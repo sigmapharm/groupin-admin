@@ -10,15 +10,16 @@
  */
 
 import React from 'react';
-import ListeUsers from '../Users/ListeUsers';
+import LoginForm from './Login';
 import history from 'utils/history';
 
-
 /* eslint-disable react/prefer-stateless-function */
-export default class HomePage extends React.PureComponent {
+class Login extends React.PureComponent {
   render() {
     return (
-      <ListeUsers history={history} />
+      <LoginForm history={history} />
     );
   }
 }
+
+export default Login;
