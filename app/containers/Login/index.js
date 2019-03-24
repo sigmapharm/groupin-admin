@@ -1,25 +1,58 @@
-/*
- * HomePage
- *
- * This is the first thing users see of our App, at the '/' route
- *
- * NOTE: while this component should technically be a stateless functional
- * component (SFC), hot reloading does not currently support SFCs. If hot
- * reloading is not a necessity for you then you can refactor it and remove
- * the linting exception.
- */
-
 import React from 'react';
-import LoginForm from './Login';
-import history from 'utils/history';
+import * as PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import LoginForm from '../../components/LoginForm';
+import { submitLogin } from './actions';
 
-/* eslint-disable react/prefer-stateless-function */
-class Login extends React.PureComponent {
+class SignIn extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      password: '',
+    };
+  }
+
+  handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.login();
+  };
+
+  login = () => {
+    this.props.dispatch(submitLogin(this.state));
+  };
+
   render() {
     return (
-      <LoginForm history={history} />
+      <form>
+        <LoginForm
+          username={this.state.username}
+          password={this.state.password}
+          handleChange={this.handleChange}
+          onSubmit={this.handleSubmit}
+        />
+      </form>
     );
   }
 }
 
-export default Login;
+/* istanbul ignore next */
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
+
+SignIn.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default compose(withConnect)(SignIn);

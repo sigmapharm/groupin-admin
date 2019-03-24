@@ -6,9 +6,12 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { fromJS } from 'immutable';
 import { routerMiddleware } from 'connected-react-router/immutable';
 import createSagaMiddleware from 'redux-saga';
+import loginSagas from 'containers/Login/saga';
 import createReducer from './reducers';
 
-const sagaMiddleware = createSagaMiddleware();
+const globalSagas = [loginSagas];
+
+const sagaMiddleware = createSagaMiddleware(globalSagas);
 
 export default function configureStore(initialState = {}, history) {
   // Create the store with two middlewares
@@ -34,6 +37,9 @@ export default function configureStore(initialState = {}, history) {
     composeEnhancers(...enhancers),
   );
 
+  if (globalSagas instanceof Array) {
+    globalSagas.forEach(saga => sagaMiddleware.run(saga));
+  }
   // Extensions
   store.runSaga = sagaMiddleware.run;
   store.injectedReducers = {}; // Reducer registry

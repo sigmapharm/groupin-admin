@@ -1,0 +1,45 @@
+import { all, put, takeLatest } from 'redux-saga/effects';
+import history from 'utils/history';
+import { callApi } from '../../services/saga';
+import { MANAGE_LOGIN_RESPONSE, SUBMIT_LOGIN } from './constants';
+import AccessTokenStorage from '../../services/security/AccessTokenStorage';
+import { manageLoginResponse } from './actions';
+import { LOGOUT } from '../App/constants';
+import { resetUserInStore } from '../App/actions';
+
+function* submitLoginWorker(action) {
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ...action.payload }),
+  };
+
+  try {
+    yield callApi('/login', manageLoginResponse, options, null);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* manageLoginResponseWorker(action) {
+  const { access_token } = action.payload;
+  AccessTokenStorage.set(access_token);
+  history.push('/');
+}
+
+function* logoutWorker() {
+  yield AccessTokenStorage.clear();
+  yield put(resetUserInStore());
+  yield history.push('/login');
+}
+
+function* loginPageSagas() {
+  yield all([
+    takeLatest(SUBMIT_LOGIN, submitLoginWorker),
+    takeLatest(MANAGE_LOGIN_RESPONSE, manageLoginResponseWorker),
+    takeLatest(LOGOUT, logoutWorker),
+  ]);
+}
+export default loginPageSagas;
