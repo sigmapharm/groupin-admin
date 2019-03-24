@@ -28,10 +28,13 @@ import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import 'file-loader?name=.htaccess!./.htaccess';
 /* eslint-enable import/no-unresolved, import/extensions */
 
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import configureStore from './configureStore';
 
 // Import i18n messages
 import { translationMessages } from './i18n';
+import GlobalLoadingDialog from './containers/GlobalLoadingDialog';
+import theme from './themes/theme';
 
 // Create redux store with history
 const initialState = {};
@@ -43,7 +46,10 @@ const render = messages => {
     <Provider store={store}>
       <LanguageProvider messages={messages}>
         <ConnectedRouter history={history}>
-          <App />
+          <MuiThemeProvider theme={theme}>
+            <App />
+            <GlobalLoadingDialog />
+          </MuiThemeProvider>
         </ConnectedRouter>
       </LanguageProvider>
     </Provider>,

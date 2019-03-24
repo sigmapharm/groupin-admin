@@ -11,29 +11,24 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import HomePage from 'containers/HomePage/Loadable';
-import Login from 'containers/Login/index.js';
+import SignIn from 'containers/Login';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
+import history from 'utils/history';
 import GlobalStyle from '../../global-styles';
 
-import { MuiThemeProvider } from "@material-ui/core/styles";
-
-import theme from "../themes/theme";
-import Header from '../../components/header/Header';
-import history from 'utils/history';
+import Header from '../header/Header';
 
 export default function App() {
   return (
-      <MuiThemeProvider theme={theme}>
-        <div>
-          <Header position="static" history={history}/>
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/login" component={Login} />
-            <Route component={NotFoundPage} />
-          </Switch>
-          <GlobalStyle />
-        </div>
-      </MuiThemeProvider>
+    <div>
+      <Header position="static" history={history} />
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/login" component={SignIn} />
+        <Route component={NotFoundPage} />
+      </Switch>
+      <GlobalStyle />
+    </div>
   );
 }

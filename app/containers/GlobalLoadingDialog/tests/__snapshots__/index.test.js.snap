@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<GlobalLoadingDialog /> should match snapshot 1`] = `
+<WithStyles(Dialog)
+  PaperProps={
+    Object {
+      "classes": Object {
+        "root": undefined,
+      },
+    }
+  }
+  fullWidth={true}
+  open={true}
+>
+  <WithStyles(CircularProgress)
+    color="primary"
+    size={100}
+  />
+</WithStyles(Dialog)>
+`;

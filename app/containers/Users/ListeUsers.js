@@ -10,8 +10,9 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
+import { compose } from 'redux';
 import Toggle from '../../components/switches/Toggle';
-import withAuth from '../Login/withAuth';
+import authenticated from '../HOC/authenticated/authenticated';
 
 const styles = theme => ({
   root: {
@@ -19,7 +20,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
     overflowX: 'auto',
-    marginLeft: '10%'
+    marginLeft: '10%',
   },
   table: {
     minWidth: 700,
@@ -32,26 +33,91 @@ const styles = theme => ({
   },
 });
 
-let id=0;
+let id = 0;
 function createData(nom, email, pharmacie, role) {
   id++;
   return { id, nom, email, pharmacie, role };
 }
 
 const rows = [
-  createData('Mekran Mohamed', 'momo@gmail.com', 'Agdal - Rabat', 'Super Admin'),
-  createData('Mekran Mohamed', 'momo@gmail.com', 'Agdal - Rabat', 'Super Admin'),
-  createData('Mekran Mohamed', 'momo@gmail.com', 'Agdal - Rabat', 'Super Admin'),
-  createData('Mekran Mohamed', 'momo@gmail.com', 'Agdal - Rabat', 'Super Admin'),
-  createData('Mekran Mohamed', 'momo@gmail.com', 'Agdal - Rabat', 'Super Admin'),
-  createData('Mekran Mohamed', 'momo@gmail.com', 'Agdal - Rabat', 'Super Admin'),
-  createData('Mekran Mohamed', 'momo@gmail.com', 'Agdal - Rabat', 'Super Admin'),
-  createData('Mekran Mohamed', 'momo@gmail.com', 'Agdal - Rabat', 'Super Admin'),
-  createData('Mekran Mohamed', 'momo@gmail.com', 'Agdal - Rabat', 'Super Admin'),
-  createData('Mekran Mohamed', 'momo@gmail.com', 'Agdal - Rabat', 'Super Admin'),
-  createData('Mekran Mohamed', 'momo@gmail.com', 'Agdal - Rabat', 'Super Admin'),
-  createData('Mekran Mohamed', 'momo@gmail.com', 'Agdal - Rabat', 'Super Admin'),
-  createData('Mekran Mohamed', 'momo@gmail.com', 'Agdal - Rabat', 'Super Admin')
+  createData(
+    'Mekran Mohamed',
+    'momo@gmail.com',
+    'Agdal - Rabat',
+    'Super Admin',
+  ),
+  createData(
+    'Mekran Mohamed',
+    'momo@gmail.com',
+    'Agdal - Rabat',
+    'Super Admin',
+  ),
+  createData(
+    'Mekran Mohamed',
+    'momo@gmail.com',
+    'Agdal - Rabat',
+    'Super Admin',
+  ),
+  createData(
+    'Mekran Mohamed',
+    'momo@gmail.com',
+    'Agdal - Rabat',
+    'Super Admin',
+  ),
+  createData(
+    'Mekran Mohamed',
+    'momo@gmail.com',
+    'Agdal - Rabat',
+    'Super Admin',
+  ),
+  createData(
+    'Mekran Mohamed',
+    'momo@gmail.com',
+    'Agdal - Rabat',
+    'Super Admin',
+  ),
+  createData(
+    'Mekran Mohamed',
+    'momo@gmail.com',
+    'Agdal - Rabat',
+    'Super Admin',
+  ),
+  createData(
+    'Mekran Mohamed',
+    'momo@gmail.com',
+    'Agdal - Rabat',
+    'Super Admin',
+  ),
+  createData(
+    'Mekran Mohamed',
+    'momo@gmail.com',
+    'Agdal - Rabat',
+    'Super Admin',
+  ),
+  createData(
+    'Mekran Mohamed',
+    'momo@gmail.com',
+    'Agdal - Rabat',
+    'Super Admin',
+  ),
+  createData(
+    'Mekran Mohamed',
+    'momo@gmail.com',
+    'Agdal - Rabat',
+    'Super Admin',
+  ),
+  createData(
+    'Mekran Mohamed',
+    'momo@gmail.com',
+    'Agdal - Rabat',
+    'Super Admin',
+  ),
+  createData(
+    'Mekran Mohamed',
+    'momo@gmail.com',
+    'Agdal - Rabat',
+    'Super Admin',
+  ),
 ];
 
 function CustomizedTable(props) {
@@ -95,20 +161,20 @@ function EditButton(props) {
   return (
     <Fab color="primary" size="small" aria-label="Edit" className={classes.fab}>
       <EditIcon />
-     </Fab>
+    </Fab>
   );
 }
 
-function ListeUsers(props){
+function ListeUsers(props) {
   const { classes } = props;
   return (
     <div>
       <Typography component="h1" variant="h5" className={classes.root}>
         Liste des utilisateurs
       </Typography>
-      <CustomizedTable classes={classes}/>
+      <CustomizedTable classes={classes} />
     </div>
-  )
+  );
 }
 
 ListeUsers.propTypes = {
@@ -119,4 +185,7 @@ EditButton.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withAuth(withStyles(styles)(ListeUsers));
+export default compose(
+  authenticated,
+  withStyles(styles),
+)(ListeUsers);

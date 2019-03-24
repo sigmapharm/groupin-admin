@@ -1,17 +1,10 @@
 {
-  "name": "react-boilerplate",
+  "name": "group-in",
   "version": "3.7.0",
-  "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/react-boilerplate/react-boilerplate.git"
-  },
   "engines": {
     "npm": ">=5",
     "node": ">=8.10.0"
   },
-  "author": "Max Stoiber",
-  "license": "MIT",
   "scripts": {
     "analyze:clean": "rimraf stats.json",
     "preanalyze": "npm run analyze:clean",
@@ -140,7 +133,6 @@
     "jest-cli": "23.6.0",
     "jest-styled-components": "6.2.2",
     "lint-staged": "7.3.0",
-    "ngrok": "3.1.0",
     "node-plop": "0.16.0",
     "null-loader": "0.1.1",
     "offline-plugin": "5.0.5",
