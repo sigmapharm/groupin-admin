@@ -187,7 +187,7 @@ EditButton.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-EditButton.CustomizedTable = {
+CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 

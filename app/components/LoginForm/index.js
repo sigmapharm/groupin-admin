@@ -8,7 +8,6 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import logocolor from '../../images/logo-color.png';
 import ErrorBar from '../Snackbar/ErrorBar';
 
@@ -87,18 +86,17 @@ export function LoginForm(props) {
           className={classes.submit}
           onClick={onSubmit}
         >
-          S'authentifier
+          {"S'authentifier"}
         </Button>
         <br />
-        <Link
-          component="button"
-          variant="body2"
+        <button
+          type="button"
           onClick={() => {
-            alert('Pas encore implémeté !');
+            alert('Pas encore implémeté !'); // eslint-disable-line  no-alert
           }}
         >
           Mot de passe oublié ?
-        </Link>
+        </button>
       </Paper>
       {error && <ErrorBar />}
     </main>
@@ -113,6 +111,7 @@ LoginForm.propTypes = {
   password: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  error: PropTypes.bool,
 };
 
 export default withStyles(styles)(LoginForm);

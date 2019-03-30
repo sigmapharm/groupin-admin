@@ -1,4 +1,5 @@
 import React from 'react';
+import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { MetaMenu } from './MetaMenu';
@@ -27,6 +28,11 @@ const MyMenu = props => {
       {user && <MenuByRole classes={classes} user={user} />}
     </div>
   );
+};
+
+MyMenu.propTypes = {
+  classes: PropTypes.object.isRequired,
+  user: PropTypes.object,
 };
 
 const styles = () => ({

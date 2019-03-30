@@ -67,6 +67,7 @@ const withSaga = injectSaga({ key: 'login', saga });
 
 SignIn.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  error: PropTypes.bool,
 };
 
 export default compose(
