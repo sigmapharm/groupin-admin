@@ -1,4 +1,8 @@
-import { MANAGE_LOGIN_RESPONSE, SUBMIT_LOGIN } from './constants';
+import {
+  MANAGE_LOGIN_RESPONSE,
+  SUBMIT_LOGIN,
+  DISPLAY_LOGIN_ERROR,
+} from './constants';
 
 const submitLogin = values => ({
   type: SUBMIT_LOGIN,
@@ -10,4 +14,9 @@ const manageLoginResponse = response => ({
   payload: { ...response },
 });
 
-export { submitLogin, manageLoginResponse };
+const displayLoginError = values => ({
+  type: DISPLAY_LOGIN_ERROR,
+  payload: { ...values },
+});
+
+export { submitLogin, manageLoginResponse, displayLoginError };

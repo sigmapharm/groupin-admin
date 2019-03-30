@@ -13,10 +13,10 @@ class Toggle extends React.Component {
   render() {
     return (
       <Switch
-          checked={this.state.checked}
-          onChange={this.handleChange('checked')}
-          value="checkedA"
-          color="primary"
+        checked={this.state.checked}
+        onChange={this.handleChange('checked')}
+        value="checkedA"
+        color="primary"
       />
     );
   }

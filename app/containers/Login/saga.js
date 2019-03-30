@@ -3,7 +3,7 @@ import history from 'utils/history';
 import { callApi } from '../../services/saga';
 import { MANAGE_LOGIN_RESPONSE, SUBMIT_LOGIN } from './constants';
 import AccessTokenStorage from '../../services/security/AccessTokenStorage';
-import { manageLoginResponse } from './actions';
+import { manageLoginResponse, displayLoginError } from './actions';
 import { LOGOUT } from '../App/constants';
 import { resetUserInStore } from '../App/actions';
 
@@ -25,8 +25,12 @@ function* submitLoginWorker(action) {
 
 function* manageLoginResponseWorker(action) {
   const { access_token } = action.payload;
-  AccessTokenStorage.set(access_token);
-  history.push('/');
+  if (access_token) {
+    AccessTokenStorage.set(access_token);
+    history.push('/');
+  } else {
+    yield put(displayLoginError());
+  }
 }
 
 function* logoutWorker() {

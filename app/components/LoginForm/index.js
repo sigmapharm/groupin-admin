@@ -8,9 +8,9 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Snackbar from '@material-ui/core/Snackbar';
 import Link from '@material-ui/core/Link';
 import logocolor from '../../images/logo-color.png';
+import ErrorBar from '../Snackbar/ErrorBar';
 
 const styles = theme => ({
   main: {
@@ -46,7 +46,7 @@ const styles = theme => ({
 });
 
 export function LoginForm(props) {
-  const { classes, username, password, handleChange, onSubmit } = props;
+  const { classes, username, password, handleChange, onSubmit, error } = props;
   return (
     <main className={classes.main}>
       <CssBaseline />
@@ -66,6 +66,7 @@ export function LoginForm(props) {
             value={username}
             onChange={handleChange}
             autoFocus
+            error={error}
           />
         </FormControl>
         <FormControl margin="normal" required fullWidth>
@@ -75,6 +76,7 @@ export function LoginForm(props) {
             value={password}
             type="password"
             onChange={handleChange}
+            error={error}
           />
         </FormControl>
         <Button
@@ -98,6 +100,7 @@ export function LoginForm(props) {
           Mot de passe oublié ?
         </Link>
       </Paper>
+      {error && <ErrorBar />}
     </main>
   );
 }
