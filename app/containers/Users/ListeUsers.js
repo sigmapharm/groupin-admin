@@ -11,7 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import { compose } from 'redux';
-import Toggle from '../../components/switches/Toggle';
+import Divider from '@material-ui/core/Divider';
+import Toggle from '../../components/Toggle/Toggle';
 import authenticated from '../HOC/authenticated/authenticated';
 
 const styles = theme => ({
@@ -35,7 +36,7 @@ const styles = theme => ({
 
 let id = 0;
 function createData(nom, email, pharmacie, role) {
-  id++;
+  id += 1;
   return { id, nom, email, pharmacie, role };
 }
 
@@ -169,9 +170,10 @@ function ListeUsers(props) {
   const { classes } = props;
   return (
     <div>
-      <Typography component="h1" variant="h5" className={classes.root}>
+      <Typography component="h1" variant="h4" className={classes.root}>
         Liste des utilisateurs
       </Typography>
+      <Divider variant="middle" className={classes.root} />
       <CustomizedTable classes={classes} />
     </div>
   );
@@ -182,6 +184,10 @@ ListeUsers.propTypes = {
 };
 
 EditButton.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 

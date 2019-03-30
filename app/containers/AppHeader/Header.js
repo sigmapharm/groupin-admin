@@ -9,7 +9,7 @@ import * as PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import logo from '../../images/logo-white.png';
-import MonMenu from './MonMenu';
+import MyMenu from './MyMenu';
 import { makeSelectUser } from '../App/selectors';
 import { logout } from '../App/actions';
 
@@ -26,12 +26,12 @@ class Header extends React.PureComponent {
           <div>
             <img alt="logo" src={logo} style={{ width: '90px' }} />
           </div>
-          <MonMenu user={user} />
+          <MyMenu user={user} />
           {!!user && (
             <Fab
               color="primary"
               size="small"
-              aria-label="Edit"
+              aria-label="Logout"
               onClick={this.handleLogout}
             >
               <LogoutIcon />

@@ -17,7 +17,7 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import history from 'utils/history';
 import GlobalStyle from '../../global-styles';
 
-import Header from '../header/Header';
+import Header from '../AppHeader/Header';
 
 export default function App() {
   return (

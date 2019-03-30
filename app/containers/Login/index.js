@@ -2,8 +2,14 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import injectReducer from 'utils/injectReducer';
+import injectSaga from 'utils/injectSaga';
+import { createStructuredSelector } from 'reselect';
 import LoginForm from '../../components/LoginForm';
 import { submitLogin } from './actions';
+import reducer from './reducer';
+import saga from './saga';
+import { makeSelectLoginErrors } from './selectors';
 
 class SignIn extends React.PureComponent {
   constructor(props) {
@@ -35,6 +41,7 @@ class SignIn extends React.PureComponent {
           password={this.state.password}
           handleChange={this.handleChange}
           onSubmit={this.handleSubmit}
+          error={this.props.error}
         />
       </form>
     );
@@ -46,13 +53,25 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
+const mapStateToProps = createStructuredSelector({
+  error: makeSelectLoginErrors(),
+});
+
 const withConnect = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 );
 
+const withReducer = injectReducer({ key: 'login', reducer });
+const withSaga = injectSaga({ key: 'login', saga });
+
 SignIn.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  error: PropTypes.bool,
 };
 
-export default compose(withConnect)(SignIn);
+export default compose(
+  withReducer,
+  withSaga,
+  withConnect,
+)(SignIn);
