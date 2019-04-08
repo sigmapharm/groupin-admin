@@ -15,8 +15,8 @@ import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
 import ErrorsArea from '../../../components/ErrorsArea';
 import { validateFormData } from './validation';
 import { createUser } from '../actions';
-import saga from "../saga";
-import injectSaga from "../../../utils/injectSaga";
+import saga from '../saga';
+import injectSaga from '../../../utils/injectSaga';
 
 const styles = theme => ({
   root: {
@@ -99,7 +99,24 @@ export class AddUser extends React.PureComponent {
           messages: {},
         },
       });
-      this.props.dispatch(createUser(this.state.formData, () => alert('toto')));
+      this.props.dispatch(createUser(this.state.formData, this.handleSubmitResponse));
+    }
+  };
+
+  handleSubmitResponse = response => {
+    if (!response) {
+      return;
+    }
+    if (response.id) {
+      alert(JSON.stringify(response));
+    } else if (response.errors) {
+      const { errors } = this.state;
+      this.setState({
+        errors: {
+          ...errors,
+          messages: { ...response.errors },
+        },
+      });
     }
   };
 
@@ -122,7 +139,7 @@ export class AddUser extends React.PureComponent {
             >
               <Grid xs={12} item>
                 <ErrorsArea
-                  prefix="Vous avez les erreurs suivants"
+                  prefix="Vous avez les erreurs suivantes"
                   errors={errors.messages}
                 />
               </Grid>

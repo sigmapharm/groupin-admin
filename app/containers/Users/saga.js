@@ -1,7 +1,7 @@
 import { all, takeLatest } from 'redux-saga/effects';
 import { callApi } from '../../services/saga';
-import {GET_USERS_LIST_ACTION, SUBMIT_CREATE_USER} from './constants';
-import { putUsersList } from './actions';
+import {GET_USERS_LIST_ACTION, MANAGE_CREATE_USER_RESPONSE, SUBMIT_CREATE_USER} from './constants';
+import { manageCreateUserResponse, putUsersList } from './actions';
 import ApiRoutes from '../../core/ApiRoutes';
 
 function* usersListWorker(action) {
@@ -30,12 +30,31 @@ function* addNewUserWorker(action) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      ...payload,
+      ville: null,
+      region: null,
+    }),
   };
   try {
-    yield callApi(ApiRoutes.USERS, null, options, null, false, false, callback);
+    yield callApi(
+      ApiRoutes.USERS,
+      manageCreateUserResponse,
+      options,
+      null,
+      false,
+      false,
+      callback,
+    );
   } catch (e) {
     callback(null);
+  }
+}
+
+function* manageCreateUserResponseWorker(action) {
+  const { payload, callback } = action;
+  if (callback) {
+    callback(payload);
   }
 }
 
@@ -43,6 +62,7 @@ function* usersListSagas() {
   yield all([
     takeLatest(GET_USERS_LIST_ACTION, usersListWorker),
     takeLatest(SUBMIT_CREATE_USER, addNewUserWorker),
+    takeLatest(MANAGE_CREATE_USER_RESPONSE, manageCreateUserResponseWorker),
   ]);
 }
 
