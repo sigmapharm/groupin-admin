@@ -18,6 +18,7 @@ import history from 'utils/history';
 import GlobalStyle from '../../global-styles';
 
 import Header from '../AppHeader/Header';
+import AddUser from '../Users/add';
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/login" component={SignIn} />
+        <Route exact path="/users/add" component={AddUser} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

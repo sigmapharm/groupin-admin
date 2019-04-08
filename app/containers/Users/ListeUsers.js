@@ -26,6 +26,8 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import history from 'utils/history';
 import reducer from './reducer';
 import saga from './saga';
 import {
@@ -75,6 +77,12 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit,
+  },
+  addUserButton: {
+    position: 'absolute',
+    // float: 'right',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2,
   },
 });
 
@@ -192,6 +200,10 @@ class ListeUsers extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  handleUserAddClick = () => {
+    history.push('/users/add');
+  };
+
   render() {
     const { rowsPerPage, page } = this.state;
     const { classes, usersList } = this.props;
@@ -295,6 +307,13 @@ class ListeUsers extends React.Component {
             </TableFooter>
           </Table>
         </Paper>
+        <Fab
+          color="primary"
+          className={classes.addUserButton}
+          onClick={this.handleUserAddClick}
+        >
+          <AddIcon />
+        </Fab>
       </div>
     );
   }

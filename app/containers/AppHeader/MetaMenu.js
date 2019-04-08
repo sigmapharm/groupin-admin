@@ -4,7 +4,7 @@ export const MetaMenu = [
   {
     key: 1,
     label: 'Utilisateurs',
-    link: '#',
+    link: '/',
     allowedRoles: [ADMIN, SUPER_ADMIN],
   },
   {
