@@ -165,7 +165,8 @@ export class AddUser extends React.PureComponent {
               <Grid xs={12} item />
               <Grid justify="center" container>
                 <Button
-                  variant="raised"
+                  type="submit"
+                  variant="contained"
                   color="primary"
                   onClick={this.handleSubmit}
                 >

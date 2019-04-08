@@ -3,6 +3,7 @@ import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import { fields } from './validation';
 
 const styles = () => ({
   userInputs: {},
@@ -14,10 +15,10 @@ export function PersonalInfo(props) {
     <>
       <Grid xs={12} md={6} item>
         <TextField
-          name="nom"
-          label="Nom"
-          value={formData.nom}
-          error={!!errors.nom}
+          name={fields.nom.name}
+          label={fields.nom.label}
+          value={formData[fields.nom.name]}
+          error={!!errors[fields.nom.name]}
           onChange={onChange}
           className={classes.userInputs}
           inputProps={{
@@ -28,10 +29,10 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          name="prenom"
-          label="Prénom"
-          value={formData.prenom}
-          error={!!errors.prenom}
+          name={fields.prenom.name}
+          label={fields.prenom.label}
+          value={formData[fields.prenom.name]}
+          error={!!errors[fields.prenom.name]}
           onChange={onChange}
           className={classes.userInputs}
           inputProps={{
@@ -42,10 +43,10 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          name="cin"
-          label="CIN"
-          value={formData.cin}
-          error={!!errors.cin}
+          name={fields.cin.name}
+          label={fields.cin.label}
+          value={formData[fields.cin.name]}
+          error={!!errors[fields.cin.name]}
           onChange={onChange}
           className={classes.userInputs}
           inputProps={{
@@ -56,11 +57,10 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          name="email"
-          label="Email"
-          type="email"
-          value={formData.email}
-          error={!!errors.email}
+          name={fields.email.name}
+          label={fields.email.label}
+          value={formData[fields.email.name]}
+          error={!!errors[fields.email.name]}
           onChange={onChange}
           className={classes.userInputs}
           inputProps={{
@@ -71,11 +71,10 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          name="telephone"
-          label="Téléphone"
-          type="tel"
-          value={formData.telephone}
-          error={!!errors.telephone}
+          name={fields.telephone.name}
+          label={fields.telephone.label}
+          value={formData[fields.telephone.name]}
+          error={!!errors[fields.telephone.name]}
           onChange={onChange}
           className={classes.userInputs}
           inputProps={{
@@ -86,11 +85,10 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          name="gsm"
-          label="GSM"
-          type="tel"
-          value={formData.gsm}
-          error={!!errors.gsm}
+          name={fields.gsm.name}
+          label={fields.gsm.label}
+          value={formData[fields.gsm.name]}
+          error={!!errors[fields.gsm.name]}
           onChange={onChange}
           className={classes.userInputs}
           inputProps={{
@@ -101,10 +99,10 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          name="ville"
-          label="Ville"
-          value={formData.ville}
-          error={!!errors.ville}
+          name={fields.ville.name}
+          label={fields.ville.label}
+          value={formData[fields.ville.name]}
+          error={!!errors[fields.ville.name]}
           onChange={onChange}
           className={classes.userInputs}
           inputProps={{
@@ -115,10 +113,10 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          name="codePostal"
-          label="Code postal"
-          value={formData.codePostal}
-          error={!!errors.codePostal}
+          name={fields.codePostal.name}
+          label={fields.codePostal.label}
+          value={formData[fields.codePostal.name]}
+          error={!!errors[fields.codePostal.name]}
           onChange={onChange}
           className={classes.userInputs}
           inputProps={{
