@@ -16,11 +16,13 @@ const styles = theme => ({
   },
 });
 
+const notEmpty = obj => Object.keys(obj).length > 0;
+
 export function ErrorsArea(props) {
   const { errors, classes, prefix } = props;
   return (
-    <Paper className={classes.root}>
-      {errors && (
+    notEmpty(errors) && (
+      <Paper className={classes.root}>
         <div>
           {prefix && (
             <Typography className={classes.text} variant="body1">
@@ -37,8 +39,8 @@ export function ErrorsArea(props) {
             </ul>
           </Typography>
         </div>
-      )}
-    </Paper>
+      </Paper>
+    )
   );
 }
 
