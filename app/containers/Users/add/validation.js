@@ -35,14 +35,22 @@ const validate = (result, field, value) => {
 
 export const validateFormData = formData => {
   let validationResult = {};
-  validationResult = validate(validationResult, fields.nom, formData.nom);
-  validationResult = validate(validationResult, fields.prenom, formData.prenom);
+  validationResult = validate(
+    validationResult,
+    fields.lastName,
+    formData.lastName,
+  );
+  validationResult = validate(
+    validationResult,
+    fields.firstName,
+    formData.firstName,
+  );
   validationResult = validate(validationResult, fields.cin, formData.cin);
   validationResult = validate(validationResult, fields.email, formData.email);
   validationResult = validate(
     validationResult,
-    fields.telephone,
-    formData.telephone,
+    fields.tel,
+    formData.tel,
   );
   validationResult = validate(validationResult, fields.gsm, formData.gsm);
   validationResult = validate(validationResult, fields.ville, formData.ville);
@@ -61,13 +69,13 @@ export const validateFormData = formData => {
 };
 
 export const fields = {
-  nom: {
-    name: 'nom',
+  lastName: {
+    name: 'lastName',
     label: 'Nom',
     validator: stringNotBlank,
   },
-  prenom: {
-    name: 'prenom',
+  firstName: {
+    name: 'firstName',
     label: 'Prénom',
     validator: stringNotBlank,
   },
@@ -81,8 +89,8 @@ export const fields = {
     label: 'Email',
     validator: emailValidation,
   },
-  telephone: {
-    name: 'telephone',
+  tel: {
+    name: 'tel',
     label: 'Téléphone',
     validator: phoneValidation,
   },

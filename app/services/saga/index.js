@@ -14,6 +14,7 @@ const defaultOptions = {
  * @param formatDataFunction : function
  * @param isSetNetworkingActive : boolean
  * @param isSetNetworkingInactive : boolean
+ * @param callbackParams : array
  * @returns {IterableIterator<*>}
  */
 function* callApi(
@@ -23,6 +24,7 @@ function* callApi(
   formatDataFunction,
   isSetNetworkingActive = true,
   isSetNetworkingInactive = true,
+  callbackParams = null,
 ) {
   if (isSetNetworkingActive) {
     yield put(GlobalActions.setNetworkingActive());
@@ -33,7 +35,7 @@ function* callApi(
       ? formatDataFunction(rawData)
       : rawData;
     if (callbackAction) {
-      yield put(callbackAction(formattedData));
+      yield put(callbackAction(formattedData, callbackParams));
     }
   } catch (e) {
     // TODO put some error handling here (show notifications ?)

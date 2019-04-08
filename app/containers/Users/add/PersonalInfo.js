@@ -15,10 +15,10 @@ export function PersonalInfo(props) {
     <>
       <Grid xs={12} md={6} item>
         <TextField
-          name={fields.nom.name}
-          label={fields.nom.label}
-          value={formData[fields.nom.name]}
-          error={!!errors[fields.nom.name]}
+          name={fields.lastName.name}
+          label={fields.lastName.label}
+          value={formData[fields.lastName.name]}
+          error={!!errors[fields.lastName.name]}
           onChange={onChange}
           className={classes.userInputs}
           inputProps={{
@@ -29,10 +29,10 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          name={fields.prenom.name}
-          label={fields.prenom.label}
-          value={formData[fields.prenom.name]}
-          error={!!errors[fields.prenom.name]}
+          name={fields.firstName.name}
+          label={fields.firstName.label}
+          value={formData[fields.firstName.name]}
+          error={!!errors[fields.firstName.name]}
           onChange={onChange}
           className={classes.userInputs}
           inputProps={{
@@ -71,10 +71,10 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          name={fields.telephone.name}
-          label={fields.telephone.label}
-          value={formData[fields.telephone.name]}
-          error={!!errors[fields.telephone.name]}
+          name={fields.tel.name}
+          label={fields.tel.label}
+          value={formData[fields.tel.name]}
+          error={!!errors[fields.tel.name]}
           onChange={onChange}
           className={classes.userInputs}
           inputProps={{

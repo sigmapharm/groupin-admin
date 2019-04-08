@@ -7,11 +7,16 @@ import Grid from '@material-ui/core/Grid';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { Button } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import authenticated from '../../HOC/authenticated/authenticated';
 import PersonalInfo from './PersonalInfo';
 import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
 import ErrorsArea from '../../../components/ErrorsArea';
 import { validateFormData } from './validation';
+import { createUser } from '../actions';
+import saga from "../saga";
+import injectSaga from "../../../utils/injectSaga";
 
 const styles = theme => ({
   root: {
@@ -42,11 +47,11 @@ const styles = theme => ({
 export class AddUser extends React.PureComponent {
   state = {
     formData: {
-      nom: '',
-      prenom: '',
+      firstName: '',
+      lastName: '',
       cin: '',
       email: '',
-      telephone: '',
+      tel: '',
       gsm: '',
       ville: '',
       codePostal: '',
@@ -94,7 +99,7 @@ export class AddUser extends React.PureComponent {
           messages: {},
         },
       });
-      alert('form valid');
+      this.props.dispatch(createUser(this.state.formData, () => alert('toto')));
     }
   };
 
@@ -181,10 +186,28 @@ export class AddUser extends React.PureComponent {
   }
 }
 
+/* istanbul ignore next */
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
+
+const withSaga = injectSaga({ key: 'users', saga });
+
 AddUser.defaultProps = {};
 
 AddUser.propTypes = {
   classes: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(authenticated(AddUser));
+export default compose(
+  withStyles(styles),
+  withConnect,
+  withSaga,
+  authenticated,
+)(AddUser);
