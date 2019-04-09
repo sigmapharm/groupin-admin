@@ -79,8 +79,7 @@ const styles = theme => ({
     margin: theme.spacing.unit,
   },
   addUserButton: {
-    position: 'absolute',
-    // float: 'right',
+    position: 'fixed',
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2,
   },
