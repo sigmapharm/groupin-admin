@@ -4,13 +4,19 @@ import {
   RESET_USER_IN_STORE,
   SET_NETWORKING_ACTIVE,
   SET_NETWORKING_INACTIVE,
+  SET_PHARMACIES,
+  SET_REGIONS,
   SET_USER_IN_STORE,
+  SET_VILLES,
 } from './constants';
 import AccessTokenStorage from '../../services/security/AccessTokenStorage';
 
 export const initialState = fromJS({
   loader: false,
   user: null,
+  pharmacies: [],
+  villes: [],
+  regions: [],
 });
 
 function reducer(state = initialState, action) {
@@ -40,6 +46,15 @@ function reducer(state = initialState, action) {
     }
     case RESET_USER_IN_STORE: {
       return state.merge({ user: null });
+    }
+    case SET_PHARMACIES: {
+      return state.merge({ pharmacies: [...action.payload] });
+    }
+    case SET_VILLES: {
+      return state.merge({ villes: [...action.payload] });
+    }
+    case SET_REGIONS: {
+      return state.merge({ regions: [...action.payload] });
     }
     default: {
       return state;

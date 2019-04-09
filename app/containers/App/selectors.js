@@ -11,10 +11,20 @@ const makeSelectLocation = () =>
     routerState.get('location').toJS(),
   );
 
+const makeSelectPharmacies = () =>
+  createSelector(selectApp, appState => {
+    return (appState && appState.toJS().pharmacies) || [];
+  });
+
 const makeSelectUser = () =>
   createSelector(
     selectApp,
     appState => (appState && appState.toJS().user) || null,
   );
 
-export { makeSelectLocation, makeSelectUser, makeSelectGlobalLoaderStatus };
+export {
+  makeSelectLocation,
+  makeSelectUser,
+  makeSelectGlobalLoaderStatus,
+  makeSelectPharmacies,
+};

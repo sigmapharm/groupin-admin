@@ -6,9 +6,16 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import { Button } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
+import Fade from '@material-ui/core/Fade';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import history from 'utils/history';
+
 import authenticated from '../../HOC/authenticated/authenticated';
 import PersonalInfo from './PersonalInfo';
 import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
@@ -17,6 +24,10 @@ import { validateFormData } from './validation';
 import { createUser } from '../actions';
 import saga from '../saga';
 import injectSaga from '../../../utils/injectSaga';
+import { makeSelectPharmacies } from '../../App/selectors';
+import { formatPharmacieToLabelValue } from './utils';
+import reducer from '../../App/reducer';
+import injectReducer from '../../../utils/injectReducer';
 
 const styles = theme => ({
   root: {
@@ -44,24 +55,27 @@ const styles = theme => ({
   },
 });
 
+const initialState = {
+  formData: {
+    firstName: '',
+    lastName: '',
+    cin: '',
+    email: '',
+    tel: '',
+    gsm: '',
+    ville: '',
+    codePostal: '',
+    pharmacie: '',
+  },
+  errors: {
+    fields: {},
+    messages: {},
+  },
+  isSuccess: false,
+};
+
 export class AddUser extends React.PureComponent {
-  state = {
-    formData: {
-      firstName: '',
-      lastName: '',
-      cin: '',
-      email: '',
-      tel: '',
-      gsm: '',
-      ville: '',
-      codePostal: '',
-      pharmacie: '',
-    },
-    errors: {
-      fields: {},
-      messages: {},
-    },
-  };
+  state = { ...initialState };
 
   handleFormDataChange = e => {
     const { formData } = this.state;
@@ -91,6 +105,7 @@ export class AddUser extends React.PureComponent {
         errors: {
           ...validation,
         },
+        isSuccess: false,
       });
     } else {
       this.setState({
@@ -99,7 +114,9 @@ export class AddUser extends React.PureComponent {
           messages: {},
         },
       });
-      this.props.dispatch(createUser(this.state.formData, this.handleSubmitResponse));
+      this.props.dispatch(
+        createUser(this.state.formData, this.handleSubmitResponse),
+      );
     }
   };
 
@@ -108,7 +125,10 @@ export class AddUser extends React.PureComponent {
       return;
     }
     if (response.id) {
-      alert(JSON.stringify(response));
+      this.setState({
+        ...initialState,
+        isSuccess: true,
+      });
     } else if (response.errors) {
       const { errors } = this.state;
       this.setState({
@@ -116,13 +136,23 @@ export class AddUser extends React.PureComponent {
           ...errors,
           messages: { ...response.errors },
         },
+        isSuccess: false,
       });
     }
   };
 
+  handleCloseSuccessMessage = () => {
+    this.setState({ isSuccess: false });
+  };
+
+  handleGoToUsersList = () => {
+    history.push('/');
+  };
+
   render() {
-    const { classes } = this.props;
-    const { formData, errors } = this.state;
+    const { classes, pharmacies } = this.props;
+    const { formData, errors, isSuccess } = this.state;
+    const formattedPharmacies = pharmacies.map(formatPharmacieToLabelValue);
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
@@ -139,6 +169,7 @@ export class AddUser extends React.PureComponent {
             >
               <Grid xs={12} item>
                 <ErrorsArea
+                  variant="success"
                   prefix="Vous avez les erreurs suivantes"
                   errors={errors.messages}
                 />
@@ -150,38 +181,26 @@ export class AddUser extends React.PureComponent {
                 maxLength={30}
               />
               <Grid xs={12} md={6} item>
-                <Grid alignContent="center" container>
-                  <Grid xs={11} item>
-                    <SingleAutoCompleteSelect
-                      className={classes.select}
-                      name="pharmacie"
-                      options={[
-                        { value: 1, label: 'toto' },
-                        { value: 2, label: 'toto2' },
-                        { value: 3, label: 'toto3' },
-                        { value: 3, label: 'toto3' },
-                        { value: 3, label: 'toto3' },
-                        { value: 3, label: 'toto3' },
-                        { value: 3, label: 'toto3' },
-                        { value: 3, label: 'toto3' },
-                        { value: 3, label: 'toto3' },
-                        { value: 3, label: 'toto3' },
-                        { value: 3, label: 'toto3' },
-                        { value: 3, label: 'toto3' },
-                        { value: 3, label: 'toto3' },
-                      ]}
-                      onChange={this.handlePharmacieSelectChange}
-                      value={formData.pharmacie}
-                      placeholder="Pharmacie"
-                      isClearable
-                    />
+                {formattedPharmacies && (
+                  <Grid alignContent="center" container>
+                    <Grid xs={11} item>
+                      <SingleAutoCompleteSelect
+                        className={classes.select}
+                        name="pharmacie"
+                        options={formattedPharmacies}
+                        onChange={this.handlePharmacieSelectChange}
+                        value={formData.pharmacie}
+                        placeholder="Pharmacie"
+                        isClearable
+                      />
+                    </Grid>
+                    <Grid xs={1} item>
+                      <Fab size="small" color="primary">
+                        <AddIcon />
+                      </Fab>
+                    </Grid>
                   </Grid>
-                  <Grid xs={1} item>
-                    <Fab size="small" color="primary">
-                      <AddIcon />
-                    </Fab>
-                  </Grid>
-                </Grid>
+                )}
               </Grid>
               <Grid xs={12} md={6} item />
               <Grid xs={12} item />
@@ -198,6 +217,32 @@ export class AddUser extends React.PureComponent {
             </Grid>
           </Paper>
         </form>
+        {isSuccess && (
+          <Snackbar
+            open
+            TransitionComponent={Fade}
+            message={
+              <span id="message-id">{`L'utilisateur a été créé avec succès.`}</span>
+            }
+            action={[
+              <Button
+                key="undo"
+                color="secondary"
+                size="small"
+                onClick={this.handleGoToUsersList}
+              >
+                Liste des utilisateurs
+              </Button>,
+              <IconButton
+                key="close"
+                color="inherit"
+                onClick={this.handleCloseSuccessMessage}
+              >
+                <CloseIcon />
+              </IconButton>,
+            ]}
+          />
+        )}
       </div>
     );
   }
@@ -208,8 +253,12 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
+const mapStateToProps = createStructuredSelector({
+  pharmacies: makeSelectPharmacies(),
+});
+
 const withConnect = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 );
 
@@ -220,10 +269,19 @@ AddUser.defaultProps = {};
 AddUser.propTypes = {
   classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
+  pharmacies: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      denomination: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
+
+const withReducer = injectReducer({ key: 'global', reducer });
 
 export default compose(
   withStyles(styles),
+  withReducer,
   withConnect,
   withSaga,
   authenticated,

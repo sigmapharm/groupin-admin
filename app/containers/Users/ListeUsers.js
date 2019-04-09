@@ -41,6 +41,7 @@ import {
 import { getUsersList } from './actions';
 import authenticated from '../HOC/authenticated/authenticated';
 import Toggle from '../../components/Toggle/Toggle';
+import {formatPharmacieToLabelValue} from "./add/utils";
 
 const actionsStyles = theme => ({
   root: {
@@ -186,8 +187,9 @@ class ListeUsers extends React.Component {
   };
 
   handleChangeRowsPerPage = event => {
-    this.setState({ page: 0, rowsPerPage: parseInt(event.target.value, 10) }, () =>
-      this.props.dispatch(getUsersList(this.state)),
+    this.setState(
+      { page: 0, rowsPerPage: parseInt(event.target.value, 10) },
+      () => this.props.dispatch(getUsersList(this.state)),
     );
   };
 
@@ -205,7 +207,7 @@ class ListeUsers extends React.Component {
 
   render() {
     const { rowsPerPage, page } = this.state;
-    const { classes, usersList } = this.props;
+    const { classes, usersList, pharmacies } = this.props;
     const totalElements = usersList.totalElements ? usersList.totalElements : 0;
     const rows = usersList.content;
     return (
@@ -273,7 +275,9 @@ class ListeUsers extends React.Component {
                       {row.firstName} {row.lastName}
                     </TableCell>
                     <TableCell>{row.email}</TableCell>
-                    <TableCell>{row.pharmacie}</TableCell>
+                    <TableCell>
+                      {row.pharmacie && row.pharmacie.denomination}
+                    </TableCell>
                     <TableCell>{row.role}</TableCell>
                     <TableCell>
                       <EditIcon color="primary" />
