@@ -3,7 +3,7 @@ import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import { fields } from './validation';
+import { fields } from '../../../containers/Users/add/validation';
 
 const styles = () => ({
   userInputs: {},

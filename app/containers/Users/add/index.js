@@ -1,11 +1,6 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -17,9 +12,6 @@ import { createStructuredSelector } from 'reselect';
 import history from 'utils/history';
 
 import authenticated from '../../HOC/authenticated/authenticated';
-import PersonalInfo from './PersonalInfo';
-import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
-import ErrorsArea from '../../../components/ErrorsArea';
 import { validateFormData } from './validation';
 import { createUser } from '../actions';
 import saga from '../saga';
@@ -28,6 +20,7 @@ import { makeSelectPharmacies } from '../../App/selectors';
 import { formatPharmacieToLabelValue } from './utils';
 import reducer from '../../App/reducer';
 import injectReducer from '../../../utils/injectReducer';
+import { AddUserForm } from '../../../components/Users/add/AddUserForm';
 
 const styles = theme => ({
   root: {
@@ -156,73 +149,22 @@ export class AddUser extends React.PureComponent {
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
-          <Paper className={classes.paper}>
-            <Typography className={classes.title} variant="h5" color="primary">
-              {`Informations personnelles`}
-            </Typography>
-            <Grid
-              className={classes.gridContainer}
-              spacing={8}
-              justify="center"
-              alignItems="center"
-              container
-            >
-              <Grid xs={12} item>
-                <ErrorsArea
-                  variant="success"
-                  prefix="Vous avez les erreurs suivantes"
-                  errors={errors.messages}
-                />
-              </Grid>
-              <PersonalInfo
-                formData={formData}
-                errors={errors.fields}
-                onChange={this.handleFormDataChange}
-                maxLength={30}
-              />
-              <Grid xs={12} md={6} item>
-                {formattedPharmacies && (
-                  <Grid alignContent="center" container>
-                    <Grid xs={11} item>
-                      <SingleAutoCompleteSelect
-                        className={classes.select}
-                        name="pharmacie"
-                        options={formattedPharmacies}
-                        onChange={this.handlePharmacieSelectChange}
-                        value={formData.pharmacie}
-                        placeholder="Pharmacie"
-                        isClearable
-                      />
-                    </Grid>
-                    <Grid xs={1} item>
-                      <Fab size="small" color="primary">
-                        <AddIcon />
-                      </Fab>
-                    </Grid>
-                  </Grid>
-                )}
-              </Grid>
-              <Grid xs={12} md={6} item />
-              <Grid xs={12} item />
-              <Grid justify="center" container>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  onClick={this.handleSubmit}
-                >
-                  Valider
-                </Button>
-              </Grid>
-            </Grid>
-          </Paper>
+          <AddUserForm
+            classes={classes}
+            errors={errors}
+            pharmacies={formattedPharmacies}
+            formData={formData}
+            handleFormDataChange={this.handleFormDataChange}
+            handlePharmacieSelectChange={this.handlePharmacieSelectChange}
+            handleSubmit={this.handleSubmit}
+          />
         </form>
         {isSuccess && (
           <Snackbar
             open
             TransitionComponent={Fade}
             message={
-              <span id="message-id">{`L'utilisateur a été créé avec succès.`}</span>
+              <span id="message-id">L'utilisateur a été créé avec succès.</span>
             }
             action={[
               <Button
