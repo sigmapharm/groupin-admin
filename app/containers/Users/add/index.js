@@ -92,7 +92,8 @@ export class AddUser extends React.PureComponent {
 
   handleSubmit = e => {
     e.preventDefault();
-    const validation = validateFormData(this.state.formData);
+    const { formData } = this.state;
+    const validation = validateFormData(formData);
     if (validation && validation.messages && validation.fields) {
       this.setState({
         errors: {
@@ -107,9 +108,13 @@ export class AddUser extends React.PureComponent {
           messages: {},
         },
       });
-      this.props.dispatch(
-        createUser(this.state.formData, this.handleSubmitResponse),
-      );
+      const formattedData = {
+        ...formData,
+        pharmacie: {
+          id: formData.pharmacie && formData.pharmacie.value,
+        },
+      };
+      this.props.dispatch(createUser(formattedData, this.handleSubmitResponse));
     }
   };
 
