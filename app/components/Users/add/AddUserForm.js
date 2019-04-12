@@ -21,6 +21,7 @@ export function AddUserForm(props) {
     formData,
     handleFormDataChange,
     handlePharmacieSelectChange,
+    handleAddPharmacieClick,
     handleSubmit,
   } = props;
   return (
@@ -63,7 +64,11 @@ export function AddUserForm(props) {
                 />
               </Grid>
               <Grid xs={1} item>
-                <Fab size="small" color="primary">
+                <Fab
+                  size="small"
+                  color="primary"
+                  onClick={handleAddPharmacieClick}
+                >
                   <AddIcon />
                 </Fab>
               </Grid>
@@ -102,6 +107,7 @@ AddUserForm.propTypes = {
   handleFormDataChange: PropTypes.func.isRequired,
   handlePharmacieSelectChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  handleAddPharmacieClick: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(AddUserForm);

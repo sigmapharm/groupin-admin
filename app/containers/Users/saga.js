@@ -1,6 +1,10 @@
 import { all, takeLatest } from 'redux-saga/effects';
 import { callApi } from '../../services/saga';
-import {GET_USERS_LIST_ACTION, MANAGE_CREATE_USER_RESPONSE, SUBMIT_CREATE_USER} from './constants';
+import {
+  GET_USERS_LIST_ACTION,
+  MANAGE_CREATE_USER_RESPONSE,
+  SUBMIT_CREATE_USER,
+} from './constants';
 import { manageCreateUserResponse, putUsersList } from './actions';
 import ApiRoutes from '../../core/ApiRoutes';
 

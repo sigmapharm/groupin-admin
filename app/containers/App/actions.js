@@ -11,6 +11,7 @@ import {
   SET_VILLES,
   SET_USER_IN_STORE,
   GET_CONFIGURATION,
+  ADD_NEW_PHARMACIE_TO_STORE,
 } from './constants';
 
 export const logout = () => ({
@@ -62,4 +63,9 @@ export const setRegions = values => ({
 export const setVilles = values => ({
   type: SET_VILLES,
   payload: values,
+});
+
+export const addPharmacieToStore = pharmacie => ({
+  type: ADD_NEW_PHARMACIE_TO_STORE,
+  payload: { ...pharmacie },
 });

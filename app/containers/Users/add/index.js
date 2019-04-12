@@ -1,11 +1,15 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import Fade from '@material-ui/core/Fade';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
@@ -20,7 +24,8 @@ import { makeSelectPharmacies } from '../../App/selectors';
 import { formatPharmacieToLabelValue } from './utils';
 import reducer from '../../App/reducer';
 import injectReducer from '../../../utils/injectReducer';
-import { AddUserForm } from '../../../components/Users/add/AddUserForm';
+import AddUserForm from '../../../components/Users/add/AddUserForm';
+import AddPharmacieContainer from '../../Pharmacie/add';
 
 const styles = theme => ({
   root: {
@@ -46,6 +51,12 @@ const styles = theme => ({
   select: {
     marginTop: theme.spacing.unit,
   },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing.unit,
+    top: theme.spacing.unit,
+    color: theme.palette.grey[500],
+  },
 });
 
 const initialState = {
@@ -65,6 +76,7 @@ const initialState = {
     messages: {},
   },
   isSuccess: false,
+  isAddPharmacie: false,
 };
 
 export class AddUser extends React.PureComponent {
@@ -147,6 +159,29 @@ export class AddUser extends React.PureComponent {
     history.push('/');
   };
 
+  handleAddPharmacieClose = () => {
+    this.setState({
+      isAddPharmacie: false,
+    });
+  };
+
+  handleAddPharmacieOpen = () => {
+    this.setState({
+      isAddPharmacie: true,
+    });
+  };
+
+  handleAddPharmacieSuccess = newPharmacie => {
+    const { formData } = this.state;
+    this.setState({
+      formData: {
+        ...formData,
+        pharmacie: formatPharmacieToLabelValue(newPharmacie),
+      },
+      isAddPharmacie: false,
+    });
+  };
+
   render() {
     const { classes, pharmacies } = this.props;
     const { formData, errors, isSuccess } = this.state;
@@ -162,8 +197,32 @@ export class AddUser extends React.PureComponent {
             handleFormDataChange={this.handleFormDataChange}
             handlePharmacieSelectChange={this.handlePharmacieSelectChange}
             handleSubmit={this.handleSubmit}
+            handleAddPharmacieClick={this.handleAddPharmacieOpen}
           />
         </form>
+        <Dialog
+          onClose={this.handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={this.state.isAddPharmacie}
+        >
+          <MuiDialogTitle disableTypography className={classes.root}>
+            <Typography variant="h5" color="primary">
+              {`Ajouter une nouvelle pharmacie`}
+            </Typography>
+            <IconButton
+              aria-label="Close"
+              className={classes.closeButton}
+              onClick={this.handleAddPharmacieClose}
+            >
+              <CloseIcon />
+            </IconButton>
+          </MuiDialogTitle>
+          <MuiDialogContent>
+            <AddPharmacieContainer
+              successCallback={this.handleAddPharmacieSuccess}
+            />
+          </MuiDialogContent>
+        </Dialog>
         {isSuccess && (
           <Snackbar
             open
