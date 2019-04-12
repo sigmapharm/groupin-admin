@@ -10,7 +10,6 @@ import { compose } from 'redux';
 import AddUser from '../Users/add';
 import { getConfiguration } from './actions';
 import reducer from './reducer';
-import AddPharmacieContainer from '../Pharmacie/add';
 
 class InternalApp extends React.PureComponent {
   componentWillMount() {
@@ -21,7 +20,6 @@ class InternalApp extends React.PureComponent {
     return (
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route exact path="/tmp" component={AddPharmacieContainer} />
         <Route exact path="/users/add" component={AddUser} />
         <Route component={NotFoundPage} />
       </Switch>
