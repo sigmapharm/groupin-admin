@@ -12,10 +12,10 @@ const makeSelectRowsPerPage = () =>
   createSelector(usersState, state => state.get('rowsPerPage'));
 
 const makeSelectPrenom = () =>
-  createSelector(usersState, state => state.get('prenom'));
+  createSelector(usersState, state => state.get('firstName'));
 
 const makeSelectNom = () =>
-  createSelector(usersState, state => state.get('nom'));
+  createSelector(usersState, state => state.get('lastName'));
 
 const makeSelectPharmacie = () =>
   createSelector(usersState, state => state.get('pharmacie'));

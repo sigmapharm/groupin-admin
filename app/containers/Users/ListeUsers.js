@@ -26,6 +26,8 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import history from 'utils/history';
 import reducer from './reducer';
 import saga from './saga';
 import {
@@ -39,6 +41,7 @@ import {
 import { getUsersList } from './actions';
 import authenticated from '../HOC/authenticated/authenticated';
 import Toggle from '../../components/Toggle/Toggle';
+import {formatPharmacieToLabelValue} from "./add/utils";
 
 const actionsStyles = theme => ({
   root: {
@@ -75,6 +78,11 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit,
+  },
+  addUserButton: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2,
   },
 });
 
@@ -179,8 +187,9 @@ class ListeUsers extends React.Component {
   };
 
   handleChangeRowsPerPage = event => {
-    this.setState({ page: 0, rowsPerPage: parseInt(event.target.value, 10) }, () =>
-      this.props.dispatch(getUsersList(this.state)),
+    this.setState(
+      { page: 0, rowsPerPage: parseInt(event.target.value, 10) },
+      () => this.props.dispatch(getUsersList(this.state)),
     );
   };
 
@@ -192,9 +201,13 @@ class ListeUsers extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  handleUserAddClick = () => {
+    history.push('/users/add');
+  };
+
   render() {
     const { rowsPerPage, page } = this.state;
-    const { classes, usersList } = this.props;
+    const { classes, usersList, pharmacies } = this.props;
     const totalElements = usersList.totalElements ? usersList.totalElements : 0;
     const rows = usersList.content;
     return (
@@ -262,7 +275,9 @@ class ListeUsers extends React.Component {
                       {row.firstName} {row.lastName}
                     </TableCell>
                     <TableCell>{row.email}</TableCell>
-                    <TableCell>{row.pharmacie}</TableCell>
+                    <TableCell>
+                      {row.pharmacie && row.pharmacie.denomination}
+                    </TableCell>
                     <TableCell>{row.role}</TableCell>
                     <TableCell>
                       <EditIcon color="primary" />
@@ -295,6 +310,13 @@ class ListeUsers extends React.Component {
             </TableFooter>
           </Table>
         </Paper>
+        <Fab
+          color="primary"
+          className={classes.addUserButton}
+          onClick={this.handleUserAddClick}
+        >
+          <AddIcon />
+        </Fab>
       </div>
     );
   }

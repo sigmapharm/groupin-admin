@@ -10,23 +10,20 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import HomePage from 'containers/HomePage/Loadable';
 import SignIn from 'containers/Login';
-import NotFoundPage from 'containers/NotFoundPage/Loadable';
-
 import history from 'utils/history';
 import GlobalStyle from '../../global-styles';
 
 import Header from '../AppHeader/Header';
+import InternalApp from './InternalApp';
 
 export default function App() {
   return (
     <div>
       <Header position="static" history={history} />
       <Switch>
-        <Route exact path="/" component={HomePage} />
         <Route exact path="/login" component={SignIn} />
-        <Route component={NotFoundPage} />
+        <Route component={InternalApp} />
       </Switch>
       <GlobalStyle />
     </div>

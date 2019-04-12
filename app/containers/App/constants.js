@@ -13,3 +13,12 @@ export const RESET_USER_IN_STORE = 'app/global/RESET_USER_IN_STORE';
 export const SET_NETWORKING_ACTIVE = 'app/global/SET_NETWORKING_ACTIVE';
 export const SET_NETWORKING_INACTIVE = 'app/global/SET_NETWORKING_INACTIVE';
 export const LOGOUT = 'app/global/LOGOUT';
+
+export const GET_CONFIGURATION = 'app/global/GET_CONFIGURATION';
+
+export const GET_PHARMACIES = 'app/global/GET_PHARMACIES';
+export const GET_VILLES = 'app/global/GET_VILLES';
+export const GET_REGIONS = 'app/global/GET_REGIONS';
+export const SET_PHARMACIES = 'app/global/SET_PHARMACIES';
+export const SET_VILLES = 'app/global/SET_VILLES';
+export const SET_REGIONS = 'app/global/SET_REGIONS';
