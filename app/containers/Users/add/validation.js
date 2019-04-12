@@ -1,20 +1,4 @@
-export const REGEX_EMAIL = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line no-useless-escape
-const REGEX_PHONE = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/; // eslint-disable-line no-useless-escape
-
-const stringNotBlank = value =>
-  !!value && !!value.trim() ? null : 'Ne peut pas être vide';
-
-const selectNotBlank = value => (value ? null : 'Choisir à partir de la liste');
-
-const emailValidation = value =>
-  REGEX_EMAIL.test(String(value).toLowerCase())
-    ? null
-    : "Le format de l'email est invalide";
-
-const phoneValidation = value =>
-  REGEX_PHONE.test(String(value).toLowerCase())
-    ? null
-    : 'Le format du numéro est invalide';
+import validators from '../../../core/validation';
 
 const validate = (result, field, value) => {
   const validation = field.validator(value);
@@ -47,11 +31,7 @@ export const validateFormData = formData => {
   );
   validationResult = validate(validationResult, fields.cin, formData.cin);
   validationResult = validate(validationResult, fields.email, formData.email);
-  validationResult = validate(
-    validationResult,
-    fields.tel,
-    formData.tel,
-  );
+  validationResult = validate(validationResult, fields.tel, formData.tel);
   validationResult = validate(validationResult, fields.gsm, formData.gsm);
   validationResult = validate(validationResult, fields.ville, formData.ville);
   validationResult = validate(
@@ -72,46 +52,46 @@ export const fields = {
   lastName: {
     name: 'lastName',
     label: 'Nom',
-    validator: stringNotBlank,
+    validator: validators.stringNotBlank,
   },
   firstName: {
     name: 'firstName',
     label: 'Prénom',
-    validator: stringNotBlank,
+    validator: validators.stringNotBlank,
   },
   cin: {
     name: 'cin',
     label: 'CIN',
-    validator: stringNotBlank,
+    validator: validators.stringNotBlank,
   },
   email: {
     name: 'email',
     label: 'Email',
-    validator: emailValidation,
+    validator: validators.emailValidation,
   },
   tel: {
     name: 'tel',
     label: 'Téléphone',
-    validator: phoneValidation,
+    validator: validators.phoneValidation,
   },
   gsm: {
     name: 'gsm',
     label: 'GSM',
-    validator: phoneValidation,
+    validator: validators.phoneValidation,
   },
   ville: {
     name: 'ville',
     label: 'Ville',
-    validator: stringNotBlank,
+    validator: validators.stringNotBlank,
   },
   codePostal: {
     name: 'codePostal',
     label: 'Code Postal',
-    validator: stringNotBlank,
+    validator: validators.stringNotBlank,
   },
   pharmacie: {
     name: 'pharmacie',
     label: 'Pharmacie',
-    validator: selectNotBlank,
+    validator: validators.selectNotBlank,
   },
 };

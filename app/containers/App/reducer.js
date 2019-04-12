@@ -1,6 +1,7 @@
 import { fromJS } from 'immutable';
 import decode from 'jwt-decode';
 import {
+  ADD_NEW_PHARMACIE_TO_STORE,
   RESET_USER_IN_STORE,
   SET_NETWORKING_ACTIVE,
   SET_NETWORKING_INACTIVE,
@@ -55,6 +56,11 @@ function reducer(state = initialState, action) {
     }
     case SET_REGIONS: {
       return state.merge({ regions: [...action.payload] });
+    }
+    case ADD_NEW_PHARMACIE_TO_STORE: {
+      const newPharmacies = state.toJS().pharmacies;
+      newPharmacies.push({ ...action.payload });
+      return state.merge({ pharmacies: [...newPharmacies] });
     }
     default: {
       return state;
