@@ -2,7 +2,12 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import history from 'utils/history';
 import { MetaMenu } from './MetaMenu';
+
+const onMenuItemClick = href => () => {
+  history.push(href);
+}
 
 const MenuByRole = props => {
   const { classes, user } = props;
@@ -11,9 +16,9 @@ const MenuByRole = props => {
       menu.allowedRoles.includes(user.role) && (
         <Button
           key={menu.key}
-          href={menu.link}
           className={classes.button}
           classes={{ label: classes.label }}
+          onClick={onMenuItemClick(menu.link)}
         >
           {menu.label}
         </Button>

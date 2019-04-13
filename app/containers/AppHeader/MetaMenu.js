@@ -10,7 +10,7 @@ export const MetaMenu = [
   {
     key: 2,
     label: 'Articles',
-    link: '#',
+    link: '/articles',
     allowedRoles: [ADMIN, SUPER_ADMIN],
   },
   {
