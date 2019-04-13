@@ -11,7 +11,15 @@ import PersonalInfo from './PersonalInfo';
 import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
 import ErrorsArea from '../../ErrorsArea';
 
-const styles = () => ({});
+const styles = () => ({
+  root: {},
+  paper: {},
+  title: {},
+  gridContainer: {},
+  divider: {},
+  select: {},
+  closeButton: {},
+});
 
 export function AddUserForm(props) {
   const {
