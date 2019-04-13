@@ -15,7 +15,8 @@ import ListeUsers from '../Users/ListeUsers';
 
 /* eslint-disable react/prefer-stateless-function */
 export default class HomePage extends React.PureComponent {
+
   render() {
     return <ListeUsers history={history} />;
-  }
+     }
 }
