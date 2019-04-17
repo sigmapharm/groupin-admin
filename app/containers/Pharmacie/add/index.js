@@ -28,12 +28,18 @@ import ErrorsArea from '../../../components/ErrorsArea';
 // import messages from './messages';
 
 /* istanbul ignore next */
-const styles = () => ({
+const styles = theme => ({
   fieldContainer: {
     maxWidth: '500px',
     minWidth: '500px',
     paddingLeft: '50px',
     paddingRight: '50px',
+    '& > *': {
+      height: '48px',
+    },
+  },
+  submitButton: {
+    marginTop: theme.spacing.unit * 3,
   },
 });
 
@@ -214,7 +220,7 @@ export class AddPharmacieContainer extends React.PureComponent {
             container
           >
             <Grid xs={12} item />
-            <Grid xs={12} item>
+            <Grid xs={10} item>
               <ErrorsArea
                 prefix="Vous avez les erreurs suivantes"
                 errors={errors.messages}
@@ -239,6 +245,7 @@ export class AddPharmacieContainer extends React.PureComponent {
               type="submit"
               variant="contained"
               color="primary"
+              className={classes.submitButton}
               onClick={this.handleFormSubmit}
             >
               Valider

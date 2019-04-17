@@ -190,7 +190,6 @@ export class AddUser extends React.PureComponent {
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
           <AddUserForm
-            classes={classes}
             errors={errors}
             pharmacies={formattedPharmacies}
             formData={formData}
