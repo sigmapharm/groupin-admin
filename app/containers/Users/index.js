@@ -128,7 +128,8 @@ export class UsersList extends React.PureComponent {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows && rows.map(row => <UsersListTableRow row={row} />)}
+              {rows &&
+                rows.map(row => <UsersListTableRow key={row.id} row={row} />)}
             </TableBody>
             <UsersListTableFooter
               totalElements={totalElements}
@@ -178,7 +179,7 @@ UsersList.defaultProps = {};
 UsersList.propTypes = {
   classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
-  usersList: PropTypes.object,
+  usersList: PropTypes.any,
   // pharmacies: PropTypes.array,
 };
 
