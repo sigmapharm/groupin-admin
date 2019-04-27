@@ -43,8 +43,8 @@ function* manageCreatePharmacieResponseWorker(action) {
 
 function* addPharmacieSaga() {
   yield all([
-    takeLatest(ADD_PHARMACIE, addPharmacieWorker),
-    takeLatest(MANAGE_PHARMACIE_RESPONSE, manageCreatePharmacieResponseWorker),
+    takeLatest(ADD_PHARMACIE,addPharmacieWorker),
+    takeLatest(MANAGE_PHARMACIE_RESPONSE,manageCreatePharmacieResponseWorker),
   ]);
 }
 

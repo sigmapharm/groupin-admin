@@ -1,6 +1,6 @@
 import { all, put, takeLatest } from 'redux-saga/effects';
 import { callApi } from '../../services/saga';
-import {GET_CONFIGURATION, GET_PHARMACIES, GET_REGIONS, GET_VILLES} from './constants';
+import {GET_CONFIGURATION, GET_PHARMACIES, GET_REGIONS, GET_VILLES,GET_LABORATOIRES} from './constants';
 import ApiRoutes from '../../core/ApiRoutes';
 import {
   setNetworkingActive,
@@ -8,6 +8,7 @@ import {
   setPharmacies,
   setRegions,
   setVilles,
+  setLaboratoires,
 } from './actions';
 
 function* getPharmaciesWorker() {
@@ -19,6 +20,9 @@ function* getRegionsWorker() {
 function* getVillesWorker() {
   yield callApi(ApiRoutes.VILLES, setVilles, {}, null, false, false);
 }
+function* getLaboratoiresWorker() {
+  yield callApi(ApiRoutes.LABORATOIRES, setLaboratoires, {}, null, false, false);
+}
 
 function* getConfigurationWorker() {
   try {
@@ -26,9 +30,12 @@ function* getConfigurationWorker() {
     yield getPharmaciesWorker();
     yield getRegionsWorker();
     yield getVillesWorker();
+    yield getLaboratoiresWorker();
+
     yield put(setNetworkingInactive());
   } catch (e) {
-    console.log(e); // eslint-disable-line
+    console.log(e);
+    // eslint-disable-line
   }
 }
 
@@ -37,6 +44,7 @@ export default function* appSaga() {
     takeLatest(GET_PHARMACIES, getPharmaciesWorker),
     takeLatest(GET_VILLES, getVillesWorker),
     takeLatest(GET_REGIONS, getRegionsWorker),
+    takeLatest(GET_LABORATOIRES, getLaboratoiresWorker),
     takeLatest(GET_CONFIGURATION, getConfigurationWorker),
   ]);
 }

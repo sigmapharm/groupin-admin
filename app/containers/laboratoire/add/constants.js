@@ -1,0 +1,2 @@
+export const ADD_LABORATOIRE = 'app/laboratoires/ADD_LABORATOIRES';
+export const MANAGE_LABORATOIRE_RESPONSE ='app/laboratoires/MANAGE_LABORATOIRES_RESPONSE';

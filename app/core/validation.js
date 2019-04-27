@@ -1,6 +1,6 @@
 const REGEX_EMAIL = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line no-useless-escape
 const REGEX_PHONE = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/; // eslint-disable-line no-useless-escape
-
+const REGEX_DOUBLE=/[+]?\\d*\\.?\\d+/;
 const stringNotBlank = value =>
   !!value && !!value.trim() ? null : 'Ne peut pas être vide';
 
@@ -16,11 +16,17 @@ const phoneValidation = value =>
     ? null
     : 'Le format du numéro est invalide';
 
+const integerValidation = value =>
+  Number.isInteger(value)
+    ? null
+    : 'Le champs saisie doit etre un entier';
+
 const validators = {
   stringNotBlank,
   selectNotBlank,
   emailValidation,
   phoneValidation,
+  integerValidation
 };
 
 export default validators;

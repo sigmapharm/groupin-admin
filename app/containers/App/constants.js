@@ -20,7 +20,13 @@ export const GET_PHARMACIES = 'app/global/GET_PHARMACIES';
 export const GET_VILLES = 'app/global/GET_VILLES';
 export const GET_REGIONS = 'app/global/GET_REGIONS';
 export const SET_PHARMACIES = 'app/global/SET_PHARMACIES';
-export const ADD_NEW_PHARMACIE_TO_STORE =
-  'app/global/ADD_NEW_PHARMACIE_TO_STORE';
+export const ADD_NEW_PHARMACIE_TO_STORE = 'app/global/ADD_NEW_PHARMACIE_TO_STORE';
 export const SET_VILLES = 'app/global/SET_VILLES';
 export const SET_REGIONS = 'app/global/SET_REGIONS';
+
+export const SET_ARTICLE_IN_STORE = 'app/global/SET_ARTICLE_IN_STORE';
+export const RESET_ARTICLE_IN_STORE = 'app/global/RESET_ARTICLE_IN_STORE';
+export const ADD_NEW_LABORATOIRE_TO_STORE = 'app/global/ADD_NEW_LABORATOIRE_TO_STORE';
+export const GET_LABORATOIRES = 'app/global/GET_LABORATOIRES';
+export const SET_LABORATOIRES = 'app/global/SET_LABORATOIRES';
+

@@ -4,6 +4,7 @@ import {
   SET_NETWORKING_INACTIVE,
   RESET_USER_IN_STORE,
   GET_PHARMACIES,
+  GET_LABORATOIRES,
   GET_VILLES,
   GET_REGIONS,
   SET_PHARMACIES,
@@ -12,7 +13,11 @@ import {
   SET_USER_IN_STORE,
   GET_CONFIGURATION,
   ADD_NEW_PHARMACIE_TO_STORE,
+  RESET_ARTICLE_IN_STORE,
+  SET_ARTICLE_IN_STORE, SET_LABORATOIRES, ADD_NEW_LABORATOIRE_TO_STORE,
+
 } from './constants';
+
 
 export const logout = () => ({
   type: LOGOUT,
@@ -42,6 +47,7 @@ export const getPharmacies = () => ({
   type: GET_PHARMACIES,
 });
 
+
 export const getVilles = () => ({
   type: GET_VILLES,
 });
@@ -68,4 +74,28 @@ export const setVilles = values => ({
 export const addPharmacieToStore = pharmacie => ({
   type: ADD_NEW_PHARMACIE_TO_STORE,
   payload: { ...pharmacie },
+});
+
+
+
+export const setArticleInStore =()=>(
+  {   type:SET_ARTICLE_IN_STORE,
+
+  }
+);
+export const resetArticleInStore = () => ({
+  type: RESET_ARTICLE_IN_STORE,
+});
+
+export const getLaboratoires = () => ({
+  type: GET_LABORATOIRES,
+});
+export const setLaboratoires = values => ({
+  type: SET_LABORATOIRES,
+  payload: values,
+});
+
+export const addLaboratoireToStore = laboratoire => ({
+  type: ADD_NEW_LABORATOIRE_TO_STORE,
+  payload: { ...laboratoire },
 });

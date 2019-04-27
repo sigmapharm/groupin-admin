@@ -26,6 +26,9 @@ const makeSelectPPV = () =>
 const makeSelectTVA = () =>
   createSelector(articlesState, state => state.get('TVA'));
 
+const makeSelectlaboratoire = () =>
+  createSelector(articlesState, state => state.get('laboratoire'));
+
 export {
   makeSelectArticlesList,
   makeSelectPage,
@@ -35,4 +38,5 @@ export {
   makeSelectPPH,
   makeSelectPPV,
   makeSelectTVA,
+  makeSelectlaboratoire,
 };

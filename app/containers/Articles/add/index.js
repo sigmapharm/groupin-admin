@@ -15,17 +15,16 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
-import { validateFormData } from './validation';
-import { createUser } from '../actions';
 import saga from '../saga';
 import injectSaga from '../../../utils/injectSaga';
-import { makeSelectPharmacies } from '../../App/selectors';
-import { formatPharmacieToLabelValue } from './utils';
 import reducer from '../../App/reducer';
 import injectReducer from '../../../utils/injectReducer';
-import AddUserForm from '../../../components/Users/add/AddUserForm';
-import AddPharmacieContainer from '../../Pharmacie/add';
-
+import {validateFormData }  from './validation';
+import { formatLaboratoireToLabelValue } from './utils';
+import { createArticle } from '../actions';
+import { makeSelectLaboratoires } from '../../App/selectors';
+import  AddArticleForm  from '../../../components/articles/add/AddAricleFrom';
+import  AddLaboratoireContainer  from '../../laboratoire/add';
 const styles = theme => ({
   root: {
     paddingLeft: theme.spacing.unit * 5,
@@ -60,25 +59,29 @@ const styles = theme => ({
 
 const initialState = {
   formData: {
-    firstName: '',
-    lastName: '',
-    cin: '',
-    email: '',
-    tel: '',
-    gsm: '',
-    ville: '',
-    codePostal: '',
-    pharmacie: '',
-  },
+     reference:'',
+     nom :'',
+     gamme :'',
+     codebare:'',
+     categorie:'',
+     classe_therapeutique:'',
+     dci:'',
+     pph:'',
+     tva:'',
+    neccissite_prescription:'',
+    produit_Marche:'',
+},
   errors: {
     fields: {},
     messages: {},
   },
   isSuccess: false,
-  isAddPharmacie: false,
+  isAddLaboratoire: false,
 };
 
-export class AddUser extends React.PureComponent {
+
+
+export class AddArticle extends React.PureComponent {
   state = { ...initialState };
 
   handleFormDataChange = e => {
@@ -91,15 +94,16 @@ export class AddUser extends React.PureComponent {
     });
   };
 
-  handlePharmacieSelectChange = value => {
+  handleLaboratoireSelectChange = value => {
     const { formData } = this.state;
     this.setState({
       formData: {
         ...formData,
-        pharmacie: value,
+        laboratoire: value,
       },
     });
   };
+
 
   handleSubmit = e => {
     e.preventDefault();
@@ -121,11 +125,11 @@ export class AddUser extends React.PureComponent {
       });
       const formattedData = {
         ...formData,
-        pharmacie: {
-          id:formData.pharmacie && formData.pharmacie.value,
+        laboratoire: {
+          id:formData.laboratoire && formData.laboratoire.value,
         },
       };
-      this.props.dispatch(createUser(formattedData, this.handleSubmitResponse));
+      this.props.dispatch(createArticle(formattedData,this.handleSubmitResponse));
     }
   };
 
@@ -154,89 +158,93 @@ export class AddUser extends React.PureComponent {
     this.setState({ isSuccess: false });
   };
 
-  handleGoToUsersList = () => {
-    history.push('/');
+  handleGoToArticlesList = () => {
+    history.push('/articles');
   };
 
-  handleAddPharmacieClose = () => {
+  handleAddlaboratoireOpen = () => {
     this.setState({
-      isAddPharmacie: false,
+      isAddLaboratoire:true,
     });
   };
 
-  handleAddPharmacieOpen = () => {
+  handleAddLaboratoireClose = () => {
     this.setState({
-      isAddPharmacie: true,
+      isAddLaboratoire:false,
     });
   };
 
-  handleAddPharmacieSuccess = newPharmacie => {
+  handleAddLaboratoireSuccess = newLaboratoire => {
     const { formData } = this.state;
     this.setState({
       formData: {
         ...formData,
-        pharmacie:formatPharmacieToLabelValue(newPharmacie),
+  laboratoire: formatLaboratoireToLabelValue(newLaboratoire),
       },
-      isAddPharmacie: false,
+      isAddLaboratoire: false,
     });
   };
 
   render() {
-    const { classes, pharmacies } = this.props;
+    const { classes, laboratoires } = this.props;
     const { formData, errors, isSuccess } = this.state;
-    const formattedPharmacies = pharmacies.map(formatPharmacieToLabelValue);
+    const formattedLaboratoire = laboratoires.map(formatLaboratoireToLabelValue);
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
-          <AddUserForm
+          <AddArticleForm
+            classes={classes}
             errors={errors}
-            pharmacies={formattedPharmacies}
+            laboratoires={formattedLaboratoire}
             formData={formData}
             handleFormDataChange={this.handleFormDataChange}
-            handlePharmacieSelectChange={this.handlePharmacieSelectChange}
+            handleLaboratoireSelectChange={this.handleLaboratoireSelectChange}
             handleSubmit={this.handleSubmit}
-            handleAddPharmacieClick={this.handleAddPharmacieOpen}
-          />
+            handleAddLaboratoireClick={this.handleAddlaboratoireOpen}
+           />
+
+
+
         </form>
         <Dialog
-          maxWidth="lg"
           onClose={this.handleClose}
           aria-labelledby="customized-dialog-title"
-          open={this.state.isAddPharmacie}
+          open={this.state.isAddLaboratoire}
         >
           <MuiDialogTitle disableTypography className={classes.root}>
             <Typography variant="h5" color="primary">
-              {`Ajouter une nouvelle pharmacie`}
+              {`Ajouter un nouveau laboratoire`}
             </Typography>
             <IconButton
               aria-label="Close"
               className={classes.closeButton}
-              onClick={this.handleAddPharmacieClose}
+              onClick={this.handleAddLaboratoireClose}
             >
               <CloseIcon />
             </IconButton>
           </MuiDialogTitle>
           <MuiDialogContent>
-            <AddPharmacieContainer
-              successCallback={this.handleAddPharmacieSuccess}
+            < AddLaboratoireContainer
+              successCallback={this.handleAddLaboratoireSuccess}
             />
           </MuiDialogContent>
+
         </Dialog>
         {isSuccess && (
           <Snackbar
             open
             TransitionComponent={Fade}
             message={
-              <span id="message-id">L'utilisateur a été créé avec succès.</span>
+              <span id="message-id">L'article a été créé avec succès.</span>
             }
             action={[
               <Button
                 key="undo"
                 color="secondary"
                 size="small"
-                onClick={this.handleGoToUsersList}
+                onClick={this.handleGoToArticlesList}
               >
-                Liste des utilisateurs
+                Liste des Articles
               </Button>,
               <IconButton
                 key="close"
@@ -259,7 +267,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = createStructuredSelector({
-  pharmacies: makeSelectPharmacies(),
+ laboratoires: makeSelectLaboratoires(),
 });
 
 const withConnect = connect(
@@ -267,19 +275,19 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key: 'users', saga });
+const withSaga = injectSaga({ key: 'articles', saga });
 
-AddUser.defaultProps = {};
+AddArticle.defaultProps = {};
 
-AddUser.propTypes = {
-  classes: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  pharmacies: PropTypes.arrayOf(
+AddArticle.propTypes = {
+  classes: PropTypes.object,
+  dispatch: PropTypes.func,
+ laboratoires: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
-      denomination: PropTypes.string.isRequired,
+      nom: PropTypes.string.isRequired,
     }),
-  ).isRequired,
+  ),
 };
 
 const withReducer = injectReducer({ key: 'global', reducer });
@@ -289,5 +297,5 @@ export default compose(
   withReducer,
   withConnect,
   withSaga,
-  authenticated,
-)(AddUser);
+ authenticated,
+)(AddArticle);

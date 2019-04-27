@@ -9,26 +9,18 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
-import ResetIcon from '@material-ui/icons/SettingsBackupRestore';
 import { compose } from 'redux';
 import Divider from '@material-ui/core/Divider';
 import injectSaga from 'utils/injectSaga';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import injectReducer from 'utils/injectReducer';
-import IconButton from '@material-ui/core/IconButton';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
-import SearchIcon from '@material-ui/icons/Search';
-import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
-import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import reducer from './reducer';
+import history from 'utils/history';
 import saga from './saga';
-import{
+
+import {
   makeSelectArticlesList,
   makeSelectPage,
   makeSelectRowsPerPage,
@@ -37,10 +29,16 @@ import{
   makeSelectPPH,
   makeSelectPPV,
   makeSelectTVA,
-}from './selectors';
+  makeSelectlaboratoire,
+} from './selectors';
 import { getArticlesList } from './actions';
-import Toggle from '../../components/Toggle/Toggle';
 import authenticated from '../HOC/authenticated/authenticated';
+import AddIcon from '@material-ui/icons/Add';
+import AticlesListTableRow from './list/ArticlesListTableRow';
+import ArticlesListTableFooter from './list/ArticlesListTableFooter';
+import  ArticlesListSearch from './list/ArticlesListSearch';
+import ArticlesListTableHeader from './list/ArticlesListTableHeader';
+
 
 const actionsStyles = theme => ({
   root: {
@@ -78,85 +76,15 @@ const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
   },
+  addArticlesButton: {
+
+    position: 'fixed',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2,
+  },
 });
 
-class TablePaginationActions extends React.Component {
-  handleFirstPageButtonClick = event => {
-    this.props.onChangePage(event, 0);
-  };
 
-  handleBackButtonClick = event => {
-    this.props.onChangePage(event, this.props.page - 1);
-  };
-
-  handleNextButtonClick = event => {
-    this.props.onChangePage(event, this.props.page + 1);
-  };
-
-  handleLastPageButtonClick = event => {
-    this.props.onChangePage(
-      event,
-      Math.max(0, Math.ceil(this.props.count / this.props.rowsPerPage) - 1),
-    );
-  };
-
-  render() {
-    const { classes, count, page, rowsPerPage, theme } = this.props;
-    return (
-      <div className={classes.root}>
-        <IconButton
-          onClick={this.handleFirstPageButtonClick}
-          disabled={page === 0}
-          aria-label="First Page"
-        >
-          {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-        </IconButton>
-        <IconButton
-          onClick={this.handleBackButtonClick}
-          disabled={page === 0}
-          aria-label="Previous Page"
-        >
-          {theme.direction === 'rtl' ? (
-            <KeyboardArrowRight />
-          ) : (
-            <KeyboardArrowLeft />
-          )}
-        </IconButton>
-        <IconButton
-          onClick={this.handleNextButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label="Next Page"
-        >
-          {theme.direction === 'rtl' ? (
-            <KeyboardArrowLeft />
-          ) : (
-            <KeyboardArrowRight />
-          )}
-        </IconButton>
-        <IconButton
-          onClick={this.handleLastPageButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label="Last Page"
-        >
-          {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-        </IconButton>
-      </div>
-    );
-  }
-}
-
-TablePaginationActions.propTypes = {
-  classes: PropTypes.object.isRequired,
-  count: PropTypes.number.isRequired,
-  onChangePage: PropTypes.func.isRequired,
-  page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired,
-  theme: PropTypes.object.isRequired,
-};
-
-const TablePaginationActionsWrapped = withStyles(actionsStyles, {
-  withTheme: true,
-})(TablePaginationActions);
 
 class ListeArticles extends React.Component {
   constructor(props) {
@@ -166,9 +94,10 @@ class ListeArticles extends React.Component {
       rowsPerPage: 10,
       categorie:'',
       nom:'',
-      PPH:0.00,
-      PPV:0.00,
-      TVA:'',
+      pph:'',
+      ppv:'',
+      tva:'',
+      laboratoire:'',
 
     };
   }
@@ -198,6 +127,10 @@ class ListeArticles extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  handleArticlesAddClick = () => {
+    history.push('/articles/add');
+  };
+
 
   render() {
     const {rowsPerPage, page } = this.state;
@@ -211,112 +144,50 @@ class ListeArticles extends React.Component {
           Liste des articles
         </Typography>
         <Divider variant="middle" className={classes.root} />
-        <form className={classes.root}>
-          <Typography component="h1" variant="h6">
-            Recherche
-          </Typography>
-
-
-          <TextField
-            name=""
-            label="Laboratoired'article "
-            className={classes.textField}
-            margin="normal"
-            onChange={this.handleChange}
-          />
-          <TextField
-            name="categorie"
-            label="Catégorie d'article"
-            className={classes.textField}
-            margin="normal"
-            onChange={this.handleChange}
-          />
-          <TextField
-            name="nom"
-            label="Désignation d'article"
-            className={classes.textField}
-            margin="normal"
-            onChange={this.handleChange}
-          />
-
-
-          <Fab
-            color="primary"
-            className={classes.button}
-            onClick={this.handleSearchArticles}
-          >
-            <SearchIcon />
-          </Fab>
-        </form>
+        <ArticlesListSearch
+          handleChange={this.handleChange}
+          handleSearchArticle={this.handleSearchArticles}
+        />
 
         <Divider variant="middle" className={classes.root} />
 
-        <Typography component="h1" variant="h6" className={classes.root}>
+       <Typography component="h1" variant="h6" className={classes.root}>
           {totalElements} Articles trouvés
         </Typography>
 
         <Paper className={classes.root}>
           <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Laboratoire</TableCell>
-                <TableCell>Catégorie</TableCell>
-                <TableCell>Désignation</TableCell>
-                <TableCell>PPH</TableCell>
-                <TableCell>PPV</TableCell>
-                <TableCell>TVA</TableCell>
-               <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
+          <TableHead>
+           <ArticlesListTableHeader />
+          </TableHead>
+
             <TableBody>
+                {rows &&
+                rows.map(row => <AticlesListTableRow key={row.id} row={row} />)}
 
-              {rows &&
-                rows.map(row => (
-
-                  <TableRow key={row.id}>
-                    <TableCell component="th" scope="row">
-                      {}</TableCell>
-                    <TableCell>{row.categorie}</TableCell>
-                    <TableCell>{row.nom}</TableCell>
-                    <TableCell>{row.pph}</TableCell>
-                    <TableCell>{row.ppv}</TableCell>
-                    <TableCell >{row.tva}</TableCell>
-                      <TableCell>
-                      <EditIcon color="primary" />
-                      <ResetIcon color="primary" />
-                    </TableCell>
-                  </TableRow>
-                ))}
             </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[10, 25, 50]}
-                  colSpan={3}
-                  count={totalElements}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    native: true,
-                  }}
-                  labelRowsPerPage="Nombre des articles par page : "
-                  labelDisplayedRows={({ from, to, count }) =>
-                    `De ${from} à ${to} sur ${count} articles`
-                  }
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActionsWrapped}
-                />
-              </TableRow>
-            </TableFooter>
+            <ArticlesListTableFooter
+              totalElements={totalElements}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              handleChangePage={this.handleChangePage}
+              handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+            />
           </Table>
         </Paper>
+       {/* action :handleArticlesAddClick */}
+        <Fab color="primary"  className={classes.addArticlesButton}
+          onClick={this.handleArticlesAddClick}>
+          <AddIcon />
+        </Fab>
+
       </div>
     );
   }
 }
 
-/* istanbul ignore next */
+
+
 const mapDispatchToProps = dispatch => ({
   dispatch,
 });
@@ -327,9 +198,10 @@ const mapStateToProps = createStructuredSelector({
   rowsPerPage:makeSelectRowsPerPage(),
   categorie:makeSelectcategorie(),
   nom:makeSelectNom(),
-  PPH:makeSelectPPH(),
-  PPV:makeSelectPPV(),
-  TVA:makeSelectTVA(),
+  pph:makeSelectPPH(),
+  ppv:makeSelectPPV(),
+  tva:makeSelectTVA(),
+  laboratoire:makeSelectlaboratoire() ,
 
 });
 
@@ -343,6 +215,8 @@ const withSaga = injectSaga({ key:'articles', saga });
 
 ListeArticles.propTypes = {
   classes: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+
 };
 
 export default compose(

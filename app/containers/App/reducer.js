@@ -9,6 +9,10 @@ import {
   SET_REGIONS,
   SET_USER_IN_STORE,
   SET_VILLES,
+  ADD_NEW_LABORATOIRE_TO_STORE,
+  RESET_ARTICLE_IN_STORE,
+  SET_ARTICLE_IN_STORE,
+  SET_LABORATOIRES,
 } from './constants';
 import AccessTokenStorage from '../../services/security/AccessTokenStorage';
 
@@ -18,6 +22,8 @@ export const initialState = fromJS({
   pharmacies: [],
   villes: [],
   regions: [],
+  laboratoires: [],
+
 });
 
 function reducer(state = initialState, action) {
@@ -62,6 +68,30 @@ function reducer(state = initialState, action) {
       newPharmacies.push({ ...action.payload });
       return state.merge({ pharmacies: [...newPharmacies] });
     }
+    case SET_ARTICLE_IN_STORE: {
+      if (!state.get('article')) {
+        const accessToken = AccessTokenStorage.get();
+        const parsedToken = decode(accessToken);
+        return state.merge({
+          article: parsedToken.article,
+        });
+      }
+      return state;
+    }
+
+    case RESET_ARTICLE_IN_STORE: {
+      return state.merge({ article: null });
+    }
+    case SET_LABORATOIRES: {
+      return state.merge({laboratoires: [...action.payload] });
+    }
+
+    case ADD_NEW_LABORATOIRE_TO_STORE: {
+      const newLaboratoires = state.toJS().laboratoires;
+      newLaboratoires.push({ ...action.payload });
+      return state.merge({ laboratoires: [...newLaboratoires ] });
+    }
+
     default: {
       return state;
     }

@@ -11,6 +11,7 @@ import AddUser from '../Users/add';
 import { getConfiguration } from './actions';
 import reducer from './reducer';
 import ListArticles from '../Articles/ListArticles';
+import  AddArticle from '../Articles/add/index';
 
 class InternalApp extends React.PureComponent {
   componentWillMount() {
@@ -23,6 +24,7 @@ class InternalApp extends React.PureComponent {
         <Route exact path="/" component={HomePage} />
         <Route exact path="/articles" component={ListArticles} />
         <Route exact path="/users/add" component={AddUser} />
+        <Route exact path="/articles/add" component={AddArticle} />
         <Route component={NotFoundPage} />
       </Switch>
     );
