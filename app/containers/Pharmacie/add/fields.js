@@ -27,13 +27,6 @@ export const pharmacieFields = [
     validator: validators.stringNotBlank,
   },
   {
-    id: 'fax',
-    name: 'fax',
-    label: 'Fax',
-    type: 'number',
-    validator: validators.stringNotBlank,
-  },
-  {
     id: 'gsm',
     name: 'gsm',
     label: 'Gsm',
@@ -108,7 +101,6 @@ export const pharmacieFields = [
       InputLabelProps: {
         shrink: true,
       },
-      // defaultValue: formatDate(new Date()),
       style: {
         width: '100%',
       },
@@ -137,7 +129,6 @@ const validateField = (result, fieldName, allData) => {
 };
 
 export const validateFormData = formData => {
-  console.log(formData)
   let validationResult = {};
   const keys = Object.keys(formData);
   keys.forEach(key => {

@@ -200,6 +200,7 @@ export class AddUser extends React.PureComponent {
           />
         </form>
         <Dialog
+          maxWidth="lg"
           onClose={this.handleClose}
           aria-labelledby="customized-dialog-title"
           open={this.state.isAddPharmacie}

@@ -48,7 +48,6 @@ const initialState = {
     denomination: '',
     adresse: '',
     tel: '',
-    fax: '',
     gsm: '',
     patente: '',
     numRC: '',
