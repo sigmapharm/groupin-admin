@@ -5,6 +5,7 @@ const PHARMACIES = '/pharmacies';
 const LABORATOIRES='/laboratoires';
 const REGIONS = '/regions';
 const VILLES = '/villes';
+const OFFRES='/offres';
 
 export default {
   LOGIN,
@@ -14,6 +15,7 @@ export default {
   REGIONS,
   LABORATOIRES,
   ARTICLES,
+  OFFRES,
 
 
 };

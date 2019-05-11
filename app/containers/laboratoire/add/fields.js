@@ -16,26 +16,26 @@ export const laboratoiresFields = [
    {
     id: 'email',
     name: 'email',
-    label: 'email',
+    label: 'Email',
     validator: validators.emailValidation,
    },
    {
     id: 'website',
     name: 'website',
-    label: 'website',
+    label: 'Website',
     validator: validators.stringNotBlank,
    },
 
   {
     id: 'description',
     name: 'description',
-    label: 'description',
+    label: 'Description',
     validator: validators.stringNotBlank,
   },
   {
     id: 'adresse',
     name: 'adresse',
-    label: 'adresse',
+    label: 'Adresse',
     validator: validators.stringNotBlank,
   },
 

@@ -1,13 +1,16 @@
 import { fromJS } from 'immutable';
 import {
-  GET_ARTICLES_LIST_ACTION,
-  PUT_ARTICLES_LIST_ACTION,
+  GET_ARTICLES_LIST_ACTION, GET_ARTICLESLABO_LIST_ACTION,
+  PUT_ARTICLES_LIST_ACTION, PUT_ARTICLESLABO_LIST_ACTION,
 } from './constants';
 
 export const initialState = fromJS({
   articlesList:[],
+  articlesListlabo:[],
+  laboratoire:'',
   page: 0,
   rowsPerPage: 10,
+
 });
 
 function reducer(state = initialState, action) {
@@ -24,6 +27,16 @@ function reducer(state = initialState, action) {
     case PUT_ARTICLES_LIST_ACTION: {
       return state.merge({
         articlesList: action.payload,
+      });
+    }
+    case GET_ARTICLESLABO_LIST_ACTION: {
+      return state.merge({
+        laboratoire: action.payload,
+      });
+    }
+    case PUT_ARTICLESLABO_LIST_ACTION : {
+      return state.merge({
+        articlesListlabo: action.payload,
       });
     }
     default: {

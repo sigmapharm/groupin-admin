@@ -1,9 +1,13 @@
 import { all, takeLatest } from 'redux-saga/effects';
 import { callApi } from '../../services/saga';
-import { GET_ARTICLES_LIST_ACTION, MANAGE_CREATE_ARTICLE_RESPONSE, SUBMIT_CREATE_ARTICLE } from './constants';
-import { manageCreateArticleResponse, putArticlesList } from './actions';
+import {
+  GET_ARTICLES_LIST_ACTION,
+  MANAGE_CREATE_ARTICLE_RESPONSE,
+  SUBMIT_CREATE_ARTICLE,
+} from './constants';
+import { manageCreateArticleResponse, putArticleslaboList, putArticlesList } from './actions';
 import ApiRoutes from '../../core/ApiRoutes';
-import ARTICLES from '../../core/ApiRoutes';
+
 
 function* articlesListWorker(action) {
   const options = {
@@ -13,16 +17,15 @@ function* articlesListWorker(action) {
     },
   };
   try {
-    const params = `?size=${action.payload.rowsPerPage}&page=${
-      action.payload.page
-    }&categorie=${
-      action.payload.categorie }&nom=${action.payload.nom}&PPH=${action.payload.PPH}&PPV=${action.payload.PPV}&laboratoire=${action.payload.laboratoire}&TVA=${action.payload.TVA}`;
+    const params = `?size=${action.payload.rowsPerPage}&page=${action.payload.page}&categorie=${action.payload.categorie}&nom=${action.payload.nom}&laboratoire=${action.payload.laboratoire}`;
     yield callApi(`/articles${params}`, putArticlesList, options, null);
   } catch (e) {
     console.log(e);
     // eslint-disable-line
   }
 }
+//Saga artilses of a single Labo
+
 
 
 function* addNewArticleWorker(action) {
@@ -63,8 +66,8 @@ function*  manageCreateArticleResponseWorker(action) {
 
 function* articlesListSagas() {
   yield all([takeLatest(GET_ARTICLES_LIST_ACTION, articlesListWorker),
-    takeLatest(SUBMIT_CREATE_ARTICLE, addNewArticleWorker),
-    takeLatest(MANAGE_CREATE_ARTICLE_RESPONSE, manageCreateArticleResponseWorker),
+             takeLatest(SUBMIT_CREATE_ARTICLE,addNewArticleWorker),
+             takeLatest(MANAGE_CREATE_ARTICLE_RESPONSE, manageCreateArticleResponseWorker),
 
 
   ]);

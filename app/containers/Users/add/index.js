@@ -196,6 +196,7 @@ export class AddUser extends React.PureComponent {
             handlePharmacieSelectChange={this.handlePharmacieSelectChange}
             handleSubmit={this.handleSubmit}
             handleAddPharmacieClick={this.handleAddPharmacieOpen}
+            handleAnuler={this.handleGoToUsersList}
           />
         </form>
         <Dialog

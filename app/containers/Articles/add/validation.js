@@ -56,7 +56,7 @@ export const validateFormData = formData => {
 export const fields = {
   reference: {
     name: 'reference',
-    label: 'Reférence',
+    label: 'Référence',
     validator: validators.stringNotBlank,
   },
   nom: {
@@ -71,7 +71,7 @@ export const fields = {
   },
   codebare: {
     name: 'codebare',
-    label: 'Code Bare',
+    label: 'Code Barre',
     validator: validators.stringNotBlank,
   },
   categorie: {
@@ -102,7 +102,7 @@ export const fields = {
   },
   dci: {
     name: 'dci',
-    label: 'dci',
+    label: 'DCI',
     validator: validators.stringNotBlank,
   },
 
@@ -121,9 +121,5 @@ laboratoire: {
     label: 'produit Marché',
 
   },
-
-
-
-
 
 };

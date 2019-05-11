@@ -99,3 +99,4 @@ export const addLaboratoireToStore = laboratoire => ({
   type: ADD_NEW_LABORATOIRE_TO_STORE,
   payload: { ...laboratoire },
 });
+

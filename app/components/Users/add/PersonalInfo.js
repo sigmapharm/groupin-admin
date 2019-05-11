@@ -10,7 +10,7 @@ const styles = () => ({
 });
 
 export function PersonalInfo(props) {
-  const { formData, errors, classes, onChange, maxLength } = props;
+  const {formData, errors, classes, onChange, maxLength } = props;
   return (
     <>
       <Grid xs={12} md={6} item>

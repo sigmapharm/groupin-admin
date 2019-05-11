@@ -5,6 +5,9 @@ const articlesState = store => store.get('articles');
 const makeSelectArticlesList = () =>
   createSelector(articlesState, state => state.get('articlesList').toJS());
 
+const makeSelectarticlesListlabo = () =>
+  createSelector(articlesState, state => state.get('articlesListlabo').toJS());
+
 const makeSelectPage = () =>
   createSelector(articlesState, state => state.get('page'));
 
@@ -39,4 +42,5 @@ export {
   makeSelectPPV,
   makeSelectTVA,
   makeSelectlaboratoire,
+  makeSelectarticlesListlabo,
 };

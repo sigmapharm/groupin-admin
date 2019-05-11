@@ -11,21 +11,18 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import Fade from '@material-ui/core/Fade';
-// import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 
 import { createStructuredSelector } from 'reselect';
-import {
-  defaultOptionsFormatter,
+import { defaultOptionsFormatter,
   pharmacieFields,
-  validateFormData,
-} from './fields';
-// import reducer from './reducer';
+  validateFormData, } from './fields';
+
 import sagas from './sagas';
 import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
 import { addPharmacie } from './actions';
 import ErrorsArea from '../../../components/ErrorsArea';
-// import messages from './messages';
+
 
 /* istanbul ignore next */
 const styles = theme => ({

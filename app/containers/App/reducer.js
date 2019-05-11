@@ -24,6 +24,7 @@ export const initialState = fromJS({
   regions: [],
   laboratoires: [],
 
+
 });
 
 function reducer(state = initialState, action) {

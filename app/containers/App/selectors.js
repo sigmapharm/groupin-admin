@@ -28,6 +28,8 @@ const makeSelectLaboratoires = () =>
     return (appState && appState.toJS().laboratoires) || [];
   });
 
+
+
 const makeSelectArticle = () =>
   createSelector(
     selectApp,

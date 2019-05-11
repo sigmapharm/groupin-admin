@@ -4,13 +4,15 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
-import PersonalInfo from './PersonalInfo';
-import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
 import ErrorsArea from '../../ErrorsArea';
-
+import  OffreInfo  from './OffreInfo';
+import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
+import ArticlesListTableHeader from './ArticlesHeader';
+import TableBody from '@material-ui/core/TableBody';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import AticlesListTableRow from './ArticlesRow';
 const styles = theme => ({
   root: {
     paddingLeft: theme.spacing.unit * 5,
@@ -21,10 +23,7 @@ const styles = theme => ({
     paddingBottom: theme.spacing.unit * 5,
     paddingTop: theme.spacing.unit * 5,
   },
-  title: {
-    paddingBottom: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 5,
-  },
+  title: { marginLeft: '-120px', },
   gridContainer: {
     paddingLeft: theme.spacing.unit * 15,
     paddingRight: theme.spacing.unit * 15,
@@ -36,10 +35,7 @@ const styles = theme => ({
   divider: {
     marginTop: theme.spacing.unit * 5,
   },
-  select: {
-    marginTop: theme.spacing.unit,
-    maxWidth: '350px',
-  },
+
   closeButton: {
     position: 'absolute',
     right: theme.spacing.unit,
@@ -49,38 +45,58 @@ const styles = theme => ({
   inputs: {
     maxWidth: '350px',
   },
-  selectPharmacieContainer: {
-    maxWidth: '360px',
-    display: 'inline-flex',
-    textAlign: 'center',
-  },
-
   buttons:{
     marginLeft:'1%',
   },
   buttonajout:{
     marginLeft:'-22%',
-  }
+  },
+  select: {
+    marginTop: theme.spacing.unit,
+    maxWidth: '350px',
+  },
+  selectLaboratoireContainer: {
+    maxWidth: '360px',
+    display: 'inline-flex',
+    textAlign: 'center',
+  },
+  table: {
+    minWidth:500,
+    marginTop:'2%',
+    marginLeft:'-2%',
+    textAlign:'center',
+    marginRight:'27%',
+
+  },
+  infoArticle:{
+    marginTop:'2%',
+    marginLeft:'-2%',
+    scrollMarginBottom:'-2%',
+},
+
+
 });
 
-export function AddUserForm(props) {
+
+
+export function AddOffreForm(props) {
   const {
     classes,
     errors,
-    pharmacies,
     formData,
     handleFormDataChange,
-    handlePharmacieSelectChange,
-    handleAddPharmacieClick,
     handleSubmit,
-    handleAnuler,
+    laboratoires,
+    handleLaboratoireSelectChange,
+    rows,
+
   } = props;
   return (
     <Paper className={classes.paper}>
       <Grid className={classes.headerGridContainer} container>
-        <Grid xs={12} item>
-          <Typography className={classes.title} variant="h5" color="primary">
-            {`Informations personnelles`}
+        <Grid xs={12}  className={classes.title} item>
+          <Typography  variant="h5" color="secondary">
+            {`Informations d'offres`}
           </Typography>
         </Grid>
         <Grid xs={12} item>
@@ -92,30 +108,50 @@ export function AddUserForm(props) {
         </Grid>
       </Grid>
       <Grid className={classes.gridContainer} spacing={8} container>
-        <PersonalInfo
+        <OffreInfo
           formData={formData}
           errors={errors.fields}
           onChange={handleFormDataChange}
           maxLength={30}
           classes={{
-            userInputs: classes.inputs,
+            offreInputs: classes.inputs,
           }}
         />
-        <Grid className={classes.selectPharmacieContainer} xs={12} md={6} item>
+        <Grid className={classes.selectLaboratoireContainer} xs={12} md={6} item>
           <SingleAutoCompleteSelect
             className={classes.select}
-            name="pharmacie"
-            options={pharmacies}
-            onChange={handlePharmacieSelectChange}
-            value={formData.pharmacie}
-            placeholder="Pharmacie"
+            name="laboratoire"
+            options={laboratoires}
+            onChange={handleLaboratoireSelectChange}
+            value={formData.laboratoire}
+            placeholder="Laboratoire"
             isClearable
-          />
-          <Fab size="small" color="primary" onClick={handleAddPharmacieClick}>
-            <AddIcon />
-          </Fab>
+        />
+    </Grid>
+        <Grid className={classes.gridContainer}spacing={8} container>
+          <Typography  variant="h5" color="secondary" className={classes.infoArticle}>
+            {`Articles de l'offre`}</Typography>
         </Grid>
-        <Grid xs={12} md={6} item />
+    <Grid className={classes.gridContainer}spacing={8} container>
+          <Table className={classes.table}>
+            <colgroup>
+              <col width="1%" />
+              <col width="1%" />
+              <col width="1%" />
+              <col width="1%" />
+              <col width="5%" />
+              <col width="5%" />
+            </colgroup>
+             <TableHead>
+               <ArticlesListTableHeader />
+             </TableHead>
+            <TableBody>
+           {rows &&
+              rows.map(row => <AticlesListTableRow key={row.id} row={row} />)}
+          </TableBody>
+        </Table>
+        </Grid>
+    <Grid xs={12} md={6} item />
         <Grid xs={12} item />
         <Grid justify="center" container>
           <Button
@@ -123,41 +159,19 @@ export function AddUserForm(props) {
             variant="contained"
             color="primary"
             className={classes.buttonajout}
-            onClick={handleSubmit}
-          >
+            onClick={handleSubmit}>
             Valider
           </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            onClick={handleAnuler}
-            className={classes.buttons}
-          >
-           ANNULER
-          </Button>
-        </Grid>
-      </Grid>
-    </Paper>
-  );
-}
+        </Grid></Grid></Paper> );}
 
-AddUserForm.defaultProps = {};
+AddOffreForm.defaultProps = {};
 
-AddUserForm.propTypes = {
+AddOffreForm.propTypes = {
   classes: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
-  pharmacies: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      denomination: PropTypes.string,
-    }),
-  ).isRequired,
   formData: PropTypes.object.isRequired,
   handleFormDataChange: PropTypes.func.isRequired,
-  handlePharmacieSelectChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  handleAddPharmacieClick: PropTypes.func.isRequired,
 };
 
- export default withStyles(styles)(AddUserForm);
+export default withStyles(styles)(AddOffreForm);

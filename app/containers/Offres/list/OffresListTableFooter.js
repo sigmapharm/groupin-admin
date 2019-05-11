@@ -1,11 +1,12 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
+
 import TableFooter from '@material-ui/core/TableFooter';
 import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
-import ArticlesListTableFooterActions from './ArticlesListTableFooterAction';
+import  OffresListTableFooterActions  from './OffresListTableFooterActions';
 
-export class ArticlesListTableFooter extends React.PureComponent {
+export class OffresListTableFooter extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -31,13 +32,13 @@ export class ArticlesListTableFooter extends React.PureComponent {
             SelectProps={{
               native: true,
             }}
-            labelRowsPerPage="Nombre d'articles par page : "
+            labelRowsPerPage="Nombre d'offres par page : "
             labelDisplayedRows={({ from, to, count }) =>
-              `De ${from} à ${to} sur ${count} articles`
+              `De ${from} à ${to} sur ${count} offres`
             }
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
-            ActionsComponent={ArticlesListTableFooterActions}
+            ActionsComponent={OffresListTableFooterActions}
           />
         </TableRow>
       </TableFooter>
@@ -45,9 +46,9 @@ export class ArticlesListTableFooter extends React.PureComponent {
   }
 }
 
-ArticlesListTableFooter.defaultProps = {};
+OffresListTableFooter.defaultProps = {};
 
-ArticlesListTableFooter.propTypes = {
+OffresListTableFooter.propTypes = {
   totalElements: PropTypes.any,
   rowsPerPage: PropTypes.any,
   page: PropTypes.any,
@@ -55,4 +56,4 @@ ArticlesListTableFooter.propTypes = {
   handleChangeRowsPerPage: PropTypes.any,
 };
 
-export default  ArticlesListTableFooter;
+export default OffresListTableFooter;

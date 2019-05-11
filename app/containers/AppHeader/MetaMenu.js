@@ -16,7 +16,7 @@ export const MetaMenu = [
   {
     key: 3,
     label: 'Offres',
-    link: '#',
+    link: '/offres',
     allowedRoles: [MEMBRE, ADMIN, SUPER_ADMIN],
   },
   {
