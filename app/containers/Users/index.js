@@ -27,10 +27,8 @@ import {
   makeSelectRowsPerPage,
   makeSelectUsersList,
 } from './selectors';
-import reducer from './reducer';
 import saga from './saga';
 import authenticated from '../HOC/authenticated/authenticated';
-import injectReducer from '../../utils/injectReducer';
 import injectSaga from '../../utils/injectSaga';
 import UsersListTableFooter from './list/UsersListTableFooter';
 
@@ -171,7 +169,6 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withReducer = injectReducer({ key: 'users', reducer });
 const withSaga = injectSaga({ key: 'users', saga });
 
 UsersList.defaultProps = {};
@@ -185,7 +182,6 @@ UsersList.propTypes = {
 
 export default compose(
   authenticated,
-  withReducer,
   withSaga,
   withConnect,
   withStyles(styles),

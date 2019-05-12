@@ -2,12 +2,10 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 import { createStructuredSelector } from 'reselect';
 import LoginForm from '../../components/LoginForm';
 import { submitLogin } from './actions';
-import reducer from './reducer';
 import saga from './saga';
 import { makeSelectLoginErrors } from './selectors';
 
@@ -62,7 +60,6 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withReducer = injectReducer({ key: 'login', reducer });
 const withSaga = injectSaga({ key: 'login', saga });
 
 SignIn.propTypes = {
@@ -71,7 +68,6 @@ SignIn.propTypes = {
 };
 
 export default compose(
-  withReducer,
   withSaga,
   withConnect,
 )(SignIn);

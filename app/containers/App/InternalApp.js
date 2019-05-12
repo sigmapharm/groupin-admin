@@ -5,15 +5,13 @@ import { Route, Switch } from 'react-router-dom';
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import { connect } from 'react-redux';
-import injectReducer from 'utils/injectReducer';
 import { compose } from 'redux';
 import AddUser from '../Users/add';
 import { getConfiguration } from './actions';
-import reducer from './reducer';
 import ListArticles from '../Articles/ListArticles';
-import  AddArticle from '../Articles/add/index';
-import  OffresList  from '../Offres';
-import  AddOffre  from '../Offres/add/index';
+import AddArticle from '../Articles/add/index';
+import OffresList from '../Offres';
+import AddOffre from '../Offres/add/index';
 
 class InternalApp extends React.PureComponent {
   componentWillMount() {
@@ -51,9 +49,4 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withReducer = injectReducer({ key: 'global', reducer });
-
-export default compose(
-  withReducer,
-  withConnect,
-)(InternalApp);
+export default compose(withConnect)(InternalApp);

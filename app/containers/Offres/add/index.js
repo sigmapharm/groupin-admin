@@ -14,15 +14,16 @@ import authenticated from '../../HOC/authenticated/authenticated';
 import saga from '../saga';
 
 import injectSaga from '../../../utils/injectSaga';
-import reducer from '../../App/reducer';
-import injectReducer from '../../../utils/injectReducer';
-import {validateFormData }  from './validation';
-import { createOffre, } from '../actions';
-import  AddOffreForm  from '../../../components/offres/add/AddOffreForm';
+import { validateFormData } from './validation';
+import { createOffre } from '../actions';
+import AddOffreForm from '../../../components/offres/add/AddOffreForm';
 import { formatLaboratoireToLabelValue } from './utils';
 import { makeSelectLaboratoires } from '../../App/selectors';
 import { getArticleslaboList } from '../../Articles/actions';
-import { makeSelectArticlesList, makeSelectarticlesListlabo } from '../../Articles/selectors';
+import {
+  makeSelectArticlesList,
+  makeSelectarticlesListlabo,
+} from '../../Articles/selectors';
 const styles = theme => ({
   root: {
     paddingLeft: theme.spacing.unit * 5,
@@ -55,25 +56,21 @@ const styles = theme => ({
 
 const initialState = {
   formData: {
-    designation:'',
-    dateDebut:'',
-    dateFin:'',
-    montant:'',
-    quantiteMin:'',
-    status:'',
-    montantMax:'',
-    laboratoire:'',
-
+    designation: '',
+    dateDebut: '',
+    dateFin: '',
+    montant: '',
+    quantiteMin: '',
+    status: '',
+    montantMax: '',
+    laboratoire: '',
   },
   errors: {
     fields: {},
     messages: {},
   },
   isSuccess: false,
-
 };
-
-
 
 export class AddOffre extends React.PureComponent {
   state = { ...initialState };
@@ -88,7 +85,7 @@ export class AddOffre extends React.PureComponent {
     });
   };
 
- handleSubmit = e => {
+  handleSubmit = e => {
     e.preventDefault();
     const { formData } = this.state;
     const validation = validateFormData(formData);
@@ -109,18 +106,20 @@ export class AddOffre extends React.PureComponent {
       const formattedData = {
         ...formData,
         laboratoire: {
-          id:formData.laboratoire && formData.laboratoire.value,
+          id: formData.laboratoire && formData.laboratoire.value,
         },
-
- };
- this.props.dispatch(createOffre(formattedData,this.handleSubmitResponse));
+      };
+      this.props.dispatch(
+        createOffre(formattedData, this.handleSubmitResponse),
+      );
     }
-
   };
 
- componentDidMount() {this.props.dispatch(getArticleslaboList(this.state));}
+  componentDidMount() {
+    this.props.dispatch(getArticleslaboList(this.state));
+  }
 
-  handleChangeLaboratoire = (laboratoire) => {
+  handleChangeLaboratoire = laboratoire => {
     this.setState({ laboratoire }, () =>
       this.props.dispatch(getArticleslaboList(this.state)),
     );
@@ -145,12 +144,10 @@ export class AddOffre extends React.PureComponent {
         isSuccess: false,
       });
     }
-
   };
 
-
   handleLaboratoireSelectChange = value => {
-  const {formData} = this.state;
+    const { formData } = this.state;
     this.setState(
       {
         formData: {
@@ -158,14 +155,14 @@ export class AddOffre extends React.PureComponent {
           laboratoire: value.label,
         },
       },
-    () => {
-        console.log("value :", value);
-      console.log("formData :", formData);
+      () => {
+        console.log('value :', value);
+        console.log('formData :', formData);
         this.props.dispatch(getArticleslaboList(this.state));
-     }
+      },
     );
 
-/* const { formData ,laboratoire} = this.state;
+    /* const { formData ,laboratoire} = this.state;
      this.setState({
       formData: {
         ...formData,
@@ -174,7 +171,7 @@ export class AddOffre extends React.PureComponent {
      },
       articles:this.handleChangeLaboratoire(value.id && value.nom),
 
-    });*/
+    }); */
   };
 
   handleCloseSuccessMessage = () => {
@@ -185,16 +182,24 @@ export class AddOffre extends React.PureComponent {
     history.push('/offres');
   };
 
-
   render() {
-    const { classes,laboratoires,articlesList,articlesListlabo } = this.props;
+    const {
+      classes,
+      laboratoires,
+      articlesList,
+      articlesListlabo,
+    } = this.props;
     const { formData, errors, isSuccess } = this.state;
-    const formattedLaboratoire = laboratoires.map(formatLaboratoireToLabelValue);
-    const totalElements = articlesList.totalElements ? articlesList.totalElements : 0;
-    //const rows = articlesList.content;
+    const formattedLaboratoire = laboratoires.map(
+      formatLaboratoireToLabelValue,
+    );
+    const totalElements = articlesList.totalElements
+      ? articlesList.totalElements
+      : 0;
+    // const rows = articlesList.content;
     const rows = articlesListlabo ? articlesListlabo.content : [];
     console.log(totalElements);
-    console.log("RENDER :", rows);
+    console.log('RENDER :', rows);
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
@@ -210,7 +215,6 @@ export class AddOffre extends React.PureComponent {
             handleLaboratoireSelectChange={this.handleLaboratoireSelectChange}
             handleAnuler={this.handleGoToOffresList}
           />
-
         </form>
         {isSuccess && (
           <Snackbar
@@ -239,9 +243,7 @@ export class AddOffre extends React.PureComponent {
           />
         )}
       </div>
-
     );
-
   }
 }
 /* istanbul ignore next */
@@ -251,8 +253,8 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = createStructuredSelector({
   laboratoires: makeSelectLaboratoires(),
-  articlesList:makeSelectArticlesList(),
- articlesListlabo:makeSelectarticlesListlabo(),
+  articlesList: makeSelectArticlesList(),
+  articlesListlabo: makeSelectarticlesListlabo(),
 });
 
 const withConnect = connect(
@@ -260,13 +262,12 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key: 'offres',saga });
+const withSaga = injectSaga({ key: 'offres', saga });
 
 AddOffre.defaultProps = {};
 
-
 AddOffre.propTypes = {
- articlesList: PropTypes.any,
+  articlesList: PropTypes.any,
   classes: PropTypes.object,
   dispatch: PropTypes.func,
   laboratoires: PropTypes.arrayOf(
@@ -277,13 +278,9 @@ AddOffre.propTypes = {
   ),
 };
 
-const withReducer = injectReducer({ key: 'global', reducer });
-
 export default compose(
   withStyles(styles),
-  withReducer,
   withConnect,
- // withSagaarticles,
   withSaga,
   authenticated,
 )(AddOffre);

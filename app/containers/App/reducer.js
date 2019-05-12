@@ -23,8 +23,6 @@ export const initialState = fromJS({
   villes: [],
   regions: [],
   laboratoires: [],
-
-
 });
 
 function reducer(state = initialState, action) {
@@ -84,13 +82,13 @@ function reducer(state = initialState, action) {
       return state.merge({ article: null });
     }
     case SET_LABORATOIRES: {
-      return state.merge({laboratoires: [...action.payload] });
+      return state.merge({ laboratoires: [...action.payload] });
     }
 
     case ADD_NEW_LABORATOIRE_TO_STORE: {
       const newLaboratoires = state.toJS().laboratoires;
       newLaboratoires.push({ ...action.payload });
-      return state.merge({ laboratoires: [...newLaboratoires ] });
+      return state.merge({ laboratoires: [...newLaboratoires] });
     }
 
     default: {

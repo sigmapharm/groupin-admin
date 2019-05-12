@@ -21,8 +21,6 @@ import saga from '../saga';
 import injectSaga from '../../../utils/injectSaga';
 import { makeSelectPharmacies } from '../../App/selectors';
 import { formatPharmacieToLabelValue } from './utils';
-import reducer from '../../App/reducer';
-import injectReducer from '../../../utils/injectReducer';
 import AddUserForm from '../../../components/Users/add/AddUserForm';
 import AddPharmacieContainer from '../../Pharmacie/add';
 
@@ -283,11 +281,8 @@ AddUser.propTypes = {
   ).isRequired,
 };
 
-const withReducer = injectReducer({ key: 'global', reducer });
-
 export default compose(
   withStyles(styles),
-  withReducer,
   withConnect,
   withSaga,
   authenticated,

@@ -26,10 +26,8 @@ import {
 
 
 } from './selectors';
-import reducer from './reducer';
 import saga from './saga';
 import authenticated from '../HOC/authenticated/authenticated';
-import injectReducer from '../../utils/injectReducer';
 import injectSaga from '../../utils/injectSaga';
 import OffresListTableHeader from './list/OffresListTableHeader';
 import OffresListTableRow from './list/OffresListTableRow';
@@ -221,7 +219,6 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withReducer = injectReducer({ key:'offres', reducer });
 const withSaga = injectSaga({ key:'offres', saga });
 
 OffresList.defaultProps = {};
@@ -235,7 +232,6 @@ OffresList.propTypes = {
 
 export default compose(
   authenticated,
-  withReducer,
   withSaga,
   withConnect,
   withStyles(styles),

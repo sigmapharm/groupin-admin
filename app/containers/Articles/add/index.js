@@ -17,14 +17,12 @@ import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
 import saga from '../saga';
 import injectSaga from '../../../utils/injectSaga';
-import reducer from '../../App/reducer';
-import injectReducer from '../../../utils/injectReducer';
-import {validateFormData }  from './validation';
+import { validateFormData } from './validation';
 import { formatLaboratoireToLabelValue } from './utils';
 import { createArticle } from '../actions';
 import { makeSelectLaboratoires } from '../../App/selectors';
-import  AddArticleForm  from '../../../components/articles/add/AddAricleFrom';
-import  AddLaboratoireContainer  from '../../laboratoire/add';
+import AddArticleForm from '../../../components/articles/add/AddAricleFrom';
+import AddLaboratoireContainer from '../../laboratoire/add';
 const styles = theme => ({
   root: {
     paddingLeft: theme.spacing.unit * 5,
@@ -59,19 +57,19 @@ const styles = theme => ({
 
 const initialState = {
   formData: {
-     reference:'',
-     nom :'',
-     gamme :'',
-     codebare:'',
-     categorie:'',
-     classe_therapeutique:'',
-     dci:'',
-     pph:'',
-     tva:'',
-    neccissite_prescription:'',
-    produit_Marche:'',
-    forme_galenique:'',
-},
+    reference: '',
+    nom: '',
+    gamme: '',
+    codebare: '',
+    categorie: '',
+    classe_therapeutique: '',
+    dci: '',
+    pph: '',
+    tva: '',
+    neccissite_prescription: '',
+    produit_Marche: '',
+    forme_galenique: '',
+  },
   errors: {
     fields: {},
     messages: {},
@@ -79,8 +77,6 @@ const initialState = {
   isSuccess: false,
   isAddLaboratoire: false,
 };
-
-
 
 export class AddArticle extends React.PureComponent {
   state = { ...initialState };
@@ -105,7 +101,6 @@ export class AddArticle extends React.PureComponent {
     });
   };
 
-
   handleSubmit = e => {
     e.preventDefault();
     const { formData } = this.state;
@@ -127,10 +122,12 @@ export class AddArticle extends React.PureComponent {
       const formattedData = {
         ...formData,
         laboratoire: {
-          id:formData.laboratoire && formData.laboratoire.value,
+          id: formData.laboratoire && formData.laboratoire.value,
         },
       };
-      this.props.dispatch(createArticle(formattedData,this.handleSubmitResponse));
+      this.props.dispatch(
+        createArticle(formattedData, this.handleSubmitResponse),
+      );
     }
   };
 
@@ -165,13 +162,13 @@ export class AddArticle extends React.PureComponent {
 
   handleAddlaboratoireOpen = () => {
     this.setState({
-      isAddLaboratoire:true,
+      isAddLaboratoire: true,
     });
   };
 
   handleAddLaboratoireClose = () => {
     this.setState({
-      isAddLaboratoire:false,
+      isAddLaboratoire: false,
     });
   };
 
@@ -180,7 +177,7 @@ export class AddArticle extends React.PureComponent {
     this.setState({
       formData: {
         ...formData,
-  laboratoire: formatLaboratoireToLabelValue(newLaboratoire),
+        laboratoire: formatLaboratoireToLabelValue(newLaboratoire),
       },
       isAddLaboratoire: false,
     });
@@ -189,7 +186,9 @@ export class AddArticle extends React.PureComponent {
   render() {
     const { classes, laboratoires } = this.props;
     const { formData, errors, isSuccess } = this.state;
-    const formattedLaboratoire = laboratoires.map(formatLaboratoireToLabelValue);
+    const formattedLaboratoire = laboratoires.map(
+      formatLaboratoireToLabelValue,
+    );
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
@@ -202,11 +201,8 @@ export class AddArticle extends React.PureComponent {
             handleLaboratoireSelectChange={this.handleLaboratoireSelectChange}
             handleSubmit={this.handleSubmit}
             handleAddLaboratoireClick={this.handleAddlaboratoireOpen}
-            handleAnuler={this.handleGoToArticlesList }
-           />
-
-
-
+            handleAnuler={this.handleGoToArticlesList}
+          />
         </form>
         <Dialog
           onClose={this.handleClose}
@@ -226,11 +222,10 @@ export class AddArticle extends React.PureComponent {
             </IconButton>
           </MuiDialogTitle>
           <MuiDialogContent>
-            < AddLaboratoireContainer
+            <AddLaboratoireContainer
               successCallback={this.handleAddLaboratoireSuccess}
             />
           </MuiDialogContent>
-
         </Dialog>
         {isSuccess && (
           <Snackbar
@@ -269,7 +264,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = createStructuredSelector({
- laboratoires: makeSelectLaboratoires(),
+  laboratoires: makeSelectLaboratoires(),
 });
 
 const withConnect = connect(
@@ -284,7 +279,7 @@ AddArticle.defaultProps = {};
 AddArticle.propTypes = {
   classes: PropTypes.object,
   dispatch: PropTypes.func,
- laboratoires: PropTypes.arrayOf(
+  laboratoires: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       nom: PropTypes.string.isRequired,
@@ -292,12 +287,9 @@ AddArticle.propTypes = {
   ),
 };
 
-const withReducer = injectReducer({ key: 'global', reducer });
-
 export default compose(
   withStyles(styles),
-  withReducer,
   withConnect,
   withSaga,
- authenticated,
+  authenticated,
 )(AddArticle);

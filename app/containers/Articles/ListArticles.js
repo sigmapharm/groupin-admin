@@ -14,9 +14,7 @@ import Divider from '@material-ui/core/Divider';
 import injectSaga from 'utils/injectSaga';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import injectReducer from 'utils/injectReducer';
 import Fab from '@material-ui/core/Fab';
-import reducer from './reducer';
 import history from 'utils/history';
 import saga from './saga';
 
@@ -210,7 +208,6 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withReducer =injectReducer({ key:'articles', reducer });
 const withSaga = injectSaga({ key:'articles', saga });
 
 ListeArticles.propTypes = {
@@ -221,7 +218,6 @@ ListeArticles.propTypes = {
 
 export default compose(
  authenticated,
-  withReducer,
   withSaga,
   withConnect,
   withStyles(styles),

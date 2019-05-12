@@ -4,11 +4,9 @@ import Dialog from '@material-ui/core/Dialog';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { createStructuredSelector } from 'reselect';
-import injectReducer from 'utils/injectReducer';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { makeSelectGlobalLoaderStatus } from '../App/selectors';
-import reducer from '../App/reducer';
 
 /* istanbul ignore next */
 const styles = () => ({
@@ -64,10 +62,7 @@ const withConnect = connect(
   null,
 );
 
-const withReducer = injectReducer({ key: 'global', reducer });
-
 export default compose(
-  withReducer,
   withConnect,
   withStyles(styles),
 )(GlobalLoadingDialog);
