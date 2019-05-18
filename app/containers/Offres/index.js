@@ -1,6 +1,5 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
@@ -23,19 +22,16 @@ import {
   makeSelectmontantObjectif,
   makeSelectquantiteMinimale,
   makeSelectstatus, makeSelectlaboratoire,
-
-
 } from './selectors';
 import saga from './saga';
 import authenticated from '../HOC/authenticated/authenticated';
 import injectSaga from '../../utils/injectSaga';
-import OffresListTableHeader from './list/OffresListTableHeader';
-import OffresListTableRow from './list/OffresListTableRow';
 import OffresListTableFooter from './list/OffresListTableFooter';
 import OffresListSearch from './list/OffresListSearch';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-
+import OffresListTableRows from './list/OffresListTableRows';
+import OffresListTableHeaders from './list/OffresListTableHeaders';
 
 /* istanbul ignore next */
 const actionsStyles = theme => ({
@@ -172,11 +168,11 @@ export class OffresList extends React.PureComponent {
          <Paper className={classes.root}>
            <Table className={classes.table}>
             <TableHead>
-            <OffresListTableHeader />
+            <OffresListTableHeaders />
             </TableHead>
             <TableBody>
               {rows &&
-              rows.map(row => <OffresListTableRow key={row.id} row={row} />)}
+              rows.map(row => <OffresListTableRows key={row.id} row={row} />)}
             </TableBody>
             <OffresListTableFooter
               totalElements={totalElements}

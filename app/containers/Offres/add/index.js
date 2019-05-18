@@ -74,6 +74,8 @@ const initialState = {
 
 export class AddOffre extends React.PureComponent {
   state = { ...initialState };
+ 
+
 
   handleFormDataChange = e => {
     const { formData } = this.state;
