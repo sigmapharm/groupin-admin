@@ -1,8 +1,5 @@
 import { createSelector } from 'reselect';
-
 const offresState = store => store.get('offres');
-
-
 const makeSelectOffresList = () =>
   createSelector(offresState, state => state.get('offresList').toJS());
 
@@ -18,7 +15,7 @@ const makeSelectdesignation = () =>
 const makeSelectdateDebut = () =>
   createSelector(offresState, state => state.get('dateDebut'));
 
-const makeSelectdateFin= () =>
+const makeSelectdateFin = () =>
   createSelector(offresState, state => state.get('dateFin'));
 
 const makeSelectmontantObjectif = () =>
@@ -32,10 +29,6 @@ const makeSelectstatus = () =>
 
 const makeSelectlaboratoire = () =>
   createSelector(offresState, state => state.get('laboratoire'));
-
-
-
-
 export {
   makeSelectOffresList,
   makeSelectPage,
@@ -48,5 +41,3 @@ export {
   makeSelectstatus,
   makeSelectlaboratoire,
 };
-
-

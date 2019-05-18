@@ -1,6 +1,5 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-
 import { compose } from 'redux';
 import Fab from '@material-ui/core/Fab';
 import { withStyles } from '@material-ui/core/styles';
@@ -33,7 +32,7 @@ export class ArticlesListSearch extends React.PureComponent {
   }
 
   render() {
-    const { classes, handleChange,  handleSearchArticle } = this.props;
+    const { classes, handleChange, handleSearchArticle } = this.props;
     // eslint-disable-line
     return (
       <form className={classes.root}>
@@ -62,12 +61,12 @@ export class ArticlesListSearch extends React.PureComponent {
           margin="normal"
           onChange={handleChange}
         />
-          <Fab
+        <Fab
           color="primary"
           className={classes.button}
           onClick={handleSearchArticle}
         >
-          <SearchIcon />
+          <SearchIcon/>
         </Fab>
       </form>
     );
@@ -77,9 +76,9 @@ export class ArticlesListSearch extends React.PureComponent {
 ArticlesListSearch.defaultProps = {};
 
 ArticlesListSearch.propTypes = {
-   classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
- // handleSearchArticles: PropTypes.func.isRequired,
+  // handleSearchArticles: PropTypes.func.isRequired,
 };
 
 export default compose(withStyles(styles))(ArticlesListSearch);

@@ -55,4 +55,4 @@ ArticlesListTableFooter.propTypes = {
   handleChangeRowsPerPage: PropTypes.any,
 };
 
-export default  ArticlesListTableFooter;
+export default ArticlesListTableFooter;

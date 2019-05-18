@@ -1,15 +1,4 @@
-import validators from '../../../core/validation'
-
- const displayDate = () => {
-  let aujourdhui = new Date();
-  let annee = aujourdhui.getFullYear();
-  let mois =aujourdhui.getMonth()+1;
-  let jour = aujourdhui.getDate();
-
-  return jour + '/' + mois + '/' + annee ;
-};
-
-
+import validators from '../../../core/validation';
 
 const validate = (result, field, value) => {
   const validation = field.validator(value);
@@ -40,9 +29,21 @@ export const validateFormData = formData => {
     fields.dateDebut,
     formData.dateDebut,
   );
-  validationResult = validate(validationResult, fields.dateFin, formData.dateFin);
-  validationResult = validate(validationResult, fields.montant, formData.montant);
-  validationResult = validate(validationResult, fields.quantiteMin, formData.quantiteMin);
+  validationResult = validate(
+    validationResult,
+    fields.dateFin,
+    formData.dateFin,
+  );
+  validationResult = validate(
+    validationResult,
+    fields.montant,
+    formData.montant,
+  );
+  validationResult = validate(
+    validationResult,
+    fields.quantiteMin,
+    formData.quantiteMin,
+  );
   validationResult = validate(validationResult, fields.status, formData.status);
 
   return validationResult;
@@ -56,58 +57,45 @@ export const fields = {
   },
   dateDebut: {
     name: 'dateDebut',
-     label: 'Date Début',
-     type:'date',
-     validator: validators.stringNotBlank,
-    // defaultvalue:displayDate(),
-
+    label: 'Date Début',
+    type: 'date',
+    validator: validators.stringNotBlank,
+  },
+  dateFin: {
+    name: 'dateFin',
+    type: 'date',
+    label: 'Date Fin',
     specialProps: {
       InputLabelProps: {
-        shrink:true,
+        shrink: true,
       },
-
       style: {
         width: '100%',
       },
       label: 'Date Fin',
     },
- },
- dateFin: {
-    name: 'dateFin',
-     type: 'date',
-     label: 'Date Fin',
-   specialProps: {
-     InputLabelProps: {
-       shrink: true,
-     },
-   style: {
-       width: '100%',
-      },
-      label: 'Date Fin',
-    },
     validator: validators.stringNotBlank,
-
   },
   montant: {
     name: 'montant',
     label: 'Montant objectif',
-    type:'number',
+    type: 'number',
     validator: validators.stringNotBlank,
   },
   quantiteMin: {
     name: 'quantiteMin',
     label: 'quantité Minimale',
-    type:'number',
+    type: 'number',
     validator: validators.stringNotBlank,
   },
   status: {
     name: 'status',
-    label:'status '+ "d'"+'offre',
+    label: "status de l'offre",
     validator: validators.stringNotBlank,
   },
-  montantMax:{
+  montantMax: {
     name: 'montantMax',
-    label:'Montant Max',
+    label: 'Montant Max',
     validator: validators.stringNotBlank,
-  }
+  },
 };

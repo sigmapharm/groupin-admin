@@ -12,7 +12,6 @@ import { createStructuredSelector } from 'reselect';
 import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
 import saga from '../saga';
-
 import injectSaga from '../../../utils/injectSaga';
 import { validateFormData } from './validation';
 import { createOffre } from '../actions';
@@ -24,7 +23,8 @@ import {
   makeSelectArticlesList,
   makeSelectarticlesListlabo,
 } from '../../Articles/selectors';
-const styles = theme => ({
+
+ const styles = theme => ({
   root: {
     paddingLeft: theme.spacing.unit * 5,
     paddingRight: theme.spacing.unit * 5,
@@ -146,33 +146,17 @@ export class AddOffre extends React.PureComponent {
     }
   };
 
+
   handleLaboratoireSelectChange = value => {
     const { formData } = this.state;
-    this.setState(
-      {
-        formData: {
-          ...formData,
-          laboratoire: value.label,
-        },
-      },
-      () => {
-        console.log('value :', value);
-        console.log('formData :', formData);
-        this.props.dispatch(getArticleslaboList(this.state));
-      },
-    );
-
-    /* const { formData ,laboratoire} = this.state;
-     this.setState({
+    this.setState({
       formData: {
         ...formData,
         laboratoire: value,
-
-     },
-      articles:this.handleChangeLaboratoire(value.id && value.nom),
-
-    }); */
+      },
+    });
   };
+
 
   handleCloseSuccessMessage = () => {
     this.setState({ isSuccess: false });
@@ -198,8 +182,6 @@ export class AddOffre extends React.PureComponent {
       : 0;
     // const rows = articlesList.content;
     const rows = articlesListlabo ? articlesListlabo.content : [];
-    console.log(totalElements);
-    console.log('RENDER :', rows);
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
@@ -252,9 +234,9 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = createStructuredSelector({
-  laboratoires: makeSelectLaboratoires(),
-  articlesList: makeSelectArticlesList(),
-  articlesListlabo: makeSelectarticlesListlabo(),
+   laboratoires: makeSelectLaboratoires(),
+   articlesList: makeSelectArticlesList(),
+   articlesListlabo: makeSelectarticlesListlabo(),
 });
 
 const withConnect = connect(
@@ -265,7 +247,6 @@ const withConnect = connect(
 const withSaga = injectSaga({ key: 'offres', saga });
 
 AddOffre.defaultProps = {};
-
 AddOffre.propTypes = {
   articlesList: PropTypes.any,
   classes: PropTypes.object,

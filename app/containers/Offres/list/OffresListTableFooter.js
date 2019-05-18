@@ -1,10 +1,9 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-
 import TableFooter from '@material-ui/core/TableFooter';
 import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
-import  OffresListTableFooterActions  from './OffresListTableFooterActions';
+import OffresListTableFooterActions from './OffresListTableFooterActions';
 
 export class OffresListTableFooter extends React.PureComponent {
   constructor(props) {

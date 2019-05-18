@@ -3,12 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import EditIcon from '@material-ui/icons/Edit';
 import { compose } from 'redux';
 import Divider from '@material-ui/core/Divider';
 import injectSaga from 'utils/injectSaga';
@@ -20,21 +17,21 @@ import saga from './saga';
 
 import {
   makeSelectArticlesList,
-  makeSelectPage,
-  makeSelectRowsPerPage,
-  makeSelectNom,
   makeSelectcategorie,
+  makeSelectlaboratoire,
+  makeSelectNom,
+  makeSelectPage,
   makeSelectPPH,
   makeSelectPPV,
+  makeSelectRowsPerPage,
   makeSelectTVA,
-  makeSelectlaboratoire,
 } from './selectors';
 import { getArticlesList } from './actions';
 import authenticated from '../HOC/authenticated/authenticated';
 import AddIcon from '@material-ui/icons/Add';
 import AticlesListTableRow from './list/ArticlesListTableRow';
 import ArticlesListTableFooter from './list/ArticlesListTableFooter';
-import  ArticlesListSearch from './list/ArticlesListSearch';
+import ArticlesListSearch from './list/ArticlesListSearch';
 import ArticlesListTableHeader from './list/ArticlesListTableHeader';
 
 
@@ -173,7 +170,6 @@ class ListeArticles extends React.Component {
             />
           </Table>
         </Paper>
-       {/* action :handleArticlesAddClick */}
         <Fab color="primary"  className={classes.addArticlesButton}
           onClick={this.handleArticlesAddClick}>
           <AddIcon />

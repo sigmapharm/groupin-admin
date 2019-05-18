@@ -7,22 +7,20 @@ export class OffresListTableHeader extends React.PureComponent {
     super(props);
     this.state = {};
   }
-render() {
+
+  render() {
     return (
-
-        <TableRow>
-          <TableCell>Désignation</TableCell>
-          <TableCell>Laboratoire</TableCell>
-          <TableCell>Status</TableCell>
-          <TableCell>Objectif atteint</TableCell>
-         <TableCell>TimeLine</TableCell>
-          <TableCell>Actions</TableCell>
-        </TableRow>
-
+      <TableRow>
+        <TableCell>Désignation</TableCell>
+        <TableCell>Laboratoire</TableCell>
+        <TableCell>Status</TableCell>
+        <TableCell>Objectif atteint (MAD)</TableCell>
+        <TableCell>TimeLine</TableCell>
+        <TableCell>Actions</TableCell>
+      </TableRow>
     );
   }
 }
 
 OffresListTableHeader.defaultProps = {};
-
 export default OffresListTableHeader;
