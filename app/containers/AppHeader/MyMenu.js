@@ -4,26 +4,26 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import history from 'utils/history';
 import { MetaMenu } from './MetaMenu';
+import WithRoles from '../WithRoles';
 
 const onMenuItemClick = href => () => {
   history.push(href);
-}
+};
 
 const MenuByRole = props => {
-  const { classes, user } = props;
-  return MetaMenu.map(
-    menu =>
-      menu.allowedRoles.includes(user.role) && (
-        <Button
-          key={menu.key}
-          className={classes.button}
-          classes={{ label: classes.label }}
-          onClick={onMenuItemClick(menu.link)}
-        >
-          {menu.label}
-        </Button>
-      ),
-  );
+  const { classes } = props;
+  return MetaMenu.map(menu => (
+    <WithRoles roles={menu.allowedRoles}>
+      <Button
+        key={menu.key}
+        className={classes.button}
+        classes={{ label: classes.label }}
+        onClick={onMenuItemClick(menu.link)}
+      >
+        {menu.label}
+      </Button>
+    </WithRoles>
+  ));
 };
 
 const MyMenu = props => {
