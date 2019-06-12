@@ -1,6 +1,5 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-import Delete from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -13,8 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import ArticleListConsultationn from '../consultlistarticle/ArticleListConsultationn';
-import { deleteArticle } from '../actions';
+import ArticleListConsultationn from '../consultlistarticle/ArticleListConsultation';
 import authenticated from '../../HOC/authenticated/authenticated';
 
 const closeStyle = {
@@ -27,8 +25,7 @@ const addCommas = nStr => {
   nStr += '';
   const x = nStr.split('.');
   let x1 = x[0];
-  // eslint-disable-next-line prefer-template
-  const x2 = x.length > 1 ? '.' + x[1] : '';
+  const x2 = x.length > 1 ? `.${x[1]}` : '';
   const rgx = /(\d+)(\d{3})/;
   while (rgx.test(x1)) {
     x1 = x1.replace(rgx, '$1' + ',' + '$2');
@@ -36,41 +33,30 @@ const addCommas = nStr => {
   return x1 + x2;
 };
 
-export class AticlesListTableRow extends React.PureComponent {
+export class ArticlesListTableRow extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { isdisplaydata: false };
+    this.state = { open: false };
   }
 
-  edit = row => {
+  viewDetails = () => {
     this.setState({
-      isdisplaydata: true,
+      open: true,
     });
   };
 
-  handledetailclose = () => {
+  close = () => {
     this.setState({
-      isdisplaydata: false,
+      open: false,
     });
-  };
-
-  delete = row => {
-    // eslint-disable-next-line react/no-access-state-in-setstate
-    // eslint-disable-next-line react/prop-types
-    const rows = this.props.dispach(deleteArticle(row));
-    // eslint-disable-next-line react/no-unused-state
-    this.setState({ rows });
   };
 
   render() {
-    // eslint-disable-next-line no-unused-vars
-    const { row, deletearticle } = this.props;
+    const { row } = this.props;
     return (
       <React.Fragment>
         <TableRow key={row.id}>
-          <TableCell component="th" scope="row">
-            {row.laboratoire && row.laboratoire.nom}
-          </TableCell>
+          <TableCell>{row.laboratoire && row.laboratoire.nom}</TableCell>
           <TableCell>{row.categorie}</TableCell>
           <TableCell>{row.nom}</TableCell>
           <TableCell>
@@ -87,40 +73,40 @@ export class AticlesListTableRow extends React.PureComponent {
             {row.tva}
             {'%'}
           </TableCell>
-          <TableCell>
-            <Search color="secondary" onClick={() => this.edit(row)} />
-            <EditIcon color="primary" style={typo3syle} />
-            <Delete
-              color="error"
-              style={typo3syle}
-              onClick={() => this.delete(row.id)}
-            />
+          <TableCell style={{ padding: 0 }}>
+            <IconButton style={{ padding: 5 }}>
+              <Search color="secondary" onClick={this.viewDetails} />
+            </IconButton>
+            <IconButton style={{ padding: 5 }}>
+              <EditIcon color="primary" style={typo3syle} />
+            </IconButton>
           </TableCell>
         </TableRow>
-
-        <Dialog
-          maxWidth="lg"
-          onClose={this.handleClose}
-          aria-labelledby="customized-dialog-title"
-          open={this.state.isdisplaydata}
-        >
-          <MuiDialogTitle disableTypography>
-            <Typography variant="h5" color="primary">
-              {`Détails article`}
+        {this.state.open && (
+          <Dialog
+            maxWidth="lg"
+            onClose={this.handleClose}
+            aria-labelledby="customized-dialog-title"
+            open
+          >
+            <MuiDialogTitle disableTypography>
+              <Typography variant="h5" color="primary">
+                {`Détails article`}
+              </Typography>
               <IconButton
                 aria-label="Close"
                 color="primary"
                 style={closeStyle}
-                onClick={this.handledetailclose}
+                onClick={this.close}
               >
                 <CloseIcon />
               </IconButton>
-            </Typography>
-          </MuiDialogTitle>
-          <MuiDialogContent>
-            <ArticleListConsultationn row={row} />
-          </MuiDialogContent>
-        </Dialog>
+            </MuiDialogTitle>
+            <MuiDialogContent>
+              <ArticleListConsultationn row={row} />
+            </MuiDialogContent>
+          </Dialog>
+        )}
       </React.Fragment>
     );
   }
@@ -129,16 +115,12 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
-AticlesListTableRow.defaultProps = {};
+ArticlesListTableRow.defaultProps = {};
 
-AticlesListTableRow.propTypes = {
+ArticlesListTableRow.propTypes = {
   row: PropTypes.object.isRequired,
-  deletearticle: PropTypes.object.isRequired,
-  // eslint-disable-next-line react/no-unused-prop-types
-  dispatch: PropTypes.func.isRequired,
 };
 const withConnect = connect(
-  // eslint-disable-next-line no-undef
   null,
   mapDispatchToProps,
 );
@@ -146,4 +128,4 @@ const withConnect = connect(
 export default compose(
   authenticated,
   withConnect,
-)(AticlesListTableRow);
+)(ArticlesListTableRow);

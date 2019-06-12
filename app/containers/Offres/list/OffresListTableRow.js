@@ -18,10 +18,9 @@ import OffreListConsultation from '../consultlistoffre/OffreListConsultation';
 import Progressbar from '../consultlistoffre/Progress';
 
 const closeStyle = {
-  marginLeft: '59rem',
+  float: 'right',
 };
 const champprogress = { width: '20%' };
-const champAction = { width: '23%' };
 const typo3syle = { marginLeft: '4%' };
 export class OffresListTableRow extends React.PureComponent {
   constructor(props) {
@@ -74,15 +73,23 @@ export class OffresListTableRow extends React.PureComponent {
               ? `Il vous reste ${joursRestants} ${joursLabel}`
               : 'Offre clôturée !'}
           </TableCell>
-          <TableCell style={champAction}>
-            <Search
-              color="secondary"
-              style={typo3syle}
-              onClick={() => this.edit(row)}
-            />
-            <EditIcon color="primary" style={typo3syle} />
-            <FileCopy color="secondary" style={typo3syle} />
-            <HighlightOff color="error" style={typo3syle} />
+          <TableCell style={{ padding: 0, width: '15%' }}>
+            <IconButton style={{ padding: 5 }}>
+              <Search
+                color="secondary"
+                style={typo3syle}
+                onClick={() => this.edit(row)}
+              />
+            </IconButton>
+            <IconButton style={{ padding: 5 }}>
+              <EditIcon color="primary" style={typo3syle} />
+            </IconButton>
+            <IconButton style={{ padding: 5 }}>
+              <FileCopy color="secondary" style={typo3syle} />
+            </IconButton>
+            <IconButton style={{ padding: 5 }}>
+              <HighlightOff color="error" style={typo3syle} />
+            </IconButton>
           </TableCell>
         </TableRow>
 

@@ -7,17 +7,17 @@ export class OffresListTableHeaders extends React.PureComponent {
     super(props);
     this.state = {};
   }
-render() {
+
+  render() {
     return (
-
-        <TableRow>
-          <TableCell>Désignation</TableCell>
-          <TableCell>TimeLine</TableCell>
-          <TableCell>Fin de l'offre</TableCell>
-          <TableCell>Details </TableCell>
-         <TableCell>Commander</TableCell>
-        </TableRow>
-
+      <TableRow>
+        <TableCell>Désignation</TableCell>
+        <TableCell>TimeLine</TableCell>
+        <TableCell>Fin de l'offre</TableCell>
+        <TableCell>Details </TableCell>
+        <TableCell>Commander</TableCell>
+        <TableCell>Actions</TableCell>
+      </TableRow>
     );
   }
 }

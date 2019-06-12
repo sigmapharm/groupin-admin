@@ -18,7 +18,7 @@ import UserListConsult from '../consultlistuser/UserListConsult';
 import { updateUser } from '../actions';
 import authenticated from '../../HOC/authenticated/authenticated';
 
-const closeButton = { marginLeft: '59rem' };
+const closeButton = { float: 'right' };
 
 const initialState = {
   formData: {
@@ -44,7 +44,7 @@ export class UsersListTableRow extends React.PureComponent {
     super(props);
     this.state = {
       ...initialState,
-      isdisplaydata: false,
+      detailsOpen: false,
     };
   }
 
@@ -58,34 +58,32 @@ export class UsersListTableRow extends React.PureComponent {
     });
   };
 
-  edit = row => {
+  edit = () => {
     this.setState({
-      isdisplaydata: true,
+      detailsOpen: true,
     });
   };
 
   handleEditclose = () => {
     this.setState({
-      isdisplaydata: false,
+      detailsOpen: false,
     });
   };
 
   handleSubmitEdit = e => {
     e.preventDefault();
     const { formData } = this.state;
-
     this.props.dispatch(updateUser(formData));
   };
 
-  handledetailclose = () => {
+  closeDetails = () => {
     this.setState({
-      isdisplaydata: false,
+      detailsOpen: false,
     });
   };
 
   render() {
     const { row } = this.props;
-    const { errors } = this.state;
     return (
       <React.Fragment>
         <TableRow key={row.id}>
@@ -95,36 +93,39 @@ export class UsersListTableRow extends React.PureComponent {
           <TableCell>{row.email}</TableCell>
           <TableCell>{row.pharmacie && row.pharmacie.denomination}</TableCell>
           <TableCell>{row.role}</TableCell>
-          <TableCell>
-            <EditIcon color="primary" />
-            <Search color="secondary" onClick={() => this.edit(row)} />
+          <TableCell style={{ padding: 0 }}>
+            <IconButton style={{ padding: 5 }}>
+              <EditIcon color="primary" />
+            </IconButton>
+            <IconButton style={{ padding: 5 }}>
+              <Search color="secondary" onClick={this.edit} />
+            </IconButton>
             <Toggle />
-            <ResetIcon color="primary" />
+            <IconButton style={{ padding: 5 }}>
+              <ResetIcon color="primary" />
+            </IconButton>
           </TableCell>
         </TableRow>
-        <Dialog
-          maxWidth="lg"
-          onClose={this.handleClose}
-          aria-labelledby="customized-dialog-title"
-          open={this.state.isdisplaydata}
-        >
-          <MuiDialogTitle disableTypography>
-            <Typography variant="h5" color="primary">
-              {`Details Utilisateur`}{' '}
-              <IconButton
-                color="primary"
-                aria-label="Close"
-                style={closeButton}
-                onClick={this.handledetailclose}
-              >
-                <CloseIcon />
-              </IconButton>
-            </Typography>
-          </MuiDialogTitle>
-          <MuiDialogContent>
-            <UserListConsult row={row} />
-          </MuiDialogContent>
-        </Dialog>
+        {this.state.detailsOpen && (
+          <Dialog maxWidth="lg" onClose={this.handleClose} open>
+            <MuiDialogTitle disableTypography>
+              <Typography variant="h5" color="primary">
+                {`Details Utilisateur`}
+                <IconButton
+                  color="primary"
+                  aria-label="Close"
+                  style={closeButton}
+                  onClick={this.closeDetails}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Typography>
+            </MuiDialogTitle>
+            <MuiDialogContent>
+              <UserListConsult row={row} />
+            </MuiDialogContent>
+          </Dialog>
+        )}
       </React.Fragment>
     );
   }

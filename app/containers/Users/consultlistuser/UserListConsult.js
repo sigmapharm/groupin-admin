@@ -4,15 +4,14 @@ import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-const styles = theme => ({
+
+const styles = () => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
   },
   textField: {
     color: '#fff000',
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
     width: 200,
   },
   input: {
@@ -23,9 +22,6 @@ const styles = theme => ({
   },
   MuiInputBaseInput5355: {
     color: 'red',
-  },
-  menu: {
-    width: 200,
   },
 });
 
@@ -59,7 +55,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Nom"
-            defaultValue={row.firstName}
+            value={row.firstName}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -70,7 +66,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Région"
-            defaultValue={row.region}
+            value={row.region}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -81,7 +77,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Prénom "
-            defaultValue={row.lastName}
+            value={row.lastName}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -92,7 +88,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Adresse"
-            defaultValue={row.adresse}
+            value={row.adresse}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -103,7 +99,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Code"
-            defaultValue={row.codePostal}
+            value={row.codePostal}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -114,7 +110,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Ville"
-            defaultValue={row.ville}
+            value={row.ville}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -125,7 +121,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="CIN"
-            defaultValue={row.cin}
+            value={row.cin}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -136,7 +132,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Tél"
-            defaultValue={row.tel}
+            value={row.tel}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -147,7 +143,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Gsm"
-            defaultValue={row.gsm}
+            value={row.gsm}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -158,7 +154,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Date de création"
-            defaultValue={dateformatcreationarticle}
+            value={dateformatcreationarticle}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -169,7 +165,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Rôle"
-            defaultValue={row.role}
+            value={row.role}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -187,7 +183,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Nom Pharmacie"
-            defaultValue={row.pharmacie.denomination}
+            value={row.pharmacie.denomination}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -198,7 +194,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Adresse"
-            defaultValue={row.pharmacie.adresse}
+            value={row.pharmacie.adresse}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -209,7 +205,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="tél"
-            defaultValue={row.pharmacie.tel}
+            value={row.pharmacie.tel}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -220,7 +216,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Gsm"
-            defaultValue={row.pharmacie.gsm}
+            value={row.pharmacie.gsm}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -231,7 +227,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Fax"
-            defaultValue={row.pharmacie.fax}
+            value={row.pharmacie.fax}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -242,7 +238,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Patente"
-            defaultValue={row.pharmacie.patente}
+            value={row.pharmacie.patente}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -253,7 +249,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Num"
-            defaultValue={row.pharmacie.numRC}
+            value={row.pharmacie.numRC}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -264,7 +260,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="RC"
-            defaultValue={row.pharmacie.denomination}
+            value={row.pharmacie.denomination}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -275,7 +271,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Rib"
-            defaultValue={row.pharmacie.rib}
+            value={row.pharmacie.rib}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -286,7 +282,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="intérlocuteur"
-            defaultValue={row.pharmacie.interlocuteur}
+            value={row.pharmacie.interlocuteur}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -297,7 +293,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="fonction"
-            defaultValue={row.pharmacie.fonction}
+            value={row.pharmacie.fonction}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -308,7 +304,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="dateCreation"
-            defaultValue={dateformatcreation}
+            value={dateformatcreation}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -319,7 +315,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Date Démarrage"
-            defaultValue={dateformatdemarage}
+            value={dateformatdemarage}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -330,7 +326,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Banque"
-            defaultValue={row.pharmacie.banque}
+            value={row.pharmacie.banque}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -341,7 +337,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Forme Juridique"
-            defaultValue={row.pharmacie.formeJuridique}
+            value={row.pharmacie.formeJuridique}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -352,7 +348,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Ville"
-            defaultValue={row.pharmacie.ville}
+            value={row.pharmacie.ville}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -363,7 +359,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="villeRC"
-            defaultValue={row.pharmacie.villeRC}
+            value={row.pharmacie.villeRC}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -374,7 +370,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Région"
-            defaultValue={row.pharmacie.region}
+            value={row.pharmacie.region}
             className={classes.textField}
             inputProps={{
               className: classes.input,
