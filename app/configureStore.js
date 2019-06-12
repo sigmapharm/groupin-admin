@@ -5,12 +5,9 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { fromJS } from 'immutable';
 import { routerMiddleware } from 'connected-react-router/immutable';
-import appSagas from 'containers/App/sagas';
 import createSagaMiddleware from 'redux-saga';
-import loginSagas from 'containers/Login/saga';
 import createReducer from './reducers';
-
-const globalSagas = [loginSagas, appSagas];
+import globalSagas from './sagas';
 
 const sagaMiddleware = createSagaMiddleware(globalSagas);
 

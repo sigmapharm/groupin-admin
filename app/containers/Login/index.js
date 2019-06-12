@@ -1,12 +1,9 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
-import injectSaga from 'utils/injectSaga';
 import { createStructuredSelector } from 'reselect';
 import LoginForm from '../../components/LoginForm';
 import { submitLogin } from './actions';
-import saga from './saga';
 import { makeSelectLoginErrors } from './selectors';
 
 class SignIn extends React.PureComponent {
@@ -60,14 +57,9 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key: 'login', saga });
-
 SignIn.propTypes = {
   dispatch: PropTypes.func.isRequired,
   error: PropTypes.bool,
 };
 
-export default compose(
-  withSaga,
-  withConnect,
-)(SignIn);
+export default withConnect(SignIn);

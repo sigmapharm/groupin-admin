@@ -1,5 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -17,8 +15,6 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
-import saga from '../saga';
-import injectSaga from '../../../utils/injectSaga';
 import { validateFormData } from './validation';
 import { formatLaboratoireToLabelValue } from './utils';
 import { createArticle } from '../actions';
@@ -274,8 +270,6 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key: 'articles', saga });
-
 AddArticle.defaultProps = {};
 
 AddArticle.propTypes = {
@@ -292,6 +286,5 @@ AddArticle.propTypes = {
 export default compose(
   withStyles(styles),
   withConnect,
-  withSaga,
   authenticated,
 )(AddArticle);

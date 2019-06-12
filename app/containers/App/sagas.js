@@ -52,7 +52,7 @@ function* getConfigurationWorker() {
   }
 }
 
-export default function* appSaga() {
+function* appSaga() {
   yield all([
     takeLatest(GET_PHARMACIES, getPharmaciesWorker),
     takeLatest(GET_VILLES, getVillesWorker),
@@ -61,3 +61,5 @@ export default function* appSaga() {
     takeLatest(GET_CONFIGURATION, getConfigurationWorker),
   ]);
 }
+
+export default appSaga;

@@ -26,9 +26,7 @@ import {
   makeSelectstatus,
   makeSelectlaboratoire,
 } from './selectors';
-import saga from './saga';
 import authenticated from '../HOC/authenticated/authenticated';
-import injectSaga from '../../utils/injectSaga';
 import OffresListTableFooter from './list/OffresListTableFooter';
 import OffresListSearch from './list/OffresListSearch';
 import OffresListTableRows from './list/OffresListTableRows';
@@ -242,8 +240,6 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key: 'offres', saga });
-
 OffresList.defaultProps = {};
 
 OffresList.propTypes = {
@@ -254,7 +250,6 @@ OffresList.propTypes = {
 
 export default compose(
   authenticated,
-  withSaga,
   withConnect,
   withStyles(styles),
 )(OffresList);

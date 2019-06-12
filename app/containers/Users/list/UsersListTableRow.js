@@ -16,8 +16,6 @@ import { compose } from 'redux';
 import Toggle from '../../../components/Toggle/Toggle';
 import UserListConsult from '../consultlistuser/UserListConsult';
 import { updateUser } from '../actions';
-import saga from '../saga';
-import injectSaga from '../../../utils/injectSaga';
 import authenticated from '../../HOC/authenticated/authenticated';
 
 const closeButton = { marginLeft: '59rem' };
@@ -137,13 +135,11 @@ const mapDispatchToProps = dispatch => ({
 UsersListTableRow.defaultProps = {};
 const withConnect = connect(mapDispatchToProps);
 
-const withSaga = injectSaga({ key: 'users', saga });
 UsersListTableRow.propTypes = {
   row: PropTypes.object.isRequired,
 };
 
 export default compose(
   withConnect,
-  withSaga,
   authenticated,
 )(UsersListTableRow);

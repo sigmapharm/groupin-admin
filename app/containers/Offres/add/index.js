@@ -11,8 +11,6 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
-import saga from '../saga';
-import injectSaga from '../../../utils/injectSaga';
 import { validateFormData } from './validation';
 import { createOffre } from '../actions';
 import AddOffreForm from '../../../components/offres/add/AddOffreForm';
@@ -73,8 +71,6 @@ const initialState = {
 
 export class AddOffre extends React.PureComponent {
   state = { ...initialState };
- 
-
 
   handleFormDataChange = e => {
     const { formData } = this.state;
@@ -165,7 +161,7 @@ export class AddOffre extends React.PureComponent {
     const formattedLaboratoire = laboratoires.map(
       formatLaboratoireToLabelValue,
     );
-    const rows = articlesListlabo.content;
+    const rows = articlesListlabo;
 
     return (
       <div className={classes.root}>
@@ -226,8 +222,6 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key: 'offres', saga });
-
 AddOffre.defaultProps = {};
 AddOffre.propTypes = {
   articlesListlabo: PropTypes.any,
@@ -244,6 +238,5 @@ AddOffre.propTypes = {
 export default compose(
   withStyles(styles),
   withConnect,
-  withSaga,
   authenticated,
 )(AddOffre);

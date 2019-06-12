@@ -104,5 +104,5 @@ export const getArticleslaboList = values => ({
 
 export const putArticleslaboList = values => ({
   type: PUT_ARTICLESLABO_LIST_ACTION,
-  payload: { ...values },
+  payload: values,
 });

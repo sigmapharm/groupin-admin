@@ -11,25 +11,18 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import Fade from '@material-ui/core/Fade';
-// import injectReducer from 'utils/injectReducer';
-import injectSaga from 'utils/injectSaga';
-
 import { createStructuredSelector } from 'reselect';
-import { defaultOptionsFormatter,
+import {
+  defaultOptionsFormatter,
   laboratoiresFields,
   validateFormData,
 } from './fields';
-// import reducer from './reducer';
-import sagas from './sagas';
 import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
 import { addlaboratoire } from './actions';
 import ErrorsArea from '../../../components/ErrorsArea';
-import { pharmacieFields } from '../../Pharmacie/add/fields';
-
 
 /* istanbul ignore next */
 const styles = theme => ({
-
   fieldContainer: {
     maxWidth: '500px',
     minWidth: '500px',
@@ -42,9 +35,7 @@ const styles = theme => ({
   submitButton: {
     marginTop: theme.spacing.unit * 3,
   },
-  select: { marginTop: theme.spacing.unit,},
-
-
+  select: { marginTop: theme.spacing.unit },
 });
 
 const initialState = {
@@ -54,7 +45,6 @@ const initialState = {
     website: '',
     description: '',
     adresse: '',
-
   },
   errors: {
     messages: {},
@@ -231,8 +221,6 @@ export class AddLaboratoireContainer extends React.PureComponent {
             container
           >
             {laboratoiresFields.map(field => this.renderField(field, classes))}
-
-
           </Grid>
 
           <Grid
@@ -249,10 +237,6 @@ export class AddLaboratoireContainer extends React.PureComponent {
             >
               Valider
             </Button>
-
-
-
-
           </Grid>
         </form>
         {isSuccess && (
@@ -260,9 +244,7 @@ export class AddLaboratoireContainer extends React.PureComponent {
             open
             TransitionComponent={Fade}
             message={
-              <span id="message-id">
-               laboratoire a été crééee avec succès.
-              </span>
+              <span id="message-id">laboratoire a été crééee avec succès.</span>
             }
             action={[
               <IconButton
@@ -285,8 +267,6 @@ AddLaboratoireContainer.defaultProps = {};
 AddLaboratoireContainer.propTypes = {
   classes: PropTypes.object,
   successCallback: PropTypes.func,
-
-
 };
 /* istanbul ignore next */
 const mapDispatchToProps = dispatch => ({
@@ -300,11 +280,7 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key: 'addlaboratoire', saga: sagas });
-
 export default compose(
-  // withReducer,
-  withSaga,
   withConnect,
   withStyles(styles),
 )(AddLaboratoireContainer);

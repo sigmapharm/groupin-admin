@@ -11,13 +11,11 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import injectSaga from 'utils/injectSaga';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import ArticleListConsultationn from '../consultlistarticle/ArticleListConsultationn';
 import { deleteArticle } from '../actions';
 import authenticated from '../../HOC/authenticated/authenticated';
-import saga from '../saga';
 
 const closeStyle = {
   marginLeft: '59rem',
@@ -145,10 +143,7 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key: 'articles', saga });
-
 export default compose(
   authenticated,
-  withSaga,
   withConnect,
 )(AticlesListTableRow);

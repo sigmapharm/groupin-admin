@@ -1,9 +1,9 @@
 import { all, put, takeLatest } from 'redux-saga/effects';
-import ApiRoutes from '../../../core/ApiRoutes';
-import { addLaboratoireToStore } from '../../App/actions';
-import { manageAddlaboratoireResponse } from './actions';
-import { callApi } from '../../../services/saga';
-import { ADD_LABORATOIRE, MANAGE_LABORATOIRE_RESPONSE } from './constants';
+import ApiRoutes from '../../core/ApiRoutes';
+import { addLaboratoireToStore } from '../App/actions';
+import { manageAddlaboratoireResponse } from './add/actions';
+import { callApi } from '../../services/saga';
+import { ADD_LABORATOIRE, MANAGE_LABORATOIRE_RESPONSE } from './add/constants';
 
 function* addLaboratoireWorker(action) {
   const { payload, callback } = action;

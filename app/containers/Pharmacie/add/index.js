@@ -11,7 +11,6 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import Fade from '@material-ui/core/Fade';
-import injectSaga from 'utils/injectSaga';
 
 import { createStructuredSelector } from 'reselect';
 import {
@@ -20,7 +19,6 @@ import {
   validateFormData,
 } from './fields';
 
-import sagas from './sagas';
 import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
 import { addPharmacie } from './actions';
 import ErrorsArea from '../../../components/ErrorsArea';
@@ -292,11 +290,7 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key: 'addPharmacie', saga: sagas });
-
 export default compose(
-  // withReducer,
-  withSaga,
   withConnect,
   withStyles(styles),
 )(AddPharmacieContainer);

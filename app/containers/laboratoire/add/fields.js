@@ -61,7 +61,6 @@ const validateField = (result, fieldName, allData) => {
 };
 
 export const validateFormData = formData => {
-  console.log(formData)
   let validationResult = {};
   const keys = Object.keys(formData);
   keys.forEach(key => {

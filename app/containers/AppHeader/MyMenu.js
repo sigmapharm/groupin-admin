@@ -13,7 +13,7 @@ const onMenuItemClick = href => () => {
 const MenuByRole = props => {
   const { classes } = props;
   return MetaMenu.map(menu => (
-    <WithRoles roles={menu.allowedRoles}>
+    <WithRoles key={menu.key} roles={menu.allowedRoles}>
       <Button
         key={menu.key}
         className={classes.button}

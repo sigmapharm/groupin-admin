@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,18 +8,16 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { compose } from 'redux';
 import Divider from '@material-ui/core/Divider';
-import injectSaga from 'utils/injectSaga';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import Fab from '@material-ui/core/Fab';
 import history from 'utils/history';
 import AddIcon from '@material-ui/icons/Add';
-import saga from './saga';
 
 import { makeSelectArticlesList } from './selectors';
 import { getArticlesList } from './actions';
 import authenticated from '../HOC/authenticated/authenticated';
-import AticlesListTableRow from './list/ArticlesListTableRow';
+import ArticlesListTableRow from './list/ArticlesListTableRow';
 import ArticlesListTableFooter from './list/ArticlesListTableFooter';
 import ArticlesListSearch from './list/ArticlesListSearch';
 import ArticlesListTableHeader from './list/ArticlesListTableHeader';
@@ -138,7 +136,7 @@ class ListeArticles extends React.Component {
             <TableBody>
               {rows &&
                 rows.map(row => (
-                  <AticlesListTableRow
+                  <ArticlesListTableRow
                     key={row.id}
                     row={row}
                     deletearticle={deletearticle}
@@ -179,8 +177,6 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key: 'articles', saga });
-
 ListeArticles.propTypes = {
   classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
@@ -188,7 +184,6 @@ ListeArticles.propTypes = {
 
 export default compose(
   authenticated,
-  withSaga,
   withConnect,
   withStyles(styles),
 )(ListeArticles);

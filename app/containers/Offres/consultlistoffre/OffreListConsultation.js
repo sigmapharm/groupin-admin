@@ -50,7 +50,6 @@ export class OffreListConsultation extends React.PureComponent {
     const avancementMontant = Math.min(row.montant / 100000, 1) * 100;
 
     const dateformat = new Intl.DateTimeFormat('fr-FR').format(datefin);
-    console.log(row.articledtos && row.articledtos)
     return (
       <React.Fragment>
         <form className={classes.container} noValidate autoComplete="off">

@@ -17,8 +17,6 @@ import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
 import { validateFormData } from './validation';
 import { createUser } from '../actions';
-import saga from '../saga';
-import injectSaga from '../../../utils/injectSaga';
 import { makeSelectPharmacies } from '../../App/selectors';
 import { formatPharmacieToLabelValue } from './utils';
 import AddUserForm from '../../../components/Users/add/AddUserForm';
@@ -266,8 +264,6 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key: 'users', saga });
-
 AddUser.defaultProps = {};
 
 AddUser.propTypes = {
@@ -284,6 +280,5 @@ AddUser.propTypes = {
 export default compose(
   withStyles(styles),
   withConnect,
-  withSaga,
   authenticated,
 )(AddUser);

@@ -36,11 +36,6 @@ function reducer(state = initialState, action) {
         laboratoire: action.payload,
       });
     }
-    case PUT_ARTICLESLABO_LIST_ACTION: {
-      return state.merge({
-        articlesListlabo: action.payload,
-      });
-    }
     case SUBMIT_DELETE_ARTICLE: {
       return state.filter(row => row.id !== action.id);
     }
