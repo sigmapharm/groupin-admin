@@ -14,15 +14,16 @@ import Fade from '@material-ui/core/Fade';
 import injectSaga from 'utils/injectSaga';
 
 import { createStructuredSelector } from 'reselect';
-import { defaultOptionsFormatter,
+import {
+  defaultOptionsFormatter,
   pharmacieFields,
-  validateFormData, } from './fields';
+  validateFormData,
+} from './fields';
 
 import sagas from './sagas';
 import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
 import { addPharmacie } from './actions';
 import ErrorsArea from '../../../components/ErrorsArea';
-
 
 /* istanbul ignore next */
 const styles = theme => ({

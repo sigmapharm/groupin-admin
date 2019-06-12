@@ -1,5 +1,12 @@
 import { fromJS } from 'immutable';
-import { PUT_USERS_LIST_ACTION, GET_USERS_LIST_ACTION } from './constants';
+import decode from 'jwt-decode';
+import {
+  PUT_USERS_LIST_ACTION,
+  GET_USERS_LIST_ACTION,
+  SUBMIT_UPDATE_USER,
+} from './constants';
+
+import AccessTokenStorage from '../../services/security/AccessTokenStorage';
 
 export const initialState = fromJS({
   usersList: [],
@@ -22,6 +29,16 @@ function reducer(state = initialState, action) {
       return state.merge({
         usersList: action.payload,
       });
+    }
+    case SUBMIT_UPDATE_USER: {
+      if (!state.get('user')) {
+        const accessToken = AccessTokenStorage.get();
+        const parsedToken = decode(accessToken);
+        return state.merge({
+          user: parsedToken.user,
+        });
+      }
+      return state;
     }
     default: {
       return state;

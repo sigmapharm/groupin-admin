@@ -13,6 +13,8 @@ import {
   RESET_ARTICLE_IN_STORE,
   SET_ARTICLE_IN_STORE,
   SET_LABORATOIRES,
+  PUT_ARTICLESLABO_LIST_ACTION,
+  GET_ARTICLESLABO_LIST_ACTION,
 } from './constants';
 import AccessTokenStorage from '../../services/security/AccessTokenStorage';
 
@@ -23,6 +25,7 @@ export const initialState = fromJS({
   villes: [],
   regions: [],
   laboratoires: [],
+  articlesListlabo: [],
 });
 
 function reducer(state = initialState, action) {
@@ -76,6 +79,16 @@ function reducer(state = initialState, action) {
         });
       }
       return state;
+    }
+    case GET_ARTICLESLABO_LIST_ACTION: {
+      return state.merge({
+        laboratoire: action.payload,
+      });
+    }
+    case PUT_ARTICLESLABO_LIST_ACTION: {
+      return state.merge({
+        articlesListlabo: action.payload,
+      });
     }
 
     case RESET_ARTICLE_IN_STORE: {

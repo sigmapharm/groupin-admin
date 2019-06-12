@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
- const selectRouter = state => state.get('router');
- const selectApp = state => state.get('global');
+const selectRouter = state => state.get('router');
+const selectApp = state => state.get('global');
 
 const makeSelectGlobalLoaderStatus = () =>
   createSelector(selectApp, appState => appState.toJS().loader);
@@ -12,9 +12,10 @@ const makeSelectLocation = () =>
   );
 
 const makeSelectPharmacies = () =>
-  createSelector(selectApp, appState => {
-    return (appState && appState.toJS().pharmacies) || [];
-  });
+  createSelector(
+    selectApp,
+    appState => (appState && appState.toJS().pharmacies) || [],
+  );
 
 const makeSelectUser = () =>
   createSelector(
@@ -22,32 +23,36 @@ const makeSelectUser = () =>
     appState => (appState && appState.toJS().user) || null,
   );
 
-
 const makeSelectLaboratoires = () =>
-  createSelector(selectApp, appState => {
-    return (appState && appState.toJS().laboratoires) || [];
-  });
-
-
-
-const makeSelectArticle = () =>
   createSelector(
     selectApp,
-    appState => (appState && appState.toJS().article) || null,
+    appState => (appState && appState.toJS().laboratoires) || [],
   );
 
-
 const makeSelectVilles = () =>
-  createSelector(selectApp, appState => {
-    return (appState && appState.toJS().villes) || [];
-  });
+  createSelector(
+    selectApp,
+    appState => (appState && appState.toJS().villes) || [],
+  );
+
+const makeSelectoffreArticledtos = () =>
+  createSelector(
+    selectApp,
+    appState => (appState && appState.toJS().articledtos) || [],
+  );
+const makeSelectarticlesListlabo = () =>
+  createSelector(
+    selectApp,
+    appState => (appState && appState.toJS().articlesListlabo) || [],
+  );
 
 export {
   makeSelectLocation,
   makeSelectUser,
   makeSelectGlobalLoaderStatus,
   makeSelectPharmacies,
-  makeSelectArticle,
   makeSelectLaboratoires,
   makeSelectVilles,
+  makeSelectoffreArticledtos,
+  makeSelectarticlesListlabo,
 };

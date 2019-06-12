@@ -17,14 +17,13 @@ import { validateFormData } from './validation';
 import { createOffre } from '../actions';
 import AddOffreForm from '../../../components/offres/add/AddOffreForm';
 import { formatLaboratoireToLabelValue } from './utils';
-import { makeSelectLaboratoires } from '../../App/selectors';
-import { getArticleslaboList } from '../../Articles/actions';
 import {
-  makeSelectArticlesList,
   makeSelectarticlesListlabo,
-} from '../../Articles/selectors';
+  makeSelectLaboratoires,
+} from '../../App/selectors';
+import { getArticleslaboList } from '../../App/actions';
 
- const styles = theme => ({
+const styles = theme => ({
   root: {
     paddingLeft: theme.spacing.unit * 5,
     paddingRight: theme.spacing.unit * 5,
@@ -117,16 +116,6 @@ export class AddOffre extends React.PureComponent {
     }
   };
 
-  componentDidMount() {
-    this.props.dispatch(getArticleslaboList(this.state));
-  }
-
-  handleChangeLaboratoire = laboratoire => {
-    this.setState({ laboratoire }, () =>
-      this.props.dispatch(getArticleslaboList(this.state)),
-    );
-  };
-
   handleSubmitResponse = response => {
     if (!response) {
       return;
@@ -148,17 +137,19 @@ export class AddOffre extends React.PureComponent {
     }
   };
 
-
   handleLaboratoireSelectChange = value => {
     const { formData } = this.state;
-    this.setState({
-      formData: {
-        ...formData,
-        laboratoire: value,
-      },
-    });
-  };
 
+    this.setState(
+      {
+        formData: {
+          ...formData,
+          laboratoire: value,
+        },
+      },
+      () => this.props.dispatch(getArticleslaboList(this.state)),
+    );
+  };
 
   handleCloseSuccessMessage = () => {
     this.setState({ isSuccess: false });
@@ -169,21 +160,13 @@ export class AddOffre extends React.PureComponent {
   };
 
   render() {
-    const {
-      classes,
-      laboratoires,
-      articlesList,
-      articlesListlabo,
-    } = this.props;
+    const { classes, laboratoires, articlesListlabo } = this.props;
     const { formData, errors, isSuccess } = this.state;
     const formattedLaboratoire = laboratoires.map(
       formatLaboratoireToLabelValue,
     );
-    const totalElements = articlesList.totalElements
-      ? articlesList.totalElements
-      : 0;
-    // const rows = articlesList.content;
-    const rows = articlesListlabo ? articlesListlabo.content : [];
+    const rows = articlesListlabo.content;
+
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
@@ -204,9 +187,7 @@ export class AddOffre extends React.PureComponent {
           <Snackbar
             open
             TransitionComponent={Fade}
-            message={
-              <span id="message-id">L'offre a été créé avec succès.</span>
-            }
+            message={<span id="message-id">Offre a été créé avec succès.</span>}
             action={[
               <Button
                 key="undo"
@@ -230,15 +211,14 @@ export class AddOffre extends React.PureComponent {
     );
   }
 }
-/* istanbul ignore next */
+
 const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
 const mapStateToProps = createStructuredSelector({
-   laboratoires: makeSelectLaboratoires(),
-   articlesList: makeSelectArticlesList(),
-   articlesListlabo: makeSelectarticlesListlabo(),
+  laboratoires: makeSelectLaboratoires(),
+  articlesListlabo: makeSelectarticlesListlabo(),
 });
 
 const withConnect = connect(
@@ -250,7 +230,7 @@ const withSaga = injectSaga({ key: 'offres', saga });
 
 AddOffre.defaultProps = {};
 AddOffre.propTypes = {
-  articlesList: PropTypes.any,
+  articlesListlabo: PropTypes.any,
   classes: PropTypes.object,
   dispatch: PropTypes.func,
   laboratoires: PropTypes.arrayOf(

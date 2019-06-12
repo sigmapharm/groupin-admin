@@ -94,7 +94,7 @@ export class OffresListTableRow extends React.PureComponent {
         >
           <MuiDialogTitle disableTypography>
             <Typography variant="h5" color="primary">
-              {`Details offre`}{' '}
+              {`Détails offre`}{' '}
               <IconButton
                 color="primary"
                 aria-label="Close"

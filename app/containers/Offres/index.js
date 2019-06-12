@@ -37,6 +37,7 @@ import OffresListTableRow from './list/OffresListTableRow';
 import OffresListTableHeaders from './list/OffresListTableHeaders';
 import WithRoles from '../WithRoles';
 import { MEMBRE, ADMIN, SUPER_ADMIN } from '../AppHeader/Roles';
+import { makeSelectoffreArticledtos } from '../App/selectors';
 
 /* istanbul ignore next */
 // eslint-disable-next-line no-unused-vars
@@ -103,6 +104,7 @@ export class OffresList extends React.PureComponent {
       quantiteMin: '',
       status: '',
       laboratoire: '',
+      articledtos: '',
     };
   }
 
@@ -139,6 +141,12 @@ export class OffresList extends React.PureComponent {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  handleStatutChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+    });
+  };
+
   render() {
     const { rowsPerPage, page } = this.state;
     // eslint-disable-next-line react/prop-types
@@ -147,8 +155,7 @@ export class OffresList extends React.PureComponent {
       ? offresList.totalElements
       : 0;
     const rows = offresList.content;
-    console.log('totalElements');
-    console.log('RENDER :', rows);
+
     return (
       <div>
         <Typography component="h1" variant="h4" className={classes.root}>
@@ -227,6 +234,7 @@ const mapStateToProps = createStructuredSelector({
   quantiteMinimale: makeSelectquantiteMinimale(),
   status: makeSelectstatus(),
   laboratoire: makeSelectlaboratoire(),
+  offreArticledtos: makeSelectoffreArticledtos(),
 });
 
 const withConnect = connect(

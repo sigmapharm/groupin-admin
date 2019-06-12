@@ -66,6 +66,8 @@ export function LoginForm(props) {
             onChange={handleChange}
             autoFocus
             error={error}
+            noValidate
+            autoComplete="off"
           />
         </FormControl>
         <FormControl margin="normal" required fullWidth>

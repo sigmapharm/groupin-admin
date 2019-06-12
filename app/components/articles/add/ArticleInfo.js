@@ -10,7 +10,7 @@ const styles = () => ({
 });
 
 export function ArticleInfo(props) {
-  const { formData, errors, classes, onChange, maxLength} = props;
+  const { formData, errors, classes, onChange, maxLength } = props;
   return (
     <>
       <Grid xs={12} md={6} item>
@@ -20,7 +20,8 @@ export function ArticleInfo(props) {
           value={formData[fields.reference.name]}
           error={!!errors[fields.reference.name]}
           onChange={onChange}
-          noValidate autoComplete="off"
+          noValidate
+          autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
             maxLength,
@@ -35,7 +36,8 @@ export function ArticleInfo(props) {
           value={formData[fields.nom.name]}
           error={!!errors[fields.nom.name]}
           onChange={onChange}
-          noValidate autoComplete="off"
+          noValidate
+          autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
             maxLength,
@@ -50,7 +52,8 @@ export function ArticleInfo(props) {
           value={formData[fields.gamme.name]}
           error={!!errors[fields.gamme.name]}
           onChange={onChange}
-          noValidate autoComplete="off"
+          noValidate
+          autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
             maxLength,
@@ -66,7 +69,8 @@ export function ArticleInfo(props) {
           value={formData[fields.codebare.name]}
           error={!!errors[fields.codebare.name]}
           onChange={onChange}
-          noValidate autoComplete="off"
+          noValidate
+          autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
             maxLength,
@@ -81,7 +85,8 @@ export function ArticleInfo(props) {
           value={formData[fields.categorie.name]}
           error={!!errors[fields.categorie.name]}
           onChange={onChange}
-          noValidate autoComplete="off"
+          noValidate
+          autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
             maxLength,
@@ -96,7 +101,8 @@ export function ArticleInfo(props) {
           value={formData[fields.classe_therapeutique.name]}
           error={!!errors[fields.classe_therapeutique.name]}
           onChange={onChange}
-          noValidate autoComplete="off"
+          noValidate
+          autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
             maxLength,
@@ -111,7 +117,8 @@ export function ArticleInfo(props) {
           value={formData[fields.forme_galenique.name]}
           error={!!errors[fields.forme_galenique.name]}
           onChange={onChange}
-          noValidate autoComplete="off"
+          noValidate
+          autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
             maxLength,
@@ -126,7 +133,8 @@ export function ArticleInfo(props) {
           value={formData[fields.dci.name]}
           error={!!errors[fields.dci.name]}
           onChange={onChange}
-          noValidate autoComplete="off"
+          noValidate
+          autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
             maxLength,
@@ -142,7 +150,8 @@ export function ArticleInfo(props) {
           value={formData[fields.pph.name]}
           error={!!errors[fields.pph.name]}
           onChange={onChange}
-          noValidate autoComplete="off"
+          noValidate
+          autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
             maxLength,
@@ -157,7 +166,8 @@ export function ArticleInfo(props) {
           value={formData[fields.tva.name]}
           error={!!errors[fields.tva.name]}
           onChange={onChange}
-          noValidate autoComplete="off"
+          noValidate
+          autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
             maxLength,
@@ -165,7 +175,7 @@ export function ArticleInfo(props) {
           fullWidth
         />
       </Grid>
-  </>
+    </>
   );
 }
 ArticleInfo.defaultProps = {};
@@ -176,6 +186,5 @@ ArticleInfo.propTypes = {
   classes: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   maxLength: PropTypes.number.isRequired,
-
 };
 export default withStyles(styles)(ArticleInfo);

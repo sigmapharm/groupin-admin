@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import { PUT_OFFRES_LIST_ACTION, GET_OFFRES_LIST_ACTION} from './constants';
+import { PUT_OFFRES_LIST_ACTION, GET_OFFRES_LIST_ACTION } from './constants';
 
 export const initialState = fromJS({
   offresList: [],

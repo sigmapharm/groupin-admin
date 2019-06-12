@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unused-state */
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import { compose } from 'redux';
@@ -33,7 +32,7 @@ export class OffresListSearch extends React.PureComponent {
   }
 
   render() {
-    const { classes, handleChange, handleSearchOffres ,handleSelctChange} = this.props; // eslint-disable-line
+    const { classes, handleChange, handleSearchOffres } = this.props; // eslint-disable-line
     return (
       <form className={classes.root}>
         <Typography component="h1" variant="h6">
@@ -61,6 +60,19 @@ export class OffresListSearch extends React.PureComponent {
           margin="normal"
           onChange={handleChange}
         />
+        {/*
+        <FormControl className={classes.formControl}>
+          <NativeSelect
+            value={valeur}
+            onChange={handleStatutChange}
+            name="statut"
+          >
+            <option value="En cours">En cours</option>
+            <option value="Cloturé">Cloturé</option>
+            <option value="En attente">En attente</option>
+          </NativeSelect>
+        </FormControl> */}
+
         <Fab
           color="primary"
           className={classes.button}

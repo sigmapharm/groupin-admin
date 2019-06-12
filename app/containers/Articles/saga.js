@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { all, takeLatest } from 'redux-saga/effects';
 import { callApi } from '../../services/saga';
 import {

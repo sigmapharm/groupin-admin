@@ -1,8 +1,8 @@
-import ApiRoutes from '../../../core/ApiRoutes';
-import { addLaboratoireToStore} from '../../App/actions';
-import {manageAddlaboratoireResponse} from './actions';
-import { callApi } from '../../../services/saga';
 import { all, put, takeLatest } from 'redux-saga/effects';
+import ApiRoutes from '../../../core/ApiRoutes';
+import { addLaboratoireToStore } from '../../App/actions';
+import { manageAddlaboratoireResponse } from './actions';
+import { callApi } from '../../../services/saga';
 import { ADD_LABORATOIRE, MANAGE_LABORATOIRE_RESPONSE } from './constants';
 
 function* addLaboratoireWorker(action) {
@@ -19,7 +19,7 @@ function* addLaboratoireWorker(action) {
   try {
     yield callApi(
       ApiRoutes.LABORATOIRES,
-     manageAddlaboratoireResponse,
+      manageAddlaboratoireResponse,
       options,
       null,
       false,
@@ -34,8 +34,7 @@ function* addLaboratoireWorker(action) {
 function* manageCreateLaboratoireResponseWorker(action) {
   const { payload, callback } = action;
   if (payload && payload.id) {
- yield put(addLaboratoireToStore(payload));
-
+    yield put(addLaboratoireToStore(payload));
   }
   if (callback) {
     callback(payload);
@@ -44,8 +43,11 @@ function* manageCreateLaboratoireResponseWorker(action) {
 
 function* addLaboratoireSaga() {
   yield all([
-    takeLatest(ADD_LABORATOIRE,addLaboratoireWorker),
-    takeLatest(MANAGE_LABORATOIRE_RESPONSE,manageCreateLaboratoireResponseWorker),
+    takeLatest(ADD_LABORATOIRE, addLaboratoireWorker),
+    takeLatest(
+      MANAGE_LABORATOIRE_RESPONSE,
+      manageCreateLaboratoireResponseWorker,
+    ),
   ]);
 }
 

@@ -2,16 +2,13 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import Delete from  '@material-ui/icons/Delete';
-
+import Delete from '@material-ui/icons/Delete';
 
 export class AticlesListTableRow extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
   }
-
-
 
   render() {
     const { row } = this.props;
@@ -37,4 +34,4 @@ AticlesListTableRow.propTypes = {
   row: PropTypes.object.isRequired,
 };
 
-export default  AticlesListTableRow;
+export default AticlesListTableRow;

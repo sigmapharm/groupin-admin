@@ -44,7 +44,6 @@ export const validateFormData = formData => {
     fields.quantiteMin,
     formData.quantiteMin,
   );
-  validationResult = validate(validationResult, fields.status, formData.status);
 
   return validationResult;
 };
@@ -88,14 +87,11 @@ export const fields = {
     type: 'number',
     validator: validators.stringNotBlank,
   },
-  status: {
-    name: 'status',
-    label: "status de l'offre",
-    validator: validators.stringNotBlank,
-  },
+
   montantMax: {
     name: 'montantMax',
     label: 'Montant Max',
+    type: 'number',
     validator: validators.stringNotBlank,
   },
 };

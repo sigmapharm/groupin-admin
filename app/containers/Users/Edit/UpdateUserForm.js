@@ -1,15 +1,12 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
-import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
-import ErrorsArea from '../../ErrorsArea';
-import ArticleInfo from './ArticleInfo';
+import PersonalInfo from './PersonalInfo';
+import ErrorsArea from '../../../components/ErrorsArea';
+
 const styles = theme => ({
   root: {
     paddingLeft: theme.spacing.unit * 5,
@@ -20,7 +17,10 @@ const styles = theme => ({
     paddingBottom: theme.spacing.unit * 5,
     paddingTop: theme.spacing.unit * 5,
   },
-  title: { marginLeft: '-120px' },
+  title: {
+    paddingBottom: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 5,
+  },
   gridContainer: {
     paddingLeft: theme.spacing.unit * 15,
     paddingRight: theme.spacing.unit * 15,
@@ -45,11 +45,12 @@ const styles = theme => ({
   inputs: {
     maxWidth: '350px',
   },
-  selectLaboratoireContainer: {
+  selectPharmacieContainer: {
     maxWidth: '360px',
     display: 'inline-flex',
     textAlign: 'center',
   },
+
   buttons: {
     marginLeft: '1%',
   },
@@ -58,24 +59,20 @@ const styles = theme => ({
   },
 });
 
-export function AddArticleForm(props) {
+export function UpdateUserForm(props) {
   const {
     classes,
     errors,
-    laboratoires,
     formData,
     handleFormDataChange,
-    handleLaboratoireSelectChange,
-    handleAddLaboratoireClick,
     handleSubmit,
-    handleAnuler,
   } = props;
   return (
-    <Paper className={classes.paper}>
+    <div>
       <Grid className={classes.headerGridContainer} container>
-        <Grid xs={12} className={classes.title} item>
-          <Typography variant="h5" color="primary">
-            {`Informations d'articles`}
+        <Grid xs={12} item>
+          <Typography className={classes.title} variant="h5" color="primary">
+            {` `}
           </Typography>
         </Grid>
         <Grid xs={12} item>
@@ -87,40 +84,15 @@ export function AddArticleForm(props) {
         </Grid>
       </Grid>
       <Grid className={classes.gridContainer} spacing={8} container>
-        <ArticleInfo
+        <PersonalInfo
           formData={formData}
           errors={errors.fields}
           onChange={handleFormDataChange}
           maxLength={30}
           classes={{
-            articleInputs: classes.inputs,
+            userInputs: classes.inputs,
           }}
         />
-        <Grid
-          className={classes.selectLaboratoireContainer}
-          xs={12}
-          md={6}
-          item
-        >
-          <SingleAutoCompleteSelect
-            className={classes.select}
-            name="laboratoire"
-            options={laboratoires}
-            onChange={handleLaboratoireSelectChange}
-            value={formData.laboratoire}
-            placeholder="Laboratoire"
-            isClearable
-          />
-          <Grid xs={1} item>
-            <Fab
-              size="small"
-              color="primary"
-              onClick={handleAddLaboratoireClick}
-            >
-              <AddIcon />
-            </Fab>
-          </Grid>
-        </Grid>
         <Grid xs={12} md={6} item />
         <Grid xs={12} item />
         <Grid justify="center" container>
@@ -131,40 +103,22 @@ export function AddArticleForm(props) {
             className={classes.buttonajout}
             onClick={handleSubmit}
           >
-            Valider
-          </Button>
-
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.buttons}
-            onClick={handleAnuler}
-          >
-            Annuler
+            Modifier
           </Button>
         </Grid>
       </Grid>
-    </Paper>
+    </div>
   );
 }
 
-AddArticleForm.defaultProps = {};
+UpdateUserForm.defaultProps = {};
 
-AddArticleForm.propTypes = {
+UpdateUserForm.propTypes = {
   classes: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
-  laboratoires: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      nom: PropTypes.string,
-    }),
-  ).isRequired,
   formData: PropTypes.object.isRequired,
   handleFormDataChange: PropTypes.func.isRequired,
-  handleLaboratoireSelectChange: PropTypes.func,
   handleSubmit: PropTypes.func.isRequired,
-  handleAddLaboratoireClick: PropTypes.func,
 };
 
-export default withStyles(styles)(AddArticleForm);
+export default withStyles(styles)(UpdateUserForm);

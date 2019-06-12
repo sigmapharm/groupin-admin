@@ -26,8 +26,16 @@ function* getRegionsWorker() {
 function* getVillesWorker() {
   yield callApi(ApiRoutes.VILLES, setVilles, {}, null, false, false);
 }
+
 function* getLaboratoiresWorker() {
-  yield callApi(ApiRoutes.LABORATOIRES, setLaboratoires, {}, null, false, false);
+  yield callApi(
+    ApiRoutes.LABORATOIRES,
+    setLaboratoires,
+    {},
+    null,
+    false,
+    false,
+  );
 }
 
 function* getConfigurationWorker() {
@@ -49,7 +57,7 @@ export default function* appSaga() {
     takeLatest(GET_PHARMACIES, getPharmaciesWorker),
     takeLatest(GET_VILLES, getVillesWorker),
     takeLatest(GET_REGIONS, getRegionsWorker),
-    takeLatest(GET_LABORATOIRES,getLaboratoiresWorker),
-   takeLatest(GET_CONFIGURATION, getConfigurationWorker),
+    takeLatest(GET_LABORATOIRES, getLaboratoiresWorker),
+    takeLatest(GET_CONFIGURATION, getConfigurationWorker),
   ]);
 }

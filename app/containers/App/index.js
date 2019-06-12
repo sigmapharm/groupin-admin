@@ -13,7 +13,6 @@ import { Route, Switch } from 'react-router-dom';
 import SignIn from 'containers/Login';
 import history from 'utils/history';
 import GlobalStyle from '../../global-styles';
-/*Routing of the application*/
 
 import Header from '../AppHeader/Header';
 import InternalApp from './InternalApp';

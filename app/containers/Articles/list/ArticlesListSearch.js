@@ -42,12 +42,16 @@ export class ArticlesListSearch extends React.PureComponent {
         <TextField
           name="laboratoire"
           label="Laboratoire"
+          noValidate
+          autoComplete="off"
           className={classes.textField}
           margin="normal"
           onChange={handleChange}
         />
         <TextField
           name="categorie"
+          noValidate
+          autoComplete="off"
           label="Catégorie d'article"
           className={classes.textField}
           margin="normal"
@@ -57,6 +61,8 @@ export class ArticlesListSearch extends React.PureComponent {
         <TextField
           name="nom"
           label="Désignation d'article"
+          noValidate
+          autoComplete="off"
           className={classes.textField}
           margin="normal"
           onChange={handleChange}
@@ -66,7 +72,7 @@ export class ArticlesListSearch extends React.PureComponent {
           className={classes.button}
           onClick={handleSearchArticle}
         >
-          <SearchIcon/>
+          <SearchIcon />
         </Fab>
       </form>
     );

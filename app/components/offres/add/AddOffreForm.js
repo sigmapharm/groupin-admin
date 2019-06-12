@@ -5,14 +5,15 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import ErrorsArea from '../../ErrorsArea';
-import  OffreInfo  from './OffreInfo';
-import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
-import ArticlesListTableHeader from './ArticlesHeader';
 import TableBody from '@material-ui/core/TableBody';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
+import ErrorsArea from '../../ErrorsArea';
+import OffreInfo from './OffreInfo';
+import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
+import ArticlesListTableHeader from './ArticlesHeader';
 import AticlesListTableRow from './ArticlesRow';
+
 const styles = theme => ({
   root: {
     paddingLeft: theme.spacing.unit * 5,
@@ -23,7 +24,7 @@ const styles = theme => ({
     paddingBottom: theme.spacing.unit * 5,
     paddingTop: theme.spacing.unit * 5,
   },
-  title: { marginLeft: '-120px', },
+  title: { marginLeft: '-120px' },
   gridContainer: {
     paddingLeft: theme.spacing.unit * 15,
     paddingRight: theme.spacing.unit * 15,
@@ -45,11 +46,11 @@ const styles = theme => ({
   inputs: {
     maxWidth: '350px',
   },
-  buttons:{
-    marginLeft:'1%',
+  buttons: {
+    marginLeft: '1%',
   },
-  buttonajout:{
-    marginLeft:'-22%',
+  buttonajout: {
+    marginLeft: '-22%',
   },
   select: {
     marginTop: theme.spacing.unit,
@@ -61,23 +62,18 @@ const styles = theme => ({
     textAlign: 'center',
   },
   table: {
-    minWidth:500,
-    marginTop:'2%',
-    marginLeft:'-2%',
-    textAlign:'center',
-    marginRight:'27%',
-
+    minWidth: 500,
+    marginTop: '2%',
+    marginLeft: '-2%',
+    textAlign: 'center',
+    marginRight: '27%',
   },
-  infoArticle:{
-    marginTop:'2%',
-    marginLeft:'-2%',
-    scrollMarginBottom:'-2%',
-},
-
-
+  infoArticle: {
+    marginTop: '2%',
+    marginLeft: '-2%',
+    scrollMarginBottom: '-2%',
+  },
 });
-
-
 
 export function AddOffreForm(props) {
   const {
@@ -89,13 +85,12 @@ export function AddOffreForm(props) {
     laboratoires,
     handleLaboratoireSelectChange,
     rows,
-
   } = props;
   return (
     <Paper className={classes.paper}>
       <Grid className={classes.headerGridContainer} container>
-        <Grid xs={12}  className={classes.title} item>
-          <Typography  variant="h5" color="secondary">
+        <Grid xs={12} className={classes.title} item>
+          <Typography variant="h5" color="primary">
             {`Informations d'offres`}
           </Typography>
         </Grid>
@@ -117,7 +112,12 @@ export function AddOffreForm(props) {
             offreInputs: classes.inputs,
           }}
         />
-        <Grid className={classes.selectLaboratoireContainer} xs={12} md={6} item>
+        <Grid
+          className={classes.selectLaboratoireContainer}
+          xs={12}
+          md={6}
+          item
+        >
           <SingleAutoCompleteSelect
             className={classes.select}
             name="laboratoire"
@@ -126,14 +126,19 @@ export function AddOffreForm(props) {
             value={formData.laboratoire}
             placeholder="Laboratoire"
             isClearable
-        />
-    </Grid>
-        <Grid className={classes.gridContainer}spacing={8} container>
-          <Typography  variant="h5" color="secondary" className={classes.infoArticle}>
-            {`Articles de l'offre`}</Typography>
+          />
         </Grid>
-    <Grid className={classes.gridContainer}spacing={8} container>
-          <Table className={classes.table}>
+        <Grid className={classes.gridContainer} spacing={8} container>
+          <Typography
+            variant="h5"
+            color="primary"
+            className={classes.infoArticle}
+          >
+            {`Articles de l'offre`}
+          </Typography>
+        </Grid>
+        <Grid className={classes.gridContainer} spacing={8} container>
+          <Table className={classes.table} style={{ marginLeft: '9%' }}>
             <colgroup>
               <col width="1%" />
               <col width="1%" />
@@ -142,16 +147,16 @@ export function AddOffreForm(props) {
               <col width="5%" />
               <col width="5%" />
             </colgroup>
-             <TableHead>
-               <ArticlesListTableHeader />
-             </TableHead>
+            <TableHead>
+              <ArticlesListTableHeader />
+            </TableHead>
             <TableBody>
-           {rows &&
-              rows.map(row => <AticlesListTableRow key={row.id} row={row} />)}
-          </TableBody>
-        </Table>
+              {rows &&
+                rows.map(row => <AticlesListTableRow key={row.id} row={row} />)}
+            </TableBody>
+          </Table>
         </Grid>
-    <Grid xs={12} md={6} item />
+        <Grid xs={12} md={6} item />
         <Grid xs={12} item />
         <Grid justify="center" container>
           <Button
@@ -159,10 +164,15 @@ export function AddOffreForm(props) {
             variant="contained"
             color="primary"
             className={classes.buttonajout}
-            onClick={handleSubmit}>
+            onClick={handleSubmit}
+          >
             Valider
           </Button>
-        </Grid></Grid></Paper> );}
+        </Grid>
+      </Grid>
+    </Paper>
+  );
+}
 
 AddOffreForm.defaultProps = {};
 

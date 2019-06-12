@@ -3,9 +3,15 @@ import { callApi } from '../../services/saga';
 import {
   GET_USERS_LIST_ACTION,
   MANAGE_CREATE_USER_RESPONSE,
+  MANAGE_UPDATE_USER_RESPONSE,
   SUBMIT_CREATE_USER,
+  SUBMIT_UPDATE_USER,
 } from './constants';
-import { manageCreateUserResponse, putUsersList } from './actions';
+import {
+  manageCreateUserResponse,
+  manageUpdateserResponse,
+  putUsersList,
+} from './actions';
 import ApiRoutes from '../../core/ApiRoutes';
 
 function* usersListWorker(action) {
@@ -62,11 +68,48 @@ function* manageCreateUserResponseWorker(action) {
   }
 }
 
+function* updateUserWorker(action) {
+  const { payload, callback } = action;
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      ...payload,
+      ville: null,
+      region: null,
+    }),
+  };
+  try {
+    yield callApi(
+      ApiRoutes.USERS,
+      manageUpdateserResponse,
+      options,
+      null,
+      false,
+      false,
+      callback,
+    );
+  } catch (e) {
+    callback(null);
+  }
+}
+
+function* manageUpdateUserResponseWorker(action) {
+  const { payload, callback } = action;
+  if (callback) {
+    callback(payload);
+  }
+}
+
 function* usersListSagas() {
   yield all([
     takeLatest(GET_USERS_LIST_ACTION, usersListWorker),
     takeLatest(SUBMIT_CREATE_USER, addNewUserWorker),
     takeLatest(MANAGE_CREATE_USER_RESPONSE, manageCreateUserResponseWorker),
+    takeLatest(SUBMIT_UPDATE_USER, updateUserWorker),
+    takeLatest(MANAGE_UPDATE_USER_RESPONSE, manageUpdateUserResponseWorker),
   ]);
 }
 

@@ -120,7 +120,7 @@ export class AddUser extends React.PureComponent {
       const formattedData = {
         ...formData,
         pharmacie: {
-          id:formData.pharmacie && formData.pharmacie.value,
+          id: formData.pharmacie && formData.pharmacie.value,
         },
       };
       this.props.dispatch(createUser(formattedData, this.handleSubmitResponse));
@@ -173,7 +173,7 @@ export class AddUser extends React.PureComponent {
     this.setState({
       formData: {
         ...formData,
-        pharmacie:formatPharmacieToLabelValue(newPharmacie),
+        pharmacie: formatPharmacieToLabelValue(newPharmacie),
       },
       isAddPharmacie: false,
     });
@@ -226,7 +226,7 @@ export class AddUser extends React.PureComponent {
             open
             TransitionComponent={Fade}
             message={
-              <span id="message-id">L'utilisateur a été créé avec succès.</span>
+              <span id="message-id">utilisateur a été créé avec succès.</span>
             }
             action={[
               <Button

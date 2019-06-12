@@ -29,6 +29,7 @@ const makeSelectstatus = () =>
 
 const makeSelectlaboratoire = () =>
   createSelector(offresState, state => state.get('laboratoire'));
+
 export {
   makeSelectOffresList,
   makeSelectPage,

@@ -14,10 +14,12 @@ import {
   GET_CONFIGURATION,
   ADD_NEW_PHARMACIE_TO_STORE,
   RESET_ARTICLE_IN_STORE,
-  SET_ARTICLE_IN_STORE, SET_LABORATOIRES, ADD_NEW_LABORATOIRE_TO_STORE,
-
+  SET_ARTICLE_IN_STORE,
+  SET_LABORATOIRES,
+  ADD_NEW_LABORATOIRE_TO_STORE,
+  GET_ARTICLESLABO_LIST_ACTION,
+  PUT_ARTICLESLABO_LIST_ACTION,
 } from './constants';
-
 
 export const logout = () => ({
   type: LOGOUT,
@@ -47,7 +49,6 @@ export const getPharmacies = () => ({
   type: GET_PHARMACIES,
 });
 
-
 export const getVilles = () => ({
   type: GET_VILLES,
 });
@@ -76,13 +77,9 @@ export const addPharmacieToStore = pharmacie => ({
   payload: { ...pharmacie },
 });
 
-
-
-export const setArticleInStore =()=>(
-  {   type:SET_ARTICLE_IN_STORE,
-
-  }
-);
+export const setArticleInStore = () => ({
+  type: SET_ARTICLE_IN_STORE,
+});
 export const resetArticleInStore = () => ({
   type: RESET_ARTICLE_IN_STORE,
 });
@@ -100,3 +97,12 @@ export const addLaboratoireToStore = laboratoire => ({
   payload: { ...laboratoire },
 });
 
+export const getArticleslaboList = values => ({
+  type: GET_ARTICLESLABO_LIST_ACTION,
+  payload: { ...values },
+});
+
+export const putArticleslaboList = values => ({
+  type: PUT_ARTICLESLABO_LIST_ACTION,
+  payload: { ...values },
+});

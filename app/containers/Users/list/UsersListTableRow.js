@@ -11,20 +11,72 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import Toggle from '../../../components/Toggle/Toggle';
 import UserListConsult from '../consultlistuser/UserListConsult';
+import { updateUser } from '../actions';
+import saga from '../saga';
+import injectSaga from '../../../utils/injectSaga';
+import authenticated from '../../HOC/authenticated/authenticated';
+
 const closeButton = { marginLeft: '59rem' };
+
+const initialState = {
+  formData: {
+    firstName: '',
+    lastName: '',
+    cin: '',
+    email: '',
+    tel: '',
+    gsm: '',
+    ville: '',
+    codePostal: '',
+    pharmacie: '',
+  },
+  errors: {
+    fields: {},
+    messages: {},
+  },
+  isSuccess: false,
+};
+
 export class UsersListTableRow extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      ...initialState,
+      isdisplaydata: false,
+    };
   }
 
-  // eslint-disable-next-line no-unused-vars
-  edit = () => {
+  handleFormDataChange = e => {
+    const { formData } = this.state;
+    this.setState({
+      formData: {
+        ...formData,
+        [e.target.name]: e.target.value,
+      },
+    });
+  };
+
+  edit = row => {
     this.setState({
       isdisplaydata: true,
     });
+  };
+
+  handleEditclose = () => {
+    this.setState({
+      isdisplaydata: false,
+    });
+  };
+
+  handleSubmitEdit = e => {
+    e.preventDefault();
+    const { formData } = this.state;
+
+    this.props.dispatch(updateUser(formData));
   };
 
   handledetailclose = () => {
@@ -35,6 +87,7 @@ export class UsersListTableRow extends React.PureComponent {
 
   render() {
     const { row } = this.props;
+    const { errors } = this.state;
     return (
       <React.Fragment>
         <TableRow key={row.id}>
@@ -78,11 +131,19 @@ export class UsersListTableRow extends React.PureComponent {
     );
   }
 }
-
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
 UsersListTableRow.defaultProps = {};
+const withConnect = connect(mapDispatchToProps);
 
+const withSaga = injectSaga({ key: 'users', saga });
 UsersListTableRow.propTypes = {
   row: PropTypes.object.isRequired,
 };
 
-export default UsersListTableRow;
+export default compose(
+  withConnect,
+  withSaga,
+  authenticated,
+)(UsersListTableRow);

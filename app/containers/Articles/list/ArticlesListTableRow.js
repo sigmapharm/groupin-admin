@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-concat */
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import Delete from '@material-ui/icons/Delete';
@@ -27,7 +26,6 @@ const closeStyle = {
 const typo3syle = { marginLeft: '4%' };
 
 const addCommas = nStr => {
-  // eslint-disable-next-line no-param-reassign
   nStr += '';
   const x = nStr.split('.');
   let x1 = x[0];
@@ -46,7 +44,6 @@ export class AticlesListTableRow extends React.PureComponent {
     this.state = { isdisplaydata: false };
   }
 
-  // eslint-disable-next-line no-unused-vars
   edit = row => {
     this.setState({
       isdisplaydata: true,
@@ -144,7 +141,7 @@ AticlesListTableRow.propTypes = {
 };
 const withConnect = connect(
   // eslint-disable-next-line no-undef
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 );
 

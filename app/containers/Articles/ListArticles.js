@@ -16,32 +16,13 @@ import history from 'utils/history';
 import AddIcon from '@material-ui/icons/Add';
 import saga from './saga';
 
-import {
-  makeSelectArticlesList,
-  makeSelectcategorie,
-  makeSelectlaboratoire,
-  makeSelectNom,
-  makeSelectPage,
-  makeSelectPPH,
-  makeSelectPPV,
-  makeSelectRowsPerPage,
-  makeSelectTVA,
-} from './selectors';
+import { makeSelectArticlesList } from './selectors';
 import { getArticlesList } from './actions';
 import authenticated from '../HOC/authenticated/authenticated';
 import AticlesListTableRow from './list/ArticlesListTableRow';
 import ArticlesListTableFooter from './list/ArticlesListTableFooter';
 import ArticlesListSearch from './list/ArticlesListSearch';
 import ArticlesListTableHeader from './list/ArticlesListTableHeader';
-
-// eslint-disable-next-line no-unused-vars
-const actionsStyles = theme => ({
-  root: {
-    flexShrink: 0,
-    color: theme.palette.text.secondary,
-    marginLeft: theme.spacing.unit * 2.5,
-  },
-});
 
 const styles = theme => ({
   root: {
@@ -131,7 +112,6 @@ class ListeArticles extends React.Component {
       : 0;
     const rows = articlesList.content;
     const deletearticle = articlesList.content;
-    console.log('RENDER :', rows);
     return (
       <div>
         <Typography component="h1" variant="h4" className={classes.root}>
@@ -192,14 +172,6 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = createStructuredSelector({
   articlesList: makeSelectArticlesList(),
-  page: makeSelectPage(),
-  rowsPerPage: makeSelectRowsPerPage(),
-  categorie: makeSelectcategorie(),
-  nom: makeSelectNom(),
-  pph: makeSelectPPH(),
-  ppv: makeSelectPPV(),
-  tva: makeSelectTVA(),
-  laboratoire: makeSelectlaboratoire(),
 });
 
 const withConnect = connect(
