@@ -1,11 +1,9 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableHead from '@material-ui/core/TableHead';
-import Divider from '@material-ui/core/Divider';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+
+import TextField from '@material-ui/core/TextField';
 
 const head = { backgroundColor: 'lightgreen' };
 const addCommas = nStr => {
@@ -19,6 +17,31 @@ const addCommas = nStr => {
   }
   return x1 + x2;
 };
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    color:'#fff000',
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  input: {
+    color: "black",
+  },
+  dense: {
+    marginTop: 19,
+  },
+  MuiInputBaseInput5355:{
+color:'red'
+    
+  },
+  menu: {
+    width: 200,
+  },
+});
 
 export class ArticleListConsultationn extends React.PureComponent {
   constructor(props) {
@@ -27,106 +50,213 @@ export class ArticleListConsultationn extends React.PureComponent {
   }
 
   render() {
-    const { row } = this.props;
+    const { row , classes } = this.props;
     return (
       <React.Fragment>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Référence</TableCell>
-              <TableCell>Désignation</TableCell>
-              <TableCell>Catégorie</TableCell>
-              <TableCell>Gamme</TableCell>
-              <TableCell>Forme galénique</TableCell>
-              <TableCell>DCI</TableCell>
-              <TableCell>Classe thérapeutique</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell>{row.reference}</TableCell>
-              <TableCell>{row.nom}</TableCell>
-              <TableCell>{row.categorie}</TableCell>
-              <TableCell>{row.gamme}</TableCell>
-              <TableCell>{row.forme_galenique}</TableCell>
-              <TableCell>{row.dci}</TableCell>
-              <TableCell>{row.classe_therapeutique}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-        <div style={{ height: '20px' }} />
-        <Divider
-          variant="middle"
-          style={{
-            backgroundColor: '#276955',
-            width: '50%',
-            marginLeft: '25%',
+        <form className={classes.container} noValidate autoComplete="off">
+                      <TextField 
+          disabled
+          id="standard-disabled"
+          label="Référence"
+          defaultValue={row.reference}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
           }}
+          margin="normal"
         />
-        <div style={{ height: '20px' }} />
-
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>PPH</TableCell>
-              <TableCell>PPV</TableCell>
-              <TableCell>TVA (%)</TableCell>
-              <TableCell>Nessite préscription</TableCell>
-              <TableCell>Produit marché</TableCell>
-              <TableCell>Code barre</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell>
-                {addCommas(row.pph.toFixed(2))
-                  .replace(/,/g, ' ')
-                  .replace('.', ',')}
-              </TableCell>
-              <TableCell>
-                {addCommas(row.ppv.toFixed(2))
-                  .replace(/,/g, ' ')
-                  .replace('.', ',')}
-              </TableCell>
-              <TableCell>{row.tva}</TableCell>
-              <TableCell>{row.neccissite_prescription}</TableCell>
-              <TableCell>{row.produit_Marche}</TableCell>
-              <TableCell>{row.codebare}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-        <div style={{ height: '20px' }} />
-        <Divider
-          variant="middle"
-          style={{
-            backgroundColor: '#276955',
-            width: '50%',
-            marginLeft: '25%',
+            <TextField
+          disabled
+          id="standard-disabled"
+          label="Désignation"
+          defaultValue={row.designation}
+                    className={classes.textField}
+          inputProps={{
+            className: classes.input
           }}
+          margin="normal"
         />
-        <div style={{ height: '20px' }} />
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Laboratoire</TableCell>
-              <TableCell>Adresse</TableCell>
-              <TableCell>Website</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Déscription</TableCell>
-              <TableCell> </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell>{row.laboratoire && row.laboratoire.nom}</TableCell>
-              <TableCell>{row.laboratoire.adresse}</TableCell>
-              <TableCell>{row.laboratoire.website}</TableCell>
-              <TableCell>{row.laboratoire.email}</TableCell>
-              <TableCell>{row.laboratoire.description}</TableCell>
-              <TableCell />
-            </TableRow>
-          </TableBody>
-        </Table>
+            <TextField
+          disabled
+          id="standard-disabled"
+          label="Catégorie "
+          defaultValue={row.categorie}
+                    className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+        <TextField
+          disabled
+          id="standard-disabled"
+          label="Gamme"
+          defaultValue={row.gamme}
+                    className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+         <TextField
+          disabled
+          id="standard-disabled"
+          label="Forme galénique          "
+          defaultValue={row.forme_galenique }
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+         <TextField
+          disabled
+          id="standard-disabled"
+          label="DCI"
+          defaultValue={row.dci}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+         <TextField
+          disabled
+          id="standard-disabled"
+          label="Classe thérapeutique"
+          defaultValue={row.classe_therapeutique}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+         <TextField
+          disabled
+          id="standard-disabled"
+          label="PPH"
+          defaultValue={row.pph}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+         <TextField
+          disabled
+          id="standard-disabled"
+          label="PPV"
+          defaultValue={row.ppv}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+         <TextField
+          disabled
+          id="standard-disabled"
+          label="TVA"
+          defaultValue={row.tva}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+             <TextField
+          disabled
+          id="standard-disabled"
+          label="neccissite_prescription"
+          defaultValue={row.neccissite_prescription}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+             <TextField
+          disabled
+          id="standard-disabled"
+          label="produit_Marche"
+          defaultValue={row.produit_Marche}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+        <TextField
+          disabled
+          id="standard-disabled"
+          label="codebare"
+          defaultValue={row.codebare}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+      </form><br/>
+         <Typography variant="h5" color="primary">
+                              {`Laboratoire`} </Typography><br/>
+                              <form  className={classes.container} noValidate autoComplete="off">
+         <TextField
+          disabled
+          id="standard-disabled"
+          label="Laboratoire"
+          defaultValue={row.laboratoire.nom}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+         <TextField
+          disabled
+          id="standard-disabled"
+          label="Adresse"
+          defaultValue={row.laboratoire.adresse}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+         <TextField
+          disabled
+          id="standard-disabled"
+          label="Website"
+          defaultValue={row.laboratoire.website}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+         <TextField
+          disabled
+          id="standard-disabled"
+          label="Email"
+          defaultValue={row.laboratoire.email}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+         <TextField
+          disabled
+          id="standard-disabled"
+          label="Déscription"
+          defaultValue={row.laboratoire.description}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+       </form>
       </React.Fragment>
     );
   }
@@ -136,4 +266,4 @@ ArticleListConsultationn.defaultProps = {};
 ArticleListConsultationn.propTypes = {
   row: PropTypes.object.isRequired,
 };
-export default ArticleListConsultationn;
+export default withStyles(styles)(ArticleListConsultationn);

@@ -10,8 +10,10 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
-import { getOffreList } from './actions';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 import history from 'utils/history';
+import { getOffreList } from './actions';
 import {
   makeSelectPage,
   makeSelectRowsPerPage,
@@ -21,19 +23,23 @@ import {
   makeSelectdateFin,
   makeSelectmontantObjectif,
   makeSelectquantiteMinimale,
-  makeSelectstatus, makeSelectlaboratoire,
+  makeSelectstatus,
+  makeSelectlaboratoire,
 } from './selectors';
 import saga from './saga';
 import authenticated from '../HOC/authenticated/authenticated';
 import injectSaga from '../../utils/injectSaga';
 import OffresListTableFooter from './list/OffresListTableFooter';
 import OffresListSearch from './list/OffresListSearch';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import OffresListTableRows from './list/OffresListTableRows';
+import OffresListTableRow from './list/OffresListTableRow';
+
 import OffresListTableHeaders from './list/OffresListTableHeaders';
+import WithRoles from '../WithRoles';
+import { MEMBRE, ADMIN, SUPER_ADMIN } from '../AppHeader/Roles';
 
 /* istanbul ignore next */
+// eslint-disable-next-line no-unused-vars
 const actionsStyles = theme => ({
   root: {
     flexShrink: 0,
@@ -71,7 +77,6 @@ const styles = theme => ({
     margin: theme.spacing.unit,
   },
   addOffresButton: {
-
     position: 'fixed',
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2,
@@ -83,12 +88,7 @@ const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
   },
-
-
 });
-
-
-
 
 export class OffresList extends React.PureComponent {
   constructor(props) {
@@ -96,13 +96,13 @@ export class OffresList extends React.PureComponent {
     this.state = {
       page: 0,
       rowsPerPage: 10,
-      designation:'',
-      dateDebut:'',
-      dateFin:'',
-      montant:'',
-      quantiteMin:'',
-      status:'',
-      laboratoire:'',
+      designation: '',
+      dateDebut: '',
+      dateFin: '',
+      montant: '',
+      quantiteMin: '',
+      status: '',
+      laboratoire: '',
     };
   }
 
@@ -115,20 +115,21 @@ export class OffresList extends React.PureComponent {
       this.props.dispatch(getOffreList(this.state)),
     );
   };
-   handleOffresAddClick = () => {
+
+  handleOffresAddClick = () => {
     history.push('/offres/add');
   };
 
   handleChangeRowsPerPage = event => {
     this.setState(
-      { page:0,rowsPerPage:parseInt(event.target.value, 10) },
+      { page: 0, rowsPerPage: parseInt(event.target.value, 10) },
       () => this.props.dispatch(getOffreList(this.state)),
     );
   };
+
   handleSelctChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
-
 
   handleSearchOffres = () => {
     this.props.dispatch(getOffreList(this.state));
@@ -138,41 +139,54 @@ export class OffresList extends React.PureComponent {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-
-
   render() {
     const { rowsPerPage, page } = this.state;
-    const { classes,offresList } = this.props;
-    const totalElements = offresList.totalElements ? offresList.totalElements : 0;
+    // eslint-disable-next-line react/prop-types
+    const { classes, offresList, user } = this.props;
+    const totalElements = offresList.totalElements
+      ? offresList.totalElements
+      : 0;
     const rows = offresList.content;
-    console.log("totalElements");
-    console.log("RENDER :", rows);
-
+    console.log('totalElements');
+    console.log('RENDER :', rows);
     return (
       <div>
         <Typography component="h1" variant="h4" className={classes.root}>
           Liste des offres
         </Typography>
         <Divider variant="middle" className={classes.root} />
-        <OffresListSearch
-          handleChange={this.handleChange}
-          handleSelctChange={this.handleSelctChange}
-          handleSearchOffres={this.handleSearchOffres}
 
-        />
- <Divider variant="middle" className={classes.root} />
-    <Typography component="h1" variant="h6" className={classes.root}>
+        <WithRoles user={user} roles={[ADMIN, SUPER_ADMIN]}>
+          <OffresListSearch
+            handleChange={this.handleChange}
+            handleSelctChange={this.handleSelctChange}
+            handleSearchOffres={this.handleSearchOffres}
+          />{' '}
+          <Divider variant="middle" className={classes.root} />
+        </WithRoles>
+
+        <Typography component="h1" variant="h6" className={classes.root}>
           {totalElements} offres trouvés
         </Typography>
 
-         <Paper className={classes.root}>
-           <Table className={classes.table}>
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
             <TableHead>
-            <OffresListTableHeaders />
+              <OffresListTableHeaders />
             </TableHead>
             <TableBody>
-              {rows &&
-              rows.map(row => <OffresListTableRows key={row.id} row={row} />)}
+              <WithRoles user={user} roles={[MEMBRE]}>
+                {rows &&
+                  rows.map(row => (
+                    <OffresListTableRows key={row.id} row={row} />
+                  ))}
+              </WithRoles>
+              <WithRoles user={user} roles={[ADMIN, SUPER_ADMIN]}>
+                {rows &&
+                  rows.map(row => (
+                    <OffresListTableRow key={row.id} row={row} />
+                  ))}
+              </WithRoles>
             </TableBody>
             <OffresListTableFooter
               totalElements={totalElements}
@@ -183,11 +197,16 @@ export class OffresList extends React.PureComponent {
             />
           </Table>
         </Paper>
-        <Fab color="primary"  className={classes.addOffresButton}
-             onClick={this.handleOffresAddClick}>
-          <AddIcon />
-        </Fab>
-   </div>
+        <WithRoles user={user} roles={[ADMIN, SUPER_ADMIN]}>
+          <Fab
+            color="primary"
+            className={classes.addOffresButton}
+            onClick={this.handleOffresAddClick}
+          >
+            <AddIcon />
+          </Fab>
+        </WithRoles>
+      </div>
     );
   }
 }
@@ -198,16 +217,16 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = createStructuredSelector({
-  offresList:makeSelectOffresList(),
+  offresList: makeSelectOffresList(),
   page: makeSelectPage(),
   rowsPerPage: makeSelectRowsPerPage(),
-  designation:makeSelectdesignation(),
-   dateDebut:makeSelectdateDebut(),
-   dateFin:makeSelectdateFin(),
-  montantObjectif:makeSelectmontantObjectif(),
-  quantiteMinimale:makeSelectquantiteMinimale(),
+  designation: makeSelectdesignation(),
+  dateDebut: makeSelectdateDebut(),
+  dateFin: makeSelectdateFin(),
+  montantObjectif: makeSelectmontantObjectif(),
+  quantiteMinimale: makeSelectquantiteMinimale(),
   status: makeSelectstatus(),
-  laboratoire:makeSelectlaboratoire() ,
+  laboratoire: makeSelectlaboratoire(),
 });
 
 const withConnect = connect(
@@ -215,7 +234,7 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key:'offres', saga });
+const withSaga = injectSaga({ key: 'offres', saga });
 
 OffresList.defaultProps = {};
 
@@ -223,7 +242,6 @@ OffresList.propTypes = {
   classes: PropTypes.object,
   dispatch: PropTypes.func,
   offresList: PropTypes.any,
-
 };
 
 export default compose(

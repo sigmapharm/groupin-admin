@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import { compose } from 'redux';
@@ -6,7 +7,6 @@ import { withStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-
 
 const styles = theme => ({
   root: {
@@ -24,14 +24,12 @@ const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
   },
-
-
 });
 
 export class OffresListSearch extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {status:'',};
+    this.state = { status: '' };
   }
 
   render() {
@@ -48,21 +46,21 @@ export class OffresListSearch extends React.PureComponent {
           margin="normal"
           onChange={handleChange}
         />
-      <TextField
+        <TextField
           name="laboratoire"
           label="Laboratoire"
           className={classes.textField}
           margin="normal"
           onChange={handleChange}
         />
-         <TextField
+        <TextField
           name="status"
           label="Status d'offre"
           defaultValue=""
           className={classes.textField}
           margin="normal"
           onChange={handleChange}
-         />
+        />
         <Fab
           color="primary"
           className={classes.button}
@@ -80,7 +78,7 @@ OffresListSearch.defaultProps = {};
 OffresListSearch.propTypes = {
   classes: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
-  handleSearchOffres : PropTypes.func.isRequired,
+  handleSearchOffres: PropTypes.func.isRequired,
 };
 
 export default compose(withStyles(styles))(OffresListSearch);

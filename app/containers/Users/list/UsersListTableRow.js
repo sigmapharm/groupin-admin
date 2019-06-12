@@ -1,4 +1,4 @@
-import React,{Fragment} from 'react';
+import React from 'react';
 import * as PropTypes from 'prop-types';
 import Search from '@material-ui/icons/Search';
 import EditIcon from '@material-ui/icons/Edit';
@@ -13,67 +13,68 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Toggle from '../../../components/Toggle/Toggle';
 import UserListConsult from '../consultlistuser/UserListConsult';
-const paper = { width: "180%"};
-const closeButton = {marginLeft:"59rem"};
+const closeButton = { marginLeft: '59rem' };
 export class UsersListTableRow extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
   }
-  edit = (row) => {
+
+  // eslint-disable-next-line no-unused-vars
+  edit = () => {
     this.setState({
       isdisplaydata: true,
     });
-  }
+  };
+
   handledetailclose = () => {
     this.setState({
       isdisplaydata: false,
     });
   };
 
-
   render() {
     const { row } = this.props;
     return (
       <React.Fragment>
-      <TableRow key={row.id}>
-        <TableCell component="th" scope="row">
-          {row.firstName} {row.lastName}
-        </TableCell>
-        <TableCell>{row.email}</TableCell>
-        <TableCell>{row.pharmacie && row.pharmacie.denomination}</TableCell>
-        <TableCell>{row.role}</TableCell>
-        <TableCell>
-          <EditIcon color="primary" />
-          <Search color="secondary" onClick={() => this.edit(row)}  />
-          <Toggle />
-          <ResetIcon color="primary" />
-        </TableCell>
-      </TableRow>
-  <Dialog  
+        <TableRow key={row.id}>
+          <TableCell component="th" scope="row">
+            {row.firstName} {row.lastName}
+          </TableCell>
+          <TableCell>{row.email}</TableCell>
+          <TableCell>{row.pharmacie && row.pharmacie.denomination}</TableCell>
+          <TableCell>{row.role}</TableCell>
+          <TableCell>
+            <EditIcon color="primary" />
+            <Search color="secondary" onClick={() => this.edit(row)} />
+            <Toggle />
+            <ResetIcon color="primary" />
+          </TableCell>
+        </TableRow>
+        <Dialog
           maxWidth="lg"
           onClose={this.handleClose}
           aria-labelledby="customized-dialog-title"
           open={this.state.isdisplaydata}
-          >
-                    <MuiDialogTitle disableTypography  > 
-                            <Typography variant="h5" color="primary">
-                              {`Details Utilisateur`}    <IconButton
-                              color="primary"
-                              aria-label="Close" style={closeButton}
-                              onClick={this.handledetailclose}
-                            >
-                              <CloseIcon />
-                            </IconButton>
-                            </Typography>
-                    </MuiDialogTitle>
-                    <MuiDialogContent>
-     
-          <UserListConsult  row={row} />
-
-                    </MuiDialogContent>
-    </Dialog>
-</React.Fragment> 
+        >
+          <MuiDialogTitle disableTypography>
+            <Typography variant="h5" color="primary">
+              {`Details Utilisateur`}{' '}
+              <IconButton
+                color="primary"
+                aria-label="Close"
+                style={closeButton}
+                onClick={this.handledetailclose}
+              >
+                <CloseIcon />
+              </IconButton>
+            </Typography>
+          </MuiDialogTitle>
+          <MuiDialogContent>
+            <UserListConsult row={row} />
+          </MuiDialogContent>
+        </Dialog>
+      </React.Fragment>
     );
   }
 }

@@ -1,4 +1,5 @@
-import React,{ Fragment } from 'react';
+// eslint-disable-next-line no-unused-vars
+import React, { Fragment } from 'react';
 import * as PropTypes from 'prop-types';
 import EditIcon from '@material-ui/icons/Edit';
 import FileCopy from '@material-ui/icons/FileCopy';
@@ -28,6 +29,7 @@ export class OffresListTableRow extends React.PureComponent {
     this.state = { isdisplaydata: false };
   }
 
+  // eslint-disable-next-line no-unused-vars
   edit = row => {
     this.setState({
       isdisplaydata: true,

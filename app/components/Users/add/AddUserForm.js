@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -55,12 +56,12 @@ const styles = theme => ({
     textAlign: 'center',
   },
 
-  buttons:{
-    marginLeft:'1%',
+  buttons: {
+    marginLeft: '1%',
   },
-  buttonajout:{
-    marginLeft:'-22%',
-  }
+  buttonajout: {
+    marginLeft: '-22%',
+  },
 });
 
 export function AddUserForm(props) {
@@ -134,7 +135,7 @@ export function AddUserForm(props) {
             onClick={handleAnuler}
             className={classes.buttons}
           >
-           ANNULER
+            ANNULER
           </Button>
         </Grid>
       </Grid>
@@ -160,4 +161,4 @@ AddUserForm.propTypes = {
   handleAddPharmacieClick: PropTypes.func.isRequired,
 };
 
- export default withStyles(styles)(AddUserForm);
+export default withStyles(styles)(AddUserForm);

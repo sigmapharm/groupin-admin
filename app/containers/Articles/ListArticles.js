@@ -13,6 +13,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import Fab from '@material-ui/core/Fab';
 import history from 'utils/history';
+import AddIcon from '@material-ui/icons/Add';
 import saga from './saga';
 
 import {
@@ -28,13 +29,12 @@ import {
 } from './selectors';
 import { getArticlesList } from './actions';
 import authenticated from '../HOC/authenticated/authenticated';
-import AddIcon from '@material-ui/icons/Add';
 import AticlesListTableRow from './list/ArticlesListTableRow';
 import ArticlesListTableFooter from './list/ArticlesListTableFooter';
 import ArticlesListSearch from './list/ArticlesListSearch';
 import ArticlesListTableHeader from './list/ArticlesListTableHeader';
 
-
+// eslint-disable-next-line no-unused-vars
 const actionsStyles = theme => ({
   root: {
     flexShrink: 0,
@@ -72,14 +72,11 @@ const styles = theme => ({
     margin: theme.spacing.unit,
   },
   addArticlesButton: {
-
     position: 'fixed',
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2,
   },
 });
-
-
 
 class ListeArticles extends React.Component {
   constructor(props) {
@@ -87,13 +84,12 @@ class ListeArticles extends React.Component {
     this.state = {
       page: 0,
       rowsPerPage: 10,
-      categorie:'',
-      nom:'',
-      pph:'',
-      ppv:'',
-      tva:'',
-      laboratoire:'',
-
+      categorie: '',
+      nom: '',
+      pph: '',
+      ppv: '',
+      tva: '',
+      laboratoire: '',
     };
   }
 
@@ -102,15 +98,15 @@ class ListeArticles extends React.Component {
   }
 
   handleChangePage = (event, page) => {
-    this.setState({ page },() =>
+    this.setState({ page }, () =>
       this.props.dispatch(getArticlesList(this.state)),
     );
   };
 
-
   handleChangeRowsPerPage = event => {
-    this.setState({page: 0, rowsPerPage: parseInt(event.target.value, 10) }, () =>
-      this.props.dispatch(getArticlesList(this.state)),
+    this.setState(
+      { page: 0, rowsPerPage: parseInt(event.target.value, 10) },
+      () => this.props.dispatch(getArticlesList(this.state)),
     );
   };
 
@@ -126,13 +122,16 @@ class ListeArticles extends React.Component {
     history.push('/articles/add');
   };
 
-
   render() {
-    const {rowsPerPage, page } = this.state;
-    const {classes,articlesList} = this.props;
-    const totalElements = articlesList.totalElements ? articlesList.totalElements : 0;
+    const { rowsPerPage, page } = this.state;
+    // eslint-disable-next-line react/prop-types
+    const { classes, articlesList } = this.props;
+    const totalElements = articlesList.totalElements
+      ? articlesList.totalElements
+      : 0;
     const rows = articlesList.content;
-    console.log("RENDER :", rows);
+    const deletearticle = articlesList.content;
+    console.log('RENDER :', rows);
     return (
       <div>
         <Typography component="h1" variant="h4" className={classes.root}>
@@ -146,20 +145,25 @@ class ListeArticles extends React.Component {
 
         <Divider variant="middle" className={classes.root} />
 
-       <Typography component="h1" variant="h6" className={classes.root}>
+        <Typography component="h1" variant="h6" className={classes.root}>
           {totalElements} Articles trouvés
         </Typography>
 
         <Paper className={classes.root}>
           <Table className={classes.table}>
-          <TableHead>
-           <ArticlesListTableHeader />
-          </TableHead>
+            <TableHead>
+              <ArticlesListTableHeader />
+            </TableHead>
 
             <TableBody>
-                {rows &&
-                rows.map(row => <AticlesListTableRow key={row.id} row={row} />)}
-
+              {rows &&
+                rows.map(row => (
+                  <AticlesListTableRow
+                    key={row.id}
+                    row={row}
+                    deletearticle={deletearticle}
+                  />
+                ))}
             </TableBody>
             <ArticlesListTableFooter
               totalElements={totalElements}
@@ -170,33 +174,32 @@ class ListeArticles extends React.Component {
             />
           </Table>
         </Paper>
-        <Fab color="primary"  className={classes.addArticlesButton}
-          onClick={this.handleArticlesAddClick}>
+        <Fab
+          color="primary"
+          className={classes.addArticlesButton}
+          onClick={this.handleArticlesAddClick}
+        >
           <AddIcon />
         </Fab>
-
       </div>
     );
   }
 }
-
-
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
 const mapStateToProps = createStructuredSelector({
-  articlesList:makeSelectArticlesList(),
-  page:makeSelectPage(),
-  rowsPerPage:makeSelectRowsPerPage(),
-  categorie:makeSelectcategorie(),
-  nom:makeSelectNom(),
-  pph:makeSelectPPH(),
-  ppv:makeSelectPPV(),
-  tva:makeSelectTVA(),
-  laboratoire:makeSelectlaboratoire() ,
-
+  articlesList: makeSelectArticlesList(),
+  page: makeSelectPage(),
+  rowsPerPage: makeSelectRowsPerPage(),
+  categorie: makeSelectcategorie(),
+  nom: makeSelectNom(),
+  pph: makeSelectPPH(),
+  ppv: makeSelectPPV(),
+  tva: makeSelectTVA(),
+  laboratoire: makeSelectlaboratoire(),
 });
 
 const withConnect = connect(
@@ -204,16 +207,15 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key:'articles', saga });
+const withSaga = injectSaga({ key: 'articles', saga });
 
 ListeArticles.propTypes = {
   classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
-
 };
 
 export default compose(
- authenticated,
+  authenticated,
   withSaga,
   withConnect,
   withStyles(styles),

@@ -3,11 +3,10 @@ import {
   MANAGE_CREATE_ARTICLE_RESPONSE,
   PUT_ARTICLES_LIST_ACTION,
   SUBMIT_CREATE_ARTICLE,
+  SUBMIT_DELETE_ARTICLE,
   GET_ARTICLESLABO_LIST_ACTION,
   PUT_ARTICLESLABO_LIST_ACTION,
 } from './constants';
-
-
 
 const getArticlesList = values => ({
   type: GET_ARTICLES_LIST_ACTION,
@@ -25,10 +24,9 @@ const getArticleslaboList = values => ({
 });
 
 const putArticleslaboList = values => ({
-  type:PUT_ARTICLESLABO_LIST_ACTION,
+  type: PUT_ARTICLESLABO_LIST_ACTION,
   payload: { ...values },
 });
-
 
 const manageCreateArticleResponse = (response, callback) => ({
   type: MANAGE_CREATE_ARTICLE_RESPONSE,
@@ -37,9 +35,18 @@ const manageCreateArticleResponse = (response, callback) => ({
 });
 
 export const createArticle = (formData, callback) => ({
-  type:  SUBMIT_CREATE_ARTICLE,
+  type: SUBMIT_CREATE_ARTICLE,
   payload: { ...formData },
   callback,
 });
-
-export { getArticlesList, putArticlesList,getArticleslaboList,putArticleslaboList,manageCreateArticleResponse };
+export const deleteArticle = formData => ({
+  type: SUBMIT_DELETE_ARTICLE,
+  payload: { ...formData },
+});
+export {
+  getArticlesList,
+  putArticlesList,
+  getArticleslaboList,
+  putArticleslaboList,
+  manageCreateArticleResponse,
+};

@@ -7,11 +7,38 @@ import * as PropTypes from 'prop-types';
 import Table from '@material-ui/core/Table';
 import Progressbar from './Progress';
 import Divider from '@material-ui/core/Divider';
-
+import { withStyles } from '@material-ui/core/styles';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
 
 const HeaderStyle = {
   backgroundColor: 'lightgray',
 };
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    color:'#fff000',
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  input: {
+    color: "black",
+  },
+  dense: {
+    marginTop: 19,
+  },
+  MuiInputBaseInput5355:{
+color:'red'
+    
+  },
+  menu: {
+    width: 200,
+  },
+});
 
 
 const champprogress = { width: '20%' };
@@ -24,7 +51,7 @@ export class OffreListConsultation extends React.PureComponent {
   }
 
   render() {
-    const { row, avancement } = this.props;
+    const { row, avancement,classes } = this.props;
     const datefin = new Date(row.dateFin);
     const mSecondesParJour = 86400 * 1000;
     const joursRestants = Math.floor((datefin - new Date()) / mSecondesParJour) + 1;
@@ -35,82 +62,116 @@ export class OffreListConsultation extends React.PureComponent {
     return (
       <React.Fragment>
 
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Désignation</TableCell>
-              <TableCell>Laboratoire</TableCell>
-              <TableCell>Montant maximal (MAD)</TableCell>
-              <TableCell>Quantité minimal ( par article)</TableCell>
-              <TableCell></TableCell>
-              <TableCell>Status de l'offre</TableCell>
+<form className={classes.container} noValidate autoComplete="off">
+                      <TextField 
+          disabled
+          id="standard-disabled"
+          label="Désignation"
+          defaultValue={row.designation}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+            <TextField
+          disabled
+          id="standard-disabled"
+          label="Laboratoire"
+          defaultValue={row.laboratoire && row.laboratoire.nom}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+          <TextField
+          disabled
+          id="standard-disabled"
+          label="Date fin"
+          defaultValue={dateformat}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+            <TextField
+          disabled
+          id="standard-disabled"
+          label="quantité minimal"
+          defaultValue={row.quantiteMin}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+        <TextField
+          disabled
+          id="standard-disabled"
+          label="Status de l'offre"
+          defaultValue={row.status}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+          
+     <div style={{width:'25%',marginTop:'28px'}}>
+        <Progressbar progress={avancement}  />
+        {joursRestants > 0 ? 'Il vous reste ' + joursRestants + ' ' + joursLabel : 'Offre clôturée !'}
 
-              <TableCell> </TableCell>
+        </div>
+        <TextField
+          disabled
+          id="standard-disabled"
+          label="Objectif "
+          defaultValue={row.montant}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+             <TextField
+          disabled
+          id="standard-disabled"
+          label="Objectif "
+          defaultValue={row.montant}
+          className={classes.textField}
+          inputProps={{
+            className: classes.input
+          }}
+          margin="normal"
+        />
+        <div style={{width:'25%',marginTop:'28px'}}>
+   <Progressbar progress={avancementMontant}/>{row.montant} MAD {avancementMontant}%
+   </div>
 
-            </TableRow></TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell component="th" scope="row">{row.designation}</TableCell>
-              <TableCell>{row.laboratoire && row.laboratoire.nom}</TableCell>
-              <TableCell>{row.quantiteMin}</TableCell>
-              <TableCell>{row.montantMax}</TableCell>
-              <TableCell></TableCell>
-              <TableCell>{row.status}</TableCell>
+   <Table>
+<TableHead>
+<TableRow>
+  <TableCell>Désignation de l'article</TableCell>
+  <TableCell>PPV</TableCell>
+  <TableCell><span style={{textDecoration:"line-through"}}>PPH</span> </TableCell>
+  <TableCell>Remise</TableCell>
+  <TableCell>PPH remisé</TableCell>
+</TableRow>
 
-              <TableCell></TableCell>
-
-            </TableRow>
-          </TableBody></Table>
-        <div style={{height:'20px'}}></div>
-        <Divider variant="middle" style={{backgroundColor:'#276955',width:'50%',marginLeft:'25%'}}/>
-        <div style={{height:'20px'}}></div>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Date fin</TableCell>
-              <TableCell>TimeLine</TableCell>
-              <TableCell>Objectif (MAD )</TableCell>
-              <TableCell>Objectif atteint </TableCell>
-
-            </TableRow></TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell>{dateformat}</TableCell>
-              <TableCell style={champprogress}>
-                <Progressbar progress={avancement}/>
-                {joursRestants > 0 ? 'Il vous reste ' + joursRestants + ' ' + joursLabel : 'Offre clôturée !'}
-              </TableCell>
-              <TableCell>{row.montant}</TableCell>
-              <TableCell> <div style={{float:'left',width:'70%'}}><Progressbar progress={avancementMontant}/></div> <div style={{float:'right',width:'30%'}}> {row.montant} MAD </div><div style={{clear:'both'}}></div>{avancementMontant}%
-
-              </TableCell>
-
-            </TableRow>
-          </TableBody></Table>
-        <div style={{height:'20px'}}></div>
-        <Divider variant="middle" style={{backgroundColor:'#276955',width:'50%',marginLeft:'25%'}}/>
-        <div style={{height:'20px'}}></div>
-
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Désignation</TableCell>
-              <TableCell>PPV</TableCell>
-              <TableCell>PPH <hr style={{width:'30%',marginLeft:'0',height:'3px',backgroundColor:'red'}}/></TableCell>
-              <TableCell>Remise (%)<hr style={{width:'30%',marginLeft:'0',height:'3px',backgroundColor:'red'}}/></TableCell>
-              <TableCell>PPH Remise<hr style={{width:'45%',marginLeft:'0',height:'3px',backgroundColor:'red'}}/></TableCell>
-            </TableRow></TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell component="th" scope="row"></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableBody></Table>
-
+</TableHead>
+<TableBody>
+<TableRow>
+<TableCell></TableCell>
+<TableCell></TableCell>
+<TableCell></TableCell>
+<TableCell></TableCell>
+<TableCell></TableCell>
+</TableRow>
+</TableBody>
+         </Table>
+      </form>
       </React.Fragment>
 
     );
@@ -122,4 +183,4 @@ OffreListConsultation.defaultProps = {
 };
 
 
-export default OffreListConsultation;
+export default withStyles(styles)(OffreListConsultation);
