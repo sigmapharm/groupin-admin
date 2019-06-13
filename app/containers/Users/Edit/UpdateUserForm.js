@@ -76,11 +76,12 @@ export function UpdateUserForm(props) {
           </Typography>
         </Grid>
         <Grid xs={12} item>
-          <ErrorsArea
-            variant="success"
-            prefix="Vous avez les erreurs suivantes"
-            errors={errors.messages}
-          />
+          {errors.messages && (
+            <ErrorsArea
+              prefix="Vous avez les erreurs suivantes"
+              errors={errors.messages}
+            />
+          )}
         </Grid>
       </Grid>
       <Grid className={classes.gridContainer} spacing={8} container>
@@ -111,11 +112,15 @@ export function UpdateUserForm(props) {
   );
 }
 
-UpdateUserForm.defaultProps = {};
+UpdateUserForm.defaultProps = {
+  errors: {
+    fields: {},
+  },
+};
 
 UpdateUserForm.propTypes = {
   classes: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired,
+  errors: PropTypes.object,
   formData: PropTypes.object.isRequired,
   handleFormDataChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,

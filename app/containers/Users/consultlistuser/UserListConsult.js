@@ -348,7 +348,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Ville"
-            value={row.pharmacie.ville}
+            value={row.pharmacie.ville && row.pharmacie.ville.name}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -359,7 +359,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="villeRC"
-            value={row.pharmacie.villeRC}
+            value={row.pharmacie.villeRC && row.pharmacie.villeRC.name}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -370,7 +370,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Région"
-            value={row.pharmacie.region}
+            value={row.pharmacie.region && row.pharmacie.region.name}
             className={classes.textField}
             inputProps={{
               className: classes.input,

@@ -13,11 +13,12 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import Tooltip from '@material-ui/core/Tooltip';
 import Toggle from '../../../components/Toggle/Toggle';
 import UserListConsult from '../consultlistuser/UserListConsult';
 import { updateUser } from '../actions';
 import authenticated from '../../HOC/authenticated/authenticated';
-import Tooltip from "@material-ui/core/Tooltip";
+import UpdateUserForm from '../Edit/UpdateUserForm';
 
 const closeButton = { float: 'right' };
 
@@ -38,6 +39,8 @@ const initialState = {
     messages: {},
   },
   isSuccess: false,
+  detailsOpen: false,
+  editMode: false,
 };
 
 export class UsersListTableRow extends React.PureComponent {
@@ -45,9 +48,16 @@ export class UsersListTableRow extends React.PureComponent {
     super(props);
     this.state = {
       ...initialState,
-      detailsOpen: false,
     };
   }
+
+  edit = () => {
+    const { row } = this.state;
+    this.setState({
+      formData: { ...row },
+      editMode: true,
+    });
+  };
 
   handleFormDataChange = e => {
     const { formData } = this.state;
@@ -59,15 +69,9 @@ export class UsersListTableRow extends React.PureComponent {
     });
   };
 
-  edit = () => {
+  openDetails = () => {
     this.setState({
       detailsOpen: true,
-    });
-  };
-
-  handleEditclose = () => {
-    this.setState({
-      detailsOpen: false,
     });
   };
 
@@ -79,12 +83,19 @@ export class UsersListTableRow extends React.PureComponent {
 
   closeDetails = () => {
     this.setState({
-      detailsOpen: false,
+      ...initialState,
+    });
+  };
+
+  closeEditMode = () => {
+    this.setState({
+      ...initialState,
     });
   };
 
   render() {
     const { row } = this.props;
+    const { editMode, detailsOpen, formData } = this.state;
     return (
       <React.Fragment>
         <TableRow key={row.id}>
@@ -96,13 +107,13 @@ export class UsersListTableRow extends React.PureComponent {
           <TableCell>{row.role}</TableCell>
           <TableCell style={{ padding: 0 }}>
             <Tooltip placement="top" title="Mofidier">
-              <IconButton style={{ padding: 5 }}>
+              <IconButton onClick={this.edit} style={{ padding: 5 }}>
                 <EditIcon color="primary" />
               </IconButton>
             </Tooltip>
             <Tooltip placement="top" title="Consulter">
-              <IconButton style={{ padding: 5 }}>
-                <Search color="secondary" onClick={this.edit} />
+              <IconButton onClick={this.openDetails} style={{ padding: 5 }}>
+                <Search color="secondary" />
               </IconButton>
             </Tooltip>
             <Tooltip placement="top" title="Rénitialiser mot de passe">
@@ -113,7 +124,7 @@ export class UsersListTableRow extends React.PureComponent {
             <Toggle />
           </TableCell>
         </TableRow>
-        {this.state.detailsOpen && (
+        {detailsOpen && (
           <Dialog maxWidth="lg" onClose={this.handleClose} open>
             <MuiDialogTitle disableTypography>
               <Typography variant="h5" color="primary">
@@ -133,6 +144,26 @@ export class UsersListTableRow extends React.PureComponent {
             </MuiDialogContent>
           </Dialog>
         )}
+        {editMode && (
+          <Dialog maxWidth="lg" onClose={this.handleClose} open>
+            <MuiDialogTitle disableTypography>
+              <Typography variant="h5" color="primary">
+                {`Modifier Utilisateur`}
+                <IconButton
+                  color="primary"
+                  aria-label="Close"
+                  style={closeButton}
+                  onClick={this.closeEditMode}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Typography>
+            </MuiDialogTitle>
+            <MuiDialogContent>
+              <UpdateUserForm formData={row} />
+            </MuiDialogContent>
+          </Dialog>
+        )}
       </React.Fragment>
     );
   }
@@ -145,6 +176,7 @@ const withConnect = connect(mapDispatchToProps);
 
 UsersListTableRow.propTypes = {
   row: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default compose(
