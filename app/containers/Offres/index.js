@@ -32,7 +32,7 @@ import OffresListSearch from './list/OffresListSearch';
 import OffresListTableRows from './list/OffresListTableRows';
 import OffresListTableRow from './list/OffresListTableRow';
 
-import OffresListTableHeaders from './list/OffresListTableHeaders';
+import OffresListTableHeaders from './list/OffresListTableHeader';
 import WithRoles from '../WithRoles';
 import { MEMBRE, ADMIN, SUPER_ADMIN } from '../AppHeader/Roles';
 import { makeSelectoffreArticledtos } from '../App/selectors';

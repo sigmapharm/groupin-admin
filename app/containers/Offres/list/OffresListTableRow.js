@@ -1,8 +1,6 @@
-// eslint-disable-next-line no-unused-vars
-import React, { Fragment } from 'react';
+import React from 'react';
 import * as PropTypes from 'prop-types';
 import EditIcon from '@material-ui/icons/Edit';
-import FileCopy from '@material-ui/icons/FileCopy';
 import HighlightOff from '@material-ui/icons/HighlightOff';
 import Search from '@material-ui/icons/Search';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,114 +12,141 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import Tooltip from '@material-ui/core/Tooltip';
+import moment from 'moment';
 import OffreListConsultation from '../consultlistoffre/OffreListConsultation';
 import Progressbar from '../consultlistoffre/Progress';
 
 const closeStyle = {
   float: 'right',
 };
-const champprogress = { width: '20%' };
-const typo3syle = { marginLeft: '4%' };
+const tableCellsWidth = { width: `${100 / 5}%` };
+const mSecondsPerDay = 86400 * 1000;
+
 export class OffresListTableRow extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { isdisplaydata: false };
+    this.state = { isShown: false };
   }
 
-  // eslint-disable-next-line no-unused-vars
-  edit = row => {
+  setIsShown = isShown => {
     this.setState({
-      isdisplaydata: true,
+      isShown,
     });
   };
 
-  handledetailclose = () => {
-    this.setState({
-      isdisplaydata: false,
-    });
+  showDetails = () => {
+    this.setIsShown(true);
+  };
+
+  closeDetails = () => {
+    this.setIsShown(false);
+  };
+
+  canEdit = offre => {
+    const now = Date.now();
+    return !!(!moment(now).isAfter(offre.dateDebut) && offre.active);
+  };
+
+  edit = () => {
+    const { row } = this.props;
+    const canEdit = this.canEdit(row);
+    if (!canEdit) {
+      alert( // eslint-disable-line
+        'Vous ne pouvez pas modifier une offre qui a commencé, terminée, ou qui a été annulée.',
+      );
+    }
+  };
+
+  cancel = () => {
+    const { row } = this.props;
+    const canEdit = this.canEdit(row);
+    if (!canEdit) {
+      alert( // eslint-disable-line
+        'Vous ne pouvez pas annuler une offre qui a commencé, terminée, ou qui a été annulée.',
+      );
+    }
   };
 
   render() {
     const { row } = this.props;
-    const dateFin = new Date(row.dateFin);
-    const dateDebut = new Date(row.dateDebut);
-    const mSecondesParJour = 86400 * 1000;
-    const dureeGolbale = (dateFin - dateDebut) / mSecondesParJour;
-    const dureeAujoudhui = (new Date() - dateDebut) / mSecondesParJour;
-    const avancement = Math.min(dureeAujoudhui / dureeGolbale, 1) * 100;
-    const avancementMontant = Math.min(row.montant / 100000, 1) * 100;
-    const joursRestants =
-      Math.floor((dateFin - new Date()) / mSecondesParJour) + 1;
-    const joursLabel = joursRestants === 1 ? 'jour' : 'jours';
+    const { isShown } = this.state;
+    const now = Date.now();
+    const startDate = new Date(row.dateFin);
+    const endDate = new Date(row.dateDebut);
+    const hasStarted = moment(now).isSameOrAfter(startDate);
+    const globalDuration = (startDate - endDate) / mSecondsPerDay;
+    const elapsedDuration = (now - endDate) / mSecondsPerDay;
+    const status = Math.min(elapsedDuration / globalDuration, 1) * 100;
+    const remainingDays = Math.floor((startDate - now) / mSecondsPerDay) + 1;
+    const dayLabel = remainingDays === 1 ? 'jour' : 'jours';
     return (
-      <React.Fragment>
+      <>
         <TableRow key={row.id}>
-          <TableCell component="th" scope="row">
-            {row.designation}
+          <TableCell style={tableCellsWidth}>{row.designation}</TableCell>
+          <TableCell style={tableCellsWidth}>
+            {row.laboratoire && row.laboratoire.nom}
           </TableCell>
-          <TableCell>{row.laboratoire && row.laboratoire.nom}</TableCell>
-          <TableCell>{row.status}</TableCell>
-          <TableCell style={champprogress}>
-            {' '}
-            {row.montant}
-            <Progressbar progress={avancementMontant} />
-            {`${avancementMontant}%`}
+          <TableCell style={tableCellsWidth}>
+            {moment(startDate).format('DD/MM/YYYY')}
           </TableCell>
-          <TableCell style={champprogress}>
-            <Progressbar progress={avancement} />
-            {joursRestants > 0
-              ? `Il vous reste ${joursRestants} ${joursLabel}`
+          <TableCell style={tableCellsWidth}>
+            <Progressbar progress={status} />
+            {moment(endDate).format('DD/MM/YYYY')}
+            <br />
+            {remainingDays > 0 // eslint-disable-line
+              ? hasStarted
+                ? `Il reste ${remainingDays} ${dayLabel}`
+                : `L'offre n'a pas encore commencé`
               : 'Offre clôturée !'}
           </TableCell>
-          <TableCell style={{ padding: 0, width: '15%' }}>
-            <IconButton style={{ padding: 5 }}>
-              <Search
-                color="secondary"
-                style={typo3syle}
-                onClick={() => this.edit(row)}
-              />
-            </IconButton>
-            <IconButton style={{ padding: 5 }}>
-              <EditIcon color="primary" style={typo3syle} />
-            </IconButton>
-            <IconButton style={{ padding: 5 }}>
-              <FileCopy color="secondary" style={typo3syle} />
-            </IconButton>
-            <IconButton style={{ padding: 5 }}>
-              <HighlightOff color="error" style={typo3syle} />
-            </IconButton>
+          <TableCell style={{ ...tableCellsWidth, padding: 0 }}>
+            <Tooltip placement="top" title="Consulter">
+              <IconButton style={{ padding: 5 }}>
+                <Search color="secondary" onClick={this.showDetails} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip placement="top" title="Modifier">
+              <IconButton onClick={this.edit} style={{ padding: 5 }}>
+                <EditIcon color="primary" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip placement="top" title="Annuler">
+              <IconButton onClick={this.cancel} style={{ padding: 5 }}>
+                <HighlightOff color="error" />
+              </IconButton>
+            </Tooltip>
           </TableCell>
         </TableRow>
-
-        <Dialog
-          maxWidth="lg"
-          onClose={this.handleClose}
-          aria-labelledby="customized-dialog-title"
-          open={this.state.isdisplaydata}
-        >
-          <MuiDialogTitle disableTypography>
-            <Typography variant="h5" color="primary">
-              {`Détails offre`}{' '}
-              <IconButton
-                color="primary"
-                aria-label="Close"
-                onClick={this.handledetailclose}
-                style={closeStyle}
-              >
-                <CloseIcon />
-              </IconButton>
-            </Typography>
-          </MuiDialogTitle>
-          <MuiDialogContent>
-            <OffreListConsultation row={row} avancement={avancement} />
-          </MuiDialogContent>
-        </Dialog>
-      </React.Fragment>
+        {isShown && (
+          <Dialog
+            maxWidth="lg"
+            onClose={this.handleClose}
+            aria-labelledby="customized-dialog-title"
+            open
+          >
+            <MuiDialogTitle disableTypography>
+              <Typography variant="h5" color="primary">
+                {`Détails offre`}{' '}
+                <IconButton
+                  color="primary"
+                  aria-label="Close"
+                  onClick={this.closeDetails}
+                  style={closeStyle}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Typography>
+            </MuiDialogTitle>
+            <MuiDialogContent>
+              <OffreListConsultation row={row} avancement={status} />
+            </MuiDialogContent>
+          </Dialog>
+        )}
+      </>
     );
   }
 }
-
-OffresListTableRow.defaultProps = {};
 
 OffresListTableRow.propTypes = {
   row: PropTypes.object.isRequired,

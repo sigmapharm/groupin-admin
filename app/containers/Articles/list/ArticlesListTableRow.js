@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import Tooltip from '@material-ui/core/Tooltip';
 import ArticleListConsultationn from '../consultlistarticle/ArticleListConsultation';
 import authenticated from '../../HOC/authenticated/authenticated';
 
@@ -74,12 +75,16 @@ export class ArticlesListTableRow extends React.PureComponent {
             {'%'}
           </TableCell>
           <TableCell style={{ padding: 0 }}>
-            <IconButton style={{ padding: 5 }}>
-              <Search color="secondary" onClick={this.viewDetails} />
-            </IconButton>
-            <IconButton style={{ padding: 5 }}>
-              <EditIcon color="primary" style={typo3syle} />
-            </IconButton>
+            <Tooltip placement="top" title="Consulter">
+              <IconButton style={{ padding: 5 }}>
+                <Search color="secondary" onClick={this.viewDetails} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip placement="top" title="Modifier">
+              <IconButton style={{ padding: 5 }}>
+                <EditIcon color="primary" style={typo3syle} />
+              </IconButton>
+            </Tooltip>
           </TableCell>
         </TableRow>
         {this.state.open && (

@@ -17,6 +17,7 @@ import Toggle from '../../../components/Toggle/Toggle';
 import UserListConsult from '../consultlistuser/UserListConsult';
 import { updateUser } from '../actions';
 import authenticated from '../../HOC/authenticated/authenticated';
+import Tooltip from "@material-ui/core/Tooltip";
 
 const closeButton = { float: 'right' };
 
@@ -94,16 +95,22 @@ export class UsersListTableRow extends React.PureComponent {
           <TableCell>{row.pharmacie && row.pharmacie.denomination}</TableCell>
           <TableCell>{row.role}</TableCell>
           <TableCell style={{ padding: 0 }}>
-            <IconButton style={{ padding: 5 }}>
-              <EditIcon color="primary" />
-            </IconButton>
-            <IconButton style={{ padding: 5 }}>
-              <Search color="secondary" onClick={this.edit} />
-            </IconButton>
+            <Tooltip placement="top" title="Mofidier">
+              <IconButton style={{ padding: 5 }}>
+                <EditIcon color="primary" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip placement="top" title="Consulter">
+              <IconButton style={{ padding: 5 }}>
+                <Search color="secondary" onClick={this.edit} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip placement="top" title="Rénitialiser mot de passe">
+              <IconButton style={{ padding: 5 }}>
+                <ResetIcon color="primary" />
+              </IconButton>
+            </Tooltip>
             <Toggle />
-            <IconButton style={{ padding: 5 }}>
-              <ResetIcon color="primary" />
-            </IconButton>
           </TableCell>
         </TableRow>
         {this.state.detailsOpen && (
