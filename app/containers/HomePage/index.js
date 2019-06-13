@@ -5,6 +5,6 @@ import UsersList from '../Users';
 /* eslint-disable react/prefer-stateless-function */
 export default class HomePage extends React.PureComponent {
   render() {
-    return <UsersList history={history} />;
+    return <UsersList />;
   }
 }

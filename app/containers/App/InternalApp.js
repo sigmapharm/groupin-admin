@@ -12,6 +12,7 @@ import ListArticles from '../Articles/ListArticles';
 import AddArticle from '../Articles/add/index';
 import OffresList from '../Offres';
 import AddOffre from '../Offres/add/index';
+import UsersList from '../Users';
 
 class InternalApp extends React.PureComponent {
   componentWillMount() {
@@ -21,9 +22,10 @@ class InternalApp extends React.PureComponent {
   render() {
     return (
       <Switch>
-        <Route exact path="/" component={HomePage} />
+        <Route exact path="/" component={OffresList} />
         <Route exact path="/articles" component={ListArticles} />
         <Route exact path="/offres" component={OffresList} />
+        <Route exact path="/users" component={UsersList} />
         <Route exact path="/users/add" component={AddUser} />
         <Route exact path="/articles/add" component={AddArticle} />
         <Route exact path="/offres/add" component={AddOffre} />
