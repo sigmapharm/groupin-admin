@@ -15,8 +15,8 @@ export function PersonalInfo(props) {
     <>
       <Grid xs={12} md={6} item>
         <TextField
-          id="standard-disabled"
-          label="Nom "
+          label="Nom"
+          name={fields.lastName.name}
           defaultValue={formData[fields.lastName.name]}
           error={!!errors[fields.lastName.name]}
           onChange={onChange}
@@ -29,7 +29,6 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          id="standard-disabled"
           label="Prenom"
           name={fields.firstName.name}
           defaultValue={formData[fields.firstName.name]}
@@ -59,7 +58,6 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          id="standard-name"
           name={fields.email.name}
           label="Email"
           defaultValue={formData[fields.email.name]}
@@ -69,12 +67,12 @@ export function PersonalInfo(props) {
           inputProps={{
             maxLength,
           }}
+          disabled
           fullWidth
         />
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          id="standard-name"
           name={fields.tel.name}
           label="Tel"
           defaultValue={formData[fields.tel.name]}
@@ -89,7 +87,6 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          id="standard-disabled"
           name={fields.gsm.name}
           label="GSM"
           defaultValue={formData[fields.gsm.name]}
@@ -104,7 +101,6 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          id="standard-name"
           name={fields.ville.name}
           label="Ville"
           defaultValue={formData[fields.ville.name]}
@@ -119,7 +115,6 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
-          id="standard-name"
           name={fields.codePostal.name}
           label="Code Postale"
           defaultValue={formData[fields.codePostal.name]}

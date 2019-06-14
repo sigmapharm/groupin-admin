@@ -11,12 +11,10 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import { connect } from 'react-redux';
 import { compose } from 'redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import Switch from '@material-ui/core/Switch';
 import UserListConsult from '../consultlistuser/UserListConsult';
-import { updateUser } from '../actions';
 import authenticated from '../../HOC/authenticated/authenticated';
 import UpdateUserForm from '../Edit/UpdateUserForm';
 
@@ -52,7 +50,7 @@ export class UsersListTableRow extends React.PureComponent {
   }
 
   edit = () => {
-    const { row } = this.state;
+    const { row } = this.props;
     this.setState({
       formData: { ...row },
       editMode: true,
@@ -78,7 +76,10 @@ export class UsersListTableRow extends React.PureComponent {
   handleSubmitEdit = e => {
     e.preventDefault();
     const { formData } = this.state;
-    this.props.dispatch(updateUser(formData));
+    this.props.updateUser(formData);
+    this.setState({
+      editMode: false,
+    });
   };
 
   closeDetails = () => {
@@ -169,7 +170,11 @@ export class UsersListTableRow extends React.PureComponent {
               </Typography>
             </MuiDialogTitle>
             <MuiDialogContent>
-              <UpdateUserForm formData={row} />
+              <UpdateUserForm
+                formData={this.state.formData}
+                handleFormDataChange={this.handleFormDataChange}
+                handleSubmit={this.handleSubmitEdit}
+              />
             </MuiDialogContent>
           </Dialog>
         )}
@@ -177,19 +182,10 @@ export class UsersListTableRow extends React.PureComponent {
     );
   }
 }
-const mapDispatchToProps = dispatch => ({
-  dispatch,
-});
-UsersListTableRow.defaultProps = {};
-const withConnect = connect(mapDispatchToProps);
-
 UsersListTableRow.propTypes = {
   row: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired,
   toggleUser: PropTypes.func.isRequired,
 };
 
-export default compose(
-  withConnect,
-  authenticated,
-)(UsersListTableRow);
+export default compose(authenticated)(UsersListTableRow);

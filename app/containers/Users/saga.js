@@ -103,28 +103,27 @@ function* manageCreateUserResponseWorker(action) {
 function* updateUserWorker(action) {
   const { payload, callback } = action;
   const options = {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       ...payload,
-      ville: null,
-      region: null,
     }),
   };
   try {
     yield callApi(
-      ApiRoutes.USERS,
-      manageUpdateserResponse,
+      `${ApiRoutes.USERS}/${payload.id}`,
+      null,
       options,
       null,
-      false,
-      false,
-      callback,
+      true,
+      true,
+      null,
     );
+    callback();
   } catch (e) {
-    callback(null);
+    alert(e); // eslint-disable-line
   }
 }
 

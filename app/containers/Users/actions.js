@@ -45,9 +45,10 @@ export const createUser = (formData, callback) => ({
   callback,
 });
 
-export const updateUser = formData => ({
+export const updateUser = (userId, formData, callback) => ({
   type: SUBMIT_UPDATE_USER,
   payload: { ...formData },
+  callback,
 });
 
 export {
