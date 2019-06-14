@@ -14,7 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import Tooltip from '@material-ui/core/Tooltip';
-import Toggle from '../../../components/Toggle/Toggle';
+import Switch from '@material-ui/core/Switch';
 import UserListConsult from '../consultlistuser/UserListConsult';
 import { updateUser } from '../actions';
 import authenticated from '../../HOC/authenticated/authenticated';
@@ -87,6 +87,10 @@ export class UsersListTableRow extends React.PureComponent {
     });
   };
 
+  toggle = e => {
+    this.props.toggleUser(e.target.checked);
+  };
+
   closeEditMode = () => {
     this.setState({
       ...initialState,
@@ -95,7 +99,7 @@ export class UsersListTableRow extends React.PureComponent {
 
   render() {
     const { row } = this.props;
-    const { editMode, detailsOpen, formData } = this.state;
+    const { editMode, detailsOpen } = this.state;
     return (
       <React.Fragment>
         <TableRow key={row.id}>
@@ -121,7 +125,12 @@ export class UsersListTableRow extends React.PureComponent {
                 <ResetIcon color="primary" />
               </IconButton>
             </Tooltip>
-            <Toggle />
+            <Switch
+              checked={row.enabled}
+              onChange={this.toggle}
+              value={row.enabled}
+              color="primary"
+            />
           </TableCell>
         </TableRow>
         {detailsOpen && (
@@ -177,6 +186,7 @@ const withConnect = connect(mapDispatchToProps);
 UsersListTableRow.propTypes = {
   row: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
+  toggleUser: PropTypes.func.isRequired,
 };
 
 export default compose(

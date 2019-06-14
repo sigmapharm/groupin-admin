@@ -16,7 +16,7 @@ import Fab from '@material-ui/core/Fab';
 import Divider from '@material-ui/core/Divider';
 import history from 'utils/history';
 import Typography from '@material-ui/core/Typography';
-import { getUsersList } from './actions';
+import { getUsersList, toggleUser } from './actions';
 import UsersListTableRow from './list/UsersListTableRow';
 import UsersListSearch from './list/UsersListSearch';
 import {
@@ -90,6 +90,10 @@ export class UsersList extends React.PureComponent {
     history.push('/users/add');
   };
 
+  toggleUser = user => value => {
+    this.props.dispatch(toggleUser(user.id, value, this.handleSearchUsers));
+  };
+
   render() {
     const { rowsPerPage, page } = this.state;
     const { classes, usersList } = this.props;
@@ -125,7 +129,13 @@ export class UsersList extends React.PureComponent {
             </TableHead>
             <TableBody>
               {rows &&
-                rows.map(row => <UsersListTableRow key={row.id} row={row} />)}
+                rows.map(row => (
+                  <UsersListTableRow
+                    row={row}
+                    key={row.id}
+                    toggleUser={this.toggleUser(row)}
+                  />
+                ))}
             </TableBody>
             <UsersListTableFooter
               totalElements={totalElements}

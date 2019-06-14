@@ -5,11 +5,21 @@ import {
   PUT_USERS_LIST_ACTION,
   SUBMIT_CREATE_USER,
   SUBMIT_UPDATE_USER,
+  TOGGLE_USER,
 } from './constants';
 
 const getUsersList = values => ({
   type: GET_USERS_LIST_ACTION,
   payload: { ...values },
+});
+
+const toggleUser = (userId, value, callback) => ({
+  type: TOGGLE_USER,
+  payload: {
+    userId,
+    value,
+    callback,
+  },
 });
 
 const putUsersList = values => ({
@@ -41,6 +51,7 @@ export const updateUser = formData => ({
 });
 
 export {
+  toggleUser,
   getUsersList,
   putUsersList,
   manageCreateUserResponse,

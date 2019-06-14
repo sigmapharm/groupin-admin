@@ -6,6 +6,7 @@ import {
   MANAGE_UPDATE_USER_RESPONSE,
   SUBMIT_CREATE_USER,
   SUBMIT_UPDATE_USER,
+  TOGGLE_USER,
 } from './constants';
 import {
   manageCreateUserResponse,
@@ -61,6 +62,37 @@ function* addNewUserWorker(action) {
   }
 }
 
+function* toggleUserWorker(action) {
+  const { payload } = action;
+  const { userId, value, callback } = payload;
+  const nextState = value ? 'enable' : 'disable';
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      ...payload,
+      ville: null,
+      region: null,
+    }),
+  };
+  try {
+    yield callApi(
+      `${ApiRoutes.USERS}/${userId}/${nextState}`,
+      null,
+      options,
+      null,
+      true,
+      true,
+      null,
+    );
+    callback();
+  } catch (e) {
+    callback();
+  }
+}
+
 function* manageCreateUserResponseWorker(action) {
   const { payload, callback } = action;
   if (callback) {
@@ -105,6 +137,7 @@ function* manageUpdateUserResponseWorker(action) {
 
 function* usersListSagas() {
   yield all([
+    takeLatest(TOGGLE_USER, toggleUserWorker),
     takeLatest(GET_USERS_LIST_ACTION, usersListWorker),
     takeLatest(SUBMIT_CREATE_USER, addNewUserWorker),
     takeLatest(MANAGE_CREATE_USER_RESPONSE, manageCreateUserResponseWorker),
