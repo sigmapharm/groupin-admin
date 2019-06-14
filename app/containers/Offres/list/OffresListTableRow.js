@@ -16,6 +16,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import moment from 'moment';
 import OffreListConsultation from '../consultlistoffre/OffreListConsultation';
 import Progressbar from '../consultlistoffre/Progress';
+import WithRoles from '../../WithRoles';
+import { ADMIN, SUPER_ADMIN } from '../../AppHeader/Roles';
 
 const closeStyle = {
   float: 'right',
@@ -45,7 +47,12 @@ export class OffresListTableRow extends React.PureComponent {
 
   canEdit = offre => {
     const now = Date.now();
-    return !!(!moment(now).isAfter(offre.dateDebut) && offre.active);
+    return (
+      // date de début < date d auj
+      !moment(now).isSameOrAfter(offre.dateDebut) ||
+      // active is true and date début < date auj
+      (moment(now).isSameOrBefore(offre.dateDebut) && offre.active === true)
+    );
   };
 
   edit = () => {
@@ -55,6 +62,8 @@ export class OffresListTableRow extends React.PureComponent {
       alert( // eslint-disable-line
         'Vous ne pouvez pas modifier une offre qui a commencé, terminée, ou qui a été annulée.',
       );
+    } else {
+      alert('Pas encore implémentée'); // eslint-disable-line
     }
   };
 
@@ -65,6 +74,8 @@ export class OffresListTableRow extends React.PureComponent {
       alert( // eslint-disable-line
         'Vous ne pouvez pas annuler une offre qui a commencé, terminée, ou qui a été annulée.',
       );
+    } else {
+      alert('Pas encore implémentée'); // eslint-disable-line
     }
   };
 
@@ -100,22 +111,24 @@ export class OffresListTableRow extends React.PureComponent {
                 : `L'offre n'a pas encore commencé`
               : 'Offre clôturée !'}
           </TableCell>
-          <TableCell style={{ ...tableCellsWidth, padding: 0 }}>
+          <TableCell style={{ ...tableCellsWidth, padding: 0, textAlign: 'center' }}>
             <Tooltip placement="top" title="Consulter">
-              <IconButton style={{ padding: 5 }}>
-                <Search color="secondary" onClick={this.showDetails} />
+              <IconButton onClick={this.showDetails} style={{ padding: 5 }}>
+                <Search color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip placement="top" title="Modifier">
-              <IconButton onClick={this.edit} style={{ padding: 5 }}>
-                <EditIcon color="primary" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip placement="top" title="Annuler">
-              <IconButton onClick={this.cancel} style={{ padding: 5 }}>
-                <HighlightOff color="error" />
-              </IconButton>
-            </Tooltip>
+            <WithRoles roles={[ADMIN, SUPER_ADMIN]}>
+              <Tooltip placement="top" title="Modifier">
+                <IconButton onClick={this.edit} style={{ padding: 5 }}>
+                  <EditIcon color="primary" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip placement="top" title="Annuler">
+                <IconButton onClick={this.cancel} style={{ padding: 5 }}>
+                  <HighlightOff color="error" />
+                </IconButton>
+              </Tooltip>
+            </WithRoles>
           </TableCell>
         </TableRow>
         {isShown && (

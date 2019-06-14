@@ -181,6 +181,7 @@ AddOffreForm.propTypes = {
   errors: PropTypes.object.isRequired,
   formData: PropTypes.object.isRequired,
   handleFormDataChange: PropTypes.func.isRequired,
+  handleLaboratoireSelectChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
 

@@ -9,7 +9,7 @@ export function OffresListTableHeader() {
       <TableCell>Laboratoire</TableCell>
       <TableCell>Date de début</TableCell>
       <TableCell>Date de fin</TableCell>
-      <TableCell>Actions</TableCell>
+      <TableCell style={{ textAlign: 'center' }}>Actions</TableCell>
     </TableRow>
   );
 }

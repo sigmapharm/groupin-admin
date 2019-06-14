@@ -14,7 +14,7 @@ import {
   SET_ARTICLE_IN_STORE,
   SET_LABORATOIRES,
   PUT_ARTICLESLABO_LIST_ACTION,
-  GET_ARTICLESLABO_LIST_ACTION,
+  GET_LABO_ARTICLES_LIST_ACTION,
 } from './constants';
 import AccessTokenStorage from '../../services/security/AccessTokenStorage';
 
@@ -80,7 +80,7 @@ function reducer(state = initialState, action) {
       }
       return state;
     }
-    case GET_ARTICLESLABO_LIST_ACTION: {
+    case GET_LABO_ARTICLES_LIST_ACTION: {
       return state.merge({
         laboratoire: action.payload,
       });

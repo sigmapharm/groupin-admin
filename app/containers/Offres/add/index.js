@@ -19,7 +19,7 @@ import {
   makeSelectarticlesListlabo,
   makeSelectLaboratoires,
 } from '../../App/selectors';
-import { getArticleslaboList } from '../../App/actions';
+import { getLaboArticlesList } from '../../App/actions';
 
 const styles = theme => ({
   root: {
@@ -136,15 +136,15 @@ export class AddOffre extends React.PureComponent {
   handleLaboratoireSelectChange = value => {
     const { formData } = this.state;
 
-    this.setState(
-      {
-        formData: {
-          ...formData,
-          laboratoire: value,
-        },
+    this.setState({
+      formData: {
+        ...formData,
+        laboratoire: value,
       },
-      () => this.props.dispatch(getArticleslaboList(this.state)),
-    );
+    });
+    if (value && value.value && !!value.label.trim()) {
+      this.props.dispatch(getLaboArticlesList(value));
+    }
   };
 
   handleCloseSuccessMessage = () => {
@@ -161,8 +161,6 @@ export class AddOffre extends React.PureComponent {
     const formattedLaboratoire = laboratoires.map(
       formatLaboratoireToLabelValue,
     );
-    const rows = articlesListlabo;
-
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
@@ -170,11 +168,10 @@ export class AddOffre extends React.PureComponent {
             classes={classes}
             errors={errors}
             formData={formData}
-            rows={rows}
+            rows={articlesListlabo}
             laboratoires={formattedLaboratoire}
             handleFormDataChange={this.handleFormDataChange}
             handleSubmit={this.handleSubmit}
-            handlelabchange={this.handleChangeLaboratoire}
             handleLaboratoireSelectChange={this.handleLaboratoireSelectChange}
             handleAnuler={this.handleGoToOffresList}
           />

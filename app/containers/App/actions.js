@@ -17,7 +17,7 @@ import {
   SET_ARTICLE_IN_STORE,
   SET_LABORATOIRES,
   ADD_NEW_LABORATOIRE_TO_STORE,
-  GET_ARTICLESLABO_LIST_ACTION,
+  GET_LABO_ARTICLES_LIST_ACTION,
   PUT_ARTICLESLABO_LIST_ACTION,
 } from './constants';
 
@@ -97,9 +97,9 @@ export const addLaboratoireToStore = laboratoire => ({
   payload: { ...laboratoire },
 });
 
-export const getArticleslaboList = values => ({
-  type: GET_ARTICLESLABO_LIST_ACTION,
-  payload: { ...values },
+export const getLaboArticlesList = laboratoire => ({
+  type: GET_LABO_ARTICLES_LIST_ACTION,
+  payload: { ...laboratoire },
 });
 
 export const putArticleslaboList = values => ({

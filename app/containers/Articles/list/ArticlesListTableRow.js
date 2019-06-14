@@ -15,6 +15,8 @@ import { compose } from 'redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import ArticleListConsultationn from '../consultlistarticle/ArticleListConsultation';
 import authenticated from '../../HOC/authenticated/authenticated';
+import WithRoles from '../../WithRoles';
+import { SUPER_ADMIN } from '../../AppHeader/Roles';
 
 const closeStyle = {
   marginLeft: '59rem',
@@ -80,11 +82,16 @@ export class ArticlesListTableRow extends React.PureComponent {
                 <Search color="secondary" onClick={this.viewDetails} />
               </IconButton>
             </Tooltip>
-            <Tooltip placement="top" title="Modifier">
-              <IconButton style={{ padding: 5 }}>
-                <EditIcon color="primary" style={typo3syle} />
-              </IconButton>
-            </Tooltip>
+            <WithRoles roles={[SUPER_ADMIN]}>
+              <Tooltip placement="top" title="Modifier">
+                <IconButton
+                  onClick={() => alert('Pas encore implémenté')}
+                  style={{ padding: 5 }}
+                >
+                  <EditIcon color="primary" style={typo3syle} />
+                </IconButton>
+              </Tooltip>
+            </WithRoles>
           </TableCell>
         </TableRow>
         {this.state.open && (

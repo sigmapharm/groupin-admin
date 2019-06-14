@@ -189,7 +189,9 @@ export class OffreListConsultation extends React.PureComponent {
               <TableCell>{}</TableCell>
               <TableCell />
               <TableCell />
-              <TableCell>{row.articledtos && row.articledtos}</TableCell>
+              <TableCell>
+                {row.offreArticledtos && row.offreArticledtos}
+              </TableCell>
               <TableCell />
             </TableRow>
           </TableBody>

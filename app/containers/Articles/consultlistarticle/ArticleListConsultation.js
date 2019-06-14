@@ -69,7 +69,7 @@ export class ArticleListConsultation extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Désignation"
-            value={row.designation}
+            value={row.nom}
             className={classes.textField}
             inputProps={{
               className: classes.input,

@@ -29,12 +29,11 @@ import {
 import authenticated from '../HOC/authenticated/authenticated';
 import OffresListTableFooter from './list/OffresListTableFooter';
 import OffresListSearch from './list/OffresListSearch';
-import OffresListTableRows from './list/OffresListTableRows';
 import OffresListTableRow from './list/OffresListTableRow';
 
 import OffresListTableHeaders from './list/OffresListTableHeader';
 import WithRoles from '../WithRoles';
-import { MEMBRE, ADMIN, SUPER_ADMIN } from '../AppHeader/Roles';
+import { ADMIN, SUPER_ADMIN } from '../AppHeader/Roles';
 import { makeSelectoffreArticledtos } from '../App/selectors';
 
 /* istanbul ignore next */
@@ -161,14 +160,12 @@ export class OffresList extends React.PureComponent {
         </Typography>
         <Divider variant="middle" className={classes.root} />
 
-        <WithRoles user={user} roles={[ADMIN, SUPER_ADMIN]}>
-          <OffresListSearch
-            handleChange={this.handleChange}
-            handleSelctChange={this.handleSelctChange}
-            handleSearchOffres={this.handleSearchOffres}
-          />{' '}
-          <Divider variant="middle" className={classes.root} />
-        </WithRoles>
+        <OffresListSearch
+          handleChange={this.handleChange}
+          handleSelctChange={this.handleSelctChange}
+          handleSearchOffres={this.handleSearchOffres}
+        />
+        <Divider variant="middle" className={classes.root} />
 
         <Typography component="h1" variant="h6" className={classes.root}>
           {totalElements} offres trouvés
@@ -180,18 +177,8 @@ export class OffresList extends React.PureComponent {
               <OffresListTableHeaders />
             </TableHead>
             <TableBody>
-              <WithRoles user={user} roles={[MEMBRE]}>
-                {rows &&
-                  rows.map(row => (
-                    <OffresListTableRows key={row.id} row={row} />
-                  ))}
-              </WithRoles>
-              <WithRoles user={user} roles={[ADMIN, SUPER_ADMIN]}>
-                {rows &&
-                  rows.map(row => (
-                    <OffresListTableRow key={row.id} row={row} />
-                  ))}
-              </WithRoles>
+              {rows &&
+                rows.map(row => <OffresListTableRow key={row.id} row={row} />)}
             </TableBody>
             <OffresListTableFooter
               totalElements={totalElements}

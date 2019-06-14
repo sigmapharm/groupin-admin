@@ -7,24 +7,24 @@ export const defaultOptionsFormatter = value =>
   }) ||
   '';
 export const laboratoiresFields = [
-   {
+  {
     id: 'nom',
     name: 'nom',
     label: 'Nom',
     validator: validators.stringNotBlank,
-   },
-   {
+  },
+  {
     id: 'email',
     name: 'email',
     label: 'Email',
     validator: validators.emailValidation,
-   },
-   {
+  },
+  {
     id: 'website',
     name: 'website',
     label: 'Website',
     validator: validators.stringNotBlank,
-   },
+  },
 
   {
     id: 'description',
@@ -38,8 +38,6 @@ export const laboratoiresFields = [
     label: 'Adresse',
     validator: validators.stringNotBlank,
   },
-
-
 ];
 
 const validateField = (result, fieldName, allData) => {

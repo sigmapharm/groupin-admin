@@ -7,7 +7,7 @@ import {
 import { manageCreateOffreResponse, putOffresList } from './actions';
 import { callApi } from '../../services/saga';
 import ApiRoutes from '../../core/ApiRoutes';
-import { GET_ARTICLESLABO_LIST_ACTION } from '../App/constants';
+import { GET_LABO_ARTICLES_LIST_ACTION } from '../App/constants';
 import { putArticleslaboList } from '../App/actions';
 function* offresListWorker(action) {
   const options = {
@@ -61,7 +61,8 @@ function* manageCreateArticleResponseWorker(action) {
     callback(payload);
   }
 }
-function* articleslaboListWorker(action) {
+function* laboArticlesListWorker(action) {
+  const { payload } = action;
   const options = {
     method: 'GET',
     headers: {
@@ -69,15 +70,14 @@ function* articleslaboListWorker(action) {
     },
   };
   try {
-    const params = `?laboratoire=${action.payload.formData.laboratoire.label}`;
     yield callApi(
-      `/articles/articleslabo${params}`,
+      `/laboratoires/${payload.value}/articles`,
       putArticleslaboList,
       options,
       null,
     );
   } catch (e) {
-    console.log(e);
+    alert(e); // eslint-disable-line
   }
 }
 
@@ -85,7 +85,7 @@ function* offresListSagas() {
   yield all([
     takeLatest(GET_OFFRES_LIST_ACTION, offresListWorker),
     takeLatest(SUBMIT_CREATE_OFFRE, addNewOffreWorker),
-    takeLatest(GET_ARTICLESLABO_LIST_ACTION, articleslaboListWorker),
+    takeLatest(GET_LABO_ARTICLES_LIST_ACTION, laboArticlesListWorker),
     takeLatest(MANAGE_CREATE_OFFRE_RESPONSE, manageCreateArticleResponseWorker),
   ]);
 }
