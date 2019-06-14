@@ -16,6 +16,7 @@ import GlobalStyle from '../../global-styles';
 
 import Header from '../AppHeader/Header';
 import InternalApp from './InternalApp';
+import RegisterPage from '../RegisterPage';
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
       <Header position="static" history={history} />
       <Switch>
         <Route exact path="/login" component={SignIn} />
+        <Route exact path="/register/:token" component={RegisterPage} />
         <Route component={InternalApp} />
       </Switch>
       <GlobalStyle />

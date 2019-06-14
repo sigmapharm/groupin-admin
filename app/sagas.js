@@ -5,6 +5,7 @@ import articlesSaga from 'containers/Articles/saga';
 import offresSaga from 'containers/Offres/saga';
 import pharmaciesSaga from 'containers/Pharmacie/saga';
 import laboratoiresSaga from 'containers/laboratoire/saga';
+import registrationSaga from 'containers/RegisterPage/saga';
 
 export default [
   loginSagas,
@@ -14,4 +15,5 @@ export default [
   offresSaga,
   pharmaciesSaga,
   laboratoiresSaga,
+  registrationSaga,
 ];
