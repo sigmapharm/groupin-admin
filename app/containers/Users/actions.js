@@ -6,6 +6,7 @@ import {
   SUBMIT_CREATE_USER,
   SUBMIT_UPDATE_USER,
   TOGGLE_USER,
+  RESET_USER,
 } from './constants';
 
 const getUsersList = values => ({
@@ -48,6 +49,14 @@ export const createUser = (formData, callback) => ({
 export const updateUser = (userId, formData, callback) => ({
   type: SUBMIT_UPDATE_USER,
   payload: { ...formData },
+  callback,
+});
+
+export const resetUser = (userId, callback) => ({
+  type: RESET_USER,
+  payload: {
+    userId,
+  },
   callback,
 });
 

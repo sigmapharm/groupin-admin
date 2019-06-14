@@ -92,6 +92,10 @@ export class UsersListTableRow extends React.PureComponent {
     this.props.toggleUser(e.target.checked);
   };
 
+  reset = () => {
+    this.props.resetUser();
+  };
+
   closeEditMode = () => {
     this.setState({
       ...initialState,
@@ -122,7 +126,7 @@ export class UsersListTableRow extends React.PureComponent {
               </IconButton>
             </Tooltip>
             <Tooltip placement="top" title="Rénitialiser mot de passe">
-              <IconButton style={{ padding: 5 }}>
+              <IconButton onClick={this.reset} style={{ padding: 5 }}>
                 <ResetIcon color="primary" />
               </IconButton>
             </Tooltip>
@@ -186,6 +190,7 @@ UsersListTableRow.propTypes = {
   row: PropTypes.object.isRequired,
   updateUser: PropTypes.func.isRequired,
   toggleUser: PropTypes.func.isRequired,
+  resetUser: PropTypes.func.isRequired,
 };
 
 export default compose(authenticated)(UsersListTableRow);

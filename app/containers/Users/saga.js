@@ -4,13 +4,13 @@ import {
   GET_USERS_LIST_ACTION,
   MANAGE_CREATE_USER_RESPONSE,
   MANAGE_UPDATE_USER_RESPONSE,
+  RESET_USER,
   SUBMIT_CREATE_USER,
   SUBMIT_UPDATE_USER,
   TOGGLE_USER,
 } from './constants';
 import {
   manageCreateUserResponse,
-  manageUpdateserResponse,
   putUsersList,
 } from './actions';
 import ApiRoutes from '../../core/ApiRoutes';
@@ -127,6 +127,33 @@ function* updateUserWorker(action) {
   }
 }
 
+function* resetUserWorker(action) {
+  const { payload, callback } = action;
+  const options = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      ...payload,
+    }),
+  };
+  try {
+    yield callApi(
+      `${ApiRoutes.USERS}/${payload.userId}/reset`,
+      null,
+      options,
+      null,
+      true,
+      true,
+      null,
+    );
+    callback();
+  } catch (e) {
+    alert(e); // eslint-disable-line
+  }
+}
+
 function* manageUpdateUserResponseWorker(action) {
   const { payload, callback } = action;
   if (callback) {
@@ -141,6 +168,7 @@ function* usersListSagas() {
     takeLatest(SUBMIT_CREATE_USER, addNewUserWorker),
     takeLatest(MANAGE_CREATE_USER_RESPONSE, manageCreateUserResponseWorker),
     takeLatest(SUBMIT_UPDATE_USER, updateUserWorker),
+    takeLatest(RESET_USER, resetUserWorker),
     takeLatest(MANAGE_UPDATE_USER_RESPONSE, manageUpdateUserResponseWorker),
   ]);
 }

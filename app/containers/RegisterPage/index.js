@@ -21,19 +21,20 @@ const styles = theme => ({
     maxWidth: '350px',
   },
   container: {
-    paddingLeft: '30%',
-    paddingRight: '30%',
-    paddingTop: '10%',
+    paddingTop: '5%',
     textAlign: 'center',
   },
   paper: {
-    paddingBottom: '10%',
-    paddingTop: '10%',
+    width: '50%',
+    margin: 'auto',
+    paddingBottom: '5%',
+    paddingTop: '5%',
     textAlign: 'center',
   },
   form: {
+    marginTop: theme.spacing.unit * 4,
     '& > *': {
-      marginTop: theme.spacing.unit,
+      marginTop: theme.spacing.unit * 2,
     },
   },
 });
@@ -96,47 +97,52 @@ export class RegisterPage extends React.PureComponent {
           <Paper className={classes.paper}>
             {!tokenValid && <div>Token Invalide</div>}
             {tokenValid && (
-              <form className={classes.form} onSubmit={this.submit}>
+              <>
                 <Typography component="h1" variant="h5">
                   Merci de saisir le mot de passe pour votre compte
                 </Typography>
-                <TextField
-                  name="password"
-                  type="password"
-                  label="Mot de passe"
-                  value={password}
-                  onChange={this.onChange}
-                  className={classes.inputs}
-                  inputProps={{
-                    maxLength: 50,
-                  }}
-                  fullWidth
-                />
-                <TextField
-                  type="password"
-                  name="passwordConfirmation"
-                  label="Confirmation du Mot de passe"
-                  value={passwordConfirmation}
-                  error={isError}
-                  onChange={this.onChange}
-                  className={classes.inputs}
-                  inputProps={{
-                    maxLength: 50,
-                  }}
-                  helperText="Les mots de passes doivent être les mêmes"
-                  fullWidth
-                />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                  onClick={this.submit}
-                >
-                  Valider
-                </Button>
-              </form>
+                <form className={classes.form} onSubmit={this.submit}>
+                  <TextField
+                    name="password"
+                    type="password"
+                    label="Mot de passe"
+                    value={password}
+                    onChange={this.onChange}
+                    className={classes.inputs}
+                    inputProps={{
+                      maxLength: 50,
+                    }}
+                    fullWidth
+                  />
+                  <br />
+                  <TextField
+                    type="password"
+                    name="passwordConfirmation"
+                    label="Confirmation du Mot de passe"
+                    value={passwordConfirmation}
+                    error={isError}
+                    onChange={this.onChange}
+                    className={classes.inputs}
+                    inputProps={{
+                      maxLength: 50,
+                    }}
+                    helperText="Les mots de passes doivent être les mêmes et suppérieur à 6."
+                    fullWidth
+                  />
+                  <br />
+                  <Button
+                    disabled={password === '' || password.length < 6 || isError}
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={this.submit}
+                  >
+                    Valider
+                  </Button>
+                </form>
+              </>
             )}
           </Paper>
         )}
