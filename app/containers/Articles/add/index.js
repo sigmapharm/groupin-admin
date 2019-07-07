@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -17,10 +18,18 @@ import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
 import { validateFormData } from './validation';
 import { formatLaboratoireToLabelValue } from './utils';
-import { createArticle } from '../actions';
+import {
+  changeArticleFormData,
+  clearArticleForm,
+  createArticle,
+  getArticleDetails,
+} from '../actions';
 import { makeSelectLaboratoires } from '../../App/selectors';
 import AddArticleForm from '../../../components/articles/add/AddAricleFrom';
 import AddLaboratoireContainer from '../../laboratoire/add';
+import { selecteArticleFormData } from '../selectors';
+import { getOfferWithDetails } from '../../Offres/actions';
+
 const styles = theme => ({
   root: {
     paddingLeft: theme.spacing.unit * 5,
@@ -76,33 +85,50 @@ const initialState = {
   isAddLaboratoire: false,
 };
 
+
+// Change component name later
 export class AddArticle extends React.PureComponent {
   state = { ...initialState };
 
-  handleFormDataChange = e => {
-    const { formData } = this.state;
-    this.setState({
-      formData: {
-        ...formData,
-        [e.target.name]: e.target.value,
+  componentWillMount() {
+    const {
+      match: {
+        params: { articleId },
       },
-    });
+    } = this.props;
+    this.setState(
+      {
+        editMode: !!articleId,
+        articleId,
+      },
+      () =>
+        !!articleId &&
+        this.props.dispatch(getArticleDetails({ id: articleId })),
+    );
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch(clearArticleForm());
+  }
+
+  // TODO : debounce event handler later
+  handleFormDataChange = ({ target: { name, value } }) => {
+    this.props.dispatch(
+      changeArticleFormData({
+        [name]: value,
+      }),
+    );
   };
 
-  handleLaboratoireSelectChange = value => {
-    const { formData } = this.state;
-    this.setState({
-      formData: {
-        ...formData,
-        laboratoire: value,
-      },
-    });
+  handleLaboratoireSelectChange = laboratoire => {
+    this.props.dispatch(changeArticleFormData({ laboratoire }));
   };
 
   handleSubmit = e => {
     e.preventDefault();
-    const { formData } = this.state;
-    const validation = validateFormData(formData);
+    const { articleId, editMode } = this.state;
+    const { articleFormData } = this.props;
+    const validation = validateFormData(articleFormData);
     if (validation && validation.messages && validation.fields) {
       this.setState({
         errors: {
@@ -118,10 +144,15 @@ export class AddArticle extends React.PureComponent {
         },
       });
       const formattedData = {
-        ...formData,
-        laboratoire: {
-          id: formData.laboratoire && formData.laboratoire.value,
-        },
+        ...articleFormData,
+        articleId,
+        laboratoire: editMode
+          ? articleFormData.laboratoire
+          : {
+            id:
+                articleFormData.laboratoire &&
+                articleFormData.laboratoire.value,
+          },
       };
       this.props.dispatch(
         createArticle(formattedData, this.handleSubmitResponse),
@@ -182,8 +213,8 @@ export class AddArticle extends React.PureComponent {
   };
 
   render() {
-    const { classes, laboratoires } = this.props;
-    const { formData, errors, isSuccess } = this.state;
+    const { classes, laboratoires, articleFormData } = this.props;
+    const { formData, errors, isSuccess, editMode } = this.state;
     const formattedLaboratoire = laboratoires.map(
       formatLaboratoireToLabelValue,
     );
@@ -193,8 +224,9 @@ export class AddArticle extends React.PureComponent {
           <AddArticleForm
             classes={classes}
             errors={errors}
+            editMode={editMode}
             laboratoires={formattedLaboratoire}
-            formData={formData}
+            formData={articleFormData}
             handleFormDataChange={this.handleFormDataChange}
             handleLaboratoireSelectChange={this.handleLaboratoireSelectChange}
             handleSubmit={this.handleSubmit}
@@ -263,6 +295,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = createStructuredSelector({
   laboratoires: makeSelectLaboratoires(),
+  articleFormData: selecteArticleFormData(),
 });
 
 const withConnect = connect(

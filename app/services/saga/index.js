@@ -30,7 +30,12 @@ function* callApi(
     yield put(GlobalActions.setNetworkingActive());
   }
   try {
-    const rawData = yield requestWithAuth(url, options);
+    let rawData = null;
+    try {
+      rawData = yield requestWithAuth(url, options);
+    } catch (e) {
+      // handle Json format when performing delete action
+    }
     const formattedData = formatDataFunction
       ? formatDataFunction(rawData)
       : rawData;

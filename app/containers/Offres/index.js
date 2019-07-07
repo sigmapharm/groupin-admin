@@ -13,7 +13,10 @@ import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import history from 'utils/history';
-import { getOffreList } from './actions';
+import _ from 'lodash';
+import TableCell from '@material-ui/core/TableCell/TableCell';
+import TableRow from '@material-ui/core/TableRow/TableRow';
+import { deleteOffer, getOffreList } from './actions';
 import {
   makeSelectPage,
   makeSelectRowsPerPage,
@@ -34,7 +37,7 @@ import OffresListTableRow from './list/OffresListTableRow';
 import OffresListTableHeaders from './list/OffresListTableHeader';
 import WithRoles from '../WithRoles';
 import { ADMIN, SUPER_ADMIN } from '../AppHeader/Roles';
-import { makeSelectoffreArticledtos } from '../App/selectors';
+//import { makeSelectoffreArticledtos } from '../App/selectors';
 
 /* istanbul ignore next */
 // eslint-disable-next-line no-unused-vars
@@ -86,6 +89,10 @@ const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
   },
+  rowsEmpty: {
+    textAlign: 'center',
+    padding: `${theme.spacing.unit * 3}px  0px`,
+  },
 });
 
 export class OffresList extends React.PureComponent {
@@ -135,7 +142,7 @@ export class OffresList extends React.PureComponent {
   };
 
   handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ [event.target.name]: _.trim(event.target.value) });
   };
 
   handleStatutChange = name => event => {
@@ -151,7 +158,7 @@ export class OffresList extends React.PureComponent {
     const totalElements = offresList.totalElements
       ? offresList.totalElements
       : 0;
-    const rows = offresList.content;
+    const rows = offresList.content || [];
 
     return (
       <div>
@@ -177,8 +184,30 @@ export class OffresList extends React.PureComponent {
               <OffresListTableHeaders />
             </TableHead>
             <TableBody>
-              {rows &&
-                rows.map(row => <OffresListTableRow key={row.id} row={row} />)}
+              {rows.length != 0 ? (
+                rows.map(row => (
+                  <OffresListTableRow
+                    key={row.id}
+                    filters={{
+                      ..._.pick(this.state, [
+                        'status',
+                        'designation',
+                        'laboratoire',
+                        'rowsPerPage',
+                        'page',
+                      ]),
+                    }}
+                    dispatch={this.props.dispatch}
+                    row={row}
+                  />
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell className={classes.rowsEmpty} colSpan={5}>
+                    <span>Pas d'offres</span>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
             <OffresListTableFooter
               totalElements={totalElements}
@@ -219,7 +248,7 @@ const mapStateToProps = createStructuredSelector({
   quantiteMinimale: makeSelectquantiteMinimale(),
   status: makeSelectstatus(),
   laboratoire: makeSelectlaboratoire(),
-  offreArticledtos: makeSelectoffreArticledtos(),
+  // offreArticledtos: makeSelectoffreArticledtos(),
 });
 
 const withConnect = connect(

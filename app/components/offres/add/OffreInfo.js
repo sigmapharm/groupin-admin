@@ -18,7 +18,7 @@ const styles = () => ({
   },
 });
 export function OffreInfo(props) {
-  const { formData, errors, classes, onChange, maxLength } = props;
+  const { formData, errors, classes, onChange, maxLength, children } = props;
   return (
     <>
       <Grid xs={12} md={6} item>
@@ -45,7 +45,7 @@ export function OffreInfo(props) {
           autoComplete="off"
           name={fields.dateDebut.name}
           // fields.dateDebut.label
-          label="Date Début"
+          label={fields.dateDebut.label}
           value={formData[fields.dateDebut.name]}
           error={!!errors[fields.dateDebut.name]}
           onChange={onChange}
@@ -66,6 +66,7 @@ export function OffreInfo(props) {
           value={formData[fields.quantiteMin.name]}
           error={!!errors[fields.quantiteMin.name]}
           onChange={onChange}
+          type={fields.quantiteMin.type}
           noValidate
           autoComplete="off"
           className={classes.offreInputs}
@@ -118,6 +119,7 @@ export function OffreInfo(props) {
           autoComplete="off"
           name={fields.montantMax.name}
           label={fields.montantMax.label}
+          type={fields.montantMax.type}
           value={formData[fields.montantMax.name]}
           onChange={onChange}
           className={classes.offreInputs}
@@ -127,6 +129,26 @@ export function OffreInfo(props) {
           fullWidth
         />
       </Grid>
+        {children}
+      <Grid xs={12} md={6} item>
+        <TextField
+          noValidate
+          autoComplete="off"
+          name={fields.offerComment.name}
+          label={fields.offerComment.label}
+          value={formData[fields.offerComment.name]}
+          onChange={onChange}
+          className={classes.offreInputs}
+          inputProps={{
+            maxLength,
+          }}
+          fullWidth
+          multiline
+          rows={1} rowsMax={2}
+        />
+      </Grid>
+
+
     </>
   );
 }

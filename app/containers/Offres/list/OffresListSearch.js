@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import * as PropTypes from 'prop-types';
 import { compose } from 'redux';
 import Fab from '@material-ui/core/Fab';
@@ -6,14 +7,19 @@ import { withStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid/Grid';
+import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
 
 const styles = theme => ({
   root: {
     width: '80%',
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
-    overflowX: 'auto',
     marginLeft: '10%',
+  },
+  filtersSection: {
+    display: 'flex',
+    alignItems: 'center',
   },
   textField: {
     marginLeft: theme.spacing.unit * 3,
@@ -23,64 +29,78 @@ const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
   },
+  select: {
+    marginTop: theme.spacing.unit * 2,
+    width: 250,
+  },
 });
 
 export class OffresListSearch extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { status: '' };
+    this.state = { status: null };
   }
 
   render() {
+    const { status } = this.state;
     const { classes, handleChange, handleSearchOffres } = this.props; // eslint-disable-line
     return (
-      <form className={classes.root}>
+      <div className={classes.root}>
         <Typography component="h1" variant="h6">
           Recherche
         </Typography>
-        <TextField
-          name="designation"
-          label="Désignation"
-          className={classes.textField}
-          margin="normal"
-          onChange={handleChange}
-        />
-        <TextField
-          name="laboratoire"
-          label="Laboratoire"
-          className={classes.textField}
-          margin="normal"
-          onChange={handleChange}
-        />
-        <TextField
+        <div className={classes.filtersSection}>
+          <TextField
+            name="designation"
+            label="Désignation"
+            className={classes.textField}
+            margin="normal"
+            onChange={handleChange}
+          />
+          <TextField
+            name="laboratoire"
+            label="Laboratoire"
+            className={classes.textField}
+            margin="normal"
+            onChange={handleChange}
+          />
+          {/* <TextField
           name="status"
           label="Status d'offre"
           defaultValue=""
           className={classes.textField}
           margin="normal"
           onChange={handleChange}
-        />
-        {/*
-        <FormControl className={classes.formControl}>
-          <NativeSelect
-            value={valeur}
-            onChange={handleStatutChange}
-            name="statut"
-          >
-            <option value="En cours">En cours</option>
-            <option value="Cloturé">Cloturé</option>
-            <option value="En attente">En attente</option>
-          </NativeSelect>
-        </FormControl> */}
+        /> */}
 
-        <Fab
-          color="primary"
-          className={classes.button}
-          onClick={handleSearchOffres}
-        >
-          <SearchIcon />
-        </Fab>
-      </form>
+          <SingleAutoCompleteSelect
+            className={classes.select}
+            name="laboratoire"
+            options={[
+              { label: 'En attente', value: 'En attente' },
+              { label: 'Cloturé', value: 'Cloturé' },
+              { label: 'En cours', value: 'En cours' },
+            ]}
+            onChange={status => {
+              this.setState({ status });
+              handleChange({
+                target: { name: 'status', value: _.get(status, 'value', '') },
+              });
+            }}
+            value={status}
+            placeholder="Status"
+            isClearable
+          />
+
+          <Fab
+            color="primary"
+            className={classes.button}
+            onClick={handleSearchOffres}
+          >
+            <SearchIcon />
+          </Fab>
+        </div>
+      </div>
     );
   }
 }

@@ -29,6 +29,8 @@ import {
 } from './selectors';
 import authenticated from '../HOC/authenticated/authenticated';
 import UsersListTableFooter from './list/UsersListTableFooter';
+import { selectCities } from '../App/selectors';
+import {formatCityToLabelValue} from "./add/utils";
 
 /* istanbul ignore next */
 const styles = theme => ({
@@ -104,9 +106,10 @@ export class UsersList extends React.PureComponent {
 
   render() {
     const { rowsPerPage, page } = this.state;
-    const { classes, usersList } = this.props;
+    const { classes, usersList,cities } = this.props;
     const totalElements = usersList.totalElements ? usersList.totalElements : 0;
     const rows = usersList.content;
+    let formatedCities = cities.map(formatCityToLabelValue);
     return (
       <div>
         <Typography component="h1" variant="h4" className={classes.root}>
@@ -139,6 +142,7 @@ export class UsersList extends React.PureComponent {
               {rows &&
                 rows.map(row => (
                   <UsersListTableRow
+                    cities={formatedCities}
                     row={row}
                     key={row.id}
                     toggleUser={this.toggleUser(row)}
@@ -180,6 +184,7 @@ const mapStateToProps = createStructuredSelector({
   prenom: makeSelectPrenom(),
   nom: makeSelectNom(),
   pharmacies: makeSelectPharmacie(),
+  cities: selectCities(),
 });
 
 const withConnect = connect(

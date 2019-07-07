@@ -17,8 +17,8 @@ import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
 import { validateFormData } from './validation';
 import { createUser } from '../actions';
-import { makeSelectPharmacies } from '../../App/selectors';
-import { formatPharmacieToLabelValue } from './utils';
+import {makeSelectPharmacies, selectCities} from '../../App/selectors';
+import {formatCityToLabelValue, formatPharmacieToLabelValue} from './utils';
 import AddUserForm from '../../../components/Users/add/AddUserForm';
 import AddPharmacieContainer from '../../Pharmacie/add';
 
@@ -65,6 +65,7 @@ const initialState = {
     ville: '',
     codePostal: '',
     pharmacie: '',
+    role: '',
   },
   errors: {
     fields: {},
@@ -120,6 +121,10 @@ export class AddUser extends React.PureComponent {
         pharmacie: {
           id: formData.pharmacie && formData.pharmacie.value,
         },
+        ville: {
+          id: formData.ville && formData.ville.value,
+        },
+        role: _.get(formData, 'role.value', ''),
       };
       this.props.dispatch(createUser(formattedData, this.handleSubmitResponse));
     }
@@ -151,7 +156,7 @@ export class AddUser extends React.PureComponent {
   };
 
   handleGoToUsersList = () => {
-    history.push('/');
+    history.push('/users');
   };
 
   handleAddPharmacieClose = () => {
@@ -178,15 +183,17 @@ export class AddUser extends React.PureComponent {
   };
 
   render() {
-    const { classes, pharmacies } = this.props;
+    const { classes, pharmacies,cities } = this.props;
     const { formData, errors, isSuccess } = this.state;
     const formattedPharmacies = pharmacies.map(formatPharmacieToLabelValue);
+    const formattedCities = cities.map(formatCityToLabelValue)
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
           <AddUserForm
             errors={errors}
             pharmacies={formattedPharmacies}
+            cities={formattedCities}
             formData={formData}
             handleFormDataChange={this.handleFormDataChange}
             handlePharmacieSelectChange={this.handlePharmacieSelectChange}
@@ -257,6 +264,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = createStructuredSelector({
   pharmacies: makeSelectPharmacies(),
+  cities: selectCities(),
 });
 
 const withConnect = connect(

@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -60,6 +61,7 @@ const styles = theme => ({
 
 export function AddArticleForm(props) {
   const {
+    editMode,
     classes,
     errors,
     laboratoires,
@@ -97,29 +99,39 @@ export function AddArticleForm(props) {
           }}
         />
         <Grid
-          className={classes.selectLaboratoireContainer}
+          {...(editMode ? {} : {className:classes.selectLaboratoireContainer})}
+
           xs={12}
           md={6}
           item
         >
-          <SingleAutoCompleteSelect
-            className={classes.select}
-            name="laboratoire"
-            options={laboratoires}
-            onChange={handleLaboratoireSelectChange}
-            value={formData.laboratoire}
-            placeholder="Laboratoire"
-            isClearable
-          />
-          <Grid xs={1} item>
-            <Fab
-              size="small"
-              color="primary"
-              onClick={handleAddLaboratoireClick}
-            >
-              <AddIcon />
-            </Fab>
-          </Grid>
+          {editMode ? (
+            <>
+              <Typography color="textSecondary">Laboratoire</Typography>
+              <span>{_.get(formData, 'laboratoire.nom')}</span>
+            </>
+          ) : (
+            <>
+              <SingleAutoCompleteSelect
+                className={classes.select}
+                name="laboratoire"
+                options={laboratoires}
+                onChange={handleLaboratoireSelectChange}
+                value={formData.laboratoire}
+                placeholder="Laboratoire"
+                isClearable
+              />
+              <Grid xs={1} item>
+                <Fab
+                  size="small"
+                  color="primary"
+                  onClick={handleAddLaboratoireClick}
+                >
+                  <AddIcon />
+                </Fab>
+              </Grid>
+            </>
+          )}
         </Grid>
         <Grid xs={12} md={6} item />
         <Grid xs={12} item />
@@ -131,7 +143,7 @@ export function AddArticleForm(props) {
             className={classes.buttonajout}
             onClick={handleSubmit}
           >
-            Valider
+            {editMode ? 'Mettre à jour' : 'Valider'}
           </Button>
 
           <Button

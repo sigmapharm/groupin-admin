@@ -17,6 +17,7 @@ import Switch from '@material-ui/core/Switch';
 import UserListConsult from '../consultlistuser/UserListConsult';
 import authenticated from '../../HOC/authenticated/authenticated';
 import UpdateUserForm from '../Edit/UpdateUserForm';
+import { formatCityToLabelValue } from '../add/utils';
 
 const closeButton = { float: 'right' };
 
@@ -52,7 +53,7 @@ export class UsersListTableRow extends React.PureComponent {
   edit = () => {
     const { row } = this.props;
     this.setState({
-      formData: { ...row },
+      formData: { ...row, ville: formatCityToLabelValue(row.ville) },
       editMode: true,
     });
   };
@@ -76,7 +77,10 @@ export class UsersListTableRow extends React.PureComponent {
   handleSubmitEdit = e => {
     e.preventDefault();
     const { formData } = this.state;
-    this.props.updateUser(formData);
+    this.props.updateUser({
+      ...formData,
+      ville: { id: formData.ville && formData.ville.value },
+    });
     this.setState({
       editMode: false,
     });
@@ -103,7 +107,7 @@ export class UsersListTableRow extends React.PureComponent {
   };
 
   render() {
-    const { row } = this.props;
+    const { row, cities } = this.props;
     const { editMode, detailsOpen } = this.state;
     return (
       <React.Fragment>
@@ -176,6 +180,7 @@ export class UsersListTableRow extends React.PureComponent {
             <MuiDialogContent>
               <UpdateUserForm
                 formData={this.state.formData}
+                cities={cities}
                 handleFormDataChange={this.handleFormDataChange}
                 handleSubmit={this.handleSubmitEdit}
               />

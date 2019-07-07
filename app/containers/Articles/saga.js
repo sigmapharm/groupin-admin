@@ -1,18 +1,35 @@
-import { all, takeLatest } from 'redux-saga/effects';
 import { callApi } from '../../services/saga';
 import {
+  deleteArticle,
+  getArticleDetailsSuccess,
+  manageCreateArticleResponse,
+  putArticlesList,
+} from './actions';
+import ApiRoutes from '../../core/ApiRoutes';
+import {
+  GET_ARTICLE_DETAILS,
   GET_ARTICLES_LIST_ACTION,
   MANAGE_CREATE_ARTICLE_RESPONSE,
   SUBMIT_CREATE_ARTICLE,
   SUBMIT_DELETE_ARTICLE,
 } from './constants';
-import {
-  manageCreateArticleResponse,
-  putArticleslaboList,
-  putArticlesList,
-  deleteArticle,
-} from './actions';
-import ApiRoutes from '../../core/ApiRoutes';
+import {takeLatest,all} from "redux-saga/effects";
+
+// TODO : optimize options http header later ;)
+
+function* getArticleDetailsWorker({ payload: { id } }) {
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  try {
+    yield callApi(`/articles/${id}`, getArticleDetailsSuccess, options, null);
+  } catch (e) {
+    // eslint-disable-line
+  }
+}
 
 function* articlesListWorker(action) {
   const options = {
@@ -33,6 +50,7 @@ function* articlesListWorker(action) {
     // eslint-disable-line
   }
 }
+
 // Saga artilses of a single Labo
 
 function* deleteArticleworker(id) {
@@ -60,10 +78,13 @@ function* deleteArticleworker(id) {
   }
 }
 
-function* addNewArticleWorker(action) {
-  const { payload, callback } = action;
+function* addOrUpdateArticleWorker(action) {
+  const {
+    payload: { articleId, ...payload },
+    callback,
+  } = action;
   const options = {
-    method: 'POST',
+    method: articleId ? 'PUT' : 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -73,9 +94,10 @@ function* addNewArticleWorker(action) {
       // region: null,
     }),
   };
+
   try {
     yield callApi(
-      ApiRoutes.ARTICLES,
+      `${ApiRoutes.ARTICLES}${articleId ? `/${articleId}` : ''}`,
       manageCreateArticleResponse,
       options,
       null,
@@ -97,8 +119,9 @@ function* manageCreateArticleResponseWorker(action) {
 
 function* articlesListSagas() {
   yield all([
+    takeLatest(GET_ARTICLE_DETAILS, getArticleDetailsWorker),
     takeLatest(GET_ARTICLES_LIST_ACTION, articlesListWorker),
-    takeLatest(SUBMIT_CREATE_ARTICLE, addNewArticleWorker),
+    takeLatest(SUBMIT_CREATE_ARTICLE, addOrUpdateArticleWorker),
     takeLatest(SUBMIT_DELETE_ARTICLE, deleteArticleworker),
     takeLatest(
       MANAGE_CREATE_ARTICLE_RESPONSE,

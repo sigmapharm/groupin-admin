@@ -6,6 +6,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Search from '@material-ui/icons/Search';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import history from 'utils/history';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -54,6 +55,8 @@ export class ArticlesListTableRow extends React.PureComponent {
     });
   };
 
+  edit = ({ id }) => history.push(`/articles/edit/${id}`);
+
   render() {
     const { row } = this.props;
     return (
@@ -85,7 +88,7 @@ export class ArticlesListTableRow extends React.PureComponent {
             <WithRoles roles={[SUPER_ADMIN]}>
               <Tooltip placement="top" title="Modifier">
                 <IconButton
-                  onClick={() => alert('Pas encore implémenté')}
+                  onClick={() => this.edit(row)}
                   style={{ padding: 5 }}
                 >
                   <EditIcon color="primary" style={typo3syle} />

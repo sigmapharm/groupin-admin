@@ -50,7 +50,6 @@ export class ArticleListConsultation extends React.PureComponent {
 
   render() {
     const { row, classes } = this.props;
-    console.log(row)
     return (
       <React.Fragment>
         <form className={classes.container} noValidate autoComplete="off">

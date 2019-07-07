@@ -12,14 +12,18 @@ import { createStructuredSelector } from 'reselect';
 import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
 import { validateFormData } from './validation';
-import { createOffre } from '../actions';
+import {
+  changeArticleOffer,
+  changeOfferFormData,
+  clearOffer,
+  createOrUpdateOffre,
+  getOfferWithDetails,
+} from '../actions';
 import AddOffreForm from '../../../components/offres/add/AddOffreForm';
 import { formatLaboratoireToLabelValue } from './utils';
-import {
-  makeSelectarticlesListlabo,
-  makeSelectLaboratoires,
-} from '../../App/selectors';
+import { makeSelectLaboratoires } from '../../App/selectors';
 import { getLaboArticlesList } from '../../App/actions';
+import { makeSelectarticlesListlabo, selectOfferFormData } from '../selectors';
 
 const styles = theme => ({
   root: {
@@ -61,6 +65,7 @@ const initialState = {
     status: '',
     montantMax: '',
     laboratoire: '',
+    comment: '',
   },
   errors: {
     fields: {},
@@ -69,23 +74,17 @@ const initialState = {
   isSuccess: false,
 };
 
+// Change component name later
 export class AddOffre extends React.PureComponent {
-  state = { ...initialState };
-
-  handleFormDataChange = e => {
-    const { formData } = this.state;
-    this.setState({
-      formData: {
-        ...formData,
-        [e.target.name]: e.target.value,
-      },
-    });
+  handleFormDataChange = ({ target: { name, value } }) => {
+    this.props.dispatch(changeOfferFormData({ [name]: value }));
   };
 
   handleSubmit = e => {
     e.preventDefault();
-    const { formData } = this.state;
-    const validation = validateFormData(formData);
+    const { formData,offerId } = this.state;
+    const { articlesListlabo, offerFormData } = this.props;
+    const validation = validateFormData(offerFormData);
     if (validation && validation.messages && validation.fields) {
       this.setState({
         errors: {
@@ -101,22 +100,20 @@ export class AddOffre extends React.PureComponent {
         },
       });
       const formattedData = {
-        ...formData,
+        offerId,
+        ...offerFormData,
         laboratoire: {
-          id: formData.laboratoire && formData.laboratoire.value,
+          id: offerFormData.laboratoryId,
         },
       };
       this.props.dispatch(
-        createOffre(formattedData, this.handleSubmitResponse),
+        createOrUpdateOffre(formattedData, articlesListlabo, this.handleSubmitResponse),
       );
     }
   };
 
   handleSubmitResponse = response => {
-    if (!response) {
-      return;
-    }
-    if (response.id) {
+    if (_.isEmpty(response)) {
       this.setState({
         ...initialState,
         isSuccess: true,
@@ -133,17 +130,22 @@ export class AddOffre extends React.PureComponent {
     }
   };
 
-  handleLaboratoireSelectChange = value => {
+  handleLaboratoireSelectChange = laboratory => {
     const { formData } = this.state;
-
-    this.setState({
+    this.props.dispatch(
+      changeOfferFormData({
+        laboratoryId: laboratory.value,
+        laboratoire: laboratory,
+      }),
+    );
+    /* this.setState({
       formData: {
         ...formData,
-        laboratoire: value,
+        laboratoryId: laboratory.value,
       },
-    });
-    if (value && value.value && !!value.label.trim()) {
-      this.props.dispatch(getLaboArticlesList(value));
+    }); */
+    if (laboratory && laboratory.value && !!laboratory.label.trim()) {
+      this.props.dispatch(getLaboArticlesList(laboratory));
     }
   };
 
@@ -155,9 +157,44 @@ export class AddOffre extends React.PureComponent {
     history.push('/offres');
   };
 
+  handleArticleRowChange = payload => {
+    this.props.dispatch(changeArticleOffer(payload));
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = { ...initialState };
+  }
+
+  componentWillMount() {
+    const {
+      match: {
+        params: { offerId },
+      },
+    } = this.props;
+    this.setState(
+      {
+        editMode: !!offerId,
+        offerId,
+      },
+      () =>
+        !!offerId && this.props.dispatch(getOfferWithDetails({ id: offerId })),
+    );
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch(clearOffer());
+  }
+
   render() {
-    const { classes, laboratoires, articlesListlabo } = this.props;
-    const { formData, errors, isSuccess } = this.state;
+    const {
+      classes,
+      laboratoires,
+      articlesListlabo,
+      selectedArticles,
+      offerFormData,
+    } = this.props;
+    const { formData, editMode, errors, isSuccess } = this.state;
     const formattedLaboratoire = laboratoires.map(
       formatLaboratoireToLabelValue,
     );
@@ -165,15 +202,18 @@ export class AddOffre extends React.PureComponent {
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
           <AddOffreForm
+            editMode={editMode}
             classes={classes}
             errors={errors}
-            formData={formData}
+            formData={offerFormData}
             rows={articlesListlabo}
+            handleArticleRowChange={this.handleArticleRowChange}
+            // selectedRows={selectedArticles}
             laboratoires={formattedLaboratoire}
             handleFormDataChange={this.handleFormDataChange}
             handleSubmit={this.handleSubmit}
             handleLaboratoireSelectChange={this.handleLaboratoireSelectChange}
-            handleAnuler={this.handleGoToOffresList}
+            onCancel={this.handleGoToOffresList}
           />
         </form>
         {isSuccess && (
@@ -212,6 +252,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = createStructuredSelector({
   laboratoires: makeSelectLaboratoires(),
   articlesListlabo: makeSelectarticlesListlabo(),
+  offerFormData: selectOfferFormData(),
 });
 
 const withConnect = connect(
@@ -221,7 +262,6 @@ const withConnect = connect(
 
 AddOffre.defaultProps = {};
 AddOffre.propTypes = {
-  articlesListlabo: PropTypes.any,
   classes: PropTypes.object,
   dispatch: PropTypes.func,
   laboratoires: PropTypes.arrayOf(

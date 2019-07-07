@@ -44,6 +44,7 @@ export const validateFormData = formData => {
     fields.pharmacie,
     formData.pharmacie,
   );
+  validationResult = validate(validationResult, fields.role, formData.role);
 
   return validationResult;
 };
@@ -82,7 +83,7 @@ export const fields = {
   ville: {
     name: 'ville',
     label: 'Ville',
-    validator: validators.stringNotBlank,
+    validator: validators.selectNotBlank,
   },
   codePostal: {
     name: 'codePostal',
@@ -92,6 +93,11 @@ export const fields = {
   pharmacie: {
     name: 'pharmacie',
     label: 'Pharmacie',
+    validator: validators.selectNotBlank,
+  },
+  role: {
+    name: 'role',
+    label: 'Role',
     validator: validators.selectNotBlank,
   },
 };

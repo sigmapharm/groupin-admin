@@ -21,8 +21,14 @@ export const MetaMenu = [
   },
   {
     key: 4,
-    label: 'Commandes',
-    link: '#',
-    allowedRoles: [MEMBRE, ADMIN, SUPER_ADMIN],
+    label: 'Mes Commandes',
+    link: '/commands',
+    allowedRoles: [MEMBRE],
+  },
+  {
+    key: 5,
+    label: 'Mes Commandes Groupé',
+    link: '/commands',
+    allowedRoles: [ADMIN, SUPER_ADMIN],
   },
 ];

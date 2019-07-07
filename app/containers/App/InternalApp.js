@@ -13,6 +13,8 @@ import AddArticle from '../Articles/add/index';
 import OffresList from '../Offres';
 import AddOffre from '../Offres/add/index';
 import UsersList from '../Users';
+import Commands from "../Command";
+import Grouping from "../Grouping";
 
 class InternalApp extends React.PureComponent {
   componentWillMount() {
@@ -28,7 +30,12 @@ class InternalApp extends React.PureComponent {
         <Route exact path="/users" component={UsersList} />
         <Route exact path="/users/add" component={AddUser} />
         <Route exact path="/articles/add" component={AddArticle} />
+        <Route exact path="/articles/edit/:articleId" component={AddArticle} />
         <Route exact path="/offres/add" component={AddOffre} />
+        <Route exact path="/offres/edit/:offerId" component={AddOffre} />
+        <Route exact path="/commands" component={Commands} />
+        <Route exact path="/offres/:offerId/commands" render={(props)=> <Commands {...props} key={props.match.params.offerId}/> } />
+        <Route exact path="/grouping/:offerId" component={Grouping} />
         <Route component={NotFoundPage} />
       </Switch>
     );

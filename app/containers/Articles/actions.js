@@ -6,6 +6,9 @@ import {
   SUBMIT_DELETE_ARTICLE,
   GET_ARTICLESLABO_LIST_ACTION,
   PUT_ARTICLESLABO_LIST_ACTION,
+  CHANGE_ARTICLE_FORM_DATA,
+  GET_ARTICLE_DETAILS,
+  GET_ARTICLE_DETAILS_SUCCESS, CLEAR_ARTICLE_FORM,
 } from './constants';
 
 const getArticlesList = values => ({
@@ -43,7 +46,30 @@ export const deleteArticle = formData => ({
   type: SUBMIT_DELETE_ARTICLE,
   payload: { ...formData },
 });
+
+const changeArticleFormData = payload => ({
+  type: CHANGE_ARTICLE_FORM_DATA,
+  payload,
+});
+
+const getArticleDetails = ({ id }) => ({
+  type: GET_ARTICLE_DETAILS,
+  payload: { id },
+});
+const getArticleDetailsSuccess = payload => ({
+  type: GET_ARTICLE_DETAILS_SUCCESS,
+  payload,
+});
+
+const clearArticleForm = () => ({
+  type: CLEAR_ARTICLE_FORM,
+});
+
 export {
+  clearArticleForm,
+  getArticleDetailsSuccess,
+  getArticleDetails,
+  changeArticleFormData,
   getArticlesList,
   putArticlesList,
   getArticleslaboList,

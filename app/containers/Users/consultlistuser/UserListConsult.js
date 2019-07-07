@@ -34,12 +34,14 @@ export class UserListConsult extends React.PureComponent {
   render() {
     // eslint-disable-next-line react/prop-types
     const { row, classes } = this.props;
-    const dateCreation = new Date(row.pharmacie.dateCreation);
-    const dateCreationarticlee = new Date(row.dateCreation);
-    const dateformatdemaragee = new Date(row.pharmacie.dateDemarrage);
-    const dateformatcreationarticle = new Intl.DateTimeFormat('fr-FR').format(
-      dateCreationarticlee,
-    );
+    const dateCreation =
+      row.pharmacie.dateCreation && new Date(row.pharmacie.dateCreation);
+    const dateCreationarticlee = row.dateCreation && new Date(row.dateCreation);
+    const dateformatdemaragee =
+      row.pharmacie.dateDemarrage && new Date(row.pharmacie.dateDemarrage);
+    const dateformatcreationarticle =
+      dateCreationarticlee &&
+      new Intl.DateTimeFormat('fr-FR').format(dateCreationarticlee);
 
     const dateformatcreation = new Intl.DateTimeFormat('fr-FR').format(
       dateCreation,
@@ -110,7 +112,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Ville"
-            value={row.ville}
+            value={_.get(row, 'ville.name', '')}
             className={classes.textField}
             inputProps={{
               className: classes.input,

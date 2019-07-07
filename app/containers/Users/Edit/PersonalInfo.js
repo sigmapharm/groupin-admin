@@ -4,13 +4,18 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { fields } from '../add/validation';
+import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
 
-const styles = () => ({
+const styles = (theme) => ({
   userInputs: {},
+  select: {
+    marginTop: theme.spacing.unit,
+    maxWidth: '350px',
+  },
 });
 
 export function PersonalInfo(props) {
-  const { formData, errors, classes, onChange, maxLength } = props;
+  const { formData,cities, errors, classes, onChange, maxLength } = props;
   return (
     <>
       <Grid xs={12} md={6} item>
@@ -100,7 +105,8 @@ export function PersonalInfo(props) {
         />
       </Grid>
       <Grid xs={12} md={6} item>
-        <TextField
+        {/*
+          <TextField
           name={fields.ville.name}
           label="Ville"
           defaultValue={formData[fields.ville.name]}
@@ -111,6 +117,21 @@ export function PersonalInfo(props) {
             maxLength,
           }}
           fullWidth
+        />
+
+        */}
+        <SingleAutoCompleteSelect
+          className={classes.select}
+          name={fields.ville.name}
+          options={cities}
+          onChange={value => {
+            onChange({
+              target: { name: 'ville', value },
+            });
+          }}
+          value={formData[fields.ville.name]}
+          placeholder={fields.ville.label}
+          isClearable
         />
       </Grid>
       <Grid xs={12} md={6} item>

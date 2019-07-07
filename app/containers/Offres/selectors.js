@@ -3,6 +3,9 @@ const offresState = store => store.get('offres');
 const makeSelectOffresList = () =>
   createSelector(offresState, state => state.get('offresList').toJS());
 
+const selectOfferArticleList = () =>
+  createSelector(offresState, state => state.get('offerArticles').toJS());
+
 const makeSelectPage = () =>
   createSelector(offresState, state => state.get('page'));
 
@@ -30,7 +33,15 @@ const makeSelectstatus = () =>
 const makeSelectlaboratoire = () =>
   createSelector(offresState, state => state.get('laboratoire'));
 
+const makeSelectarticlesListlabo = () =>
+  createSelector(offresState, state => state.get('articlesListlabo').toJS());
+
+const selectOfferFormData = () =>
+  createSelector(offresState, state => state.get('offerFormData').toJS());
+
 export {
+  selectOfferFormData,
+  selectOfferArticleList,
   makeSelectOffresList,
   makeSelectPage,
   makeSelectRowsPerPage,
@@ -41,4 +52,5 @@ export {
   makeSelectquantiteMinimale,
   makeSelectstatus,
   makeSelectlaboratoire,
+  makeSelectarticlesListlabo,
 };

@@ -43,7 +43,7 @@ function* getConfigurationWorker() {
     yield put(setNetworkingActive());
     yield getPharmaciesWorker();
     yield getRegionsWorker();
-    yield getVillesWorker();
+    //yield getVillesWorker();
     yield getLaboratoiresWorker();
     yield put(setNetworkingInactive());
   } catch (e) {
@@ -55,7 +55,7 @@ function* getConfigurationWorker() {
 function* appSaga() {
   yield all([
     takeLatest(GET_PHARMACIES, getPharmaciesWorker),
-    takeLatest(GET_VILLES, getVillesWorker),
+    //takeLatest(GET_VILLES, getVillesWorker),
     takeLatest(GET_REGIONS, getRegionsWorker),
     takeLatest(GET_LABORATOIRES, getLaboratoiresWorker),
     takeLatest(GET_CONFIGURATION, getConfigurationWorker),

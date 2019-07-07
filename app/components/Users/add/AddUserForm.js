@@ -66,6 +66,7 @@ const styles = theme => ({
 
 export function AddUserForm(props) {
   const {
+    cities,
     classes,
     errors,
     pharmacies,
@@ -94,6 +95,7 @@ export function AddUserForm(props) {
       </Grid>
       <Grid className={classes.gridContainer} spacing={8} container>
         <PersonalInfo
+          cities={cities}
           formData={formData}
           errors={errors.fields}
           onChange={handleFormDataChange}
@@ -102,6 +104,24 @@ export function AddUserForm(props) {
             userInputs: classes.inputs,
           }}
         />
+        <Grid xs={12} md={6} item>
+          <SingleAutoCompleteSelect
+            className={classes.select}
+            name="role"
+            options={[
+              { label: 'SUPER ADMIN', value: 'SUPER_ADMIN' },
+              { label: 'UTILISATEUR', value: 'MEMBRE' },
+            ]}
+            onChange={value => {
+              handleFormDataChange({
+                target: { name: 'role', value },
+              });
+            }}
+            value={formData.value}
+            placeholder="Role"
+            isClearable
+          />
+        </Grid>
         <Grid className={classes.selectPharmacieContainer} xs={12} md={6} item>
           <SingleAutoCompleteSelect
             className={classes.select}
@@ -116,7 +136,6 @@ export function AddUserForm(props) {
             <AddIcon />
           </Fab>
         </Grid>
-        <Grid xs={12} md={6} item />
         <Grid xs={12} item />
         <Grid justify="center" container>
           <Button

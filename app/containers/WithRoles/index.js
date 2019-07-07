@@ -34,7 +34,7 @@ export class WithRoles extends React.PureComponent {
   }
 
   render() {
-    const { strategy, children } = this.props;
+    const { strategy, children ,user:{ role } } = this.props;
     return (
       <>
         {!this.isAllowed &&

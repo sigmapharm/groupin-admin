@@ -43,8 +43,8 @@ function* addNewUserWorker(action) {
     },
     body: JSON.stringify({
       ...payload,
-      ville: null,
-      region: null,
+     // ville: null,
+     // region: null,
     }),
   };
   try {

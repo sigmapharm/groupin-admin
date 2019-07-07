@@ -14,7 +14,7 @@ const validate = (result, field, value) => {
       },
     };
   }
-  return { ...result };
+  return {...result};
 };
 
 export const validateFormData = formData => {
@@ -51,19 +51,19 @@ export const validateFormData = formData => {
 export const fields = {
   designation: {
     name: 'designation',
-    label: 'designation',
+    label: 'Designation',
     validator: validators.stringNotBlank,
   },
   dateDebut: {
     name: 'dateDebut',
-    label: 'Date Début',
+    label: 'Date début',
     type: 'date',
     validator: validators.stringNotBlank,
   },
   dateFin: {
     name: 'dateFin',
     type: 'date',
-    label: 'Date Fin',
+    label: 'Date fin',
     specialProps: {
       InputLabelProps: {
         shrink: true,
@@ -71,27 +71,36 @@ export const fields = {
       style: {
         width: '100%',
       },
-      label: 'Date Fin',
+      label: 'Date fin',
     },
     validator: validators.stringNotBlank,
   },
   montant: {
     name: 'montant',
-    label: 'Montant objectif',
+    label: 'Montant par objectif',
     type: 'number',
     validator: validators.stringNotBlank,
   },
   quantiteMin: {
     name: 'quantiteMin',
-    label: 'quantité Minimale',
+    label: 'Quantité minimale',
     type: 'number',
     validator: validators.stringNotBlank,
   },
-
   montantMax: {
     name: 'montantMax',
-    label: 'Montant Max',
+    label: 'Montant max',
     type: 'number',
     validator: validators.stringNotBlank,
+  },
+  discount: {
+    name: 'discount',
+    label: 'Remise',
+    type: 'number',
+  },
+  offerComment: {
+    name: 'comment',
+    label: 'Comment',
+    type: 'text',
   },
 };

@@ -66,6 +66,7 @@ export function UpdateUserForm(props) {
     formData,
     handleFormDataChange,
     handleSubmit,
+    cities,
   } = props;
   return (
     <div>
@@ -86,6 +87,7 @@ export function UpdateUserForm(props) {
       </Grid>
       <Grid className={classes.gridContainer} spacing={8} container>
         <PersonalInfo
+          cities={cities}
           formData={formData}
           errors={errors.fields}
           onChange={handleFormDataChange}

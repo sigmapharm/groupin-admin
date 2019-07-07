@@ -28,8 +28,11 @@ const makeSelectTVA = () =>
 
 const makeSelectlaboratoire = () =>
   createSelector(articlesState, state => state.get('laboratoire'));
+const selecteArticleFormData = () =>
+  createSelector(articlesState, state => state.get('articleFormData').toJS());
 
 export {
+  selecteArticleFormData,
   makeSelectArticlesList,
   makeSelectPage,
   makeSelectRowsPerPage,

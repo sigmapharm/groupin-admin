@@ -8,11 +8,15 @@ import Button from '@material-ui/core/Button';
 import TableBody from '@material-ui/core/TableBody';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
+import TextField from '@material-ui/core/TextField/TextField';
+import TableCell from '@material-ui/core/TableCell/TableCell';
+import TableRow from '@material-ui/core/TableRow/TableRow';
 import ErrorsArea from '../../ErrorsArea';
 import OffreInfo from './OffreInfo';
 import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
 import ArticlesListTableHeader from './ArticlesHeader';
 import AticlesListTableRow from './ArticlesRow';
+import { fields } from '../../../containers/Offres/add/validation';
 
 const styles = theme => ({
   root: {
@@ -73,6 +77,10 @@ const styles = theme => ({
     marginLeft: '-2%',
     scrollMarginBottom: '-2%',
   },
+  rowsEmpty: {
+    textAlign: 'center',
+    padding: `${theme.spacing.unit * 3}px  0px`,
+  },
 });
 
 export function AddOffreForm(props) {
@@ -82,9 +90,12 @@ export function AddOffreForm(props) {
     formData,
     handleFormDataChange,
     handleSubmit,
+    onCancel,
     laboratoires,
     handleLaboratoireSelectChange,
+    handleArticleRowChange,
     rows,
+    editMode,
   } = props;
   return (
     <Paper className={classes.paper}>
@@ -111,23 +122,29 @@ export function AddOffreForm(props) {
           classes={{
             offreInputs: classes.inputs,
           }}
-        />
-        <Grid
-          className={classes.selectLaboratoireContainer}
-          xs={12}
-          md={6}
-          item
         >
-          <SingleAutoCompleteSelect
-            className={classes.select}
-            name="laboratoire"
-            options={laboratoires}
-            onChange={handleLaboratoireSelectChange}
-            value={formData.laboratoire}
-            placeholder="Laboratoire"
-            isClearable
-          />
-        </Grid>
+          <Grid xs={12} md={6} item>
+            {!editMode ? (
+              <SingleAutoCompleteSelect
+                className={classes.select}
+                name="laboratoire"
+                options={laboratoires}
+                onChange={handleLaboratoireSelectChange}
+                value={formData.laboratoire}
+                placeholder="Laboratoire"
+                isClearable
+              />
+            ) : (
+              <>
+                <Typography color="textSecondary">Laboratoire</Typography>
+                <span>
+                  {formData.laboratoryName}
+                </span>
+              </>
+            )}
+          </Grid>
+        </OffreInfo>
+
         <Grid className={classes.gridContainer} spacing={8} container>
           <Typography
             variant="h5"
@@ -151,8 +168,22 @@ export function AddOffreForm(props) {
               <ArticlesListTableHeader />
             </TableHead>
             <TableBody>
-              {rows &&
-                rows.map(row => <AticlesListTableRow key={row.id} row={row} />)}
+              {rows.length != 0 ? (
+                rows.map((row, index) => (
+                  <AticlesListTableRow
+                    index={index}
+                    handleArticleRowChange={handleArticleRowChange}
+                    key={row.id}
+                    row={row}
+                  />
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell className={classes.rowsEmpty} colSpan={7}>
+                    <span>Veuillez choisir une laboratoire </span>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </Grid>
@@ -166,7 +197,16 @@ export function AddOffreForm(props) {
             className={classes.buttonajout}
             onClick={handleSubmit}
           >
-            Valider
+            {editMode ? 'Mettre à jour ' : 'Valider'}
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            className={classes.buttons}
+            onClick={onCancel}
+          >
+            Annuler
           </Button>
         </Grid>
       </Grid>

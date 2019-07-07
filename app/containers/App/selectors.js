@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import _ from 'lodash';
 
 const selectRouter = state => state.get('router');
 const selectApp = state => state.get('global');
@@ -29,30 +30,26 @@ const makeSelectLaboratoires = () =>
     appState => (appState && appState.toJS().laboratoires) || [],
   );
 
-const makeSelectVilles = () =>
+const selectRegions = () =>
   createSelector(
     selectApp,
-    appState => (appState && appState.toJS().villes) || [],
+    appState => (appState && appState.toJS().regions) || [],
   );
 
-const makeSelectoffreArticledtos = () =>
-  createSelector(
-    selectApp,
-    appState => (appState && appState.toJS().articledtos) || [],
-  );
-const makeSelectarticlesListlabo = () =>
-  createSelector(
-    selectApp,
-    appState => (appState && appState.toJS().articlesListlabo) || [],
+const selectCities = () =>
+  createSelector(selectApp, appState =>
+    _((appState && appState.toJS().regions) || [])
+      .map('cities')
+      .flatMap()
+      .value(),
   );
 
 export {
+  selectRegions,
   makeSelectLocation,
   makeSelectUser,
   makeSelectGlobalLoaderStatus,
   makeSelectPharmacies,
   makeSelectLaboratoires,
-  makeSelectVilles,
-  makeSelectoffreArticledtos,
-  makeSelectarticlesListlabo,
+  selectCities,
 };

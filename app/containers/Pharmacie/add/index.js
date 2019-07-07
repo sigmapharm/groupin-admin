@@ -1,6 +1,6 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-
+import _ from 'lodash';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
@@ -22,6 +22,7 @@ import {
 import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
 import { addPharmacie } from './actions';
 import ErrorsArea from '../../../components/ErrorsArea';
+import {  selectRegions } from '../../App/selectors';
 
 /* istanbul ignore next */
 const styles = theme => ({
@@ -84,18 +85,29 @@ export class AddPharmacieContainer extends React.PureComponent {
     this.setState({
       formData: {
         ...formData,
-        [name]: (value && value.value) || '',
+        ville: name === 'region' ? null : formData.ville,
+        [name]: value,
       },
     });
   };
 
   getRenderedProps = field => {
     const { formData } = this.state;
+    const { regions } = this.props;
+
+    const options = {
+      region: regions,
+      ville: _.get(
+        _.find(regions, { id: _.get(formData, 'region.value') }),
+        'cities',
+        [],
+      ),
+    };
     let props = {
       name: field.name,
       label: field.label,
       value:
-        (field.formatter && field.formatter(formData[field.name])) ||
+        (field.valueFormatter && field.valueFormatter(formData[field.name])) ||
         formData[field.name],
       fullWidth: true,
       onChange: this.handleInputChange,
@@ -113,9 +125,10 @@ export class AddPharmacieContainer extends React.PureComponent {
     if (field.select) {
       props = {
         ...props,
-        options: (field.options || this.props[field.fromProps]).map(
-          defaultOptionsFormatter,
-        ),
+        options: (
+          options[field.name] ||
+          (field.options || this.props[field.fromProps])
+        ).map(field.optionFormatter),
         onChange: this.handleSelectChange(field.name),
         placeholder: field.placeholder,
       };
@@ -168,7 +181,21 @@ export class AddPharmacieContainer extends React.PureComponent {
         },
       });
       this.props.dispatch(
-        addPharmacie({ ...formData }, this.handleSubmitResponse),
+        addPharmacie(
+          {
+            ...formData,
+            ville: {
+              id: _.get(formData, 'ville.value'),
+            },
+            region: {
+              id: _.get(formData, 'region.value'),
+            },
+            formeJuridique:_.get(formData,'formeJuridique.value'),
+            banque:_.get(formData,'banque.value'),
+
+          },
+          this.handleSubmitResponse,
+        ),
       );
     }
   };
@@ -283,7 +310,9 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
-const mapStateToProps = createStructuredSelector({});
+const mapStateToProps = createStructuredSelector({
+  regions: selectRegions(),
+});
 
 const withConnect = connect(
   mapStateToProps,

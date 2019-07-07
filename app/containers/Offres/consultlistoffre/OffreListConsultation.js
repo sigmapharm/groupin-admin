@@ -6,8 +6,24 @@ import TableBody from '@material-ui/core/TableBody';
 import * as PropTypes from 'prop-types';
 import Table from '@material-ui/core/Table';
 import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Progressbar from './Progress';
+import { createStructuredSelector } from 'reselect';
+
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import Typography from '@material-ui/core/Typography/Typography';
+import TextField from '@material-ui/core/TextField/TextField';
+import Button from '@material-ui/core/Button/Button';
+import Grid from '@material-ui/core/Grid/Grid';
+import Checkbox from '@material-ui/core/Checkbox/Checkbox';
+import history from 'utils/history';
+import InfoSnackBar from '../../../components/Snackbar/InfoBar';
+import { selectOfferArticleList } from '../selectors';
+// import { makeSelectoffreArticledtos } from '../../App/selectors';
+import {
+  changeOfferArticle,
+  loadArticleOffer,
+  submitClientCommand,
+} from '../actions';
 
 const styles = theme => ({
   container: {
@@ -32,120 +48,182 @@ const styles = theme => ({
   menu: {
     width: 200,
   },
+  metaContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+    marginBottom: '10px',
+  },
+  metaItems: {
+    paddingRight: '2em',
+    display: 'inline-block',
+  },
+  commandButton: {
+    marginTop: '15px',
+  },
+  cancelButton: {
+    marginTop: '15px',
+    marginRight: '10px',
+  },
+  hasError: {
+    backgroundColor: '#ff000042',
+  },
 });
 
 export class OffreListConsultation extends React.PureComponent {
+  handleQuantityChange = (id, minQuantity) => ({ target: { value } }) => {
+    this.props.dispatch(
+      changeOfferArticle({
+        id,
+        quantity: +value,
+        hasError: +value < minQuantity,
+      }),
+    );
+  };
+
+  handSelectArticleChange = id => ({ target: { checked } }) => {
+    this.props.dispatch(
+      changeOfferArticle({
+        id,
+        selected: checked,
+      }),
+    );
+  };
+
+  handleSubmitResponse = response => {
+    if (_.isEmpty(response)) {
+      const { dismiss } = this.props;
+      dismiss();
+      history.push('/commands');
+    }
+  };
+
   constructor(props) {
     super(props);
     this.state = {};
   }
 
+  get allowCommandSubmit() {
+    const { offerArticles, row } = this.props;
+    const { quantiteMin } = row;
+    return _.every(
+      offerArticles.filter(({ selected }) => !!selected),
+      ({ quantity, selected }) => selected && quantity >= quantiteMin,
+    );
+  }
+
+
+
+  componentWillMount() {
+    const {
+      dispatch,
+      row: { id },
+    } = this.props;
+    dispatch(loadArticleOffer({ id }));
+  }
+
   render() {
-    const { row, avancement, classes } = this.props;
+    const {
+      row,
+      classes,
+      remainingDays,
+      hasStarted,
+      progress,
+      offerArticles,
+      commandMode,
+      dismiss,
+    } = this.props;
     const datefin = new Date(row.dateFin);
-    const mSecondesParJour = 86400 * 1000;
-    const joursRestants =
-      Math.floor((datefin - new Date()) / mSecondesParJour) + 1;
-    const joursLabel = joursRestants === 1 ? 'jour' : 'jours';
-    const avancementMontant = Math.min(row.montant / 100000, 1) * 100;
+    const startDate = new Date(row.dateDebut);
+    const joursLabel = remainingDays === 1 ? 'jour' : 'jours';
+    // const avancementMontant = Math.min(row.montant / 100000, 1) * 100;
 
     const dateformat = new Intl.DateTimeFormat('fr-FR').format(datefin);
+    const startDateFormated = new Intl.DateTimeFormat('fr-FR').format(
+      startDate,
+    );
+
+
+
     return (
       <React.Fragment>
-        <form className={classes.container} noValidate autoComplete="off">
-          <TextField
-            disabled
-            id="standard-disabled"
-            label="Désignation"
-            defaultValue={row.designation}
-            className={classes.textField}
-            inputProps={{
-              className: classes.input,
-            }}
-            margin="normal"
-          />
-          <TextField
-            disabled
-            id="standard-disabled"
-            label="Laboratoire"
-            defaultValue={row.laboratoire && row.laboratoire.nom}
-            className={classes.textField}
-            inputProps={{
-              className: classes.input,
-            }}
-            margin="normal"
-          />
-          <TextField
-            disabled
-            id="standard-disabled"
-            label="Date fin"
-            defaultValue={dateformat}
-            className={classes.textField}
-            inputProps={{
-              className: classes.input,
-            }}
-            margin="normal"
-          />
-          <TextField
-            disabled
-            id="standard-disabled"
-            label="quantité minimal"
-            defaultValue={row.quantiteMin}
-            className={classes.textField}
-            inputProps={{
-              className: classes.input,
-            }}
-            margin="normal"
-          />
-          <TextField
-            disabled
-            id="standard-disabled"
-            label="Status de l'offre"
-            defaultValue={row.status}
-            className={classes.textField}
-            inputProps={{
-              className: classes.input,
-            }}
-            margin="normal"
-          />
-
+        <div className={classes.metaContainer}>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Designation</Typography>
+            <Typography variant="h6" component="h2">
+              {row.designation}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Laboratoire</Typography>
+            <Typography variant="h6" component="h2">
+              {row.laboratoryName}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Date Début</Typography>
+            <Typography variant="h6" component="h2">
+              {startDateFormated}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Date fin</Typography>
+            <Typography variant="h6" component="h2">
+              {dateformat}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Quantité Minimal</Typography>
+            <Typography variant="h6" component="h2">
+              {row.quantiteMin}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Montant Par Objectif</Typography>
+            <Typography variant="h6" component="h2">
+              {row.montant}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Status</Typography>
+            <Typography variant="h6" component="h2">
+              {row.status}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Montant Max</Typography>
+            <Typography variant="h6" component="h2">
+              {row.montantMax}
+            </Typography>
+          </div>
+        </div>
+        {/*
+         <div
+          className={classes.metaContainer}
+          style={{ justifyContent: 'center' }}
+        >
           <div style={{ width: '25%', marginTop: '28px' }}>
-            <Progressbar progress={avancement} />
-            {joursRestants > 0
-              ? `Il vous reste ${joursRestants} ${joursLabel}`
+            <Progressbar progress={progress} />
+            {remainingDays > 0 // eslint-disable-line
+              ? hasStarted
+                ? `Il reste ${remainingDays} ${joursLabel}`
+                : `L'offre n'a pas encore commencé`
               : 'Offre clôturée !'}
           </div>
-          <TextField
-            disabled
-            id="standard-disabled"
-            label="Objectif "
-            defaultValue={row.montant}
-            className={classes.textField}
-            inputProps={{
-              className: classes.input,
-            }}
-            margin="normal"
-          />
-          <TextField
-            disabled
-            id="standard-disabled"
-            label="Objectif "
-            defaultValue={row.montant}
-            className={classes.textField}
-            inputProps={{
-              className: classes.input,
-            }}
-            margin="normal"
-          />
+          {/*
           <div style={{ width: '25%', marginTop: '28px' }}>
             <Progressbar progress={avancementMontant} />
             {row.montant} MAD {avancementMontant}%
           </div>
-        </form>
+
+      </div>
+
+        */}
 
         <Table>
           <TableHead>
             <TableRow>
+              {commandMode && <TableCell />}
               <TableCell>Désignation</TableCell>
               <TableCell>PPV</TableCell>
               <TableCell>
@@ -181,21 +259,123 @@ export class OffreListConsultation extends React.PureComponent {
                   }}
                 />
               </TableCell>
+              {commandMode && (
+                <TableCell>
+                  Quantité
+                  <hr
+                    style={{
+                      width: '45%',
+                      marginLeft: '0',
+                      height: '3px',
+                      backgroundColor: 'red',
+                    }}
+                  />
+                </TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow>
-              <TableCell component="th" scope="row" />
-              <TableCell>{}</TableCell>
-              <TableCell />
-              <TableCell />
-              <TableCell>
-                {row.offreArticledtos && row.offreArticledtos}
-              </TableCell>
-              <TableCell />
-            </TableRow>
+            {offerArticles.map(
+              ({
+                id,
+                nom,
+                ppv,
+                pph,
+                discount,
+                computedPPH,
+                quantity,
+                hasError,
+                selected,
+              }) => (
+                <TableRow
+                  {...(hasError && selected
+                    ? { className: classes.hasError }
+                    : {})}
+                  key={id}
+                >
+                  {commandMode && (
+                    <TableCell>
+                      <Checkbox
+                        onChange={this.handSelectArticleChange(id)}
+                        checked={!!selected}
+                      />
+                    </TableCell>
+                  )}
+                  <TableCell>{nom}</TableCell>
+                  <TableCell>{ppv.toFixed(2)}</TableCell>
+                  <TableCell>{pph.toFixed(2)}</TableCell>
+                  <TableCell>{discount}</TableCell>
+                  <TableCell>{computedPPH.toFixed(2)}</TableCell>
+                  {commandMode && (
+                    <TableCell>
+                      <TextField
+                        name="quantity"
+                        label="Quantité"
+                        type="number"
+                        value={quantity || ''}
+                        disabled={!selected}
+                        autoComplete="off"
+                        inputProps={{ maxLength: 100 }}
+                        onChange={this.handleQuantityChange(
+                          id,
+                          row.quantiteMin,
+                        )}
+                        fullWidth
+                      />
+                    </TableCell>
+                  )}
+                </TableRow>
+              ),
+            )}
+            {commandMode && (
+              <TableRow>
+                <TableCell style={{ textAlign: 'right' }} colSpan={6}>
+                  Total :{' '}
+                </TableCell>
+                <TableCell style={{ textAlign: 'center' }}>
+                  {_.sumBy(
+                    offerArticles,
+                    ({ quantity, computedPPH }) => computedPPH * quantity || 0,
+                  ).toFixed(2)}
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
+        {commandMode && (
+          <Grid justify="center" container>
+            <Button
+              className={classes.cancelButton}
+              type="submit"
+              variant="contained"
+              color="primary"
+              onClick={dismiss}
+            >
+              Annuler
+            </Button>
+            <Button
+              className={classes.commandButton}
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={!this.allowCommandSubmit}
+              onClick={() =>
+                this.allowCommandSubmit &&
+                this.props.dispatch(
+                  submitClientCommand(
+                    {
+                      offerId: row.id,
+                      offerArticles,
+                    },
+                    this.handleSubmitResponse,
+                  ),
+                )
+              }
+            >
+              Commander
+            </Button>
+          </Grid>
+        )}
       </React.Fragment>
     );
   }
@@ -205,4 +385,18 @@ OffreListConsultation.defaultProps = {
   row: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(OffreListConsultation);
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+const withConnect = connect(
+  createStructuredSelector({
+    offerArticles: selectOfferArticleList(),
+  }),
+  mapDispatchToProps,
+);
+
+export default compose(
+  withConnect,
+  withStyles(styles),
+)(OffreListConsultation);
