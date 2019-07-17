@@ -23,6 +23,7 @@ export class AticlesListTableRow extends React.PureComponent {
             onChange={({ target: { checked } }) =>
               handleArticleRowChange({
                 discount: row.discount,
+                minQuantity: row.minQuantity,
                 index,
                 selected: checked,
               })
@@ -43,8 +44,29 @@ export class AticlesListTableRow extends React.PureComponent {
             onChange={({ target: { value } }) =>
               handleArticleRowChange({
                 discount: +value,
-                index,
+                minQuantity: row.minQuantity,
                 selected: row.selected,
+                index,
+              })
+            }
+            disabled={!row.selected}
+            autoComplete="off"
+            inputProps={{ maxLength: 100 }}
+            fullWidth
+          />
+        </TableCell>
+        <TableCell>
+          <TextField
+            name={fields.quantiteMin.name}
+            label={fields.quantiteMin.label}
+            value={row.minQuantity || ''}
+            type={fields.quantiteMin.type}
+            onChange={({ target: { value } }) =>
+              handleArticleRowChange({
+                minQuantity: +value,
+                discount: row.discount,
+                selected: row.selected,
+                index,
               })
             }
             disabled={!row.selected}

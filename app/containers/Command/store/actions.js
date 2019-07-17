@@ -27,3 +27,10 @@ export const DISPATCH_QUANTITY_TO_SUB_COMMANDS =
 
 export const DISPATCH_QUANTITY_TO_SUB_COMMANDS_SUCCESS =
   '[Commands] : dispatch quantity to sub commands Success';
+export const LOAD_OFFER_META_DATA = '[Commands] : Load offer meta data';
+export const LOAD_OFFER_META_DATA_SUCCESS =
+  '[Commands] : Load offer meta data success';
+export const LOAD_OFFER_META_DATA_FAIL =
+  '[Commands] : Load offer meta data fail';
+export const COPY_QUANTITIES_INTO_MODIFIED_QUANTITES =
+  '[Commands] : Copy quantities into modified quantities';

@@ -54,6 +54,7 @@ const initialState = {
     banque: '',
     dateDemarrage: '',
     dateCreation: '',
+    ice:''
   },
   errors: {
     messages: {},

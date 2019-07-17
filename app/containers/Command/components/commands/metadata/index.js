@@ -20,6 +20,8 @@ export default ({
   showSubCommands,
   forAdmin,
   canDelete,
+  isAdmin,
+  disableClientEditCommand,
   withOptions = true,
 }) => (
   <>
@@ -28,13 +30,19 @@ export default ({
         <TableCell>{row.offerName}</TableCell>
         <TableCell>{row.laboratoryName}</TableCell>
         <TableCell>{row.pharmacyName}</TableCell>
-        <TableCell>{moment(row.creationDate).format('YYYY-MM-DD')}</TableCell>
+        <TableCell>{moment(row.creationDate).format('DD/MM/YYYY')}</TableCell>
         <TableCell>{row.totalAmount.toFixed(2)}</TableCell>
         {withOptions && (
           <TableCell>
             <Tooltip placement="top" title="Modifier la commande">
-              <IconButton onClick={updateCommand(row)} style={{ padding: 5 }}>
-                <EditIcon color="primary" />
+              <IconButton
+                disabled={(!isAdmin && !row.canDelete) || disableClientEditCommand}
+                onClick={updateCommand(row)}
+                style={{ padding: 5 }}
+              >
+                <EditIcon
+                  color={(!isAdmin && !row.canDelete) || disableClientEditCommand ? 'disabled':'primary'}
+                />
               </IconButton>
             </Tooltip>
             <Tooltip placement="top" title="Afficher le detail">
@@ -45,13 +53,15 @@ export default ({
             {canDelete && (
               <Tooltip placement="top" title="Annuler">
                 <IconButton
-                  disabled={!row.canDelete}
+                  disabled={!isAdmin && !row.canDelete}
                   onClick={deleteCommand({
                     ..._.pick(row, ['commandId', 'canDelete']),
                   })}
                   style={{ padding: 5 }}
                 >
-                  <HighlightOff color="primary" />
+                  <HighlightOff
+                    color={!isAdmin && !row.canDelete ? 'disabled' : 'error'}
+                  />
                 </IconButton>
               </Tooltip>
             )}

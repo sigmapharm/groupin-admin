@@ -1,4 +1,5 @@
 import * as actionsType from './actions';
+import { CREATE_NEW_PROVIDER } from './actions';
 
 export const loadAllCommandByOffer = offerId => ({
   type: actionsType.LOAD_ALL_COMMAND_BY_OFFER,
@@ -47,4 +48,31 @@ export const changeAggregatedArticleQuantity = ({
 
 export const clearGroupingResources = () => ({
   type: actionsType.CLEAR_GROUPING,
+});
+
+export const createNewProvider = (formData, callback) => ({
+  type: actionsType.CREATE_NEW_PROVIDER,
+  payload: formData,
+  callback,
+});
+
+export const createNewProviderSuccess = () => ({
+  type: actionsType.CREATE_NEW_PROVIDER_SUCCESS,
+});
+
+export const createNewProviderFail = () => ({
+  type: actionsType.CREATE_NEW_PROVIDER_SUCCESS,
+});
+
+export const loadAllProviders = () => ({
+  type: actionsType.GET_ALL_PROVIDERS,
+});
+
+export const loadAllProvidersSuccess = payload => ({
+  type: actionsType.GET_ALL_PROVIDERS_SUCCESS,
+  payload,
+});
+
+export const toggleCheckAll = payload => ({
+  type: actionsType.TOGGLE_CHECK_ALL,
 });

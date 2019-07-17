@@ -7,7 +7,9 @@ import { withStyles } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider/Divider';
 import Paper from '@material-ui/core/Paper/Paper';
 import Button from '@material-ui/core/Button/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 import history from 'utils/history';
+import moment from 'moment';
 import authenticated from '../HOC/authenticated/authenticated';
 import styles from './style';
 import Search from './components/search/index';
@@ -15,6 +17,7 @@ import searchFields from './searchFields';
 import { commandHeaders, commandHeadersWithOption } from './headers';
 import Table from '../../components/Table/index';
 import CommandBody from './components/commands/metadata/index';
+import OfferMetaData from './components/offer/metadata';
 import {
   getCommandArticles,
   getCommandsList,
@@ -25,7 +28,10 @@ import Dialog from '../../components/Dialog/index';
 import CommandFullDetail from './components/commands/details';
 import InfoBar from '../../components/Snackbar/InfoBar';
 import { makeSelectUser } from '../App/selectors';
-import { SUPER_ADMIN } from '../AppHeader/Roles';
+import { ADMIN, SUPER_ADMIN } from '../AppHeader/Roles';
+import { clearSelectedOffer } from '../Offres/actions';
+import { selectSelectedOffer } from '../Offres/selectors';
+import GeneriqueDialog from '../../components/Alert';
 
 class Command extends PureComponent {
   searchFields = searchFields(fieldData => {
@@ -57,6 +63,7 @@ class Command extends PureComponent {
   };
 
   onDeleteSuccess = () => {
+    this.closePopConfirmation();
     this.setState({
       showInfoBar: true,
       infoBarParams: {
@@ -104,12 +111,30 @@ class Command extends PureComponent {
 
   deleteCommand = ({ commandId, canDelete }) => () => {
     const { deleteCommand } = this.props;
-    if (canDelete)
+    if (canDelete || this.forAdminCommands)
       deleteCommand({
         commandId,
         callback: this.onDeleteSuccess,
         isAggregate: this.forAdminCommands,
       });
+  };
+
+  performDeleteCommand = ({ commandId, canDelete }) => () => {
+    this.openPopConfirmation({
+      title: 'Suppression',
+      textContent: 'Êtes-vous sûr de supprimer cette commande ? ',
+      onClose: this.closePopConfirmation,
+      onSubmit: this.deleteCommand({ commandId, canDelete }),
+    });
+  };
+
+  performDispatching = ({ commandId, offerId }) => () => {
+    this.openPopConfirmation({
+      title: 'Dipatching',
+      textContent: 'Êtes-vous sûr de dispatcher les quantités  ? ',
+      onClose: this.closePopConfirmation,
+      onSubmit: this.dispatchQuantity({ commandId, offerId }),
+    });
   };
 
   showCommandDetail = row => () => {
@@ -193,6 +218,8 @@ class Command extends PureComponent {
       },
       showInfoBar: false,
       infoBarParams: {},
+      showPopConfirmation: false,
+      popConfirmationParams: {},
     };
   }
 
@@ -242,6 +269,16 @@ class Command extends PureComponent {
     return !!offerId && role === SUPER_ADMIN;
   }
 
+  get disableGroupingBtn() {
+    const { selectedOffer } = this.props;
+    const endDate = _.get(selectedOffer, 'dateFin');
+    const startDate = _.get(selectedOffer, 'dateDebut');
+    return (
+      moment(new Date()).isBetween(new Date(startDate), new Date(endDate)) ||
+      moment(new Date()).isBefore(new Date(startDate))
+    );
+  }
+
   goToGrouping = () => {
     const {
       match: {
@@ -259,14 +296,17 @@ class Command extends PureComponent {
     });
   };
 
-  onDispatchSuccess = offerId => () => {
+  onDispatchSuccess = offerId => error => {
+    this.closePopConfirmation();
     this.setState({
       showInfoBar: true,
-      infoBarParams: {
-        title: 'Les quantités sont bien dispatchées',
-        onSuccessTitle: 'Consulter',
-        onSuccess: () => history.push(`offres/${offerId}/commands`),
-      },
+      infoBarParams: error
+        ? { title: 'Merci remplir toutes les quantités livrées !' }
+        : {
+            title: 'Les quantités sont bien dispatchées',
+            onSuccessTitle: 'Consulter',
+            onSuccess: () => history.push(`offres/${offerId}/commands`),
+        },
     });
   };
 
@@ -274,7 +314,45 @@ class Command extends PureComponent {
 
   componentWillMount() {
     this.onSearch();
+    this.loadOfferMetaData();
   }
+
+  loadOfferMetaData() {
+    const {
+      match: {
+        params: { offerId },
+      },
+      loadOfferMetaData,
+      user: { role },
+    } = this.props;
+    !!offerId &&
+      (role === SUPER_ADMIN || role === ADMIN) &&
+      loadOfferMetaData(offerId);
+  }
+
+  componentWillUnmount() {
+    const { clearSelectedOffer } = this.props;
+    clearSelectedOffer();
+  }
+
+  openPopConfirmation = ({ title, textContent, onClose, onSubmit }) => {
+    this.setState({
+      showPopConfirmation: true,
+      popConfirmationParams: {
+        title,
+        textContent,
+        onClose,
+        onSubmit,
+      },
+    });
+  };
+
+  closePopConfirmation = () => {
+    this.setState({
+      showPopConfirmation: false,
+      popConfirmationParams: {},
+    });
+  };
 
   render() {
     const {
@@ -283,23 +361,43 @@ class Command extends PureComponent {
       commandArticles,
       user,
       subCommands,
+      selectedOffer,
+      copyQtIntoModifiedQt,
     } = this.props;
-    const { selectedCommand, showInfoBar, infoBarParams } = this.state;
-
+    const {
+      selectedCommand,
+      showInfoBar,
+      infoBarParams,
+      showPopConfirmation,
+      popConfirmationParams,
+    } = this.state;
     return (
       <>
         <Typography component="h1" variant="h4" className={classes.root}>
-          Liste des commands
+          {this.forAdminCommands && 'Liste de mes commandes groupées'}
+          {this.canGroup && "List des commandss associées à l'offre : "}
+          {!this.forAdminCommands && !this.canGroup && 'Liste des commandes'}
         </Typography>
+        {this.canGroup && (
+          <div className={classes.root}>
+            <OfferMetaData offer={selectedOffer} />
+          </div>
+        )}
         <Divider variant="middle" className={classes.root} />
         <Search fields={this.searchFields} onSearch={this.onSearch} />
 
         {this.canGroup && (
           <div className={`${classes.root} ${classes.groupingContainer}`}>
+            {this.disableGroupingBtn && (
+              <span className={classes.groupingMsg}>
+                * Vous ne pouvez pas grouper jusqu'à ce que l'offre soit clôturé
+              </span>
+            )}
             <Button
               type="submit"
               variant="contained"
               color="primary"
+              disabled={this.disableGroupingBtn}
               onClick={this.goToGrouping}
             >
               Creer un grouping
@@ -321,15 +419,21 @@ class Command extends PureComponent {
                 list={commands}
                 user={user}
                 forAdmin={this.forAdminCommands}
-                dispatchQuantity={this.dispatchQuantity}
+                isAdmin={this.isAdmin}
+                dispatchQuantity={this.performDispatching}
                 updateCommand={this.updateCommandDetail}
                 selectCommand={this.showCommandDetail}
-                deleteCommand={this.deleteCommand}
+                deleteCommand={this.performDeleteCommand}
                 canDelete={!this.canGroup}
+                disableClientEditCommand={this.disableGroupingBtn}
                 showSubCommands={this.showSubCommandsModel}
               />
             )}
           </Table>
+          <GeneriqueDialog
+            open={showPopConfirmation}
+            {...popConfirmationParams}
+          />
           <Dialog
             title={
               !this.state.update
@@ -347,6 +451,8 @@ class Command extends PureComponent {
               onChange={this.onRowChange}
               readMode={!this.state.update}
               isAdmin={this.isAdmin}
+              copyQuantities={copyQtIntoModifiedQt}
+              forAdmin={this.forAdminCommands}
               metadata={selectedCommand}
               list={commandArticles}
             />
@@ -375,13 +481,17 @@ class Command extends PureComponent {
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators(actionCreators, dispatch);
+  bindActionCreators(
+    _.merge({}, actionCreators, { clearSelectedOffer }),
+    dispatch,
+  );
 
 const mapStateToProps = createStructuredSelector({
   commandPageable: getCommandsList(),
   commandArticles: getCommandArticles(),
   user: makeSelectUser(),
   subCommands: getSubCommands(),
+  selectedOffer: selectSelectedOffer(),
 });
 
 const withConnect = connect(

@@ -9,7 +9,6 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Table from '../../../../components/Table';
 
 const commandHeaders = [
-  { title: '-' },
   { title: 'Offre' },
   { title: 'Laboratoire' },
   { title: 'Date commande' },
@@ -22,37 +21,47 @@ const styles = theme => ({
   },
 });
 
-export default withStyles(styles)(({ classes, commands = [], onChange }) => (
-  <>
-    <Typography style={{ textAlign: 'center' }}>
-      Total :{' '}
-      {(
-        _.sumBy(
-          commands,
-          ({ selected, totalAmount }) => selected * totalAmount,
-        ) || 0
-      ).toFixed(2)}
-    </Typography>
-    <Table headers={commandHeaders} pageable={false}>
-      {commands.map((row, index) => (
-        <TableRow
-          {...{ className: row.isLinked ? classes.disabled : '' }}
-          key={row.commandId}
-        >
-          <TableCell>
-            <Checkbox
-              checked={!!row.selected}
-              onChange={({ target: { checked: selected } }) =>
-                !row.isLinked && onChange({ index, selected })
-              }
-            />
-          </TableCell>
-          <TableCell>{row.offerName}</TableCell>
-          <TableCell>{row.laboratoryName}</TableCell>
-          <TableCell>{moment(row.creationDate).format('YYYY-MM-DD')}</TableCell>
-          <TableCell>{row.totalAmount.toFixed(2)}</TableCell>
-        </TableRow>
-      ))}
-    </Table>
-  </>
-));
+export default withStyles(styles)(
+  ({ checkAllValue, onToggleCheckAll, classes, commands = [], onChange }) => (
+    <>
+      <Typography style={{ textAlign: 'center' }}>
+        Total :{' '}
+        {(
+          _.sumBy(
+            commands,
+            ({ selected, totalAmount }) => (selected ? totalAmount : 0),
+          ) || 0
+        ).toFixed(2)}
+      </Typography>
+      <Table
+        headers={_.concat(
+          [<Checkbox checked={checkAllValue} onChange={onToggleCheckAll} />],
+          commandHeaders,
+        )}
+        pageable={false}
+      >
+        {commands.map((row, index) => (
+          <TableRow
+            {...{ className: row.isLinked ? classes.disabled : '' }}
+            key={row.commandId}
+          >
+            <TableCell>
+              <Checkbox
+                checked={!!row.selected}
+                onChange={({ target: { checked: selected } }) =>
+                  !row.isLinked && onChange({ index, selected })
+                }
+              />
+            </TableCell>
+            <TableCell>{row.offerName}</TableCell>
+            <TableCell>{row.laboratoryName}</TableCell>
+            <TableCell>
+              {moment(row.creationDate).format('DD/MM/YYYY')}
+            </TableCell>
+            <TableCell>{row.totalAmount.toFixed(2)}</TableCell>
+          </TableRow>
+        ))}
+      </Table>
+    </>
+  ),
+);

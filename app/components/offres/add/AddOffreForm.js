@@ -11,6 +11,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TextField from '@material-ui/core/TextField/TextField';
 import TableCell from '@material-ui/core/TableCell/TableCell';
 import TableRow from '@material-ui/core/TableRow/TableRow';
+import moment from 'moment';
+import IconButton from '@material-ui/core/IconButton/IconButton';
+import FillIcon from '@material-ui/icons/ArrowDownward';
 import ErrorsArea from '../../ErrorsArea';
 import OffreInfo from './OffreInfo';
 import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
@@ -81,7 +84,25 @@ const styles = theme => ({
     textAlign: 'center',
     padding: `${theme.spacing.unit * 3}px  0px`,
   },
+  globalVarsContainer: {
+    width: 'auto',
+    display: 'flex',
+    alignItems: 'flex-end',
+  },
+  globalVarsIcon: { padding: '10px 10px' },
 });
+function editOnlyDateField(editMode, formData) {
+  if (formData == null) return false;
+  const { dateDebut, dateFin } = formData;
+  if (moment(new Date()).isBefore(dateDebut)) return false;
+  return moment(new Date()).isBetween(dateDebut, dateFin);
+}
+
+function disableAll(editMode, formData) {
+  if (formData == null) return false;
+  const { dateFin } = formData;
+  return moment(new Date()).isAfter(dateFin);
+}
 
 export function AddOffreForm(props) {
   const {
@@ -96,7 +117,18 @@ export function AddOffreForm(props) {
     handleArticleRowChange,
     rows,
     editMode,
+    originalFormData,
+    toggleAllSelection,
+    checkAllValue,
+    handleGlobalVarsChange,
+    applyGlobalVars,
   } = props;
+  const disableAllFields = disableAll(editMode, originalFormData);
+  const disableAllFieldsExceptDate = editOnlyDateField(
+    editMode,
+    originalFormData,
+  );
+  const onGlobalVarsChange = _.debounce(handleGlobalVarsChange, 500);
   return (
     <Paper className={classes.paper}>
       <Grid className={classes.headerGridContainer} container>
@@ -105,6 +137,9 @@ export function AddOffreForm(props) {
             {`Informations d'offres`}
           </Typography>
         </Grid>
+      </Grid>
+
+      <Grid className={classes.gridContainer} spacing={8} container>
         <Grid xs={12} item>
           <ErrorsArea
             variant="success"
@@ -112,10 +147,11 @@ export function AddOffreForm(props) {
             errors={errors.messages}
           />
         </Grid>
-      </Grid>
-      <Grid className={classes.gridContainer} spacing={8} container>
         <OffreInfo
+          disableAllWithoutDate={disableAllFieldsExceptDate}
+          disableAll={disableAllFields}
           formData={formData}
+          originalFormData={originalFormData}
           errors={errors.fields}
           onChange={handleFormDataChange}
           maxLength={30}
@@ -137,11 +173,59 @@ export function AddOffreForm(props) {
             ) : (
               <>
                 <Typography color="textSecondary">Laboratoire</Typography>
-                <span>
-                  {formData.laboratoryName}
-                </span>
+                <span>{formData.laboratoryName}</span>
               </>
             )}
+          </Grid>
+          <Grid xs={12} md={4} container item>
+            <Grid className={classes.globalVarsContainer} item xs={6}>
+              <TextField
+                noValidate
+                autoComplete="off"
+                name="globalDiscountPerArticle"
+                label="Global remise"
+                type="number"
+                onChange={({ target: { value } }) =>
+                  onGlobalVarsChange({ globalDiscountPerArticle: +value })
+                }
+                className={classes.offreInputs}
+                fullWidth
+                multiline
+                rows={1}
+                rowsMax={2}
+              />
+              <IconButton
+                onClick={() => applyGlobalVars('globalDiscountPerArticle','discount')}
+                className={classes.globalVarsIcon}
+                aria-label="Delete"
+              >
+                <FillIcon fontSize="small" />
+              </IconButton>
+            </Grid>
+            <Grid className={classes.globalVarsContainer} item xs={6}>
+              <TextField
+                noValidate
+                autoComplete="off"
+                name="globalMinQuantity"
+                label="Global min quantite"
+                type="number"
+                onChange={({ target: { value } }) =>
+                  onGlobalVarsChange({ globalMinQuantity: +value })
+                }
+                className={classes.offreInputs}
+                fullWidth
+                multiline
+                rows={1}
+                rowsMax={2}
+              />
+              <IconButton
+                onClick={() => applyGlobalVars('globalMinQuantity','minQuantity')}
+                className={classes.globalVarsIcon}
+                aria-label="Delete"
+              >
+                <FillIcon fontSize="small" />
+              </IconButton>
+            </Grid>
           </Grid>
         </OffreInfo>
 
@@ -155,31 +239,30 @@ export function AddOffreForm(props) {
           </Typography>
         </Grid>
         <Grid className={classes.gridContainer} spacing={8} container>
-          <Table className={classes.table} style={{ marginLeft: '9%' }}>
-            <colgroup>
-              <col width="1%" />
-              <col width="1%" />
-              <col width="1%" />
-              <col width="1%" />
-              <col width="5%" />
-              <col width="5%" />
-            </colgroup>
+          <Table className={classes.table} style={{ marginLeft: '1%' }}>
             <TableHead>
-              <ArticlesListTableHeader />
+              <ArticlesListTableHeader
+                checkAllValue={rows.length == 0 ? false : checkAllValue}
+                onCheckAllChange={toggleAllSelection}
+              />
             </TableHead>
             <TableBody>
               {rows.length != 0 ? (
                 rows.map((row, index) => (
                   <AticlesListTableRow
                     index={index}
-                    handleArticleRowChange={handleArticleRowChange}
+                    handleArticleRowChange={
+                      disableAllFields || disableAllFieldsExceptDate
+                        ? () => {}
+                        : handleArticleRowChange
+                    }
                     key={row.id}
                     row={row}
                   />
                 ))
               ) : (
                 <TableRow>
-                  <TableCell className={classes.rowsEmpty} colSpan={7}>
+                  <TableCell className={classes.rowsEmpty} colSpan={8}>
                     <span>Veuillez choisir une laboratoire </span>
                   </TableCell>
                 </TableRow>
@@ -195,7 +278,8 @@ export function AddOffreForm(props) {
             variant="contained"
             color="primary"
             className={classes.buttonajout}
-            onClick={handleSubmit}
+            onClick={handleSubmit(disableAllFieldsExceptDate)}
+            disabled={disableAllFields}
           >
             {editMode ? 'Mettre à jour ' : 'Valider'}
           </Button>

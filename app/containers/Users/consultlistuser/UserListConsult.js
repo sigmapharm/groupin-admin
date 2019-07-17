@@ -12,7 +12,7 @@ const styles = () => ({
   },
   textField: {
     color: '#fff000',
-    width: 200,
+    margin: '10px 20px',
   },
   input: {
     color: 'black',
@@ -64,7 +64,7 @@ export class UserListConsult extends React.PureComponent {
             }}
             margin="normal"
           />
-          <TextField
+          {/*<TextField
             disabled
             id="standard-disabled"
             label="Région"
@@ -74,7 +74,7 @@ export class UserListConsult extends React.PureComponent {
               className: classes.input,
             }}
             margin="normal"
-          />
+          />*/}
           <TextField
             disabled
             id="standard-disabled"
@@ -196,6 +196,7 @@ export class UserListConsult extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Adresse"
+            style={{ width: '300px' }}
             value={row.pharmacie.adresse}
             className={classes.textField}
             inputProps={{

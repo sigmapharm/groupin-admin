@@ -91,7 +91,7 @@ export function LoginForm(props) {
           {"S'authentifier"}
         </Button>
         <br />
-        <button
+        {/* <button
           type="button"
           onClick={() => {
             alert('Pas encore implémeté !'); // eslint-disable-line  no-alert
@@ -99,6 +99,7 @@ export function LoginForm(props) {
         >
           Mot de passe oublié ?
         </button>
+       */}
       </Paper>
       {error && <ErrorBar />}
     </main>

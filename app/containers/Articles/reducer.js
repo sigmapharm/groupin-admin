@@ -10,6 +10,7 @@ import {
   SUBMIT_DELETE_ARTICLE,
 } from './constants';
 import { CHANGE_OFFER_FORM_DATA } from '../Offres/constants';
+import { formatLaboratoireToLabelValue } from './add/utils';
 
 const articleFormDataInitialState = fromJS({
   reference: '',
@@ -66,8 +67,12 @@ function reducer(state = initialState, action) {
       });
     }
     case GET_ARTICLE_DETAILS_SUCCESS: {
+      const formData = action.payload;
+      formData.laboratoire = formatLaboratoireToLabelValue(
+        formData.laboratoire,
+      );
       return state.merge({
-        articleFormData: action.payload,
+        articleFormData: formData,
       });
     }
     case MANAGE_CREATE_ARTICLE_RESPONSE:

@@ -17,7 +17,7 @@ export function ArticleInfo(props) {
         <TextField
           name={fields.reference.name}
           label={fields.reference.label}
-          value={formData[fields.reference.name]}
+          value={formData[fields.reference.name] || ''}
           error={!!errors[fields.reference.name]}
           onChange={onChange}
           noValidate
@@ -33,7 +33,7 @@ export function ArticleInfo(props) {
         <TextField
           name={fields.nom.name}
           label={fields.nom.label}
-          value={formData[fields.nom.name]}
+          value={formData[fields.nom.name] || ''}
           error={!!errors[fields.nom.name]}
           onChange={onChange}
           noValidate
@@ -49,7 +49,7 @@ export function ArticleInfo(props) {
         <TextField
           name={fields.gamme.name}
           label={fields.gamme.label}
-          value={formData[fields.gamme.name]}
+          value={formData[fields.gamme.name] || ''}
           error={!!errors[fields.gamme.name]}
           onChange={onChange}
           noValidate
@@ -66,7 +66,7 @@ export function ArticleInfo(props) {
         <TextField
           name={fields.codebare.name}
           label={fields.codebare.label}
-          value={formData[fields.codebare.name]}
+          value={formData[fields.codebare.name] || ''}
           error={!!errors[fields.codebare.name]}
           onChange={onChange}
           noValidate
@@ -82,7 +82,7 @@ export function ArticleInfo(props) {
         <TextField
           name={fields.categorie.name}
           label={fields.categorie.label}
-          value={formData[fields.categorie.name]}
+          value={formData[fields.categorie.name] || ''}
           error={!!errors[fields.categorie.name]}
           onChange={onChange}
           noValidate
@@ -98,7 +98,7 @@ export function ArticleInfo(props) {
         <TextField
           name={fields.classe_therapeutique.name}
           label={fields.classe_therapeutique.label}
-          value={formData[fields.classe_therapeutique.name]}
+          value={formData[fields.classe_therapeutique.name] || ''}
           error={!!errors[fields.classe_therapeutique.name]}
           onChange={onChange}
           noValidate
@@ -114,7 +114,7 @@ export function ArticleInfo(props) {
         <TextField
           name={fields.forme_galenique.name}
           label={fields.forme_galenique.label}
-          value={formData[fields.forme_galenique.name]}
+          value={formData[fields.forme_galenique.name] || ''}
           error={!!errors[fields.forme_galenique.name]}
           onChange={onChange}
           noValidate
@@ -130,7 +130,7 @@ export function ArticleInfo(props) {
         <TextField
           name={fields.dci.name}
           label={fields.dci.label}
-          value={formData[fields.dci.name]}
+          value={formData[fields.dci.name] || ''}
           error={!!errors[fields.dci.name]}
           onChange={onChange}
           noValidate
@@ -142,12 +142,27 @@ export function ArticleInfo(props) {
           fullWidth
         />
       </Grid>
-
+      <Grid xs={12} md={6} item>
+        <TextField
+          name={fields.ppv.name}
+          label={fields.ppv.label}
+          value={formData[fields.ppv.name] || ''}
+          error={!!errors[fields.ppv.name]}
+          onChange={onChange}
+          noValidate
+          autoComplete="off"
+          className={classes.articleInputs}
+          inputProps={{
+            maxLength,
+          }}
+          fullWidth
+        />
+      </Grid>
       <Grid xs={12} md={6} item>
         <TextField
           name={fields.pph.name}
           label={fields.pph.label}
-          value={formData[fields.pph.name]}
+          value={formData[fields.pph.name] || ''}
           error={!!errors[fields.pph.name]}
           onChange={onChange}
           noValidate
@@ -163,7 +178,7 @@ export function ArticleInfo(props) {
         <TextField
           name={fields.tva.name}
           label={fields.tva.label}
-          value={formData[fields.tva.name]}
+          value={formData[fields.tva.name] || ''}
           error={!!errors[fields.tva.name]}
           onChange={onChange}
           noValidate

@@ -12,6 +12,7 @@ import logo from '../../images/logo-white.png';
 import MyMenu from './MyMenu';
 import { makeSelectUser } from '../App/selectors';
 import { logout } from '../App/actions';
+import WithRoles from '../WithRoles';
 
 class Header extends React.PureComponent {
   handleLogout = () => {
@@ -20,6 +21,7 @@ class Header extends React.PureComponent {
 
   render() {
     const { user, classes, position } = this.props;
+    const { username, role } = user || {};
     return (
       <AppBar className={classes.container} position={position}>
         <Toolbar>
@@ -28,14 +30,20 @@ class Header extends React.PureComponent {
           </div>
           <MyMenu user={user} />
           {!!user && (
-            <Fab
-              color="primary"
-              size="small"
-              aria-label="Logout"
-              onClick={this.handleLogout}
-            >
-              <LogoutIcon />
-            </Fab>
+            <>
+              <span style={{ marginRight: '10px' }}>
+                <i> {username || ''}</i> -{' '}
+                <b>{(role || '').split('_').join(' ')}</b>{' '}
+              </span>
+              <Fab
+                color="primary"
+                size="small"
+                aria-label="Logout"
+                onClick={this.handleLogout}
+              >
+                <LogoutIcon />
+              </Fab>
+            </>
           )}
         </Toolbar>
       </AppBar>

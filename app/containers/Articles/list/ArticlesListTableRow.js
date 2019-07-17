@@ -66,14 +66,10 @@ export class ArticlesListTableRow extends React.PureComponent {
           <TableCell>{row.categorie}</TableCell>
           <TableCell>{row.nom}</TableCell>
           <TableCell>
-            {addCommas(row.pph)
-              .replace(/,/g, ' ')
-              .replace('.', ',')}
+            {(_.get(row,'pph') || 0).toFixed(2) }
           </TableCell>
           <TableCell>
-            {addCommas(row.ppv)
-              .replace(/,/g, ' ')
-              .replace('.', ',')}
+            {(_.get(row,'ppv',0) || 0).toFixed(2)}
           </TableCell>
           <TableCell>
             {row.tva}
@@ -104,14 +100,13 @@ export class ArticlesListTableRow extends React.PureComponent {
             aria-labelledby="customized-dialog-title"
             open
           >
-            <MuiDialogTitle disableTypography>
+            <MuiDialogTitle style={{display:'flex',justifyContent:'space-between'}} disableTypography>
               <Typography variant="h5" color="primary">
                 {`Détails article`}
               </Typography>
               <IconButton
                 aria-label="Close"
                 color="primary"
-                style={closeStyle}
                 onClick={this.close}
               >
                 <CloseIcon />

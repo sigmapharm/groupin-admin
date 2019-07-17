@@ -30,6 +30,9 @@ const makeSelectquantiteMinimale = () =>
 const makeSelectstatus = () =>
   createSelector(offresState, state => state.get('status'));
 
+const getSelectedAllValue = () =>
+  createSelector(offresState, state => state.get('selectedAll'));
+
 const makeSelectlaboratoire = () =>
   createSelector(offresState, state => state.get('laboratoire'));
 
@@ -39,7 +42,15 @@ const makeSelectarticlesListlabo = () =>
 const selectOfferFormData = () =>
   createSelector(offresState, state => state.get('offerFormData').toJS());
 
+const selectOriginalOfferFormData = () =>
+  createSelector(offresState, state => state.get('originalOfferFormData').toJS());
+const selectSelectedOffer = () =>
+  createSelector(offresState, state => state.get('selectedOffer').toJS());
+
 export {
+  getSelectedAllValue,
+  selectOriginalOfferFormData,
+  selectSelectedOffer,
   selectOfferFormData,
   selectOfferArticleList,
   makeSelectOffresList,

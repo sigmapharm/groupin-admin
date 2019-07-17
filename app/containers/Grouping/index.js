@@ -10,6 +10,8 @@ import Step from '@material-ui/core/Step/Step';
 import Stepper from '@material-ui/core/Stepper/Stepper';
 import history from 'utils/history';
 import Paper from '@material-ui/core/Paper/Paper';
+import Typography from '@material-ui/core/Typography/Typography';
+import Divider from '@material-ui/core/Divider/Divider';
 import styles from './style';
 import authenticated from '../HOC/authenticated/authenticated';
 import CommandChooser from './components/commands';
@@ -17,7 +19,14 @@ import ArticlesAggregation from './components/articles';
 import ProviderChooser from './components/provider';
 
 import * as actionCreators from './store/actions.creators';
-import { getAllArticlesByCommands, getAllCommands } from './store/selectors';
+import {
+  getAllArticlesByCommands,
+  getAllCommands,
+  getAllProviders,
+  getCheckAllValue,
+} from './store/selectors';
+import Dialog from '../../components/Dialog/index';
+import ProviderForm from './components/provider/form';
 
 function getSteps() {
   return [
@@ -31,6 +40,7 @@ class Grouping extends React.PureComponent {
   state = {
     activeStep: 0,
     selectedProvider: null,
+    showProviderForm: false,
   };
 
   handleNext = () => {
@@ -50,6 +60,47 @@ class Grouping extends React.PureComponent {
       activeStep: activeStep + 1,
     });
   };
+
+  handleBack = () => {
+    const { activeStep } = this.state;
+    if (activeStep === 0) {
+      history.goBack();
+      return;
+    }
+    this.setState(state => ({
+      activeStep: state.activeStep - 1,
+    }));
+  };
+
+  onCommandSelectionChange = payload => {
+    const { changeCommandSelection } = this.props;
+    changeCommandSelection(payload);
+  };
+
+  onArticleQuantityChange = payload => {
+    const { changeAggregatedArticleQuantity } = this.props;
+    changeAggregatedArticleQuantity(payload);
+  };
+
+  closeProviderForm = () => {
+    this.setState({ showProviderForm: false });
+  };
+
+  openProviderForm = () => {
+    this.setState({ showProviderForm: true });
+  };
+
+  get activeNextStep() {
+    const { activeStep, selectedProvider } = this.state;
+    const { articles, commands } = this.props;
+    if (activeStep === 0)
+      return commands.length && _.some(commands, ({ selected }) => !!selected);
+    if (activeStep === 1) return articles.length;
+    if (activeStep === 2) {
+      return !!selectedProvider;
+    }
+    return false;
+  }
 
   submitCommandAggregate() {
     const {
@@ -76,30 +127,16 @@ class Grouping extends React.PureComponent {
     );
   }
 
-  handleBack = () => {
-    this.setState(state => ({
-      activeStep: state.activeStep - 1,
-    }));
-  };
-
-  onCommandSelectionChange = payload => {
-    const { changeCommandSelection } = this.props;
-    changeCommandSelection(payload);
-  };
-
-  onArticleQuantityChange = payload => {
-    const { changeAggregatedArticleQuantity } = this.props;
-    changeAggregatedArticleQuantity(payload);
-  };
-
   componentWillMount() {
     const {
       match: {
         params: { offerId },
       },
       loadAllCommandByOffer,
+      loadAllProviders,
     } = this.props;
     loadAllCommandByOffer(offerId);
+    loadAllProviders();
   }
 
   componentWillUnmount() {
@@ -107,25 +144,21 @@ class Grouping extends React.PureComponent {
     clearGroupingResources();
   }
 
-  get activeNextStep() {
-    const { activeStep, selectedProvider } = this.state;
-    const { articles, commands } = this.props;
-    if (activeStep === 0)
-      return commands.length && _.some(commands, ({ selected }) => !!selected);
-    if (activeStep === 1) return articles.length;
-    if (activeStep === 2) {
-      return !!selectedProvider;
-    }
-    return false;
-  }
-
   render() {
-    const { classes, commands, articles } = this.props;
+    const { classes, commands, articles, providers, checkAllValue,toggleCheckAll } = this.props;
     const steps = getSteps();
-    const { activeStep, selectedProvider } = this.state;
+    const { activeStep, selectedProvider, showProviderForm } = this.state;
 
     return (
       <Paper className={classes.root}>
+        <Typography
+          className={classes.titleContainer}
+          component="h1"
+          variant="h4"
+        >
+          Grouping
+        </Typography>
+        <Divider />
         <Stepper className={classes.stepperContainer} activeStep={activeStep}>
           {steps.map(label => {
             const props = {};
@@ -141,6 +174,8 @@ class Grouping extends React.PureComponent {
           {activeStep === 0 && (
             <CommandChooser
               commands={commands}
+              onToggleCheckAll={toggleCheckAll}
+              checkAllValue={checkAllValue}
               onChange={this.onCommandSelectionChange}
             />
           )}
@@ -153,16 +188,14 @@ class Grouping extends React.PureComponent {
           {activeStep === 2 && (
             <ProviderChooser
               value={selectedProvider}
+              providers={providers}
+              onAdd={this.openProviderForm}
               onChange={selectedProvider => this.setState({ selectedProvider })}
             />
           )}
           <div style={{ textAlign: 'center', marginTop: '10px' }}>
-            <Button
-              disabled={activeStep === 0}
-              onClick={this.handleBack}
-              className={classes.button}
-            >
-              Précedent
+            <Button onClick={this.handleBack} className={classes.button}>
+              {activeStep > 0 ? 'Précedent' : 'Annuler'}
             </Button>
             <Button
               variant="contained"
@@ -177,6 +210,14 @@ class Grouping extends React.PureComponent {
             </Button>
           </div>
         </div>
+        <Dialog
+          open={showProviderForm}
+          title="Ajouter un fourniseur"
+          showBtns={false}
+          onClose={this.closeProviderForm}
+        >
+          <ProviderForm onAddSuccess={this.closeProviderForm} />
+        </Dialog>
       </Paper>
     );
   }
@@ -188,6 +229,8 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = createStructuredSelector({
   commands: getAllCommands(),
   articles: getAllArticlesByCommands(),
+  providers: getAllProviders(),
+  checkAllValue: getCheckAllValue(),
 });
 
 const withConnect = connect(

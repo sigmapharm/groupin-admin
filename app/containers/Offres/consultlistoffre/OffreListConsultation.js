@@ -24,6 +24,8 @@ import {
   loadArticleOffer,
   submitClientCommand,
 } from '../actions';
+import { makeSelectUser } from '../../App/selectors';
+import { ADMIN, SUPER_ADMIN } from '../../AppHeader/Roles';
 
 const styles = theme => ({
   container: {
@@ -104,15 +106,19 @@ export class OffreListConsultation extends React.PureComponent {
   }
 
   get allowCommandSubmit() {
-    const { offerArticles, row } = this.props;
-    const { quantiteMin } = row;
+    const { offerArticles } = this.props;
     return _.every(
       offerArticles.filter(({ selected }) => !!selected),
-      ({ quantity, selected }) => selected && quantity >= quantiteMin,
+      ({ quantity, selected,minQuantity }) => selected && quantity >= minQuantity,
     );
   }
 
-
+  get forAdmin() {
+    const {
+      user: { role },
+    } = this.props;
+    return role === SUPER_ADMIN;
+  }
 
   componentWillMount() {
     const {
@@ -143,8 +149,6 @@ export class OffreListConsultation extends React.PureComponent {
       startDate,
     );
 
-
-
     return (
       <React.Fragment>
         <div className={classes.metaContainer}>
@@ -173,29 +177,27 @@ export class OffreListConsultation extends React.PureComponent {
             </Typography>
           </div>
           <div className={classes.metaItems}>
-            <Typography color="textSecondary">Quantité Minimal</Typography>
-            <Typography variant="h6" component="h2">
-              {row.quantiteMin}
-            </Typography>
-          </div>
-          <div className={classes.metaItems}>
-            <Typography color="textSecondary">Montant Par Objectif</Typography>
-            <Typography variant="h6" component="h2">
-              {row.montant}
-            </Typography>
-          </div>
-          <div className={classes.metaItems}>
             <Typography color="textSecondary">Status</Typography>
             <Typography variant="h6" component="h2">
               {row.status}
             </Typography>
           </div>
-          <div className={classes.metaItems}>
-            <Typography color="textSecondary">Montant Max</Typography>
-            <Typography variant="h6" component="h2">
-              {row.montantMax}
-            </Typography>
-          </div>
+          {this.forAdmin && (
+            <>
+              <div className={classes.metaItems}>
+                <Typography color="textSecondary">Montant Objectif</Typography>
+                <Typography variant="h6" component="h2">
+                  {row.montant}
+                </Typography>
+              </div>
+              <div className={classes.metaItems}>
+                <Typography color="textSecondary">Montant Max</Typography>
+                <Typography variant="h6" component="h2">
+                  {row.montantMax}
+                </Typography>
+              </div>
+            </>
+          )}
         </div>
         {/*
          <div
@@ -259,6 +261,17 @@ export class OffreListConsultation extends React.PureComponent {
                   }}
                 />
               </TableCell>
+              <TableCell>
+                Quantité Minimal
+                <hr
+                  style={{
+                    width: '45%',
+                    marginLeft: '0',
+                    height: '3px',
+                    backgroundColor: 'red',
+                  }}
+                />
+              </TableCell>
               {commandMode && (
                 <TableCell>
                   Quantité
@@ -284,6 +297,7 @@ export class OffreListConsultation extends React.PureComponent {
                 discount,
                 computedPPH,
                 quantity,
+                minQuantity,
                 hasError,
                 selected,
               }) => (
@@ -306,6 +320,7 @@ export class OffreListConsultation extends React.PureComponent {
                   <TableCell>{pph.toFixed(2)}</TableCell>
                   <TableCell>{discount}</TableCell>
                   <TableCell>{computedPPH.toFixed(2)}</TableCell>
+                  <TableCell>{minQuantity}</TableCell>
                   {commandMode && (
                     <TableCell>
                       <TextField
@@ -318,7 +333,7 @@ export class OffreListConsultation extends React.PureComponent {
                         inputProps={{ maxLength: 100 }}
                         onChange={this.handleQuantityChange(
                           id,
-                          row.quantiteMin,
+                          minQuantity
                         )}
                         fullWidth
                       />
@@ -329,7 +344,7 @@ export class OffreListConsultation extends React.PureComponent {
             )}
             {commandMode && (
               <TableRow>
-                <TableCell style={{ textAlign: 'right' }} colSpan={6}>
+                <TableCell style={{ textAlign: 'right' }} colSpan={7}>
                   Total :{' '}
                 </TableCell>
                 <TableCell style={{ textAlign: 'center' }}>
@@ -392,6 +407,7 @@ const mapDispatchToProps = dispatch => ({
 const withConnect = connect(
   createStructuredSelector({
     offerArticles: selectOfferArticleList(),
+    user: makeSelectUser(),
   }),
   mapDispatchToProps,
 );

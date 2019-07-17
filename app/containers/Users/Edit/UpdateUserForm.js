@@ -55,7 +55,7 @@ const styles = theme => ({
     marginLeft: '1%',
   },
   buttonajout: {
-    marginLeft: '-22%',
+    marginLeft: '-12%',
   },
 });
 

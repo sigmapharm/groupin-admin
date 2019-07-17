@@ -1,4 +1,4 @@
-import { all, takeLatest } from 'redux-saga/effects';
+import {all, put, takeLatest} from 'redux-saga/effects';
 import {
   DELETE_COMMAND,
   DISPATCH_QUANTITY_TO_SUB_COMMANDS,
@@ -16,6 +16,7 @@ import {
   updateCommandDetailSuccess,
   dispatchQuantitySuccess,
 } from './actions.creators';
+import requestWithAuth from '../../../services/request/request-with-auth';
 
 function* dispatchQuantityWorker({ payload: { id, callback } }) {
   const options = {
@@ -25,15 +26,17 @@ function* dispatchQuantityWorker({ payload: { id, callback } }) {
     },
   };
   try {
-    yield callApi(
+    yield requestWithAuth(`/commands/aggregate/${id}/dispatch`, options);
+    /* yield callApi(
       `/commands/aggregate/${id}/dispatch`,
       dispatchQuantitySuccess,
       options,
       null,
-    );
+    ); */
+    yield put(dispatchQuantitySuccess());
     yield callback && callback();
   } catch (e) {
-
+    yield callback && callback(e);
   }
 }
 

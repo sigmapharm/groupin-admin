@@ -36,8 +36,9 @@ import OffresListTableRow from './list/OffresListTableRow';
 
 import OffresListTableHeaders from './list/OffresListTableHeader';
 import WithRoles from '../WithRoles';
-import { ADMIN, SUPER_ADMIN } from '../AppHeader/Roles';
-//import { makeSelectoffreArticledtos } from '../App/selectors';
+import { ADMIN, MEMBRE, SUPER_ADMIN } from '../AppHeader/Roles';
+import { makeSelectUser } from '../App/selectors';
+// import { makeSelectoffreArticledtos } from '../App/selectors';
 
 /* istanbul ignore next */
 // eslint-disable-next-line no-unused-vars
@@ -98,6 +99,9 @@ const styles = theme => ({
 export class OffresList extends React.PureComponent {
   constructor(props) {
     super(props);
+    const {
+      user: { role },
+    } = props;
     this.state = {
       page: 0,
       rowsPerPage: 10,
@@ -106,7 +110,7 @@ export class OffresList extends React.PureComponent {
       dateFin: '',
       montant: '',
       quantiteMin: '',
-      status: '',
+      status: role === MEMBRE ? 'En cours' : '',
       laboratoire: '',
       articledtos: '',
     };
@@ -248,6 +252,7 @@ const mapStateToProps = createStructuredSelector({
   quantiteMinimale: makeSelectquantiteMinimale(),
   status: makeSelectstatus(),
   laboratoire: makeSelectlaboratoire(),
+  user: makeSelectUser(),
   // offreArticledtos: makeSelectoffreArticledtos(),
 });
 

@@ -8,7 +8,24 @@ import SearchIcon from '@material-ui/icons/Search';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid/Grid';
+import { createStructuredSelector } from 'reselect';
+import connect from 'react-redux/es/connect/connect';
 import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
+import {
+  makeSelectdateDebut,
+  makeSelectdateFin,
+  makeSelectdesignation,
+  makeSelectlaboratoire,
+  makeSelectmontantObjectif,
+  makeSelectOffresList,
+  makeSelectPage,
+  makeSelectquantiteMinimale,
+  makeSelectRowsPerPage,
+  makeSelectstatus,
+} from '../selectors';
+import { makeSelectUser } from '../../App/selectors';
+import { WithRoles } from '../../WithRoles';
+import { ADMIN, MEMBRE, SUPER_ADMIN } from '../../AppHeader/Roles';
 
 const styles = theme => ({
   root: {
@@ -38,12 +55,17 @@ const styles = theme => ({
 export class OffresListSearch extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { status: null };
+    const {
+      user: { role },
+    } = props;
+    this.state = {
+      status: role === MEMBRE ? { label: 'En cours', value: 'En cours' } : null,
+    };
   }
 
   render() {
     const { status } = this.state;
-    const { classes, handleChange, handleSearchOffres } = this.props; // eslint-disable-line
+    const { classes, handleChange, handleSearchOffres, user :{role} } = this.props; // eslint-disable-line
     return (
       <div className={classes.root}>
         <Typography component="h1" variant="h6">
@@ -72,7 +94,6 @@ export class OffresListSearch extends React.PureComponent {
           margin="normal"
           onChange={handleChange}
         /> */}
-
           <SingleAutoCompleteSelect
             className={classes.select}
             name="laboratoire"
@@ -105,6 +126,12 @@ export class OffresListSearch extends React.PureComponent {
   }
 }
 
+const mapStateToProps = createStructuredSelector({
+  user: makeSelectUser(),
+});
+
+const withConnect = connect(mapStateToProps);
+
 OffresListSearch.defaultProps = {};
 
 OffresListSearch.propTypes = {
@@ -113,4 +140,7 @@ OffresListSearch.propTypes = {
   handleSearchOffres: PropTypes.func.isRequired,
 };
 
-export default compose(withStyles(styles))(OffresListSearch);
+export default compose(
+  withConnect,
+  withStyles(styles),
+)(OffresListSearch);

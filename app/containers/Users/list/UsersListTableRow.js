@@ -144,18 +144,18 @@ export class UsersListTableRow extends React.PureComponent {
         </TableRow>
         {detailsOpen && (
           <Dialog maxWidth="lg" onClose={this.handleClose} open>
-            <MuiDialogTitle disableTypography>
+            <MuiDialogTitle style={{display:'flex',justifyContent:'space-between'}} disableTypography>
               <Typography variant="h5" color="primary">
                 {`Details Utilisateur`}
-                <IconButton
-                  color="primary"
-                  aria-label="Close"
-                  style={closeButton}
-                  onClick={this.closeDetails}
-                >
-                  <CloseIcon />
-                </IconButton>
               </Typography>
+              <IconButton
+                color="primary"
+                aria-label="Close"
+                style={closeButton}
+                onClick={this.closeDetails}
+              >
+                <CloseIcon />
+              </IconButton>
             </MuiDialogTitle>
             <MuiDialogContent>
               <UserListConsult row={row} />
@@ -164,18 +164,17 @@ export class UsersListTableRow extends React.PureComponent {
         )}
         {editMode && (
           <Dialog maxWidth="lg" onClose={this.handleClose} open>
-            <MuiDialogTitle disableTypography>
+            <MuiDialogTitle style={{display:'flex',justifyContent:'space-between'}} disableTypography>
               <Typography variant="h5" color="primary">
                 {`Modifier Utilisateur`}
-                <IconButton
-                  color="primary"
-                  aria-label="Close"
-                  style={closeButton}
-                  onClick={this.closeEditMode}
-                >
-                  <CloseIcon />
-                </IconButton>
               </Typography>
+              <IconButton
+                color="primary"
+                aria-label="Close"
+                onClick={this.closeEditMode}
+              >
+                <CloseIcon />
+              </IconButton>
             </MuiDialogTitle>
             <MuiDialogContent>
               <UpdateUserForm

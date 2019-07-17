@@ -1,5 +1,9 @@
-import { all, takeLatest } from 'redux-saga/effects';
+import { all, put, takeLatest } from 'redux-saga/effects';
 import {
+  CLONE_OFFER,
+  CLONE_OFFER_SUCCESS,
+  CLOSE_OFFER,
+  CLOSE_OFFER_SUCCESS,
   DELETE_OFFER,
   DELETE_OFFER_SUCCESS,
   GET_OFFER_WITH_DETAILS,
@@ -7,10 +11,12 @@ import {
   LOAD_ARTICLES_OFFER,
   MANAGE_CREATE_OFFRE_RESPONSE,
   SUBMIT_CLIENT_COMMAND,
-  SUBMIT_CLIENT_COMMAND_SUCCESS,
   SUBMIT_CREATE_OFFRE,
 } from './constants';
 import {
+  cloneOfferFail,
+  cloneOfferSuccess,
+  closeOfferSuccess,
   deleteOfferSuccess,
   getOfferWithDetailsSuccess,
   loadArticleOfferSuccess,
@@ -21,9 +27,42 @@ import {
 import { callApi } from '../../services/saga';
 import { GET_LABO_ARTICLES_LIST_ACTION } from '../App/constants';
 import { putArticleslaboList } from '../App/actions';
+import requestWithAuth from '../../services/request/request-with-auth';
+
+function* cloneOfferWorker({ payload: { offerId, filters, callback } }) {
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  try {
+    yield requestWithAuth(`/offres/${offerId}/clone`, options);
+    yield put(cloneOfferSuccess(filters));
+    yield callback && callback();
+  } catch (e) {
+    yield put(cloneOfferFail());
+    yield callback && callback(e);
+  }
+}
+
+function* closeOfferWorker({ payload: { offerId, filters, callback } }) {
+  const options = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  try {
+    yield requestWithAuth(`/offres/${offerId}/close`, options);
+    yield put(closeOfferSuccess(filters));
+    yield callback && callback();
+  } catch (e) {
+    yield callback && callback(e);
+  }
+}
 
 function* submitClientCommandWorker(action) {
-  console.log(action);
   const {
     callback,
     payload: { offerArticles, offerId },
@@ -43,17 +82,11 @@ function* submitClientCommandWorker(action) {
     ),
   };
   try {
-    yield callApi(
-      `/commands/client/${offerId}`,
-      submitClientCommandSuccess,
-      options,
-      null,
-      false,
-      false,
-      callback,
-    );
+    yield requestWithAuth(`/commands/client/${offerId}`, options);
+    yield put(submitClientCommandSuccess());
+    yield callback && callback();
   } catch (e) {
-    callback(null);
+    // TODO
   }
 }
 
@@ -65,9 +98,10 @@ function* getOfferWithDetailsWorker({ payload: { id } }) {
     },
   };
   try {
-    yield callApi(`/offres/${id}/`, getOfferWithDetailsSuccess, options, null);
+    const res = yield requestWithAuth(`/offres/${id}/full-details`, options);
+    yield put(getOfferWithDetailsSuccess(res));
   } catch (e) {
-    console.log({ e });
+    // TODO
   }
 }
 
@@ -75,12 +109,12 @@ function* deleteOfferWorker({ payload: { id, filters } }) {
   const options = {
     method: 'DELETE',
   };
-  yield callApi(
-    `/offres/${id}`,
-    deleteOfferSuccess.bind(null, filters),
-    options,
-    null,
-  );
+  try {
+    yield requestWithAuth(`/offres/${id}`, options);
+    yield put(deleteOfferSuccess(filters));
+  } catch (e) {
+    // TODO
+  }
 }
 
 function* loadArticleOfferWorker({ payload: { id } }) {
@@ -91,14 +125,18 @@ function* loadArticleOfferWorker({ payload: { id } }) {
     },
   };
   try {
-    yield callApi(
+    const res = yield requestWithAuth(`/offres/${id}/articles`, options);
+    yield put(loadArticleOfferSuccess(res));
+
+    /* yield callApi(
       `/offres/${id}/articles`,
       loadArticleOfferSuccess,
       options,
       null,
     );
+    */
   } catch (e) {
-    console.log({ e });
+    // TODO
   }
 }
 
@@ -129,6 +167,7 @@ function* addNewOffreWorker(action) {
       offerId,
       laboratoryId,
       laboratoire,
+      updateOnlyDate,
       ...payload
     },
     callback,
@@ -141,16 +180,21 @@ function* addNewOffreWorker(action) {
     },
     body: JSON.stringify({
       ...payload,
-      offerArticledtos: offerArticledtos.map(({ selected, id, discount }) => ({
-        articleId: id,
-        discount,
-        selected,
-      })),
+      offerArticledtos: updateOnlyDate
+        ? []
+        : offerArticledtos.map(({ selected, id, discount, minQuantity }) => ({
+          articleId: id,
+          discount,
+          selected,
+          minQuantity,
+        })),
     }),
   };
   try {
     yield callApi(
-      `/offres/${laboratoryId}${offerId ? `/${offerId}` : ''}`,
+      updateOnlyDate
+        ? `/offres/${offerId}/extend-end-date`
+        : `/offres/${laboratoryId}${offerId ? `/${offerId}` : ''}`,
       manageCreateOffreResponse,
       options,
       null,
@@ -164,13 +208,6 @@ function* addNewOffreWorker(action) {
 }
 
 function* manageCreateArticleResponseWorker(action) {
-  const { payload, callback } = action;
-  if (callback) {
-    callback(payload);
-  }
-}
-function* submitClientCommandSuccessWorker(action) {
-  console.log(action);
   const { payload, callback } = action;
   if (callback) {
     callback(payload);
@@ -197,10 +234,15 @@ function* laboArticlesListWorker(action) {
   }
 }
 
-function* offresListSagas() {
+function* offersListSagas() {
   yield all([
     takeLatest(
-      [GET_OFFRES_LIST_ACTION, DELETE_OFFER_SUCCESS],
+      [
+        GET_OFFRES_LIST_ACTION,
+        DELETE_OFFER_SUCCESS,
+        CLOSE_OFFER_SUCCESS,
+        CLONE_OFFER_SUCCESS,
+      ],
       offresListWorker,
     ),
     takeLatest(SUBMIT_CREATE_OFFRE, addNewOffreWorker),
@@ -210,8 +252,9 @@ function* offresListSagas() {
     takeLatest(DELETE_OFFER, deleteOfferWorker),
     takeLatest(GET_OFFER_WITH_DETAILS, getOfferWithDetailsWorker),
     takeLatest(SUBMIT_CLIENT_COMMAND, submitClientCommandWorker),
-    takeLatest(SUBMIT_CLIENT_COMMAND_SUCCESS, submitClientCommandSuccessWorker),
+    takeLatest(CLOSE_OFFER, closeOfferWorker),
+    takeLatest(CLONE_OFFER, cloneOfferWorker),
   ]);
 }
 
-export default offresListSagas;
+export default offersListSagas;

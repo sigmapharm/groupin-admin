@@ -14,7 +14,7 @@ const validate = (result, field, value) => {
       },
     };
   }
-  return {...result};
+  return { ...result };
 };
 
 export const validateFormData = formData => {
@@ -34,6 +34,12 @@ export const validateFormData = formData => {
     fields.dateFin,
     formData.dateFin,
   );
+  fields.dateFin.validator = validators.isBeforeValidation(formData.dateDebut);
+  validationResult = validate(
+    validationResult,
+    fields.dateFin,
+    formData.dateFin,
+  );
   validationResult = validate(
     validationResult,
     fields.montant,
@@ -41,8 +47,8 @@ export const validateFormData = formData => {
   );
   validationResult = validate(
     validationResult,
-    fields.quantiteMin,
-    formData.quantiteMin,
+    fields.globalDiscount,
+    formData.globalDiscount,
   );
 
   return validationResult;
@@ -83,7 +89,7 @@ export const fields = {
   },
   quantiteMin: {
     name: 'quantiteMin',
-    label: 'Quantité minimale',
+    label: 'Qté min',
     type: 'number',
     validator: validators.stringNotBlank,
   },
@@ -97,6 +103,12 @@ export const fields = {
     name: 'discount',
     label: 'Remise',
     type: 'number',
+  },
+  globalDiscount: {
+    name: 'globalDiscount',
+    label: 'Remise % appliquer au montant total',
+    type: 'number',
+    validator: validators.stringNotBlank,
   },
   offerComment: {
     name: 'comment',

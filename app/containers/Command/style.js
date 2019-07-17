@@ -42,7 +42,11 @@ export default theme => ({
     textAlign: 'center',
     padding: `${theme.spacing.unit * 3}px  0px`,
   },
-  groupingContainer:{
+  groupingContainer: {
     textAlign: 'right',
-  }
+  },
+  groupingMsg: {
+    color: 'red',
+    marginRight: '5px',
+  },
 });

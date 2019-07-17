@@ -6,13 +6,13 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Table from '../../../../components/Table';
 
 const articleHeaders = [
-  { title: 'label' },
-  { title: 'pph' },
-  { title: 'ppv' },
-  { title: 'tva' },
-  { title: 'pph remisé' },
-  { title: 'quantité' },
-  { title: 'quantité ajuster' },
+  { title: 'Article' },
+  { title: 'PPH' },
+  { title: 'PPV' },
+  { title: 'TVA' },
+  { title: 'PPH Remisé' },
+  { title: 'Quantité Commandée' },
+  { title: 'Quantité Ajustée' },
 ];
 
 const styles = theme => ({
@@ -33,7 +33,7 @@ export default withStyles(styles)(({ articles = [], onChange }) => (
           <TableCell>
             <TextField
               name="modifiedQuantity"
-              label="Quantité Ajusté"
+              label="Quantité Ajustée"
               value={article.modifiedQuantity || ''}
               type="number"
               onChange={({ target: { value } }) =>

@@ -14,6 +14,8 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import CloneIcon from '@material-ui/icons/FileCopy';
+import DealOffIcon from '@material-ui/icons/CalendarToday';
 import Tooltip from '@material-ui/core/Tooltip';
 import moment from 'moment';
 import history from 'utils/history';
@@ -21,7 +23,13 @@ import OffreListConsultation from '../consultlistoffre/OffreListConsultation';
 import Progressbar from '../consultlistoffre/Progress';
 import WithRoles from '../../WithRoles';
 import { ADMIN, MEMBRE, SUPER_ADMIN } from '../../AppHeader/Roles';
-import { clearOffer, deleteOffer } from '../actions';
+import {
+  clearOffer,
+  cloneOffer,
+  closeOffer,
+  deleteOffer,
+  selectOffer,
+} from '../actions';
 import GeneriqueDialog from '../../../components/Alert';
 
 const closeStyle = {
@@ -35,9 +43,29 @@ export class OffresListTableRow extends React.PureComponent {
     super(props);
     this.state = {
       isShown: false,
-      deleteDialogIsShown: false,
+      showPopConfirmation: false,
+      popConfirmationParams: {},
     };
   }
+
+  openPopConfirmation = ({ title, textContent, onClose, onSubmit }) => {
+    this.setState({
+      showPopConfirmation: true,
+      popConfirmationParams: {
+        title,
+        textContent,
+        onClose,
+        onSubmit,
+      },
+    });
+  };
+
+  closePopConfirmation = () => {
+    this.setState({
+      showPopConfirmation: false,
+      popConfirmationParams: {},
+    });
+  };
 
   setIsShown = isShown => {
     this.setState({
@@ -67,12 +95,7 @@ export class OffresListTableRow extends React.PureComponent {
 
   canEdit = offre => {
     const now = Date.now();
-    return (
-      // date de début < date d auj
-      !moment(now).isSameOrAfter(offre.dateDebut) ||
-      // active is true and date début < date auj
-      (moment(now).isSameOrBefore(offre.dateDebut) && offre.active === true)
-    );
+    return moment(now).isBefore(offre.dateFin);
   };
 
   edit = () => {
@@ -83,13 +106,51 @@ export class OffresListTableRow extends React.PureComponent {
     }
   };
 
+  canDelete = row => {
+    const { dateDebut } = row;
+    return moment(new Date()).isBefore(dateDebut);
+  };
+
   deleteRow = () => {
     const { row, filters } = this.props;
-    const canEdit = this.canEdit(row);
-    if (canEdit) {
+    if (this.canDelete(row)) {
       this.props.dispatch(deleteOffer({ id: row.id, filters }));
-      this.setState({ deleteDialogIsShown: false });
+      this.closePopConfirmation();
     }
+  };
+
+  get canCloseOffer() {
+    const {
+      row: { dateDebut, dateFin },
+    } = this.props;
+    return moment(new Date()).isBetween(new Date(dateDebut), new Date(dateFin));
+  }
+
+  closeOffer = () => {
+    const {
+      dispatch,
+      row: { id, dateDebut, dateFin },
+      filters,
+    } = this.props;
+    if (this.canCloseOffer)
+      dispatch(
+        closeOffer(id, filters, err => {
+          if (!err) this.closePopConfirmation();
+        }),
+      );
+  };
+
+  duplicateOffer = () => {
+    const {
+      row: { id },
+      dispatch,
+      filters,
+    } = this.props;
+    dispatch(
+      cloneOffer(id, filters, err => {
+        if (!err) this.closePopConfirmation();
+      }),
+    );
   };
 
   get allowOrderButton() {
@@ -103,17 +164,23 @@ export class OffresListTableRow extends React.PureComponent {
 
   render() {
     const { row } = this.props;
-    const { isShown, deleteDialogIsShown, commandMode } = this.state;
+    const {
+      isShown,
+      showPopConfirmation,
+      popConfirmationParams,
+      commandMode,
+    } = this.state;
     const now = Date.now();
     const startDate = new Date(row.dateDebut);
     const endDate = new Date(row.dateFin);
-    const hasStarted = moment(now).isSameOrAfter(startDate);
+    const hasStarted = moment(new Date()).isSameOrAfter(startDate);
     // const globalDuration = (startDate - endDate) / mSecondsPerDay;
     // const elapsedDuration = (now - endDate) / mSecondsPerDay;
 
     const totalDays = moment(endDate).diff(startDate, 'days');
     const elapsedDays = moment(new Date()).diff(startDate, 'days');
-    const progress = _.round((elapsedDays / totalDays) * 100, 2);
+    let progress = _.round((elapsedDays / totalDays) * 100, 2);
+    progress = progress > 100 ? 100 : progress;
     const remainingDays = totalDays - elapsedDays;
 
     // const status = Math.min(elapsedDuration / globalDuration, 1) * 100 || 0;
@@ -128,7 +195,7 @@ export class OffresListTableRow extends React.PureComponent {
             {moment(startDate).format('DD/MM/YYYY')}
           </TableCell>
           <TableCell style={tableCellsWidth}>
-            <Progressbar progress={progress} />
+            <Progressbar progress={hasStarted ? progress : 0} />
             {moment(endDate).format('DD/MM/YYYY')}
             <br />
             {remainingDays > 0 // eslint-disable-line
@@ -152,7 +219,9 @@ export class OffresListTableRow extends React.PureComponent {
                   onClick={this.command}
                   style={{ padding: 5 }}
                 >
-                  <ShoppingCart color="secondary" />
+                  <ShoppingCart
+                    color={!this.allowOrderButton ? 'disabled' : 'secondary'}
+                  />
                 </IconButton>
               </Tooltip>
             </WithRoles>
@@ -163,38 +232,56 @@ export class OffresListTableRow extends React.PureComponent {
                   onClick={this.edit}
                   style={{ padding: 5 }}
                 >
-                  <EditIcon color="primary" />
+                  <EditIcon
+                    color={this.canEdit(row) ? 'primary' : 'disabled'}
+                  />
                 </IconButton>
               </Tooltip>
               <Tooltip placement="top" title="Annuler">
                 <IconButton
-                  disabled={!this.canEdit(row)}
-                  onClick={() => this.setState({ deleteDialogIsShown: true })}
+                  disabled={!this.canDelete(row)}
+                  onClick={this.performDelete}
                   style={{ padding: 5 }}
                 >
-                  <HighlightOff color="error" />
+                  <HighlightOff
+                    color={this.canDelete(row) ? 'error' : 'disabled'}
+                  />
+                </IconButton>
+              </Tooltip>
+              <Tooltip placement="top" title="Clôturer l'offre">
+                <IconButton
+                  disabled={!this.canCloseOffer}
+                  onClick={this.performCloseOffer}
+                  style={{ padding: 5 }}
+                >
+                  <DealOffIcon
+                    color={this.canCloseOffer ? 'primary' : 'disabled'}
+                  />
                 </IconButton>
               </Tooltip>
               <Tooltip placement="top" title="List des commands">
                 <IconButton
-                  onClick={() => history.push(`/offres/${row.id}/commands`)}
+                  onClick={this.goToSubCommands(row)}
                   style={{ padding: 5 }}
                 >
                   <ListIcon color="primary" />
                 </IconButton>
               </Tooltip>
+              <Tooltip placement="top" title="Dupliquer une offre">
+                <IconButton
+                  onClick={this.performCloneOffer}
+                  style={{ padding: 5 }}
+                >
+                  <CloneIcon color="primary" />
+                </IconButton>
+              </Tooltip>
             </WithRoles>
           </TableCell>
         </TableRow>
-        {deleteDialogIsShown && (
-          <GeneriqueDialog
-            open={deleteDialogIsShown}
-            title="Suppression"
-            textContent="Êtes-vous sûr de supprimer cette offre ? "
-            onClose={() => this.setState({ deleteDialogIsShown: false })}
-            onSubmit={this.deleteRow}
-          />
-        )}
+        <GeneriqueDialog
+          open={showPopConfirmation}
+          {...popConfirmationParams}
+        />
         {isShown && (
           <Dialog
             maxWidth="lg"
@@ -227,14 +314,46 @@ export class OffresListTableRow extends React.PureComponent {
             </MuiDialogContent>
           </Dialog>
         )}
-
       </>
     );
   }
+
+  performDelete = () => {
+    this.openPopConfirmation({
+      title: 'Suppression',
+      textContent: 'Êtes-vous sûr de supprimer cette offre ? ',
+      onClose: this.closePopConfirmation,
+      onSubmit: this.deleteRow,
+    });
+  };
+
+  performCloseOffer = () => {
+    this.openPopConfirmation({
+      title: 'Clôturer',
+      textContent: 'Êtes-vous sûr de clôturer cette offre ? ',
+      onClose: this.closePopConfirmation,
+      onSubmit: this.closeOffer,
+    });
+  };
+
+  performCloneOffer = () => {
+    this.openPopConfirmation({
+      title: 'Dupliquer',
+      textContent: 'Êtes-vous sûr de dépliquer cette offre ? ',
+      onClose: this.closePopConfirmation,
+      onSubmit: this.duplicateOffer,
+    });
+  };
+
+  goToSubCommands = row => () => {
+    const { dispatch } = this.props;
+    dispatch(selectOffer(row));
+    history.push(`/offres/${row.id}/commands`);
+  };
 }
 
 OffresListTableRow.propTypes = {
   row: PropTypes.object.isRequired,
-  filters: PropTypes.any
+  filters: PropTypes.any,
 };
 export default OffresListTableRow;

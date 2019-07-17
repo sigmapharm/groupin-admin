@@ -3,6 +3,9 @@ import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider/Divider';
+import IconButton from '@material-ui/core/IconButton/IconButton';
+import DeleteIcon from '@material-ui/icons/ArrowDropDown';
 import { fields } from '../../../containers/Offres/add/validation';
 
 const styles = () => ({
@@ -18,7 +21,17 @@ const styles = () => ({
   },
 });
 export function OffreInfo(props) {
-  const { formData, errors, classes, onChange, maxLength, children } = props;
+  const {
+    formData,
+    errors,
+    classes,
+    onChange,
+    maxLength,
+    children,
+    disableAllWithoutDate,
+    disableAll,
+  } = props;
+  const disable = disableAllWithoutDate || disableAll;
   return (
     <>
       <Grid xs={12} md={6} item>
@@ -30,6 +43,7 @@ export function OffreInfo(props) {
           error={!!errors[fields.designation.name]}
           onChange={onChange}
           noValidate
+          disabled={disable}
           autoComplete="off"
           className={classes.offreInputs}
           inputProps={{
@@ -45,6 +59,7 @@ export function OffreInfo(props) {
           autoComplete="off"
           name={fields.dateDebut.name}
           // fields.dateDebut.label
+          disabled={disable}
           label={fields.dateDebut.label}
           value={formData[fields.dateDebut.name]}
           error={!!errors[fields.dateDebut.name]}
@@ -61,26 +76,9 @@ export function OffreInfo(props) {
       <Grid xs={12} md={6} item>
         <TextField
           required
-          name={fields.quantiteMin.name}
-          label={fields.quantiteMin.label}
-          value={formData[fields.quantiteMin.name]}
-          error={!!errors[fields.quantiteMin.name]}
-          onChange={onChange}
-          type={fields.quantiteMin.type}
           noValidate
           autoComplete="off"
-          className={classes.offreInputs}
-          inputProps={{
-            maxLength,
-          }}
-          fullWidth
-        />
-      </Grid>
-      <Grid xs={12} md={6} item>
-        <TextField
-          required
-          noValidate
-          autoComplete="off"
+          disabled={disableAll}
           name={fields.dateFin.name}
           label={fields.dateFin.label}
           value={formData[fields.dateFin.name]}
@@ -103,6 +101,7 @@ export function OffreInfo(props) {
           value={formData[fields.montant.name]}
           error={!!errors[fields.montant.name]}
           onChange={onChange}
+          disabled={disable}
           noValidate
           autoComplete="off"
           type={fields.montant.type}
@@ -122,6 +121,7 @@ export function OffreInfo(props) {
           type={fields.montantMax.type}
           value={formData[fields.montantMax.name]}
           onChange={onChange}
+          disabled={disable}
           className={classes.offreInputs}
           inputProps={{
             maxLength,
@@ -129,7 +129,6 @@ export function OffreInfo(props) {
           fullWidth
         />
       </Grid>
-        {children}
       <Grid xs={12} md={6} item>
         <TextField
           noValidate
@@ -139,16 +138,37 @@ export function OffreInfo(props) {
           value={formData[fields.offerComment.name]}
           onChange={onChange}
           className={classes.offreInputs}
+          disabled={disable}
           inputProps={{
             maxLength,
           }}
           fullWidth
           multiline
-          rows={1} rowsMax={2}
+          rows={1}
+          rowsMax={2}
         />
       </Grid>
-
-
+      <Grid xs={12} md={6} item>
+        <TextField
+          noValidate
+          autoComplete="off"
+          name={fields.globalDiscount.name}
+          label={fields.globalDiscount.label}
+          value={formData[fields.globalDiscount.name] || ''}
+          type={fields.globalDiscount.type}
+          error={!!errors[fields.globalDiscount.name]}
+          onChange={onChange}
+          className={classes.offreInputs}
+          inputProps={{
+            maxLength,
+          }}
+          fullWidth
+          multiline
+          rows={1}
+          rowsMax={2}
+        />
+      </Grid>
+      {children}
     </>
   );
 }

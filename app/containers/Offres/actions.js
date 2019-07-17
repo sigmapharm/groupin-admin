@@ -1,8 +1,16 @@
 import {
+  APPLY_GLOBAL_REMISE_OR_MIN_QT,
   CHANGE_ARTICLE_OFFER,
   CHANGE_OFFER_ARTICLE,
   CHANGE_OFFER_FORM_DATA,
   CLEAR_OFFER,
+  CLEAR_SELECTED_OFFER,
+  CLONE_OFFER,
+  CLONE_OFFER_FAIL,
+  CLONE_OFFER_SUCCESS,
+  CLOSE_OFFER,
+  CLOSE_OFFER_FAIL,
+  CLOSE_OFFER_SUCCESS,
   DELETE_OFFER,
   DELETE_OFFER_SUCCESS,
   GET_OFFER_WITH_DETAILS,
@@ -12,24 +20,27 @@ import {
   LOAD_ARTICLES_OFFER_SUCCESS,
   MANAGE_CREATE_OFFRE_RESPONSE,
   PUT_OFFRES_LIST_ACTION,
+  SELECT_OFFER,
+  SELECTED_OFFER,
   SUBMIT_CLIENT_COMMAND,
   SUBMIT_CLIENT_COMMAND_SUCCESS,
   SUBMIT_CREATE_OFFRE,
+  TOGGLE_CHECK_ALL,
 } from './constants';
 
 const getOffreList = values => ({
   type: GET_OFFRES_LIST_ACTION,
-  payload: {...values},
+  payload: { ...values },
 });
 
 const putOffresList = values => ({
   type: PUT_OFFRES_LIST_ACTION,
-  payload: {...values},
+  payload: { ...values },
 });
 
-const loadArticleOffer = ({id}) => ({
+const loadArticleOffer = ({ id }) => ({
   type: LOAD_ARTICLES_OFFER,
-  payload: {id},
+  payload: { id },
 });
 
 const loadArticleOfferSuccess = payload => ({
@@ -37,23 +48,29 @@ const loadArticleOfferSuccess = payload => ({
   payload,
 });
 
-const clearOffer = () => ({type: CLEAR_OFFER});
+const clearOffer = () => ({ type: CLEAR_OFFER });
 
-const deleteOffer = ({id, filters}) => ({
+const deleteOffer = ({ id, filters }) => ({
   type: DELETE_OFFER,
-  payload: {id, filters},
+  payload: { id, filters },
 });
 
-const deleteOfferSuccess = payload => ({type: DELETE_OFFER_SUCCESS, payload});
+const deleteOfferSuccess = payload => ({ type: DELETE_OFFER_SUCCESS, payload });
 
-const changeArticleOffer = ({index, id, selected, discount}) => ({
+const changeArticleOffer = ({
+  index,
+  id,
+  selected,
+  minQuantity,
+  discount,
+}) => ({
   type: CHANGE_ARTICLE_OFFER,
-  payload: {index, id, selected, discount},
+  payload: { index, id, selected, discount, minQuantity },
 });
 
-const getOfferWithDetails = ({id}) => ({
+const getOfferWithDetails = ({ id }) => ({
   type: GET_OFFER_WITH_DETAILS,
-  payload: {id},
+  payload: { id },
 });
 
 const getOfferWithDetailsSuccess = payload => ({
@@ -66,35 +83,92 @@ const changeOfferFormData = payload => ({
   payload,
 });
 
-const changeOfferArticle = (payload) => ({
+const changeOfferArticle = payload => ({
   type: CHANGE_OFFER_ARTICLE,
   payload,
 });
 
-const submitClientCommand = (payload,callback) => ({
+const submitClientCommand = (payload, callback) => ({
   type: SUBMIT_CLIENT_COMMAND,
-  payload,callback
+  payload,
+  callback,
 });
-const submitClientCommandSuccess = (response,callback) => ({
+const submitClientCommandSuccess = response => ({
   type: SUBMIT_CLIENT_COMMAND_SUCCESS,
-  payload:response,
-  callback
-
+  payload: response,
 });
 
 const manageCreateOffreResponse = (response, callback) => ({
   type: MANAGE_CREATE_OFFRE_RESPONSE,
-  payload: {...response},
+  payload: { ...response },
   callback,
 });
 
-const createOrUpdateOffre = (formData, offerArticledtos, callback) => ({
-  type: SUBMIT_CREATE_OFFRE,
-  payload: {...formData, offerArticledtos},
+const createOrUpdateOffre = (
+  formData,
+  offerArticledtos,
+  updateOnlyDate,
   callback,
+) => ({
+  type: SUBMIT_CREATE_OFFRE,
+  payload: { ...formData, offerArticledtos, updateOnlyDate },
+  callback,
+});
+
+const selectOffer = payload => ({
+  type: SELECT_OFFER,
+  payload,
+});
+const clearSelectedOffer = payload => ({
+  type: CLEAR_SELECTED_OFFER,
+  payload,
+});
+
+const closeOffer = (offerId, filters, callback) => ({
+  type: CLOSE_OFFER,
+  payload: { offerId, filters, callback },
+});
+
+const closeOfferSuccess = payload => ({
+  type: CLOSE_OFFER_SUCCESS,
+  payload,
+});
+const closeOfferFail = () => ({
+  type: CLOSE_OFFER_FAIL,
+});
+
+const cloneOffer = (offerId, filters, callback) => ({
+  type: CLONE_OFFER,
+  payload: { offerId, filters, callback },
+});
+
+const cloneOfferSuccess = filters => ({
+  type: CLONE_OFFER_SUCCESS,
+  payload: filters,
+});
+
+const cloneOfferFail = () => ({
+  type: CLONE_OFFER_FAIL,
+});
+
+const toggleCheckAll = () => ({
+  type: TOGGLE_CHECK_ALL,
+});
+
+const applyGlobalRemiseOrMinQt = payload => ({
+  type: APPLY_GLOBAL_REMISE_OR_MIN_QT,
+  payload,
 });
 
 export {
+  applyGlobalRemiseOrMinQt,
+  toggleCheckAll,
+  cloneOffer,
+  cloneOfferSuccess,
+  cloneOfferFail,
+  closeOffer,
+  closeOfferSuccess,
+  closeOfferFail,
   submitClientCommand,
   submitClientCommandSuccess,
   changeOfferArticle,
@@ -111,4 +185,6 @@ export {
   createOrUpdateOffre,
   loadArticleOffer,
   loadArticleOfferSuccess,
+  selectOffer,
+  clearSelectedOffer,
 };

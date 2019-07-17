@@ -13,17 +13,24 @@ import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
 import { validateFormData } from './validation';
 import {
+  applyGlobalRemiseOrMinQt,
   changeArticleOffer,
   changeOfferFormData,
   clearOffer,
   createOrUpdateOffre,
   getOfferWithDetails,
+  toggleCheckAll,
 } from '../actions';
 import AddOffreForm from '../../../components/offres/add/AddOffreForm';
 import { formatLaboratoireToLabelValue } from './utils';
 import { makeSelectLaboratoires } from '../../App/selectors';
 import { getLaboArticlesList } from '../../App/actions';
-import { makeSelectarticlesListlabo, selectOfferFormData } from '../selectors';
+import {
+  getSelectedAllValue,
+  makeSelectarticlesListlabo,
+  selectOfferFormData,
+  selectOriginalOfferFormData,
+} from '../selectors';
 
 const styles = theme => ({
   root: {
@@ -66,7 +73,10 @@ const initialState = {
     montantMax: '',
     laboratoire: '',
     comment: '',
+    globalDiscount: '',
   },
+  globalMinQuantity: '',
+  globalDiscountPerArticle: '',
   errors: {
     fields: {},
     messages: {},
@@ -80,9 +90,9 @@ export class AddOffre extends React.PureComponent {
     this.props.dispatch(changeOfferFormData({ [name]: value }));
   };
 
-  handleSubmit = e => {
+  handleSubmit = updateOnlyDate => e => {
     e.preventDefault();
-    const { formData,offerId } = this.state;
+    const { formData, offerId } = this.state;
     const { articlesListlabo, offerFormData } = this.props;
     const validation = validateFormData(offerFormData);
     if (validation && validation.messages && validation.fields) {
@@ -107,7 +117,12 @@ export class AddOffre extends React.PureComponent {
         },
       };
       this.props.dispatch(
-        createOrUpdateOffre(formattedData, articlesListlabo, this.handleSubmitResponse),
+        createOrUpdateOffre(
+          formattedData,
+          articlesListlabo,
+          updateOnlyDate,
+          this.handleSubmitResponse,
+        ),
       );
     }
   };
@@ -166,6 +181,11 @@ export class AddOffre extends React.PureComponent {
     this.state = { ...initialState };
   }
 
+  toggleAllSelection = () => {
+    const { dispatch } = this.props;
+    dispatch(toggleCheckAll());
+  };
+
   componentWillMount() {
     const {
       match: {
@@ -186,6 +206,16 @@ export class AddOffre extends React.PureComponent {
     this.props.dispatch(clearOffer());
   }
 
+  onGlobalVarsChange = payload => {
+    this.setState(payload);
+  };
+
+  applyGlobalVars = (key, keyPerArticle) => {
+    const { dispatch } = this.props;
+    const keyValue = _.get(this.state, key);
+    dispatch(applyGlobalRemiseOrMinQt({ [keyPerArticle]: keyValue }));
+  };
+
   render() {
     const {
       classes,
@@ -193,6 +223,8 @@ export class AddOffre extends React.PureComponent {
       articlesListlabo,
       selectedArticles,
       offerFormData,
+      originalOfferFormData,
+      checkAllValue,
     } = this.props;
     const { formData, editMode, errors, isSuccess } = this.state;
     const formattedLaboratoire = laboratoires.map(
@@ -205,10 +237,14 @@ export class AddOffre extends React.PureComponent {
             editMode={editMode}
             classes={classes}
             errors={errors}
+            toggleAllSelection={this.toggleAllSelection}
+            checkAllValue={checkAllValue}
             formData={offerFormData}
+            originalFormData={originalOfferFormData}
             rows={articlesListlabo}
             handleArticleRowChange={this.handleArticleRowChange}
-            // selectedRows={selectedArticles}
+            handleGlobalVarsChange={this.onGlobalVarsChange}
+            applyGlobalVars={this.applyGlobalVars}
             laboratoires={formattedLaboratoire}
             handleFormDataChange={this.handleFormDataChange}
             handleSubmit={this.handleSubmit}
@@ -253,6 +289,8 @@ const mapStateToProps = createStructuredSelector({
   laboratoires: makeSelectLaboratoires(),
   articlesListlabo: makeSelectarticlesListlabo(),
   offerFormData: selectOfferFormData(),
+  originalOfferFormData: selectOriginalOfferFormData(),
+  checkAllValue: getSelectedAllValue(),
 });
 
 const withConnect = connect(

@@ -8,8 +8,15 @@ import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import Checkbox from '@material-ui/core/Checkbox/Checkbox';
 import TextField from '@material-ui/core/TextField/TextField';
+import Tooltip from '@material-ui/core/Tooltip/Tooltip';
+import IconButton from '@material-ui/core/IconButton/IconButton';
+import ListIcon from '@material-ui/icons/ArrowRight';
+import {
+  adminCommandArticlesHeadersForUpdate,
+  articleHeaders,
+  articleHeadersForUpdate,
+} from '../../../headers';
 import Table from '../../../../../components/Table';
-import {articleHeaders, articleHeadersForUpdate} from '../../../headers';
 
 const styles = theme => ({
   metaContainer: {
@@ -32,117 +39,163 @@ const styles = theme => ({
 });
 
 export default withStyles(styles)(
-  ({ list, metadata, classes, readMode = true, onChange, isAdmin }) => (
-    <>
-      <div className={classes.metaContainer}>
-        <div className={classes.metaItems}>
-          <Typography color="textSecondary">Offre</Typography>
-          <Typography variant="h6" component="h2">
-            {metadata.offerName}
-          </Typography>
+  ({
+    list,
+    metadata,
+    classes,
+    readMode = true,
+    onChange,
+    isAdmin,
+    forAdmin,
+    copyQuantities,
+    globalDiscount
+  }) => {
+    const deliveredTotalAmount = _.sumBy(
+      list,
+      ({ modifiedQuantity, computedPPH, selected }) =>
+        selected * (modifiedQuantity || 0) * computedPPH || 0,
+    ) || 0;
+    const discount = (1-globalDiscount/100) || 1
+    return (
+      <>
+        <div className={classes.metaContainer}>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Offre</Typography>
+            <Typography variant="h6" component="h2">
+              {metadata.offerName}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Laboratoire</Typography>
+            <Typography variant="h6" component="h2">
+              {metadata.laboratoryName}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Date de creation</Typography>
+            <Typography variant="h6" component="h2">
+              {moment(metadata.creationDate).format('DD/MM/YYYY')}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Total Commande</Typography>
+            <Typography variant="h6" component="h2">
+              {(metadata.totalAmount || 1).toFixed(2)}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Total Commande Remisé</Typography>
+            <Typography variant="h6" component="h2">
+              {(metadata.totalAmount * discount || 1).toFixed(2)}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Total Livraison</Typography>
+            <Typography variant="h6" component="h2">
+              {deliveredTotalAmount.toFixed(2)}
+            </Typography>
+          </div><div className={classes.metaItems}>
+            <Typography color="textSecondary">Total Livraison Remisé</Typography>
+            <Typography variant="h6" component="h2">
+              {(deliveredTotalAmount*discount).toFixed(2)}
+            </Typography>
+          </div>
         </div>
-        <div className={classes.metaItems}>
-          <Typography color="textSecondary">Laboratoire</Typography>
-          <Typography variant="h6" component="h2">
-            {metadata.laboratoryName}
-          </Typography>
-        </div>
-        <div className={classes.metaItems}>
-          <Typography color="textSecondary">Date de creation</Typography>
-          <Typography variant="h6" component="h2">
-            {moment(metadata.creationDate).format('YYYY-MM-DD')}
-          </Typography>
-        </div>
-        <div className={classes.metaItems}>
-          <Typography color="textSecondary">Prix total</Typography>
-          <Typography variant="h6" component="h2">
-            {metadata.totalAmount.toFixed(2)}
-          </Typography>
-        </div>
-      </div>
-      <Divider variant="middle" />
-      <Table
-        headers={readMode ? articleHeaders : articleHeadersForUpdate}
-        pageable={false}
-      >
-        {!!list.length && (
-          <>
-            {list
-              .filter(({ selected }) => (readMode ? selected : true))
-              .map((article, index) => (
-                <TableRow key={article.offerArticleId}>
-                  {!readMode && (
+        <Divider variant="middle" />
+        <Table
+          headers={
+            readMode
+              ? articleHeaders
+              : isAdmin
+              ? forAdmin
+                ? adminCommandArticlesHeadersForUpdate(
+                  <>
+                    <span>QUANTITE</span>
+                    <Tooltip
+                      placement="top"
+                      title="Copier les quantités vers les quantités livrées"
+                    >
+                      <IconButton
+                        onClick={copyQuantities}
+                        style={{ padding: 5 }}
+                      >
+                        <ListIcon color="primary" />
+                      </IconButton>
+                    </Tooltip>
+                  </>,
+                )
+                : _.tail(articleHeadersForUpdate)
+              : articleHeadersForUpdate
+          }
+          pageable={false}
+        >
+          {!!list.length && (
+            <>
+              {list
+                .filter(({ selected }) => (readMode || (isAdmin && !forAdmin)  ? selected : true))
+                .map((article, index) => (
+                  <TableRow key={article.offerArticleId}>
+                    {!isAdmin &&
+                    !readMode && (
+                      <TableCell>
+                        <Checkbox
+                          onChange={({ target: { checked } }) =>
+                            onChange({ selected: checked, index })
+                          }
+                          checked={!!article.selected}
+                        />
+                      </TableCell>
+                    )}
+                    <TableCell>{article.label}</TableCell>
+                    <TableCell>{article.pph.toFixed(2)}</TableCell>
+                    <TableCell>{article.ppv.toFixed(2)}</TableCell>
+                    <TableCell>{article.tva.toFixed(2)}</TableCell>
+                    <TableCell>{article.computedPPH.toFixed(2)}</TableCell>
                     <TableCell>
-                      {' '}
-                      <Checkbox
-                        onChange={({ target: { checked } }) =>
-                          onChange({ selected: checked, index })
-                        }
-                        checked={!!article.selected}
-                      />{' '}
+                      {!readMode &&
+                      ((isAdmin && forAdmin) || (!isAdmin && !forAdmin)) ? (
+                        <TextField
+                          name="quantity"
+                          label="Quantité"
+                          value={article.quantity || ''}
+                          type="number"
+                          onChange={({ target: { value } }) =>
+                            onChange({ index, quantity: +value })
+                          }
+                          disabled={!article.selected}
+                          autoComplete="off"
+                          inputProps={{ maxLength: 100 }}
+                          fullWidth
+                        />
+                      ) : (
+                        article.quantity
+                      )}
                     </TableCell>
-                  )}
-                  <TableCell>{article.label}</TableCell>
-                  <TableCell>{article.pph.toFixed(2)}</TableCell>
-                  <TableCell>{article.ppv.toFixed(2)}</TableCell>
-                  <TableCell>{article.tva.toFixed(2)}</TableCell>
-                  <TableCell>{article.computedPPH.toFixed(2)}</TableCell>
-                  <TableCell>
-                    {readMode ? (
-                      article.quantity
-                    ) : (
-                      <TextField
-                        name="quantity"
-                        label="Quantité"
-                        value={article.quantity || ''}
-                        type="number"
-                        onChange={({ target: { value } }) =>
-                          onChange({ index, quantity: +value })
-                        }
-                        disabled={!article.selected}
-                        autoComplete="off"
-                        inputProps={{ maxLength: 100 }}
-                        fullWidth
-                      />
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {!isAdmin || readMode ? (
-                      article.modifiedQuantity || '-'
-                    ) : (
-                      <TextField
-                        name="quantity"
-                        label="Quantité"
-                        value={article.modifiedQuantity || ''}
-                        type="number"
-                        onChange={({ target: { value } }) =>
-                          onChange({ index, modifiedQuantity: +value })
-                        }
-                        disabled={!article.selected}
-                        autoComplete="off"
-                        inputProps={{ maxLength: 100 }}
-                        fullWidth
-                      />
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            <TableRow>
-              <TableCell
-                className={classes.totalAmount}
-                colSpan={articleHeaders.length + 1}
-              >
-                Total :{' '}
-                {_.sumBy(
-                  list,
-                  ({ quantity, computedPPH, selected }) =>
-                    selected * quantity * computedPPH || 0,
-                ).toFixed(2)}
-              </TableCell>
-            </TableRow>
-          </>
-        )}
-      </Table>
-    </>
-  ),
+                    <TableCell>
+                      {!isAdmin || readMode ? (
+                        article.modifiedQuantity || '-'
+                      ) : (
+                        <TextField
+                          name="quantity"
+                          label="Quantité"
+                          value={article.modifiedQuantity || ''}
+                          type="number"
+                          onChange={({ target: { value } }) =>
+                            onChange({ index, modifiedQuantity: +value })
+                          }
+                          disabled={!article.selected}
+                          autoComplete="off"
+                          inputProps={{ maxLength: 100 }}
+                          fullWidth
+                        />
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </>
+          )}
+        </Table>
+      </>
+    )
+  }
 );

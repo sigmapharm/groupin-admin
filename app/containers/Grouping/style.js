@@ -1,9 +1,14 @@
 export default theme => ({
   root: {
-    margin:'10px',
-    padding:"10px",
+    margin: '10px',
+    padding: '10px',
+  },
+  titleContainer: {
+    padding: '0.75em',
+    textAlign: 'center',
   },
   stepperContainer: {
+    marginTop: '1em',
     background: 'transparent',
   },
   button: {

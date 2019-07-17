@@ -3,7 +3,7 @@ export const commandHeadersWithOption = [
   { title: 'Laboratoire' },
   { title: 'Pharmacie' },
   { title: 'Date de commande' },
-  { title: 'Total' },
+  { title: 'Montant Command' },
   { title: 'Actions' },
 ];
 export const commandHeaders = [
@@ -20,7 +20,16 @@ export const articleHeaders = [
   { title: 'TVA' },
   { title: 'PPH REMISE' },
   { title: 'QUANTITE' },
-  { title: 'QUANTITE FOURNIE' },
+  { title: 'QUANTITE LIVREE' },
+];
+export const adminCommandArticlesHeadersForUpdate = (Component)=> [
+  { title: 'DESIGNATION' },
+  { title: 'PPH' },
+  { title: 'PPV' },
+  { title: 'TVA' },
+  { title: 'PPH REMISE' },
+  Component,
+  { title: 'QUANTITE LIVREE' },
 ];
 export const articleHeadersForUpdate = [
   { title: '' },
@@ -30,6 +39,6 @@ export const articleHeadersForUpdate = [
   { title: 'TVA' },
   { title: 'PPH REMISE' },
   { title: 'QUANTITE' },
-  { title: 'QUANTITE FOURNIE' },
+  { title: 'QUANTITE LIVREE' },
 ];
 

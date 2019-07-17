@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
 import ErrorsArea from '../../ErrorsArea';
 import ArticleInfo from './ArticleInfo';
+import {formatLaboratoireToLabelValue} from "../../../containers/Articles/add/utils";
 const styles = theme => ({
   root: {
     paddingLeft: theme.spacing.unit * 5,
@@ -80,6 +81,8 @@ export function AddArticleForm(props) {
             {`Informations d'articles`}
           </Typography>
         </Grid>
+      </Grid>
+      <Grid className={classes.gridContainer} spacing={8} container>
         <Grid xs={12} item>
           <ErrorsArea
             variant="success"
@@ -87,8 +90,6 @@ export function AddArticleForm(props) {
             errors={errors.messages}
           />
         </Grid>
-      </Grid>
-      <Grid className={classes.gridContainer} spacing={8} container>
         <ArticleInfo
           formData={formData}
           errors={errors.fields}
@@ -99,39 +100,29 @@ export function AddArticleForm(props) {
           }}
         />
         <Grid
-          {...(editMode ? {} : {className:classes.selectLaboratoireContainer})}
-
+          className={classes.selectLaboratoireContainer}
           xs={12}
-          md={6}
+          md={12}
           item
         >
-          {editMode ? (
-            <>
-              <Typography color="textSecondary">Laboratoire</Typography>
-              <span>{_.get(formData, 'laboratoire.nom')}</span>
-            </>
-          ) : (
-            <>
-              <SingleAutoCompleteSelect
-                className={classes.select}
-                name="laboratoire"
-                options={laboratoires}
-                onChange={handleLaboratoireSelectChange}
-                value={formData.laboratoire}
-                placeholder="Laboratoire"
-                isClearable
-              />
-              <Grid xs={1} item>
-                <Fab
-                  size="small"
-                  color="primary"
-                  onClick={handleAddLaboratoireClick}
-                >
-                  <AddIcon />
-                </Fab>
-              </Grid>
-            </>
-          )}
+          <SingleAutoCompleteSelect
+            className={classes.select}
+            name="laboratoire"
+            options={laboratoires}
+            onChange={handleLaboratoireSelectChange}
+            value={formData.laboratoire}
+            placeholder="Laboratoire"
+            isClearable
+          />
+          <Grid xs={1} item>
+            <Fab
+              size="small"
+              color="primary"
+              onClick={handleAddLaboratoireClick}
+            >
+              <AddIcon />
+            </Fab>
+          </Grid>
         </Grid>
         <Grid xs={12} md={6} item />
         <Grid xs={12} item />

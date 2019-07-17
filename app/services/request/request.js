@@ -1,13 +1,11 @@
+import _ from "lodash";
 import ApiPathService from '../api/ApiPathService';
 
 export const post = (url, options) =>
   request(url, { ...options, method: 'POST' });
 
 export const checkStatus = response => {
-  if (
-    (response.status >= 200 && response.status < 300) ||
-    response.status === 400
-  ) {
+  if (response.status >= 200 && response.status < 300) {
     return response;
   }
 
@@ -20,7 +18,8 @@ const request = (url, options) => {
   const baseApiPath = ApiPathService.getBasePath();
   return fetch(`${baseApiPath}${url}`, options)
     .then(checkStatus)
-    .then(res => res.json());
+    .then(res => res.text())
+    .then(e => _.isEmpty(e)  ? {} : JSON.parse(e));
 };
 
 export default request;

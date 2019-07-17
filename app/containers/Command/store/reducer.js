@@ -3,7 +3,9 @@ import {
   CHANGE_COMMAND_ARTICLE,
   CLEAR_AGGREGATE_SUB_COMMANDS,
   CLEAR_COMMAND_ARTICLES,
-  LOAD_AGGREGATE_SUB_COMMANDS, LOAD_AGGREGATE_SUB_COMMANDS_SUCCESS,
+  COPY_QUANTITIES_INTO_MODIFIED_QUANTITES,
+  LOAD_AGGREGATE_SUB_COMMANDS,
+  LOAD_AGGREGATE_SUB_COMMANDS_SUCCESS,
   LOAD_COMMAND_ARTICLES_SUCCESS,
   LOAD_COMMANDS_WITH_FILTERS_SUCCESS,
   UPDATE_COMMAND_DETAIL_SUCCESS,
@@ -30,6 +32,18 @@ function reducer(state = initialState, action) {
     case LOAD_COMMAND_ARTICLES_SUCCESS: {
       return state.merge({
         commandArticlesDetail: action.payload,
+      });
+    }
+    case COPY_QUANTITIES_INTO_MODIFIED_QUANTITES: {
+      const commandArticlesDetail = state.get('commandArticlesDetail').toJS();
+      return state.merge({
+        commandArticlesDetail: commandArticlesDetail.map(
+          ({ quantity, modifiedQuantity, ...e }) => ({
+            ...e,
+            quantity,
+            modifiedQuantity: quantity,
+          }),
+        ),
       });
     }
     case UPDATE_COMMAND_DETAIL_SUCCESS:

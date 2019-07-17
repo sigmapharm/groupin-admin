@@ -1,4 +1,4 @@
-import validators from '../../../core/validation'
+import validators from '../../../core/validation';
 
 const validate = (result, field, value) => {
   const validation = field.validator(value);
@@ -24,27 +24,31 @@ export const validateFormData = formData => {
     fields.reference,
     formData.reference,
   );
-  validationResult = validate(
-    validationResult,
-    fields.nom,
-    formData.nom,
-  );
+  validationResult = validate(validationResult, fields.nom, formData.nom);
   validationResult = validate(validationResult, fields.gamme, formData.gamme);
-  validationResult = validate(validationResult, fields.codebare, formData.codebare);
-  validationResult = validate(validationResult, fields.categorie, formData.categorie);
-  validationResult = validate(validationResult, fields.classe_therapeutique, formData.classe_therapeutique);
-  validationResult = validate(validationResult, fields.forme_galenique, formData.forme_galenique);
+  validationResult = validate(
+    validationResult,
+    fields.codebare,
+    formData.codebare,
+  );
+  validationResult = validate(
+    validationResult,
+    fields.categorie,
+    formData.categorie,
+  );
+  validationResult = validate(
+    validationResult,
+    fields.classe_therapeutique,
+    formData.classe_therapeutique,
+  );
+  validationResult = validate(
+    validationResult,
+    fields.forme_galenique,
+    formData.forme_galenique,
+  );
   validationResult = validate(validationResult, fields.dci, formData.dci);
-  validationResult = validate(
-    validationResult,
-    fields.pph,
-    formData.pph,
-  );
-  validationResult = validate(
-    validationResult,
-    fields.tva,
-    formData.tva,
-  );
+  validationResult = validate(validationResult, fields.pph, formData.pph);
+  validationResult = validate(validationResult, fields.tva, formData.tva);
   validationResult = validate(
     validationResult,
     fields.laboratoire,
@@ -66,7 +70,7 @@ export const fields = {
   },
   gamme: {
     name: 'gamme',
-    label: 'Gamme '+  "d'" + 'article',
+    label: 'Gamme ' + "d'" + 'article',
     validator: validators.stringNotBlank,
   },
   codebare: {
@@ -100,13 +104,17 @@ export const fields = {
     label: 'TVA',
     validator: validators.stringNotBlank,
   },
+  ppv: {
+    name: 'ppv',
+    label: 'PPV',
+    validator: validators.stringNotBlank,
+  },
   dci: {
     name: 'dci',
     label: 'DCI',
     validator: validators.stringNotBlank,
   },
-
-laboratoire: {
+  laboratoire: {
     name: 'laboratoire',
     label: 'Laboratoire',
     validator: validators.selectNotBlank,
@@ -114,12 +122,9 @@ laboratoire: {
   neccissite_prescription: {
     name: 'neccissite_prescription',
     label: 'avec préscription',
-
   },
   produit_Marche: {
     name: ' produit_Marche',
     label: 'produit Marché',
-
   },
-
 };

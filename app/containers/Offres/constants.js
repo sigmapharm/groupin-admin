@@ -21,7 +21,22 @@ export const GET_OFFER_WITH_DETAILS = '[OFFER] : Get Offer With Details';
 export const GET_OFFER_WITH_DETAILS_SUCCESS =
   '[OFFER] : Get Offer With Details Success';
 
-export const CHANGE_OFFER_ARTICLE = '[OFFER] : Change  Offer Article  (check,quantity)'
-export const SUBMIT_CLIENT_COMMAND = '[OFFER] : submit client command'
-export const SUBMIT_CLIENT_COMMAND_SUCCESS = '[OFFER] : submit client command SUCCESS'
+export const CHANGE_OFFER_ARTICLE =
+  '[OFFER] : Change  Offer Article  (check,quantity)';
+export const SUBMIT_CLIENT_COMMAND = '[OFFER] : submit client command';
+export const SUBMIT_CLIENT_COMMAND_SUCCESS =
+  '[OFFER] : submit client command SUCCESS';
+export const SELECT_OFFER = '[OFFER] : select offer ';
+export const CLEAR_SELECTED_OFFER = '[OFFER] : clear selected offer ';
+export const CLOSE_OFFER = '[OFFER] : close offer';
+export const CLOSE_OFFER_SUCCESS = '[OFFER] : close offer success';
 
+export const CLONE_OFFER = '[OFFER] : clone offer';
+
+export const CLONE_OFFER_SUCCESS = '[OFFER] : clone offer success';
+
+export const CLONE_OFFER_FAIL = '[OFFER] : clone offer fail';
+
+export const TOGGLE_CHECK_ALL = '[OFFER] : toggle check all offer articles';
+
+export const APPLY_GLOBAL_REMISE_OR_MIN_QT = '[OFFER] : apply global remise or min quantity'

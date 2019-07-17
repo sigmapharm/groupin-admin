@@ -72,6 +72,7 @@ const initialState = {
     classe_therapeutique: '',
     dci: '',
     pph: '',
+    ppv: '',
     tva: '',
     neccissite_prescription: '',
     produit_Marche: '',
@@ -84,7 +85,6 @@ const initialState = {
   isSuccess: false,
   isAddLaboratoire: false,
 };
-
 
 // Change component name later
 export class AddArticle extends React.PureComponent {
@@ -146,17 +146,11 @@ export class AddArticle extends React.PureComponent {
       const formattedData = {
         ...articleFormData,
         articleId,
-        laboratoire: editMode
-          ? articleFormData.laboratoire
-          : {
-            id:
-                articleFormData.laboratoire &&
-                articleFormData.laboratoire.value,
-          },
+        laboratoire: {
+          id: _.get(articleFormData, 'laboratoire.value'),
+        },
       };
-      this.props.dispatch(
-        createArticle(formattedData, this.handleSubmitResponse),
-      );
+       this.props.dispatch(createArticle(formattedData, this.handleSubmitResponse));
     }
   };
 

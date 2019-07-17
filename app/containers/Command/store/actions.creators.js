@@ -70,3 +70,19 @@ export const dispatchQuantity = ({ commandId, callback }) => ({
 export const dispatchQuantitySuccess = () => ({
   type: actionsType.DISPATCH_QUANTITY_TO_SUB_COMMANDS_SUCCESS,
 });
+
+export const loadOfferMetaData = offerId => ({
+  type: actionsType.LOAD_OFFER_META_DATA,
+  payload: { offerId },
+});
+export const loadOfferMetaDataSuccess = payload => ({
+  type: actionsType.LOAD_OFFER_META_DATA_SUCCESS,
+  payload,
+});
+export const loadOfferMetaDataFail = () => ({
+  type: actionsType.LOAD_OFFER_META_DATA_FAIL,
+});
+
+export const copyQtIntoModifiedQt = () => ({
+  type: actionsType.COPY_QUANTITIES_INTO_MODIFIED_QUANTITES,
+});
