@@ -158,6 +158,7 @@ export function OffreInfo(props) {
           type={fields.globalDiscount.type}
           error={!!errors[fields.globalDiscount.name]}
           onChange={onChange}
+          disabled={disable}
           className={classes.offreInputs}
           inputProps={{
             maxLength,
