@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton/IconButton';
 import HighlightOff from '@material-ui/icons/HighlightOff';
 import Search from '@material-ui/icons/Search';
 import EditIcon from '@material-ui/icons/Edit';
+import PrintIcon from '@material-ui/icons/Print';
 import Tooltip from '@material-ui/core/Tooltip';
 import ListIcon from '@material-ui/icons/List';
 import CheckIcon from '@material-ui/icons/Check';
@@ -16,6 +17,7 @@ export default ({
   deleteCommand,
   selectCommand,
   updateCommand,
+  printCommand,
   dispatchQuantity,
   showSubCommands,
   forAdmin,
@@ -34,6 +36,14 @@ export default ({
         <TableCell>{row.totalAmount.toFixed(2)}</TableCell>
         {withOptions && (
           <TableCell>
+            <Tooltip placement="top" title="Imprimer la commande">
+              <IconButton
+                onClick={printCommand(row)}
+                style={{ padding: 5 }}
+              >
+                <PrintIcon color="primary"/>
+              </IconButton>
+            </Tooltip>
             <Tooltip placement="top" title="Modifier la commande">
               <IconButton
                 disabled={(!isAdmin && !row.canDelete) || disableClientEditCommand}

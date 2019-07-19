@@ -86,3 +86,8 @@ export const loadOfferMetaDataFail = () => ({
 export const copyQtIntoModifiedQt = () => ({
   type: actionsType.COPY_QUANTITIES_INTO_MODIFIED_QUANTITES,
 });
+
+export const downloadCommandForm = ({commandId, callback}) => ({
+  type: actionsType.DOWNLOAD_COMMAND_FORM,
+  payload: { commandId, callback },
+});

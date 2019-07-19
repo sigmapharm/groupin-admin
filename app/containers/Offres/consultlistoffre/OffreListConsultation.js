@@ -16,6 +16,7 @@ import Button from '@material-ui/core/Button/Button';
 import Grid from '@material-ui/core/Grid/Grid';
 import Checkbox from '@material-ui/core/Checkbox/Checkbox';
 import history from 'utils/history';
+import _ from 'lodash';
 import InfoSnackBar from '../../../components/Snackbar/InfoBar';
 import { selectOfferArticleList } from '../selectors';
 // import { makeSelectoffreArticledtos } from '../../App/selectors';

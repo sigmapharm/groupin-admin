@@ -19,7 +19,7 @@ import OffreInfo from './OffreInfo';
 import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
 import ArticlesListTableHeader from './ArticlesHeader';
 import AticlesListTableRow from './ArticlesRow';
-import { fields } from '../../../containers/Offres/add/validation';
+import _ from 'lodash';
 
 const styles = theme => ({
   root: {

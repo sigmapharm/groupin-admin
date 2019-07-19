@@ -10,6 +10,7 @@ import {
   LOAD_COMMANDS_WITH_FILTERS_SUCCESS,
   UPDATE_COMMAND_DETAIL_SUCCESS,
 } from './actions';
+import _ from 'lodash';
 
 export const initialState = fromJS({
   commandsList: {

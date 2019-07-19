@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _ from 'lodash';
 import ApiPathService from '../api/ApiPathService';
 
 export const post = (url, options) =>
@@ -19,7 +19,13 @@ const request = (url, options) => {
   return fetch(`${baseApiPath}${url}`, options)
     .then(checkStatus)
     .then(res => res.text())
-    .then(e => _.isEmpty(e)  ? {} : JSON.parse(e));
+    .then(e => (_.isEmpty(e) ? {} : JSON.parse(e)));
+};
+const requestBlob = (url, options) => {
+  const baseApiPath = ApiPathService.getBasePath();
+  return fetch(`${baseApiPath}${url}`, options)
+    .then(checkStatus)
+    .then(res => res.blob());
 };
 
-export default request;
+export { request, requestBlob };

@@ -1,7 +1,8 @@
-import {all, put, takeLatest} from 'redux-saga/effects';
+import { all, put, takeLatest } from 'redux-saga/effects';
 import {
   DELETE_COMMAND,
   DISPATCH_QUANTITY_TO_SUB_COMMANDS,
+  DOWNLOAD_COMMAND_FORM,
   LOAD_AGGREGATE_SUB_COMMANDS,
   LOAD_COMMAND_ARTICLES,
   LOAD_COMMANDS_WITH_FILTERS,
@@ -18,6 +19,22 @@ import {
 } from './actions.creators';
 import requestWithAuth from '../../../services/request/request-with-auth';
 
+function* downloadCommandFormWorker({ payload: { commandId, callback } }) {
+  const options = {
+    method: 'GET',
+  };
+  try {
+    const blob = yield requestWithAuth(
+      `/commands/${commandId}/print`,
+      options,
+      true,
+    );
+    yield callback && callback(null, blob);
+  } catch (e) {
+    yield callback && callback(err);
+  }
+}
+
 function* dispatchQuantityWorker({ payload: { id, callback } }) {
   const options = {
     method: 'POST',
@@ -27,12 +44,6 @@ function* dispatchQuantityWorker({ payload: { id, callback } }) {
   };
   try {
     yield requestWithAuth(`/commands/aggregate/${id}/dispatch`, options);
-    /* yield callApi(
-      `/commands/aggregate/${id}/dispatch`,
-      dispatchQuantitySuccess,
-      options,
-      null,
-    ); */
     yield put(dispatchQuantitySuccess());
     yield callback && callback();
   } catch (e) {
@@ -140,6 +151,7 @@ function* loadCommandsWorker({
 
 export default function* commandListSagas() {
   yield all([
+    takeLatest(DOWNLOAD_COMMAND_FORM, downloadCommandFormWorker),
     takeLatest(LOAD_COMMANDS_WITH_FILTERS, loadCommandsWorker),
     takeLatest(DELETE_COMMAND, deleteCommandWorker),
     takeLatest(LOAD_COMMAND_ARTICLES, loadCommandArticleWorker),

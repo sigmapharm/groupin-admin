@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import _ from 'lodash';
 const groupingState = store => store.get('grouping');
 const globalState = store => store.get('global');
 

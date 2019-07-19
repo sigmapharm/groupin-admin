@@ -34,3 +34,5 @@ export const LOAD_OFFER_META_DATA_FAIL =
   '[Commands] : Load offer meta data fail';
 export const COPY_QUANTITIES_INTO_MODIFIED_QUANTITES =
   '[Commands] : Copy quantities into modified quantities';
+
+export const DOWNLOAD_COMMAND_FORM = '[Commands] : download command form pdf ';

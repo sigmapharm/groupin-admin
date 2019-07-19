@@ -47,7 +47,7 @@ function* getConfigurationWorker() {
     yield getLaboratoiresWorker();
     yield put(setNetworkingInactive());
   } catch (e) {
-    console.log(e);
+
     // eslint-disable-line
   }
 }

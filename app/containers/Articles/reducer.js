@@ -11,6 +11,7 @@ import {
 } from './constants';
 import { CHANGE_OFFER_FORM_DATA } from '../Offres/constants';
 import { formatLaboratoireToLabelValue } from './add/utils';
+import _ from 'lodash';
 
 const articleFormDataInitialState = fromJS({
   reference: '',

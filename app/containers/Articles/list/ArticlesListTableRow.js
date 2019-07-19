@@ -18,6 +18,7 @@ import ArticleListConsultationn from '../consultlistarticle/ArticleListConsultat
 import authenticated from '../../HOC/authenticated/authenticated';
 import WithRoles from '../../WithRoles';
 import { SUPER_ADMIN } from '../../AppHeader/Roles';
+import _ from 'lodash';
 
 const closeStyle = {
   marginLeft: '59rem',

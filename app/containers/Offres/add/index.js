@@ -31,6 +31,7 @@ import {
   selectOfferFormData,
   selectOriginalOfferFormData,
 } from '../selectors';
+import _ from 'lodash';
 
 const styles = theme => ({
   root: {

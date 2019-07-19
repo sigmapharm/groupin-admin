@@ -38,11 +38,7 @@ const selectRegions = () =>
 
 const selectCities = () =>
   createSelector(selectApp, appState =>
-    _((appState && appState.toJS().regions) || [])
-      .map('cities')
-      .flatMap()
-      .value(),
-  );
+   _.flatMap( _.map((appState && appState.toJS().regions) || [],'cities')));
 
 export {
   selectRegions,

@@ -30,6 +30,7 @@ export const SELECT_OFFER = '[OFFER] : select offer ';
 export const CLEAR_SELECTED_OFFER = '[OFFER] : clear selected offer ';
 export const CLOSE_OFFER = '[OFFER] : close offer';
 export const CLOSE_OFFER_SUCCESS = '[OFFER] : close offer success';
+export const CLOSE_OFFER_FAIL = '[OFFER] : close offer fail';
 
 export const CLONE_OFFER = '[OFFER] : clone offer';
 

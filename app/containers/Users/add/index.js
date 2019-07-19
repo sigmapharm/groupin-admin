@@ -21,6 +21,7 @@ import {makeSelectPharmacies, selectCities} from '../../App/selectors';
 import {formatCityToLabelValue, formatPharmacieToLabelValue} from './utils';
 import AddUserForm from '../../../components/Users/add/AddUserForm';
 import AddPharmacieContainer from '../../Pharmacie/add';
+import _ from 'lodash';
 
 const styles = theme => ({
   root: {

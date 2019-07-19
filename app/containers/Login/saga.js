@@ -19,7 +19,7 @@ function* submitLoginWorker(action) {
   try {
     yield callApi('/login', manageLoginResponse, options, null);
   } catch (e) {
-    console.log(e); // eslint-disable-line
+
   }
 }
 

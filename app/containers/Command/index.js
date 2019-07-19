@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import history from 'utils/history';
 import moment from 'moment';
+import _ from 'lodash';
 import authenticated from '../HOC/authenticated/authenticated';
 import styles from './style';
 import Search from './components/search/index';
@@ -162,6 +163,26 @@ class Command extends PureComponent {
       update: true,
       showCommandDetail: true,
       selectedCommand: row,
+    });
+  };
+
+  printCommand = row => () => {
+    const { downloadCommandForm } = this.props;
+    downloadCommandForm({
+      commandId: row.commandId,
+      callback: (err, blob) => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title: 'Une erreur est survenue lors de la génération du pdf',
+            },
+          });
+        } else {
+          const pdfBlob = new Blob([blob], { type: blob.type });
+          window.open(URL.createObjectURL(pdfBlob));
+        }
+      },
     });
   };
 
@@ -424,6 +445,7 @@ class Command extends PureComponent {
                 updateCommand={this.updateCommandDetail}
                 selectCommand={this.showCommandDetail}
                 deleteCommand={this.performDeleteCommand}
+                printCommand={this.printCommand}
                 canDelete={!this.canGroup}
                 disableClientEditCommand={this.disableGroupingBtn}
                 showSubCommands={this.showSubCommandsModel}

@@ -13,6 +13,7 @@ import { createNewProvider } from '../../store/actions.creators';
 import { getAllCities } from '../../store/selectors';
 import authenticated from '../../../HOC/authenticated/authenticated';
 import ErrorsArea from '../../../../components/ErrorsArea';
+import _ from 'lodash';
 
 const styles = () => ({
   gridContainer: {
@@ -106,7 +107,6 @@ class ProviderForm extends React.PureComponent {
     const { classes, cities } = this.props;
     const { errors } = this.state;
     const formattedCities = _.map(cities, this.formatCities);
-    console.log({ formattedCities, cities });
     return (
       <Grid className={classes.gridContainer} container>
         <Grid xs={12} item>
