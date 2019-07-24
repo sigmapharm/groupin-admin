@@ -1,4 +1,4 @@
-import {all, put, takeLatest} from 'redux-saga/effects';
+import { all, put, takeLatest } from 'redux-saga/effects';
 import { callApi } from '../../../services/saga';
 import {
   createNewProviderSuccess,
@@ -16,10 +16,10 @@ import {
 } from './actions';
 import { submitClientCommandSuccess } from '../../Offres/actions';
 import requestWithAuth from '../../../services/request/request-with-auth';
-import {loadOfferMetaDataSuccess} from "../../Command/store/actions.creators";
-import {LOAD_OFFER_META_DATA} from "../../Command/store/actions";
+import { loadOfferMetaDataSuccess } from '../../Command/store/actions.creators';
+import { LOAD_OFFER_META_DATA } from '../../Command/store/actions';
 
-function* loadOfferMetaDataWorker({ payload: { offerId } }) {
+function* loadOfferMetaDataWorker({ payload: { offerId, callback } }) {
   const options = {
     method: 'GET',
     headers: {
@@ -29,7 +29,10 @@ function* loadOfferMetaDataWorker({ payload: { offerId } }) {
   try {
     const res = yield requestWithAuth(`/offres/${offerId}`, options);
     yield put(loadOfferMetaDataSuccess(res));
-  } catch (e) {}
+    yield callback && callback();
+  } catch (e) {
+    yield callback && callback(e);
+  }
 }
 
 function* createNewProviderWorker({ payload, callback }) {
@@ -41,9 +44,13 @@ function* createNewProviderWorker({ payload, callback }) {
     body: JSON.stringify(payload),
   };
   try {
-    yield callApi(`/provider`, createNewProviderSuccess, options, null);
-    yield callback();
-  } catch (e) {}
+    const res = yield requestWithAuth(`/provider`, options);
+    yield put(createNewProviderSuccess(res));
+    // yield callApi(`/provider`, createNewProviderSuccess, options, null);
+    yield callback && callback();
+  } catch (e) {
+    yield callback && callback(e);
+  }
 }
 
 function* submitCommandAggregateWorker({
@@ -62,12 +69,17 @@ function* submitCommandAggregateWorker({
     }),
   };
   try {
-    yield callApi(
+    const res = yield requestWithAuth(
       `/commands/aggregate/${offerId}`,
-      submitClientCommandSuccess,
       options,
-      null,
     );
+    yield put(submitClientCommandSuccess(res));
+    // yield callApi(
+    //   `/commands/aggregate/${offerId}`,
+    //   submitClientCommandSuccess,
+    //   options,
+    //   null,
+    // );
     yield callback();
   } catch (e) {}
 }
@@ -83,12 +95,17 @@ function* loadAggregatedArticlesByCommandWorker({
   };
   const queryString = commandIds.map(value => `commandId=${value}`).join('&');
   try {
-    yield callApi(
+    const res = yield requestWithAuth(
       `/commands/articles/aggregate/?${queryString}`,
-      loadAggregatedArticlesSuccess,
       options,
-      null,
     );
+    yield put(loadAggregatedArticlesSuccess(res));
+    // yield callApi(
+    //   `/commands/articles/aggregate/?${queryString}`,
+    //   loadAggregatedArticlesSuccess,
+    //   options,
+    //   null,
+    // );
   } catch (e) {}
 }
 
@@ -100,12 +117,17 @@ function* loadAllCommandByOfferWorker({ payload: { id } }) {
     },
   };
   try {
-    yield callApi(
+    const res = yield requestWithAuth(
       `/commands/${id}?page=0&size=${Number.MAX_SAFE_INTEGER}&sort=id,desc`,
-      loadAllCommandByOfferSuccess,
       options,
-      null,
     );
+    yield put(loadAllCommandByOfferSuccess(res));
+    // yield callApi(
+    //   `/commands/${id}?page=0&size=${Number.MAX_SAFE_INTEGER}&sort=id,desc`,
+    //   loadAllCommandByOfferSuccess,
+    //   options,
+    //   null,
+    // );
   } catch (e) {}
 }
 function* getAllProvidersWorker() {
@@ -116,7 +138,9 @@ function* getAllProvidersWorker() {
     },
   };
   try {
-    yield callApi(`/provider`, loadAllProvidersSuccess, options, null);
+    const res = yield requestWithAuth(`/provider`, options);
+    yield put(loadAllProvidersSuccess(res));
+    // yield callApi(`/provider`, loadAllProvidersSuccess, options, null);
   } catch (e) {}
 }
 
@@ -130,6 +154,7 @@ export default function* groupingListSagas() {
       [GET_ALL_PROVIDERS, CREATE_NEW_PROVIDER_SUCCESS],
       getAllProvidersWorker,
     ),
-    takeLatest(LOAD_OFFER_META_DATA,loadOfferMetaDataWorker)
+    takeLatest(LOAD_OFFER_META_DATA, loadOfferMetaDataWorker),
+    ,
   ]);
 }

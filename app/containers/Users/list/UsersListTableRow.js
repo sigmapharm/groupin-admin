@@ -86,6 +86,13 @@ export class UsersListTableRow extends React.PureComponent {
     });
   };
 
+  handeledit = e => {
+    e.preventDefault();
+    this.setState({
+      editMode: true,
+    });
+  };
+
   closeDetails = () => {
     this.setState({
       ...initialState,
@@ -144,7 +151,10 @@ export class UsersListTableRow extends React.PureComponent {
         </TableRow>
         {detailsOpen && (
           <Dialog maxWidth="lg" onClose={this.handleClose} open>
-            <MuiDialogTitle style={{display:'flex',justifyContent:'space-between'}} disableTypography>
+            <MuiDialogTitle
+              style={{ display: 'flex', justifyContent: 'space-between' }}
+              disableTypography
+            >
               <Typography variant="h5" color="primary">
                 {`Details Utilisateur`}
               </Typography>
@@ -164,7 +174,10 @@ export class UsersListTableRow extends React.PureComponent {
         )}
         {editMode && (
           <Dialog maxWidth="lg" onClose={this.handleClose} open>
-            <MuiDialogTitle style={{display:'flex',justifyContent:'space-between'}} disableTypography>
+            <MuiDialogTitle
+              style={{ display: 'flex', justifyContent: 'space-between' }}
+              disableTypography
+            >
               <Typography variant="h5" color="primary">
                 {`Modifier Utilisateur`}
               </Typography>

@@ -8,12 +8,13 @@ import {
   PUT_ARTICLESLABO_LIST_ACTION,
   CHANGE_ARTICLE_FORM_DATA,
   GET_ARTICLE_DETAILS,
-  GET_ARTICLE_DETAILS_SUCCESS, CLEAR_ARTICLE_FORM,
+  GET_ARTICLE_DETAILS_SUCCESS,
+  CLEAR_ARTICLE_FORM,
 } from './constants';
 
-const getArticlesList = values => ({
+const getArticlesList = (values, callback) => ({
   type: GET_ARTICLES_LIST_ACTION,
-  payload: { ...values },
+  payload: { ...values, callback },
 });
 
 const putArticlesList = values => ({

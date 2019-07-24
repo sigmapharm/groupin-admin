@@ -9,9 +9,10 @@ import {
   RESET_USER,
 } from './constants';
 
-const getUsersList = values => ({
+const getUsersList = (values, callback) => ({
   type: GET_USERS_LIST_ACTION,
   payload: { ...values },
+  callback,
 });
 
 const toggleUser = (userId, value, callback) => ({

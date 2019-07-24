@@ -1,4 +1,4 @@
-import { all, takeLatest } from 'redux-saga/effects';
+import { all, put, takeLatest } from 'redux-saga/effects';
 import { callApi } from '../../services/saga';
 import {
   GET_USERS_LIST_ACTION,
@@ -13,9 +13,11 @@ import {
   manageCreateUserResponse,
   putUsersList,
 } from './actions';
+import requestWithAuth from '../../services/request/request-with-auth';
 import ApiRoutes from '../../core/ApiRoutes';
 
 function* usersListWorker(action) {
+  const { callback } = action;
   const options = {
     method: 'GET',
     headers: {
@@ -28,9 +30,13 @@ function* usersListWorker(action) {
     }&firstName=${action.payload.prenom}&lastName=${
       action.payload.nom
     }&pharmacie=${action.payload.pharmacie}`;
-    yield callApi(`/users${params}`, putUsersList, options, null);
+    const res = yield requestWithAuth(`/users${params}`, options);
+    yield put(putUsersList(res));
+    // yield callApi(`/users${params}`, putUsersList, options, null);
+    yield callback && callback();
   } catch (e) {
     console.log(e); // eslint-disable-line
+    yield callback && callback(e);
   }
 }
 
@@ -43,8 +49,8 @@ function* addNewUserWorker(action) {
     },
     body: JSON.stringify({
       ...payload,
-     // ville: null,
-     // region: null,
+      // ville: null,
+      // region: null,
     }),
   };
   try {
@@ -78,18 +84,10 @@ function* toggleUserWorker(action) {
     }),
   };
   try {
-    yield callApi(
-      `${ApiRoutes.USERS}/${userId}/${nextState}`,
-      null,
-      options,
-      null,
-      true,
-      true,
-      null,
-    );
-    callback();
+    yield requestWithAuth(`${ApiRoutes.USERS}/${userId}/${nextState}`, options);
+    yield callback && callback();
   } catch (e) {
-    callback();
+    yield callback && callback(e);
   }
 }
 
@@ -112,18 +110,19 @@ function* updateUserWorker(action) {
     }),
   };
   try {
-    yield callApi(
-      `${ApiRoutes.USERS}/${payload.id}`,
-      null,
-      options,
-      null,
-      true,
-      true,
-      null,
-    );
-    callback();
+    yield requestWithAuth(`${ApiRoutes.USERS}/${payload.id}`, options);
+    // yield callApi(
+    //   `${ApiRoutes.USERS}/${payload.id}`,
+    //   null,
+    //   options,
+    //   null,
+    //   true,
+    //   true,
+    //   null,
+    // );
+    yield callback && callback();
   } catch (e) {
-    alert(e); // eslint-disable-line
+    yield callback && callback(e);
   }
 }
 
@@ -139,18 +138,23 @@ function* resetUserWorker(action) {
     }),
   };
   try {
-    yield callApi(
+    yield requestWithAuth(
       `${ApiRoutes.USERS}/${payload.userId}/reset`,
-      null,
       options,
-      null,
-      true,
-      true,
-      null,
     );
-    callback();
+    // yield callApi(
+    //   `${ApiRoutes.USERS}/${payload.userId}/reset`,
+    //   null,
+    //   options,
+    //   null,
+    //   true,
+    //   true,
+    //   null,
+    // );
+    yield callback && callback();
   } catch (e) {
     alert(e); // eslint-disable-line
+    yield callback && callback(e);
   }
 }
 

@@ -30,7 +30,8 @@ import {
 import authenticated from '../HOC/authenticated/authenticated';
 import UsersListTableFooter from './list/UsersListTableFooter';
 import { selectCities } from '../App/selectors';
-import {formatCityToLabelValue} from "./add/utils";
+import { formatCityToLabelValue } from './add/utils';
+import InfoBar from '../../components/Snackbar/InfoBar';
 
 /* istanbul ignore next */
 const styles = theme => ({
@@ -60,28 +61,79 @@ export class UsersList extends React.PureComponent {
       prenom: '',
       nom: '',
       pharmacie: '',
+      showInfoBar: false,
+      infoBarParams: {},
     };
   }
 
   componentDidMount() {
-    this.props.dispatch(getUsersList(this.state));
+    this.props.dispatch(
+      getUsersList(this.state, err => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                "le chargement des utilisateur à échoué merci de contacter l'administrateur ",
+            },
+          });
+        }
+      }),
+    );
   }
 
   handleChangePage = (event, page) => {
     this.setState({ page }, () =>
-      this.props.dispatch(getUsersList(this.state)),
+      this.props.dispatch(
+        getUsersList(this.state, err => {
+          if (err) {
+            this.setState({
+              showInfoBar: true,
+              infoBarParams: {
+                title:
+                  "le chargement des utilisateur à échoué merci de contacter l'administrateur ",
+              },
+            });
+          }
+        }),
+      ),
     );
   };
 
   handleChangeRowsPerPage = event => {
     this.setState(
       { page: 0, rowsPerPage: parseInt(event.target.value, 10) },
-      () => this.props.dispatch(getUsersList(this.state)),
+      () =>
+        this.props.dispatch(
+          getUsersList(this.state, err => {
+            if (err) {
+              this.setState({
+                showInfoBar: true,
+                infoBarParams: {
+                  title:
+                    "le chargement des utilisateur  à échoué merci de contacter l'administrateur ",
+                },
+              });
+            }
+          }),
+        ),
     );
   };
 
   handleSearchUsers = () => {
-    this.props.dispatch(getUsersList(this.state));
+    this.props.dispatch(
+      getUsersList(this.state, err => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                "le chargement des utilisateur  à échoué merci de contacter l'administrateur ",
+            },
+          });
+        }
+      }),
+    );
   };
 
   handleChange = event => {
@@ -93,23 +145,67 @@ export class UsersList extends React.PureComponent {
   };
 
   toggleUser = user => value => {
-    this.props.dispatch(toggleUser(user.id, value, this.handleSearchUsers));
+    this.props.dispatch(
+      toggleUser(user.id, value, err => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                "La activation / desactivation  d'un utilisateur  à échoué merci de contacter l'administrateur ",
+            },
+          });
+        } else {
+          this.handleSearchUsers();
+        }
+      }),
+    );
   };
 
   updateUser = user => values => {
-    this.props.dispatch(updateUser(user.id, values, this.handleSearchUsers));
+    this.props.dispatch(
+      updateUser(user.id, values, err => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                "La modification d'un utilisateur  à échoué merci de contacter l'administrateur ",
+            },
+          });
+        } else {
+          this.handleSearchUsers();
+        }
+      }),
+    );
   };
 
   resetUser = user => () => {
-    this.props.dispatch(resetUser(user.id, this.handleSearchUsers));
+    this.props.dispatch(
+      resetUser(user.id, err => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                "La renitialisation d'un utilisateur  à échoué merci de contacter l'administrateur ",
+            },
+          });
+        } else {
+          this.handleSearchUsers();
+        }
+      }),
+    );
   };
 
+  closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
+
   render() {
-    const { rowsPerPage, page } = this.state;
-    const { classes, usersList,cities } = this.props;
+    const { rowsPerPage, page, showInfoBar, infoBarParams } = this.state;
+    const { classes, usersList, cities } = this.props;
     const totalElements = usersList.totalElements ? usersList.totalElements : 0;
     const rows = usersList.content;
-    let formatedCities = cities.map(formatCityToLabelValue);
+    const formatedCities = cities.map(formatCityToLabelValue);
     return (
       <div>
         <Typography component="h1" variant="h4" className={classes.root}>
@@ -159,6 +255,11 @@ export class UsersList extends React.PureComponent {
               handleChangeRowsPerPage={this.handleChangeRowsPerPage}
             />
           </Table>
+          <InfoBar
+            open={showInfoBar}
+            onClose={this.closeInfoBar}
+            {...infoBarParams}
+          />
         </Paper>
         <Fab
           color="primary"
@@ -198,6 +299,7 @@ UsersList.propTypes = {
   classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   usersList: PropTypes.any,
+  handledit: PropTypes.func,
 };
 
 export default compose(

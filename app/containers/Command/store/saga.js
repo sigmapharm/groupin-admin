@@ -31,7 +31,7 @@ function* downloadCommandFormWorker({ payload: { commandId, callback } }) {
     );
     yield callback && callback(null, blob);
   } catch (e) {
-    yield callback && callback(err);
+    yield callback && callback(e);
   }
 }
 
@@ -51,7 +51,7 @@ function* dispatchQuantityWorker({ payload: { id, callback } }) {
   }
 }
 
-function* loadAggregateSubCommandsWorker({ payload: { id } }) {
+function* loadAggregateSubCommandsWorker({ payload: { id, callback } }) {
   const options = {
     method: 'GET',
     headers: {
@@ -59,13 +59,19 @@ function* loadAggregateSubCommandsWorker({ payload: { id } }) {
     },
   };
   try {
-    yield callApi(
-      `/commands/aggregate/${id}`,
-      loadAggregateSubCommandsSuccess,
-      options,
-      null,
-    );
-  } catch (e) {}
+    const res = yield requestWithAuth(`/commands/aggregate/${id}`, options);
+    yield put(loadAggregateSubCommandsSuccess(res));
+    // yield callApi(
+    //   `/commands/aggregate/${id}`,
+    //   loadAggregateSubCommandsSuccess,
+    //   options,
+    //   null,
+    // );
+    yield callback && callback();
+  } catch (e) {
+    console.log("lala");
+    yield callback && callback(e);
+  }
 }
 
 function* updateClientCommandWorker({
@@ -81,17 +87,22 @@ function* updateClientCommandWorker({
     ),
   };
   try {
-    yield callApi(
+    const res = yield requestWithAuth(
       `/commands/${isAggregate ? 'aggregate' : 'client'}/${commandId}`,
-      updateCommandDetailSuccess,
       options,
-      null,
     );
+    yield put(updateCommandDetailSuccess(res));
+    // yield callApi(
+    //   `/commands/${isAggregate ? 'aggregate' : 'client'}/${commandId}`,
+    //   updateCommandDetailSuccess,
+    //   options,
+    //   null,
+    // );
     yield callback && callback();
   } catch (e) {}
 }
 
-function* loadCommandArticleWorker({ payload: { id, isAggregate } }) {
+function* loadCommandArticleWorker({ payload: { id, isAggregate, callback } }) {
   const options = {
     method: 'GET',
     headers: {
@@ -99,13 +110,15 @@ function* loadCommandArticleWorker({ payload: { id, isAggregate } }) {
     },
   };
   try {
-    yield callApi(
+    const res = yield requestWithAuth(
       `/commands/${isAggregate ? 'aggregate/' : ''}${id}/articles`,
-      loadCommandArticlesSuccess,
       options,
-      null,
     );
-  } catch (e) {}
+    yield put(loadCommandArticlesSuccess(res));
+    yield callback && callback();
+  } catch (e) {
+    yield callback && callback(e);
+  }
 }
 
 function* deleteCommandWorker({ payload: { id, callback, isAggregate } }) {
@@ -116,18 +129,25 @@ function* deleteCommandWorker({ payload: { id, callback, isAggregate } }) {
     },
   };
   try {
-    yield callApi(
+    const res = yield requestWithAuth(
       `/commands/${isAggregate ? 'aggregate/' : ''}${id}`,
-      deleteCommandSuccess,
       options,
-      null,
     );
+    yield put(deleteCommandSuccess(res));
+    // yield callApi(
+    //   `/commands/${isAggregate ? 'aggregate/' : ''}${id}`,
+    //   deleteCommandSuccess,
+    //   options,
+    //   null,
+    // );
     yield callback && callback();
-  } catch (e) {}
+  } catch (e) {
+    yield callback && callback(e);
+  }
 }
 
 function* loadCommandsWorker({
-  payload: { offerId, isAggregate, ...payload },
+  payload: { offerId, isAggregate, callback, ...payload },
 }) {
   const options = {
     method: 'GET',
@@ -138,15 +158,26 @@ function* loadCommandsWorker({
   const queryString = Object.keys(payload)
     .map(key => `${key}=${payload[key]}`)
     .join('&');
+    console.log("too");
   try {
-    yield callApi(
+    const res = yield requestWithAuth(
       `/commands/${isAggregate ? 'aggregate/' : ''}${offerId ||
         ''}?${queryString}`,
-      loadCommandsSuccess,
       options,
-      null,
     );
-  } catch (e) {}
+    yield put(loadCommandsSuccess(res));
+    // yield callApi(
+    //   `/commands/${isAggregate ? 'aggregate/' : ''}${offerId ||
+    //     ''}?${queryString}`,
+    //   loadCommandsSuccess,
+    //   options,
+    //   null,
+    // );
+    yield callback && callback();
+  } catch (e) {
+    console.log(callback);
+    yield callback && callback(e);
+  }
 }
 
 export default function* commandListSagas() {

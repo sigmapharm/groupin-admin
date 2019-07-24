@@ -27,9 +27,9 @@ import {
   TOGGLE_CHECK_ALL,
 } from './constants';
 
-const getOffreList = values => ({
+const getOffreList = (values, callback) => ({
   type: GET_OFFRES_LIST_ACTION,
-  payload: { ...values },
+  payload: { ...values, callback },
 });
 
 const putOffresList = values => ({
@@ -37,9 +37,10 @@ const putOffresList = values => ({
   payload: { ...values },
 });
 
-const loadArticleOffer = ({ id }) => ({
+const loadArticleOffer = ({ id, callback }) => ({
   type: LOAD_ARTICLES_OFFER,
   payload: { id },
+  callback,
 });
 
 const loadArticleOfferSuccess = payload => ({
@@ -49,9 +50,9 @@ const loadArticleOfferSuccess = payload => ({
 
 const clearOffer = () => ({ type: CLEAR_OFFER });
 
-const deleteOffer = ({ id, filters }) => ({
+const deleteOffer = ({ id, filters, callback }) => ({
   type: DELETE_OFFER,
-  payload: { id, filters },
+  payload: { id, filters, callback },
 });
 
 const deleteOfferSuccess = payload => ({ type: DELETE_OFFER_SUCCESS, payload });

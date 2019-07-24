@@ -26,6 +26,7 @@ import {
 } from '../actions';
 import { makeSelectLaboratoires } from '../../App/selectors';
 import AddArticleForm from '../../../components/articles/add/AddAricleFrom';
+import InfoBar from '../../../components/Snackbar/InfoBar';
 import AddLaboratoireContainer from '../../laboratoire/add';
 import { selecteArticleFormData } from '../selectors';
 import { getOfferWithDetails } from '../../Offres/actions';
@@ -84,6 +85,8 @@ const initialState = {
   },
   isSuccess: false,
   isAddLaboratoire: false,
+  showInfoBar: false,
+  infoBarParams: {},
 };
 
 // Change component name later
@@ -150,7 +153,21 @@ export class AddArticle extends React.PureComponent {
           id: _.get(articleFormData, 'laboratoire.value'),
         },
       };
-       this.props.dispatch(createArticle(formattedData, this.handleSubmitResponse));
+      this.props.dispatch(
+        createArticle(formattedData, err => {
+          if (err) {
+            this.setState({
+              showInfoBar: true,
+              infoBarParams: {
+                title:
+                  "La Modification des articles a échoué merci de contacter l'administrateur ",
+              },
+            });
+          } else {
+            this.handleSubmitResponse();
+          }
+        }),
+      );
     }
   };
 
@@ -206,9 +223,18 @@ export class AddArticle extends React.PureComponent {
     });
   };
 
+  closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
+
   render() {
     const { classes, laboratoires, articleFormData } = this.props;
-    const { formData, errors, isSuccess, editMode } = this.state;
+    const {
+      formData,
+      errors,
+      isSuccess,
+      editMode,
+      showInfoBar,
+      infoBarParams,
+    } = this.state;
     const formattedLaboratoire = laboratoires.map(
       formatLaboratoireToLabelValue,
     );
@@ -277,6 +303,11 @@ export class AddArticle extends React.PureComponent {
             ]}
           />
         )}
+        <InfoBar
+          open={showInfoBar}
+          onClose={this.closeInfoBar}
+          {...infoBarParams}
+        />
       </div>
     );
   }

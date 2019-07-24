@@ -21,6 +21,7 @@ import ArticlesListTableRow from './list/ArticlesListTableRow';
 import ArticlesListTableFooter from './list/ArticlesListTableFooter';
 import ArticlesListSearch from './list/ArticlesListSearch';
 import ArticlesListTableHeader from './list/ArticlesListTableHeader';
+import InfoBar from '../../components/Snackbar/InfoBar';
 
 const styles = theme => ({
   root: {
@@ -69,28 +70,83 @@ class ListeArticles extends React.Component {
       ppv: '',
       tva: '',
       laboratoire: '',
+      showInfoBar: false,
+      infoBarParams: {},
     };
   }
 
   componentDidMount() {
-    this.props.dispatch(getArticlesList(this.state));
+    this.props.dispatch(
+      getArticlesList(this.state, err => {
+        if (err) {
+          this.setState({
+            showPopConfirmation: false,
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                "Le chargement des articles à échoué merci de contacter l'administrateur ",
+            },
+          });
+        }
+      }),
+    );
   }
 
   handleChangePage = (event, page) => {
     this.setState({ page }, () =>
-      this.props.dispatch(getArticlesList(this.state)),
+      this.props.dispatch(
+        getArticlesList(this.state, err => {
+          if (err) {
+            this.setState({
+              showPopConfirmation: false,
+              showInfoBar: true,
+              infoBarParams: {
+                title:
+                  "Le chargement des articles à échoué merci de contacter l'administrateur ",
+              },
+            });
+          }
+        }),
+      ),
     );
   };
 
   handleChangeRowsPerPage = event => {
     this.setState(
       { page: 0, rowsPerPage: parseInt(event.target.value, 10) },
-      () => this.props.dispatch(getArticlesList(this.state)),
+      () =>
+        this.props.dispatch(
+          getArticlesList(this.state, err => {
+            if (err) {
+              this.setState({
+                showPopConfirmation: false,
+                showInfoBar: true,
+                infoBarParams: {
+                  title:
+                    "Le chargement des articles à échoué merci de contacter l'administrateur ",
+                },
+              });
+            }
+          }),
+        ),
     );
   };
 
   handleSearchArticles = () => {
-    this.props.dispatch(getArticlesList(this.state));
+    this.props.dispatch(
+      getArticlesList(this.state, err => {
+        if (err) {
+          this.setState({
+            showPopConfirmation: false,
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                "Le chargement des articles à échoué merci de contacter l'administrateur ",
+            },
+          });
+        }
+      }),
+    );
   };
 
   handleChange = event => {
@@ -101,8 +157,10 @@ class ListeArticles extends React.Component {
     history.push('/articles/add');
   };
 
+  closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
+
   render() {
-    const { rowsPerPage, page } = this.state;
+    const { rowsPerPage, page, showInfoBar, infoBarParams } = this.state;
     // eslint-disable-next-line react/prop-types
     const { classes, articlesList } = this.props;
     const totalElements = articlesList.totalElements
@@ -151,6 +209,11 @@ class ListeArticles extends React.Component {
               handleChangeRowsPerPage={this.handleChangeRowsPerPage}
             />
           </Table>
+          <InfoBar
+            open={showInfoBar}
+            onClose={this.closeInfoBar}
+            {...infoBarParams}
+          />
         </Paper>
         <Fab
           color="primary"

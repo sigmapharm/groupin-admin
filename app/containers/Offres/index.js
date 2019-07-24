@@ -33,7 +33,7 @@ import authenticated from '../HOC/authenticated/authenticated';
 import OffresListTableFooter from './list/OffresListTableFooter';
 import OffresListSearch from './list/OffresListSearch';
 import OffresListTableRow from './list/OffresListTableRow';
-
+import InfoBar from '../../components/Snackbar/InfoBar';
 import OffresListTableHeaders from './list/OffresListTableHeader';
 import WithRoles from '../WithRoles';
 import { ADMIN, MEMBRE, SUPER_ADMIN } from '../AppHeader/Roles';
@@ -113,16 +113,44 @@ export class OffresList extends React.PureComponent {
       status: role === MEMBRE ? 'En cours' : '',
       laboratoire: '',
       articledtos: '',
+      showInfoBar: false,
+      infoBarParams: {},
     };
   }
 
   componentDidMount() {
-    this.props.dispatch(getOffreList(this.state));
+    this.props.dispatch(
+      getOffreList(this.state, err => {
+        if (err) {
+          this.setState({
+            showPopConfirmation: false,
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                "Le chargement des articles à échoué merci de contacter l'administrateur ",
+            },
+          });
+        }
+      }),
+    );
   }
 
   handleChangePage = (event, page) => {
     this.setState({ page }, () =>
-      this.props.dispatch(getOffreList(this.state)),
+      this.props.dispatch(
+        getOffreList(this.state, err => {
+          if (err) {
+            this.setState({
+              showPopConfirmation: false,
+              showInfoBar: true,
+              infoBarParams: {
+                title:
+                  "Le chargement des articles à échoué merci de contacter l'administrateur ",
+              },
+            });
+          }
+        }),
+      ),
     );
   };
 
@@ -133,7 +161,21 @@ export class OffresList extends React.PureComponent {
   handleChangeRowsPerPage = event => {
     this.setState(
       { page: 0, rowsPerPage: parseInt(event.target.value, 10) },
-      () => this.props.dispatch(getOffreList(this.state)),
+      () =>
+        this.props.dispatch(
+          getOffreList(this.state, err => {
+            if (err) {
+              this.setState({
+                showPopConfirmation: false,
+                showInfoBar: true,
+                infoBarParams: {
+                  title:
+                    "Le chargement des articles à échoué merci de contacter l'administrateur ",
+                },
+              });
+            }
+          }),
+        ),
     );
   };
 
@@ -142,7 +184,20 @@ export class OffresList extends React.PureComponent {
   };
 
   handleSearchOffres = () => {
-    this.props.dispatch(getOffreList(this.state));
+    this.props.dispatch(
+      getOffreList(this.state, err => {
+        if (err) {
+          this.setState({
+            showPopConfirmation: false,
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                "Le chargement des articles à échoué merci de contacter l'administrateur ",
+            },
+          });
+        }
+      }),
+    );
   };
 
   handleChange = event => {
@@ -155,8 +210,10 @@ export class OffresList extends React.PureComponent {
     });
   };
 
+  closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
+
   render() {
-    const { rowsPerPage, page } = this.state;
+    const { rowsPerPage, page, showInfoBar, infoBarParams } = this.state;
     // eslint-disable-next-line react/prop-types
     const { classes, offresList, user } = this.props;
     const totalElements = offresList.totalElements
@@ -221,6 +278,11 @@ export class OffresList extends React.PureComponent {
               handleChangeRowsPerPage={this.handleChangeRowsPerPage}
             />
           </Table>
+          <InfoBar
+            open={showInfoBar}
+            onClose={this.closeInfoBar}
+            {...infoBarParams}
+          />
         </Paper>
         <WithRoles user={user} roles={[ADMIN, SUPER_ADMIN]}>
           <Fab

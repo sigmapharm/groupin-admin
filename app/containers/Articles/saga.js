@@ -1,3 +1,4 @@
+import { takeLatest, all, put } from 'redux-saga/effects';
 import { callApi } from '../../services/saga';
 import {
   deleteArticle,
@@ -13,7 +14,7 @@ import {
   SUBMIT_CREATE_ARTICLE,
   SUBMIT_DELETE_ARTICLE,
 } from './constants';
-import {takeLatest,all} from "redux-saga/effects";
+import requestWithAuth from '../../services/request/request-with-auth';
 
 // TODO : optimize options http header later ;)
 
@@ -32,6 +33,7 @@ function* getArticleDetailsWorker({ payload: { id } }) {
 }
 
 function* articlesListWorker(action) {
+  const { callback } = action.payload;
   const options = {
     method: 'GET',
     headers: {
@@ -44,8 +46,13 @@ function* articlesListWorker(action) {
     }&categorie=${action.payload.categorie}&nom=${
       action.payload.nom
     }&laboratoire=${action.payload.laboratoire}`;
-    yield callApi(`/articles${params}`, putArticlesList, options, null);
+    // yield callApi(`/articles${params}`, putArticlesList, options, null);
+    const res = yield requestWithAuth(`/articles${params}`, options);
+    yield put(putArticlesList(res));
+    yield callback && callback();
   } catch (e) {
+    console.log("test callback");
+    yield callback && callback(e);
     console.log(e);
     // eslint-disable-line
   }

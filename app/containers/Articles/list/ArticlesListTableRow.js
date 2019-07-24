@@ -14,11 +14,11 @@ import CloseIcon from '@material-ui/icons/Close';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import Tooltip from '@material-ui/core/Tooltip';
+import _ from 'lodash';
 import ArticleListConsultationn from '../consultlistarticle/ArticleListConsultation';
 import authenticated from '../../HOC/authenticated/authenticated';
 import WithRoles from '../../WithRoles';
 import { SUPER_ADMIN } from '../../AppHeader/Roles';
-import _ from 'lodash';
 
 const closeStyle = {
   marginLeft: '59rem',
@@ -41,7 +41,9 @@ const addCommas = nStr => {
 export class ArticlesListTableRow extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { open: false };
+    this.state = {
+      open: false,
+    };
   }
 
   viewDetails = () => {
@@ -58,6 +60,8 @@ export class ArticlesListTableRow extends React.PureComponent {
 
   edit = ({ id }) => history.push(`/articles/edit/${id}`);
 
+  closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
+
   render() {
     const { row } = this.props;
     return (
@@ -66,12 +70,8 @@ export class ArticlesListTableRow extends React.PureComponent {
           <TableCell>{row.laboratoire && row.laboratoire.nom}</TableCell>
           <TableCell>{row.categorie}</TableCell>
           <TableCell>{row.nom}</TableCell>
-          <TableCell>
-            {(_.get(row,'pph') || 0).toFixed(2) }
-          </TableCell>
-          <TableCell>
-            {(_.get(row,'ppv',0) || 0).toFixed(2)}
-          </TableCell>
+          <TableCell>{(_.get(row, 'pph') || 0).toFixed(2)}</TableCell>
+          <TableCell>{(_.get(row, 'ppv', 0) || 0).toFixed(2)}</TableCell>
           <TableCell>
             {row.tva}
             {'%'}
@@ -101,7 +101,10 @@ export class ArticlesListTableRow extends React.PureComponent {
             aria-labelledby="customized-dialog-title"
             open
           >
-            <MuiDialogTitle style={{display:'flex',justifyContent:'space-between'}} disableTypography>
+            <MuiDialogTitle
+              style={{ display: 'flex', justifyContent: 'space-between' }}
+              disableTypography
+            >
               <Typography variant="h5" color="primary">
                 {`Détails article`}
               </Typography>

@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import history from 'utils/history';
+import _ from 'lodash';
 import authenticated from '../../HOC/authenticated/authenticated';
 import { validateFormData } from './validation';
 import {
@@ -22,6 +23,7 @@ import {
   toggleCheckAll,
 } from '../actions';
 import AddOffreForm from '../../../components/offres/add/AddOffreForm';
+import InfoBar from '../../../components/Snackbar/InfoBar';
 import { formatLaboratoireToLabelValue } from './utils';
 import { makeSelectLaboratoires } from '../../App/selectors';
 import { getLaboArticlesList } from '../../App/actions';
@@ -31,7 +33,6 @@ import {
   selectOfferFormData,
   selectOriginalOfferFormData,
 } from '../selectors';
-import _ from 'lodash';
 
 const styles = theme => ({
   root: {
@@ -122,7 +123,19 @@ export class AddOffre extends React.PureComponent {
           formattedData,
           articlesListlabo,
           updateOnlyDate,
-          this.handleSubmitResponse,
+          err => {
+            if (err) {
+              this.setState({
+                showInfoBar: true,
+                infoBarParams: {
+                  title:
+                    "La Modification des commands a échoué merci de contacter l'administrateur ",
+                },
+              });
+            } else {
+              this.handleSubmitResponse();
+            }
+          },
         ),
       );
     }
@@ -179,7 +192,11 @@ export class AddOffre extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = { ...initialState };
+    this.state = {
+      ...initialState,
+      showInfoBar: false,
+      infoBarParams: {},
+    };
   }
 
   toggleAllSelection = () => {
@@ -217,6 +234,8 @@ export class AddOffre extends React.PureComponent {
     dispatch(applyGlobalRemiseOrMinQt({ [keyPerArticle]: keyValue }));
   };
 
+  closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
+
   render() {
     const {
       classes,
@@ -227,7 +246,14 @@ export class AddOffre extends React.PureComponent {
       originalOfferFormData,
       checkAllValue,
     } = this.props;
-    const { formData, editMode, errors, isSuccess } = this.state;
+    const {
+      formData,
+      editMode,
+      errors,
+      isSuccess,
+      showInfoBar,
+      infoBarParams,
+    } = this.state;
     const formattedLaboratoire = laboratoires.map(
       formatLaboratoireToLabelValue,
     );
@@ -277,6 +303,11 @@ export class AddOffre extends React.PureComponent {
             ]}
           />
         )}
+        <InfoBar
+          open={showInfoBar}
+          onClose={this.closeInfoBar}
+          {...infoBarParams}
+        />
       </div>
     );
   }

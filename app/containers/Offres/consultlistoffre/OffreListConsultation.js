@@ -17,7 +17,7 @@ import Grid from '@material-ui/core/Grid/Grid';
 import Checkbox from '@material-ui/core/Checkbox/Checkbox';
 import history from 'utils/history';
 import _ from 'lodash';
-import InfoSnackBar from '../../../components/Snackbar/InfoBar';
+import InfoBar from '../../../components/Snackbar/InfoBar';
 import { selectOfferArticleList } from '../selectors';
 // import { makeSelectoffreArticledtos } from '../../App/selectors';
 import {
@@ -103,14 +103,18 @@ export class OffreListConsultation extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      showInfoBar: false,
+      infoBarParams: {},
+    };
   }
 
   get allowCommandSubmit() {
     const { offerArticles } = this.props;
     return _.every(
       offerArticles.filter(({ selected }) => !!selected),
-      ({ quantity, selected,minQuantity }) => selected && quantity >= minQuantity,
+      ({ quantity, selected, minQuantity }) =>
+        selected && quantity >= minQuantity,
     );
   }
 
@@ -126,8 +130,25 @@ export class OffreListConsultation extends React.PureComponent {
       dispatch,
       row: { id },
     } = this.props;
-    dispatch(loadArticleOffer({ id }));
+    dispatch(
+      loadArticleOffer({
+        id,
+        callback: err => {
+          if (err) {
+            this.setState({
+              showInfoBar: true,
+              infoBarParams: {
+                title:
+                  "Le chargement des offres a échoué merci de contacter l'administrateur ",
+              },
+            });
+          }
+        },
+      }),
+    );
   }
+
+  closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
 
   render() {
     const {
@@ -140,6 +161,7 @@ export class OffreListConsultation extends React.PureComponent {
       commandMode,
       dismiss,
     } = this.props;
+    const { showInfoBar, infoBarParams } = this.state;
     const datefin = new Date(row.dateFin);
     const startDate = new Date(row.dateDebut);
     const joursLabel = remainingDays === 1 ? 'jour' : 'jours';
@@ -332,10 +354,7 @@ export class OffreListConsultation extends React.PureComponent {
                         disabled={!selected}
                         autoComplete="off"
                         inputProps={{ maxLength: 100 }}
-                        onChange={this.handleQuantityChange(
-                          id,
-                          minQuantity
-                        )}
+                        onChange={this.handleQuantityChange(id, minQuantity)}
                         fullWidth
                       />
                     </TableCell>
@@ -392,6 +411,11 @@ export class OffreListConsultation extends React.PureComponent {
             </Button>
           </Grid>
         )}
+        <InfoBar
+          open={showInfoBar}
+          onClose={this.closeInfoBar}
+          {...infoBarParams}
+        />
       </React.Fragment>
     );
   }

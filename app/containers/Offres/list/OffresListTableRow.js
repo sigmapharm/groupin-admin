@@ -32,6 +32,8 @@ import {
   selectOffer,
 } from '../actions';
 import GeneriqueDialog from '../../../components/Alert';
+import InfoBar from '../../../components/Snackbar/InfoBar';
+
 
 const closeStyle = {
   float: 'right',
@@ -46,6 +48,8 @@ export class OffresListTableRow extends React.PureComponent {
       isShown: false,
       showPopConfirmation: false,
       popConfirmationParams: {},
+      showInfoBar: false,
+      infoBarParams: {},
     };
   }
 
@@ -115,8 +119,24 @@ export class OffresListTableRow extends React.PureComponent {
   deleteRow = () => {
     const { row, filters } = this.props;
     if (this.canDelete(row)) {
-      this.props.dispatch(deleteOffer({ id: row.id, filters }));
-      this.closePopConfirmation();
+      this.props.dispatch(
+        deleteOffer({
+          id: row.id,
+          filters,
+          callback: err => {
+            if (err) {
+              this.setState({
+                showPopConfirmation: false,
+                showInfoBar: true,
+                infoBarParams: {
+                  title:
+                    "La supression des offres à échoué merci de contacter l'administrateur ",
+                },
+              });
+            }
+          },
+        }),
+      );
     }
   };
 
@@ -136,7 +156,16 @@ export class OffresListTableRow extends React.PureComponent {
     if (this.canCloseOffer)
       dispatch(
         closeOffer(id, filters, err => {
-          if (!err) this.closePopConfirmation();
+          if (err) {
+            this.setState({
+              showPopConfirmation: false,
+              showInfoBar: true,
+              infoBarParams: {
+                title:
+                  "La supression des offres à échoué merci de contacter l'administrateur ",
+              },
+            });
+          }
         }),
       );
   };
@@ -149,7 +178,16 @@ export class OffresListTableRow extends React.PureComponent {
     } = this.props;
     dispatch(
       cloneOffer(id, filters, err => {
-        if (!err) this.closePopConfirmation();
+        if (err) {
+          this.setState({
+            showPopConfirmation: false,
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                "La supression des offres à échoué merci de contacter l'administrateur ",
+            },
+          });
+        }
       }),
     );
   };
@@ -163,6 +201,8 @@ export class OffresListTableRow extends React.PureComponent {
     return moment(new Date()).isBetween(startDate, endDate, null, true);
   }
 
+  closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
+
   render() {
     const { row } = this.props;
     const {
@@ -170,6 +210,8 @@ export class OffresListTableRow extends React.PureComponent {
       showPopConfirmation,
       popConfirmationParams,
       commandMode,
+      showInfoBar,
+      infoBarParams,
     } = this.state;
     const now = Date.now();
     const startDate = new Date(row.dateDebut);
@@ -282,6 +324,11 @@ export class OffresListTableRow extends React.PureComponent {
         <GeneriqueDialog
           open={showPopConfirmation}
           {...popConfirmationParams}
+        />
+        <InfoBar
+          open={showInfoBar}
+          onClose={this.closeInfoBar}
+          {...infoBarParams}
         />
         {isShown && (
           <Dialog

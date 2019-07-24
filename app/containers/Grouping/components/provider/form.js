@@ -7,13 +7,14 @@ import { bindActionCreators, compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import connect from 'react-redux/es/connect/connect';
 import Button from '@material-ui/core/Button/Button';
+import _ from 'lodash';
 import SingleAutoCompleteSelect from '../../../../components/AutoCompleteSelect';
 import { fields, validateFormData } from './formFields';
 import { createNewProvider } from '../../store/actions.creators';
 import { getAllCities } from '../../store/selectors';
 import authenticated from '../../../HOC/authenticated/authenticated';
 import ErrorsArea from '../../../../components/ErrorsArea';
-import _ from 'lodash';
+import InfoBar from '../../../../components/Snackbar/InfoBar';
 
 const styles = () => ({
   gridContainer: {
@@ -61,9 +62,26 @@ class ProviderForm extends React.PureComponent {
         },
         'city',
       );
-      createNewProvider(formattedData, () => onAddSuccess());
+      createNewProvider(
+        formattedData,
+
+        err => {
+          if (err) {
+            this.setState({
+              showInfoBar: true,
+              infoBarParams: {
+                title: 'Une erreur est survenue ',
+              },
+            });
+          } else {
+            onAddSuccess();
+          }
+        },
+      );
     }
   };
+
+  closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
 
   onTextInputChange = ({ target: { name, value } }) => {
     this.updateFormData(name, value);
@@ -90,6 +108,8 @@ class ProviderForm extends React.PureComponent {
         messages: {},
       },
       isSuccess: false,
+      showInfoBar: false,
+      infoBarParams: {},
     };
   }
 
@@ -105,7 +125,7 @@ class ProviderForm extends React.PureComponent {
 
   render() {
     const { classes, cities } = this.props;
-    const { errors } = this.state;
+    const { errors, showInfoBar, infoBarParams } = this.state;
     const formattedCities = _.map(cities, this.formatCities);
     return (
       <Grid className={classes.gridContainer} container>
@@ -176,6 +196,11 @@ class ProviderForm extends React.PureComponent {
             Ajouter
           </Button>
         </Grid>
+        <InfoBar
+          open={showInfoBar}
+          onClose={this.closeInfoBar}
+          {...infoBarParams}
+        />
       </Grid>
     );
   }

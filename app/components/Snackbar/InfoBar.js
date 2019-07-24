@@ -7,22 +7,29 @@ import CloseIcon from '@material-ui/icons/Close';
 
 export default ({ title, open, onClose, onSuccess, onSuccessTitle }) =>
   open && (
-    <Snackbar
-      open={open}
-      TransitionComponent={Fade}
-      onClose={onClose}
-      message={<span id="message-id">{title}</span>}
-      action={[
-        onSuccessTitle ? (
-          <Button key="undo" color="secondary" size="small" onClick={onSuccess}>
-            {onSuccessTitle}
-          </Button>
-        ) : (
-          <></>
-        ),
-        <IconButton key="close" color="secondary" onClick={onClose}>
-          <CloseIcon />
-        </IconButton>,
-      ]}
-    />
+    <div>
+      <Snackbar
+        open={open}
+        TransitionComponent={Fade}
+        onClose={onClose}
+        message={<span id="message-id">{title}</span>}
+        action={[
+          onSuccessTitle ? (
+            <Button
+              key="undo"
+              color="secondary"
+              size="small"
+              onClick={onSuccess}
+            >
+              {onSuccessTitle}
+            </Button>
+          ) : (
+            <></>
+          ),
+          <IconButton key="close" color="secondary" onClick={onClose}>
+            <CloseIcon />
+          </IconButton>,
+        ]}
+      />
+    </div>
   );

@@ -105,19 +105,21 @@ function* getOfferWithDetailsWorker({ payload: { id } }) {
   }
 }
 
-function* deleteOfferWorker({ payload: { id, filters } }) {
+function* deleteOfferWorker({ payload: { id, filters, callback } }) {
   const options = {
     method: 'DELETE',
   };
   try {
     yield requestWithAuth(`/offres/${id}`, options);
     yield put(deleteOfferSuccess(filters));
+    yield callback && callback();
   } catch (e) {
+    yield callback && callback(e);
     // TODO
   }
 }
 
-function* loadArticleOfferWorker({ payload: { id } }) {
+function* loadArticleOfferWorker({ payload: { id }, callback }) {
   const options = {
     method: 'GET',
     headers: {
@@ -135,12 +137,15 @@ function* loadArticleOfferWorker({ payload: { id } }) {
       null,
     );
     */
+    yield callback && callback();
   } catch (e) {
     // TODO
+    yield callback && callback(e);
   }
 }
 
 function* offresListWorker(action) {
+  const { callback } = action.payload;
   const options = {
     method: 'GET',
     headers: {
@@ -153,8 +158,12 @@ function* offresListWorker(action) {
     }&designation=${action.payload.designation}&laboratory=${
       action.payload.laboratoire
     }&status=${action.payload.status}`;
-    yield callApi(`/offres${params}`, putOffresList, options, null);
+    const res = yield requestWithAuth(`/offres${params}`, options);
+    yield put(putOffresList(res));
+    // yield callApi(`/offres${params}`, putOffresList, options, null);
+    yield callback && callback();
   } catch (e) {
+    yield callback && callback(e);
     console.log(e);
     // eslint-disable-line
   }
@@ -183,11 +192,11 @@ function* addNewOffreWorker(action) {
       offerArticledtos: updateOnlyDate
         ? []
         : offerArticledtos.map(({ selected, id, discount, minQuantity }) => ({
-          articleId: id,
-          discount,
-          selected,
-          minQuantity,
-        })),
+            articleId: id,
+            discount,
+            selected,
+            minQuantity,
+          })),
     }),
   };
   try {

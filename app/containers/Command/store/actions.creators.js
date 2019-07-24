@@ -20,9 +20,9 @@ export const deleteCommandSuccess = payload => ({
   payload,
 });
 
-export const loadCommandArticles = ({ commandId, isAggregate }) => ({
+export const loadCommandArticles = ({ commandId, isAggregate, callback }) => ({
   type: actionsType.LOAD_COMMAND_ARTICLES,
-  payload: { id: commandId, isAggregate },
+  payload: { id: commandId, isAggregate, callback },
 });
 
 export const clearCommandArticles = () => ({
@@ -48,9 +48,9 @@ export const updateCommandDetailSuccess = payload => ({
   payload,
 });
 
-export const loadAggregateSubCommands = id => ({
+export const loadAggregateSubCommands = (id, callback) => ({
   type: actionsType.LOAD_AGGREGATE_SUB_COMMANDS,
-  payload: { id },
+  payload: { id, callback },
 });
 
 export const clearAggregateSubCommands = () => ({
@@ -71,9 +71,9 @@ export const dispatchQuantitySuccess = () => ({
   type: actionsType.DISPATCH_QUANTITY_TO_SUB_COMMANDS_SUCCESS,
 });
 
-export const loadOfferMetaData = offerId => ({
+export const loadOfferMetaData = (offerId, callback) => ({
   type: actionsType.LOAD_OFFER_META_DATA,
-  payload: { offerId },
+  payload: { offerId, callback },
 });
 export const loadOfferMetaDataSuccess = payload => ({
   type: actionsType.LOAD_OFFER_META_DATA_SUCCESS,

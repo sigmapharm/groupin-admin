@@ -49,7 +49,7 @@ class Command extends PureComponent {
     const { searchData } = this.state;
     const {
       match: {
-        params: { offerId },
+        params: { offerId, callback },
       },
       commandPageable: { number, size },
       loadCommands,
@@ -60,6 +60,17 @@ class Command extends PureComponent {
       size,
       page: number,
       isAggregate: this.forAdminCommands,
+      callback: err => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                "Le chargement des commands a échoué merci de contacter l'administrateur ",
+            },
+          });
+        }
+      },
     });
   };
 
@@ -89,6 +100,18 @@ class Command extends PureComponent {
       size,
       page: +page,
       isAggregate: this.forAdminCommands,
+      callback: err => {
+        if (err) {
+          this.setState({
+            showPopConfirmation: false,
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                "le chargement des commands à échoué merci de contacter l'administrateur ",
+            },
+          });
+        }
+      },
     });
   };
 
@@ -107,25 +130,50 @@ class Command extends PureComponent {
       size: +value,
       page: number,
       isAggregate: this.forAdminCommands,
+      callback: err => {
+        if (err) {
+          this.setState({
+            showPopConfirmation: false,
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                "La pagination des commands à échoué merci de contacter l'administrateur ",
+            },
+          });
+        }
+      },
     });
   };
 
-  deleteCommand = ({ commandId, canDelete }) => () => {
+  deleteCommand = ({ commandId, canDelete, callback }) => () => {
     const { deleteCommand } = this.props;
     if (canDelete || this.forAdminCommands)
       deleteCommand({
         commandId,
-        callback: this.onDeleteSuccess,
+        callback: err => {
+          if (err) {
+            this.setState({
+              showPopConfirmation: false,
+              showInfoBar: true,
+              infoBarParams: {
+                title:
+                  "Suppresion de commande  à échoué merci de contacter l'administrateur",
+              },
+            });
+          } else {
+            this.onDeleteSuccess();
+          }
+        },
         isAggregate: this.forAdminCommands,
       });
   };
 
-  performDeleteCommand = ({ commandId, canDelete }) => () => {
+  performDeleteCommand = ({ commandId, canDelete, callback }) => () => {
     this.openPopConfirmation({
       title: 'Suppression',
       textContent: 'Êtes-vous sûr de supprimer cette commande ? ',
       onClose: this.closePopConfirmation,
-      onSubmit: this.deleteCommand({ commandId, canDelete }),
+      onSubmit: this.deleteCommand({ commandId, canDelete, callback }),
     });
   };
 
@@ -143,12 +191,23 @@ class Command extends PureComponent {
     loadCommandArticles({
       commandId: row.commandId,
       isAggregate: this.forAdminCommands,
-    });
-
-    this.setState({
-      update: false,
-      showCommandDetail: true,
-      selectedCommand: row,
+      callback: err => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                " L'affichage de commande  à échoué merci de contacter l'administrateur ",
+            },
+          });
+        } else {
+          this.setState({
+            update: true,
+            showCommandDetail: true,
+            selectedCommand: row,
+          });
+        }
+      },
     });
   };
 
@@ -157,12 +216,23 @@ class Command extends PureComponent {
     loadCommandArticles({
       commandId: row.commandId,
       isAggregate: this.forAdminCommands,
-    });
-
-    this.setState({
-      update: true,
-      showCommandDetail: true,
-      selectedCommand: row,
+      callback: err => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title:
+                " La modification d'une commande  à échoué merci de contacter l'administrateur",
+            },
+          });
+        } else {
+          this.setState({
+            update: true,
+            showCommandDetail: true,
+            selectedCommand: row,
+          });
+        }
+      },
     });
   };
 
@@ -175,7 +245,8 @@ class Command extends PureComponent {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title: 'Une erreur est survenue lors de la génération du pdf',
+              title:
+                " La génération du pdf à échoué merci de contacter l'administrateur",
             },
           });
         } else {
@@ -247,7 +318,17 @@ class Command extends PureComponent {
   showSubCommandsModel = row => () => {
     const { commandId } = row;
     const { loadAggregateSubCommands } = this.props;
-    loadAggregateSubCommands(commandId);
+    loadAggregateSubCommands(commandId, err => {
+      if (err) {
+        this.setState({
+          showInfoBar: true,
+          infoBarParams: {
+            title:
+              " La list des sous commmande  à échoué merci de contacter l'administrateur",
+          },
+        });
+      }
+    });
     this.setState({
       showSubCommands: true,
       selectedCommand: row,
@@ -341,14 +422,27 @@ class Command extends PureComponent {
   loadOfferMetaData() {
     const {
       match: {
-        params: { offerId },
+        params: { offerId, callback },
       },
       loadOfferMetaData,
       user: { role },
     } = this.props;
     !!offerId &&
       (role === SUPER_ADMIN || role === ADMIN) &&
-      loadOfferMetaData(offerId);
+      loadOfferMetaData({
+        offerId,
+        callback: err => {
+          if (err) {
+            this.setState({
+              showInfoBar: true,
+              infoBarParams: {
+                title:
+                  "le chargement des commands a échoué merci de contacter l'administrateur ",
+              },
+            });
+          }
+        },
+      });
   }
 
   componentWillUnmount() {
