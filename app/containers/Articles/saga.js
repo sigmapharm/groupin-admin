@@ -110,10 +110,11 @@ function* addOrUpdateArticleWorker(action) {
       null,
       false,
       false,
-      callback,
+      callback && callback(),
     );
   } catch (e) {
-    callback(null);
+    yield put(manageCreateArticleResponse(e.response,callback(e)))
+    //callback && callback(e)(e.response);
   }
 }
 

@@ -80,10 +80,12 @@ export class UsersListTableRow extends React.PureComponent {
     this.props.updateUser({
       ...formData,
       ville: { id: formData.ville && formData.ville.value },
+    },()=>{
+      this.setState({
+        editMode: false,
+      });
     });
-    this.setState({
-      editMode: false,
-    });
+
   };
 
   handeledit = e => {

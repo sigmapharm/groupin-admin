@@ -4,14 +4,15 @@ import ApiPathService from '../api/ApiPathService';
 export const post = (url, options) =>
   request(url, { ...options, method: 'POST' });
 
-export const checkStatus = response => {
+export const checkStatus = async response => {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
-
   const error = new Error(response.statusText);
-  error.response = response;
-  throw error;
+  let res = await response.text();
+  res = _.isEmpty(res) ? {} : JSON.parse(res);
+  error.response = res;
+  return Promise.reject(error);
 };
 
 const request = (url, options) => {

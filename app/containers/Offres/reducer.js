@@ -177,7 +177,6 @@ function reducer(state = initialState, action) {
             selected,
             discount: selected ? discount : 0,
             minQuantity: selected ? minQuantity : 0,
-            computedPPH: selected ? item.pph * (1 - (discount || 0) / 100) : 0,
           },
         }),
       });

@@ -134,6 +134,7 @@ export class OffresListTableRow extends React.PureComponent {
                 },
               });
             }
+            this.closePopConfirmation();
           },
         }),
       );
@@ -166,6 +167,7 @@ export class OffresListTableRow extends React.PureComponent {
               },
             });
           }
+          this.closePopConfirmation()
         }),
       );
   };
@@ -188,6 +190,7 @@ export class OffresListTableRow extends React.PureComponent {
             },
           });
         }
+        this.closePopConfirmation()
       }),
     );
   };

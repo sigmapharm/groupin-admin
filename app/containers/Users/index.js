@@ -162,7 +162,7 @@ export class UsersList extends React.PureComponent {
     );
   };
 
-  updateUser = user => values => {
+  updateUser = user => (values, successCallback) => {
     this.props.dispatch(
       updateUser(user.id, values, err => {
         if (err) {
@@ -174,6 +174,7 @@ export class UsersList extends React.PureComponent {
             },
           });
         } else {
+          successCallback && successCallback();
           this.handleSearchUsers();
         }
       }),

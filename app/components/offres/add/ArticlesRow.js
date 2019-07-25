@@ -75,7 +75,7 @@ export class AticlesListTableRow extends React.PureComponent {
             fullWidth
           />
         </TableCell>
-        <TableCell>{row.computedPPH && row.computedPPH.toFixed(2)}</TableCell>
+        <TableCell>{(row.selected ? row.pph * (1 - (row.discount || 0) / 100) : 0).toFixed(2)}</TableCell>
       </TableRow>
     );
   }

@@ -154,7 +154,7 @@ export class AddArticle extends React.PureComponent {
         },
       };
       this.props.dispatch(
-        createArticle(formattedData, err => {
+        createArticle(formattedData, (err)=>(res) => {
           if (err) {
             this.setState({
               showInfoBar: true,
@@ -164,7 +164,7 @@ export class AddArticle extends React.PureComponent {
               },
             });
           } else {
-            this.handleSubmitResponse();
+            this.handleSubmitResponse(res);
           }
         }),
       );

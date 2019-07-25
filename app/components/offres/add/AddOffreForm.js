@@ -14,12 +14,12 @@ import TableRow from '@material-ui/core/TableRow/TableRow';
 import moment from 'moment';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import FillIcon from '@material-ui/icons/ArrowDownward';
+import _ from 'lodash';
 import ErrorsArea from '../../ErrorsArea';
 import OffreInfo from './OffreInfo';
 import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
 import ArticlesListTableHeader from './ArticlesHeader';
 import AticlesListTableRow from './ArticlesRow';
-import _ from 'lodash';
 
 const styles = theme => ({
   root: {
@@ -195,7 +195,9 @@ export function AddOffreForm(props) {
                 rowsMax={2}
               />
               <IconButton
-                onClick={() => applyGlobalVars('globalDiscountPerArticle','discount')}
+                onClick={() =>
+                  applyGlobalVars('globalDiscountPerArticle', 'discount')
+                }
                 className={classes.globalVarsIcon}
                 aria-label="Delete"
               >
@@ -219,7 +221,9 @@ export function AddOffreForm(props) {
                 rowsMax={2}
               />
               <IconButton
-                onClick={() => applyGlobalVars('globalMinQuantity','minQuantity')}
+                onClick={() =>
+                  applyGlobalVars('globalMinQuantity', 'minQuantity')
+                }
                 className={classes.globalVarsIcon}
                 aria-label="Delete"
               >
@@ -242,8 +246,10 @@ export function AddOffreForm(props) {
           <Table className={classes.table} style={{ marginLeft: '1%' }}>
             <TableHead>
               <ArticlesListTableHeader
-                checkAllValue={rows.length == 0 ? false : checkAllValue}
-                onCheckAllChange={toggleAllSelection}
+                checkAllValue={
+                  (disableAllFields || disableAllFieldsExceptDate) || (rows.length == 0 ? false : checkAllValue)
+                }
+                onCheckAllChange={(disableAllFields || disableAllFieldsExceptDate) ? null : toggleAllSelection}
               />
             </TableHead>
             <TableBody>

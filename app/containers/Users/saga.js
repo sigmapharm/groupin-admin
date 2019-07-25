@@ -9,10 +9,7 @@ import {
   SUBMIT_UPDATE_USER,
   TOGGLE_USER,
 } from './constants';
-import {
-  manageCreateUserResponse,
-  putUsersList,
-} from './actions';
+import { manageCreateUserResponse, putUsersList } from './actions';
 import requestWithAuth from '../../services/request/request-with-auth';
 import ApiRoutes from '../../core/ApiRoutes';
 
@@ -63,8 +60,10 @@ function* addNewUserWorker(action) {
       false,
       callback,
     );
+    const res = yield requestWithAuth(ApiRoutes.USERS, options);
+    yield put(manageCreateUserResponse(res, callback));
   } catch (e) {
-    callback(null);
+    yield put(manageCreateUserResponse(e.response, callback));
   }
 }
 

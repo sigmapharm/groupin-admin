@@ -164,7 +164,6 @@ function* offresListWorker(action) {
     yield callback && callback();
   } catch (e) {
     yield callback && callback(e);
-    console.log(e);
     // eslint-disable-line
   }
 }
@@ -200,19 +199,15 @@ function* addNewOffreWorker(action) {
     }),
   };
   try {
-    yield callApi(
+    const res = yield requestWithAuth(
       updateOnlyDate
         ? `/offres/${offerId}/extend-end-date`
         : `/offres/${laboratoryId}${offerId ? `/${offerId}` : ''}`,
-      manageCreateOffreResponse,
       options,
-      null,
-      false,
-      false,
-      callback,
     );
+    yield put(manageCreateOffreResponse(res, callback && callback()));
   } catch (e) {
-    callback(null);
+    yield put(manageCreateOffreResponse(e.response, callback && callback(e)));
   }
 }
 

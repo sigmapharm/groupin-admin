@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import validators from '../../../core/validation';
 
 const validate = (result, field, value) => {
@@ -16,7 +17,25 @@ const validate = (result, field, value) => {
   }
   return { ...result };
 };
-
+export const validateArticleList = (result, offerArticles) => {
+  const validation = _.some(
+    offerArticles,
+    ({ selected,minQuantity }) => selected && (minQuantity || 0) <= 0,
+  );
+  if (validation) {
+    return {
+      fields: {
+        ...result.fields,
+        'Quantité Minimal': true,
+      },
+      messages: {
+        ...result.messages,
+        'Quantité minimal ': 'Vous devez remplir toutes les quantités minimales',
+      },
+    };
+  }
+  return { ...result };
+};
 export const validateFormData = formData => {
   let validationResult = {};
   validationResult = validate(

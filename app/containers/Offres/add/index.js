@@ -12,7 +12,7 @@ import { createStructuredSelector } from 'reselect';
 import history from 'utils/history';
 import _ from 'lodash';
 import authenticated from '../../HOC/authenticated/authenticated';
-import { validateFormData } from './validation';
+import { validateArticleList, validateFormData } from './validation';
 import {
   applyGlobalRemiseOrMinQt,
   changeArticleOffer,
@@ -94,9 +94,10 @@ export class AddOffre extends React.PureComponent {
 
   handleSubmit = updateOnlyDate => e => {
     e.preventDefault();
-    const { formData, offerId } = this.state;
+    const { formData, offerId, editMode } = this.state;
     const { articlesListlabo, offerFormData } = this.props;
-    const validation = validateFormData(offerFormData);
+    let validation = validateFormData(offerFormData);
+    validation = validateArticleList(validation, articlesListlabo);
     if (validation && validation.messages && validation.fields) {
       this.setState({
         errors: {
@@ -123,17 +124,19 @@ export class AddOffre extends React.PureComponent {
           formattedData,
           articlesListlabo,
           updateOnlyDate,
-          err => {
+          err => response => {
             if (err) {
               this.setState({
                 showInfoBar: true,
                 infoBarParams: {
-                  title:
-                    "La Modification des commands a échoué merci de contacter l'administrateur ",
+                  title: `  ${
+                    editMode ? 'La Modification' : "L'ajoute"
+                  }  des commands a échoué merci de contacter l'administrateur `,
                 },
               });
+              this.handleSubmitResponse(response);
             } else {
-              this.handleSubmitResponse();
+              this.handleSubmitResponse(response);
             }
           },
         ),
