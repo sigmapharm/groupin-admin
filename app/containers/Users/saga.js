@@ -12,6 +12,7 @@ import {
 import { manageCreateUserResponse, putUsersList } from './actions';
 import requestWithAuth from '../../services/request/request-with-auth';
 import ApiRoutes from '../../core/ApiRoutes';
+import * as GlobalActions from '../App/actions';
 
 function* usersListWorker(action) {
   const { callback } = action;
@@ -21,20 +22,22 @@ function* usersListWorker(action) {
       'Content-Type': 'application/json',
     },
   };
-  try {
-    const params = `?size=${action.payload.rowsPerPage}&page=${
-      action.payload.page
-    }&firstName=${action.payload.prenom}&lastName=${
-      action.payload.nom
-    }&pharmacie=${action.payload.pharmacie}`;
-    const res = yield requestWithAuth(`/users${params}`, options);
-    yield put(putUsersList(res));
-    // yield callApi(`/users${params}`, putUsersList, options, null);
-    yield callback && callback();
-  } catch (e) {
-    console.log(e); // eslint-disable-line
-    yield callback && callback(e);
-  }
+  yield networking(function*() {
+    try {
+      const params = `?size=${action.payload.rowsPerPage}&page=${
+        action.payload.page
+        }&firstName=${action.payload.prenom}&lastName=${
+        action.payload.nom
+        }&pharmacie=${action.payload.pharmacie}`;
+      const res = yield requestWithAuth(`/users${params}`, options);
+      yield put(putUsersList(res));
+      // yield callApi(`/users${params}`, putUsersList, options, null);
+      yield callback && callback();
+    } catch (e) {
+      console.log(e); // eslint-disable-line
+      yield callback && callback(e);
+    }
+  })
 }
 
 function* addNewUserWorker(action) {
@@ -50,12 +53,14 @@ function* addNewUserWorker(action) {
       // region: null,
     }),
   };
-  try {
-    const res = yield requestWithAuth(ApiRoutes.USERS, options);
-    yield put(manageCreateUserResponse(res, callback));
-  } catch (e) {
-    yield put(manageCreateUserResponse(e.response, callback));
-  }
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(ApiRoutes.USERS, options);
+      yield put(manageCreateUserResponse(res, callback));
+    } catch (e) {
+      yield put(manageCreateUserResponse(e.response, callback));
+    }
+  });
 }
 
 function* toggleUserWorker(action) {
@@ -73,12 +78,17 @@ function* toggleUserWorker(action) {
       region: null,
     }),
   };
-  try {
-    yield requestWithAuth(`${ApiRoutes.USERS}/${userId}/${nextState}`, options);
-    yield callback && callback();
-  } catch (e) {
-    yield callback && callback(e);
-  }
+  yield networking(function*() {
+    try {
+      yield requestWithAuth(
+        `${ApiRoutes.USERS}/${userId}/${nextState}`,
+        options,
+      );
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
 }
 
 function* manageCreateUserResponseWorker(action) {
@@ -99,21 +109,14 @@ function* updateUserWorker(action) {
       ...payload,
     }),
   };
-  try {
-    yield requestWithAuth(`${ApiRoutes.USERS}/${payload.id}`, options);
-    // yield callApi(
-    //   `${ApiRoutes.USERS}/${payload.id}`,
-    //   null,
-    //   options,
-    //   null,
-    //   true,
-    //   true,
-    //   null,
-    // );
-    yield callback && callback();
-  } catch (e) {
-    yield callback && callback(e);
-  }
+  yield networking(function*() {
+    try {
+      yield requestWithAuth(`${ApiRoutes.USERS}/${payload.id}`, options);
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
 }
 
 function* resetUserWorker(action) {
@@ -127,25 +130,22 @@ function* resetUserWorker(action) {
       ...payload,
     }),
   };
-  try {
-    yield requestWithAuth(
-      `${ApiRoutes.USERS}/${payload.userId}/reset`,
-      options,
-    );
-    // yield callApi(
-    //   `${ApiRoutes.USERS}/${payload.userId}/reset`,
-    //   null,
-    //   options,
-    //   null,
-    //   true,
-    //   true,
-    //   null,
-    // );
-    yield callback && callback();
-  } catch (e) {
-    alert(e); // eslint-disable-line
-    yield callback && callback(e);
-  }
+  yield networking(function*() {
+    try {
+      yield requestWithAuth(
+        `${ApiRoutes.USERS}/${payload.userId}/reset`,
+        options,
+      );
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
+}
+function* networking(func) {
+  yield put(GlobalActions.setNetworkingActive());
+  yield func();
+  yield put(GlobalActions.setNetworkingInactive());
 }
 
 function* manageUpdateUserResponseWorker(action) {

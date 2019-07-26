@@ -28,6 +28,7 @@ import { callApi } from '../../services/saga';
 import { GET_LABO_ARTICLES_LIST_ACTION } from '../App/constants';
 import { putArticleslaboList } from '../App/actions';
 import requestWithAuth from '../../services/request/request-with-auth';
+import * as GlobalActions from '../App/actions';
 
 function* cloneOfferWorker({ payload: { offerId, filters, callback } }) {
   const options = {
@@ -36,14 +37,16 @@ function* cloneOfferWorker({ payload: { offerId, filters, callback } }) {
       'Content-Type': 'application/json',
     },
   };
-  try {
-    yield requestWithAuth(`/offres/${offerId}/clone`, options);
-    yield put(cloneOfferSuccess(filters));
-    yield callback && callback();
-  } catch (e) {
-    yield put(cloneOfferFail());
-    yield callback && callback(e);
-  }
+  yield networking(function*() {
+    try {
+      yield requestWithAuth(`/offres/${offerId}/clone`, options);
+      yield put(cloneOfferSuccess(filters));
+      yield callback && callback();
+    } catch (e) {
+      yield put(cloneOfferFail());
+      yield callback && callback(e);
+    }
+  });
 }
 
 function* closeOfferWorker({ payload: { offerId, filters, callback } }) {
@@ -53,13 +56,15 @@ function* closeOfferWorker({ payload: { offerId, filters, callback } }) {
       'Content-Type': 'application/json',
     },
   };
-  try {
-    yield requestWithAuth(`/offres/${offerId}/close`, options);
-    yield put(closeOfferSuccess(filters));
-    yield callback && callback();
-  } catch (e) {
-    yield callback && callback(e);
-  }
+  yield networking(function*() {
+    try {
+      yield requestWithAuth(`/offres/${offerId}/close`, options);
+      yield put(closeOfferSuccess(filters));
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
 }
 
 function* submitClientCommandWorker(action) {
@@ -81,13 +86,15 @@ function* submitClientCommandWorker(action) {
         })),
     ),
   };
-  try {
-    yield requestWithAuth(`/commands/client/${offerId}`, options);
-    yield put(submitClientCommandSuccess());
-    yield callback && callback();
-  } catch (e) {
-    // TODO
-  }
+  yield networking(function*() {
+    try {
+      yield requestWithAuth(`/commands/client/${offerId}`, options);
+      yield put(submitClientCommandSuccess());
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
 }
 
 function* getOfferWithDetailsWorker({ payload: { id } }) {
@@ -97,26 +104,29 @@ function* getOfferWithDetailsWorker({ payload: { id } }) {
       'Content-Type': 'application/json',
     },
   };
-  try {
-    const res = yield requestWithAuth(`/offres/${id}/full-details`, options);
-    yield put(getOfferWithDetailsSuccess(res));
-  } catch (e) {
-    // TODO
-  }
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(`/offres/${id}/full-details`, options);
+      yield put(getOfferWithDetailsSuccess(res));
+    } catch (e) {
+      // TODO
+    }
+  });
 }
 
 function* deleteOfferWorker({ payload: { id, filters, callback } }) {
   const options = {
     method: 'DELETE',
   };
-  try {
-    yield requestWithAuth(`/offres/${id}`, options);
-    yield put(deleteOfferSuccess(filters));
-    yield callback && callback();
-  } catch (e) {
-    yield callback && callback(e);
-    // TODO
-  }
+  yield networking(function*() {
+    try {
+      yield requestWithAuth(`/offres/${id}`, options);
+      yield put(deleteOfferSuccess(filters));
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
 }
 
 function* loadArticleOfferWorker({ payload: { id }, callback }) {
@@ -126,22 +136,16 @@ function* loadArticleOfferWorker({ payload: { id }, callback }) {
       'Content-Type': 'application/json',
     },
   };
-  try {
-    const res = yield requestWithAuth(`/offres/${id}/articles`, options);
-    yield put(loadArticleOfferSuccess(res));
-
-    /* yield callApi(
-      `/offres/${id}/articles`,
-      loadArticleOfferSuccess,
-      options,
-      null,
-    );
-    */
-    yield callback && callback();
-  } catch (e) {
-    // TODO
-    yield callback && callback(e);
-  }
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(`/offres/${id}/articles`, options);
+      yield put(loadArticleOfferSuccess(res));
+      yield callback && callback();
+    } catch (e) {
+      // TODO
+      yield callback && callback(e);
+    }
+  });
 }
 
 function* offresListWorker(action) {
@@ -152,20 +156,22 @@ function* offresListWorker(action) {
       'Content-Type': 'application/json',
     },
   };
-  try {
-    const params = `?size=${action.payload.rowsPerPage}&page=${
-      action.payload.page
-    }&designation=${action.payload.designation}&laboratory=${
-      action.payload.laboratoire
-    }&status=${action.payload.status}`;
-    const res = yield requestWithAuth(`/offres${params}`, options);
-    yield put(putOffresList(res));
-    // yield callApi(`/offres${params}`, putOffresList, options, null);
-    yield callback && callback();
-  } catch (e) {
-    yield callback && callback(e);
-    // eslint-disable-line
-  }
+  yield networking(function*() {
+    try {
+      const params = `?size=${action.payload.rowsPerPage}&page=${
+        action.payload.page
+      }&designation=${action.payload.designation}&laboratory=${
+        action.payload.laboratoire
+      }&status=${action.payload.status}`;
+      const res = yield requestWithAuth(`/offres${params}`, options);
+      yield put(putOffresList(res));
+      // yield callApi(`/offres${params}`, putOffresList, options, null);
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+      // eslint-disable-line
+    }
+  });
 }
 
 function* addNewOffreWorker(action) {
@@ -198,17 +204,19 @@ function* addNewOffreWorker(action) {
           })),
     }),
   };
-  try {
-    const res = yield requestWithAuth(
-      updateOnlyDate
-        ? `/offres/${offerId}/extend-end-date`
-        : `/offres/${laboratoryId}${offerId ? `/${offerId}` : ''}`,
-      options,
-    );
-    yield put(manageCreateOffreResponse(res, callback && callback()));
-  } catch (e) {
-    yield put(manageCreateOffreResponse(e.response, callback && callback(e)));
-  }
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(
+        updateOnlyDate
+          ? `/offres/${offerId}/extend-end-date`
+          : `/offres/${laboratoryId}${offerId ? `/${offerId}` : ''}`,
+        options,
+      );
+      yield put(manageCreateOffreResponse(res, callback && callback()));
+    } catch (e) {
+      yield put(manageCreateOffreResponse(e.response, callback && callback(e)));
+    }
+  });
 }
 
 function* manageCreateArticleResponseWorker(action) {
@@ -236,6 +244,11 @@ function* laboArticlesListWorker(action) {
   } catch (e) {
     alert(e); // eslint-disable-line
   }
+}
+function* networking(func) {
+  yield put(GlobalActions.setNetworkingActive());
+  yield func();
+  yield put(GlobalActions.setNetworkingInactive());
 }
 
 function* offersListSagas() {

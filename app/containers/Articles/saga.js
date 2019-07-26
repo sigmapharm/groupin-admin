@@ -15,6 +15,7 @@ import {
   SUBMIT_DELETE_ARTICLE,
 } from './constants';
 import requestWithAuth from '../../services/request/request-with-auth';
+import * as GlobalActions from "../App/actions";
 
 // TODO : optimize options http header later ;)
 
@@ -40,22 +41,22 @@ function* articlesListWorker(action) {
       'Content-Type': 'application/json',
     },
   };
-  try {
-    const params = `?size=${action.payload.rowsPerPage}&page=${
-      action.payload.page
-    }&categorie=${action.payload.categorie}&nom=${
-      action.payload.nom
-    }&laboratoire=${action.payload.laboratoire}`;
-    // yield callApi(`/articles${params}`, putArticlesList, options, null);
-    const res = yield requestWithAuth(`/articles${params}`, options);
-    yield put(putArticlesList(res));
-    yield callback && callback();
-  } catch (e) {
-    console.log("test callback");
-    yield callback && callback(e);
-    console.log(e);
-    // eslint-disable-line
-  }
+  yield networking(function *() {
+    try {
+      const params = `?size=${action.payload.rowsPerPage}&page=${
+        action.payload.page
+        }&categorie=${action.payload.categorie}&nom=${
+        action.payload.nom
+        }&laboratoire=${action.payload.laboratoire}`;
+      // yield callApi(`/articles${params}`, putArticlesList, options, null);
+      const res = yield requestWithAuth(`/articles${params}`, options);
+      yield put(putArticlesList(res));
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+      // eslint-disable-line
+    }
+  })
 }
 
 // Saga artilses of a single Labo
@@ -123,6 +124,12 @@ function* manageCreateArticleResponseWorker(action) {
   if (callback) {
     callback(payload);
   }
+}
+
+function* networking(func) {
+  yield put(GlobalActions.setNetworkingActive());
+  yield func();
+  yield put(GlobalActions.setNetworkingInactive());
 }
 
 function* articlesListSagas() {

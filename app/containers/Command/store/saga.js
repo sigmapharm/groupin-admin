@@ -8,7 +8,6 @@ import {
   LOAD_COMMANDS_WITH_FILTERS,
   UPDATE_COMMAND_DETAIL,
 } from './actions';
-import { callApi } from '../../../services/saga';
 import {
   deleteCommandSuccess,
   loadAggregateSubCommandsSuccess,
@@ -18,21 +17,24 @@ import {
   dispatchQuantitySuccess,
 } from './actions.creators';
 import requestWithAuth from '../../../services/request/request-with-auth';
+import * as GlobalActions from '../../App/actions';
 
 function* downloadCommandFormWorker({ payload: { commandId, callback } }) {
   const options = {
     method: 'GET',
   };
-  try {
-    const blob = yield requestWithAuth(
-      `/commands/${commandId}/print`,
-      options,
-      true,
-    );
-    yield callback && callback(null, blob);
-  } catch (e) {
-    yield callback && callback(e);
-  }
+  yield networking(function *() {
+    try {
+      const blob = yield requestWithAuth(
+        `/commands/${commandId}/print`,
+        options,
+        true,
+      );
+      yield callback && callback(null, blob);
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  })
 }
 
 function* dispatchQuantityWorker({ payload: { id, callback } }) {
@@ -42,13 +44,15 @@ function* dispatchQuantityWorker({ payload: { id, callback } }) {
       'Content-Type': 'application/json',
     },
   };
-  try {
-    yield requestWithAuth(`/commands/aggregate/${id}/dispatch`, options);
-    yield put(dispatchQuantitySuccess());
-    yield callback && callback();
-  } catch (e) {
-    yield callback && callback(e);
-  }
+  yield networking(function *() {
+    try {
+      yield requestWithAuth(`/commands/aggregate/${id}/dispatch`, options);
+      yield put(dispatchQuantitySuccess());
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  })
 }
 
 function* loadAggregateSubCommandsWorker({ payload: { id, callback } }) {
@@ -58,20 +62,15 @@ function* loadAggregateSubCommandsWorker({ payload: { id, callback } }) {
       'Content-Type': 'application/json',
     },
   };
-  try {
-    const res = yield requestWithAuth(`/commands/aggregate/${id}`, options);
-    yield put(loadAggregateSubCommandsSuccess(res));
-    // yield callApi(
-    //   `/commands/aggregate/${id}`,
-    //   loadAggregateSubCommandsSuccess,
-    //   options,
-    //   null,
-    // );
-    yield callback && callback();
-  } catch (e) {
-    console.log("lala");
-    yield callback && callback(e);
-  }
+  yield networking(function *() {
+    try {
+      const res = yield requestWithAuth(`/commands/aggregate/${id}`, options);
+      yield put(loadAggregateSubCommandsSuccess(res));
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  })
 }
 
 function* updateClientCommandWorker({
@@ -86,20 +85,18 @@ function* updateClientCommandWorker({
       commandArticles.filter(({ selected }) => selected || isAggregate),
     ),
   };
-  try {
-    const res = yield requestWithAuth(
-      `/commands/${isAggregate ? 'aggregate' : 'client'}/${commandId}`,
-      options,
-    );
-    yield put(updateCommandDetailSuccess(res));
-    // yield callApi(
-    //   `/commands/${isAggregate ? 'aggregate' : 'client'}/${commandId}`,
-    //   updateCommandDetailSuccess,
-    //   options,
-    //   null,
-    // );
-    yield callback && callback();
-  } catch (e) {}
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(
+        `/commands/${isAggregate ? 'aggregate' : 'client'}/${commandId}`,
+        options,
+      );
+      yield put(updateCommandDetailSuccess(res));
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(err);
+    }
+  });
 }
 
 function* loadCommandArticleWorker({ payload: { id, isAggregate, callback } }) {
@@ -109,16 +106,18 @@ function* loadCommandArticleWorker({ payload: { id, isAggregate, callback } }) {
       'Content-Type': 'application/json',
     },
   };
-  try {
-    const res = yield requestWithAuth(
-      `/commands/${isAggregate ? 'aggregate/' : ''}${id}/articles`,
-      options,
-    );
-    yield put(loadCommandArticlesSuccess(res));
-    yield callback && callback();
-  } catch (e) {
-    yield callback && callback(e);
-  }
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(
+        `/commands/${isAggregate ? 'aggregate/' : ''}${id}/articles`,
+        options,
+      );
+      yield put(loadCommandArticlesSuccess(res));
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
 }
 
 function* deleteCommandWorker({ payload: { id, callback, isAggregate } }) {
@@ -128,22 +127,19 @@ function* deleteCommandWorker({ payload: { id, callback, isAggregate } }) {
       'Content-Type': 'application/json',
     },
   };
-  try {
-    const res = yield requestWithAuth(
-      `/commands/${isAggregate ? 'aggregate/' : ''}${id}`,
-      options,
-    );
-    yield put(deleteCommandSuccess(res));
-    // yield callApi(
-    //   `/commands/${isAggregate ? 'aggregate/' : ''}${id}`,
-    //   deleteCommandSuccess,
-    //   options,
-    //   null,
-    // );
-    yield callback && callback();
-  } catch (e) {
-    yield callback && callback(e);
-  }
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(
+        `/commands/${isAggregate ? 'aggregate/' : ''}${id}`,
+        options,
+      );
+      yield put(deleteCommandSuccess(res));
+
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
 }
 
 function* loadCommandsWorker({
@@ -158,26 +154,25 @@ function* loadCommandsWorker({
   const queryString = Object.keys(payload)
     .map(key => `${key}=${payload[key]}`)
     .join('&');
-    console.log("too");
-  try {
-    const res = yield requestWithAuth(
-      `/commands/${isAggregate ? 'aggregate/' : ''}${offerId ||
-        ''}?${queryString}`,
-      options,
-    );
-    yield put(loadCommandsSuccess(res));
-    // yield callApi(
-    //   `/commands/${isAggregate ? 'aggregate/' : ''}${offerId ||
-    //     ''}?${queryString}`,
-    //   loadCommandsSuccess,
-    //   options,
-    //   null,
-    // );
-    yield callback && callback();
-  } catch (e) {
-    console.log(callback);
-    yield callback && callback(e);
-  }
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(
+        `/commands/${isAggregate ? 'aggregate/' : ''}${offerId ||
+          ''}?${queryString}`,
+        options,
+      );
+      yield put(loadCommandsSuccess(res));
+
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
+}
+function* networking(func) {
+  yield put(GlobalActions.setNetworkingActive());
+  yield func();
+  yield put(GlobalActions.setNetworkingInactive());
 }
 
 export default function* commandListSagas() {
