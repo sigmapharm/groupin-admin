@@ -1,4 +1,4 @@
-import history from 'utils/history';
+
 import { request, requestBlob } from './request';
 import AccessTokenStorage from '../security/AccessTokenStorage';
 
@@ -10,14 +10,7 @@ const requestWithAuth = (url, options, forBlob = false) => {
       Authorization: AccessTokenStorage.get(),
     },
   };
-  return (forBlob ? requestBlob : request)(url, optionsWithAuth).catch(e => {
-    if (e.response && e.response.status === 401) {
-      AccessTokenStorage.clear();
-      history.push('/login');
-    } else {
-      throw e;
-    }
-  });
+  return (forBlob ? requestBlob : request)(url, optionsWithAuth)
 };
 
 export const get = (url, options) =>

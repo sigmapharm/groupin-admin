@@ -51,15 +51,6 @@ function* addNewUserWorker(action) {
     }),
   };
   try {
-    yield callApi(
-      ApiRoutes.USERS,
-      manageCreateUserResponse,
-      options,
-      null,
-      false,
-      false,
-      callback,
-    );
     const res = yield requestWithAuth(ApiRoutes.USERS, options);
     yield put(manageCreateUserResponse(res, callback));
   } catch (e) {
