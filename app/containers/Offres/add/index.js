@@ -145,13 +145,17 @@ export class AddOffre extends React.PureComponent {
   };
 
   handleSubmitResponse = response => {
+    const { errors, editMode } = this.state
     if (_.isEmpty(response)) {
+      if(editMode){
+        history.goBack()
+        return
+      }
       this.setState({
         ...initialState,
         isSuccess: true,
       });
     } else if (response.errors) {
-      const { errors } = this.state;
       this.setState({
         errors: {
           ...errors,
@@ -170,12 +174,6 @@ export class AddOffre extends React.PureComponent {
         laboratoire: laboratory,
       }),
     );
-    /* this.setState({
-      formData: {
-        ...formData,
-        laboratoryId: laboratory.value,
-      },
-    }); */
     if (laboratory && laboratory.value && !!laboratory.label.trim()) {
       this.props.dispatch(getLaboArticlesList(laboratory));
     }
@@ -244,13 +242,11 @@ export class AddOffre extends React.PureComponent {
       classes,
       laboratoires,
       articlesListlabo,
-      selectedArticles,
       offerFormData,
       originalOfferFormData,
       checkAllValue,
     } = this.props;
     const {
-      formData,
       editMode,
       errors,
       isSuccess,

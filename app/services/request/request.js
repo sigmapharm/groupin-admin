@@ -2,7 +2,6 @@ import _ from 'lodash';
 import history from 'utils/history';
 import ApiPathService from '../api/ApiPathService';
 import AccessTokenStorage from '../security/AccessTokenStorage';
-
 export const post = (url, options) =>
   request(url, { ...options, method: 'POST' });
 
@@ -12,8 +11,8 @@ export const checkStatus = async response => {
   }
   if (response.status === 401) {
     AccessTokenStorage.clear();
-    history.push('/login');
-    return;
+    window.location.reload(true)
+    return
   }
   const error = new Error(response.statusText);
   let res = await response.text();

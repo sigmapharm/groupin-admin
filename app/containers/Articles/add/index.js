@@ -282,7 +282,7 @@ export class AddArticle extends React.PureComponent {
             open
             TransitionComponent={Fade}
             message={
-              <span id="message-id">L'article a été créé avec succès.</span>
+              <span id="message-id">L'article a été {editMode ? 'mis à jour ' : 'créé'}  avec succès.</span>
             }
             action={[
               <Button

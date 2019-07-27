@@ -202,7 +202,7 @@ class Command extends PureComponent {
           });
         } else {
           this.setState({
-            update: true,
+            update: false,
             showCommandDetail: true,
             selectedCommand: row,
           });

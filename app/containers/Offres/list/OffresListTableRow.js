@@ -34,7 +34,6 @@ import {
 import GeneriqueDialog from '../../../components/Alert';
 import InfoBar from '../../../components/Snackbar/InfoBar';
 
-
 const closeStyle = {
   float: 'right',
 };
@@ -167,7 +166,7 @@ export class OffresListTableRow extends React.PureComponent {
               },
             });
           }
-          this.closePopConfirmation()
+          this.closePopConfirmation();
         }),
       );
   };
@@ -190,7 +189,7 @@ export class OffresListTableRow extends React.PureComponent {
             },
           });
         }
-        this.closePopConfirmation()
+        this.closePopConfirmation();
       }),
     );
   };
@@ -201,7 +200,7 @@ export class OffresListTableRow extends React.PureComponent {
     } = this.props;
     const startDate = new Date(dateDebut);
     const endDate = new Date(dateFin);
-    return moment(new Date()).isBetween(startDate, endDate, null, true);
+    return moment(new Date()).isBetween(startDate, endDate, null, 'day');
   }
 
   closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
@@ -219,14 +218,14 @@ export class OffresListTableRow extends React.PureComponent {
     const now = Date.now();
     const startDate = new Date(row.dateDebut);
     const endDate = new Date(row.dateFin);
-    const hasStarted = moment(new Date()).isSameOrAfter(startDate);
+    const hasStarted = moment(new Date()).isSameOrAfter(startDate,'day');
     // const globalDuration = (startDate - endDate) / mSecondsPerDay;
     // const elapsedDuration = (now - endDate) / mSecondsPerDay;
 
     const totalDays = moment(endDate).diff(startDate, 'days');
     const elapsedDays = moment(new Date()).diff(startDate, 'days');
     let progress = _.round((elapsedDays / totalDays) * 100, 2);
-    progress = progress > 100 ? 100 : progress;
+    progress = (progress > 100 || totalDays == 0) ? 100 : progress;
     const remainingDays = totalDays - elapsedDays;
 
     // const status = Math.min(elapsedDuration / globalDuration, 1) * 100 || 0;

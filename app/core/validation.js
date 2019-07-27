@@ -19,9 +19,9 @@ const phoneValidation = value =>
 
 const isBeforeValidation = startDate => endDate =>
   startDate && endDate
-    ? moment(endDate).isAfter(startDate)
+    ? moment(endDate).isSameOrAfter(startDate)
       ? null
-      : 'Date début doit être avant Date Fin'
+      : 'La date de début doit être avant ou égale à la date de fin'
     : null;
 
 const validators = {

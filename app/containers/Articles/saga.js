@@ -47,7 +47,7 @@ function* articlesListWorker(action) {
         action.payload.page
         }&categorie=${action.payload.categorie}&nom=${
         action.payload.nom
-        }&laboratoire=${action.payload.laboratoire}`;
+        }&laboratory=${action.payload.laboratoire}`;
       // yield callApi(`/articles${params}`, putArticlesList, options, null);
       const res = yield requestWithAuth(`/articles${params}`, options);
       yield put(putArticlesList(res));
