@@ -71,7 +71,7 @@ export const dispatchQuantitySuccess = () => ({
   type: actionsType.DISPATCH_QUANTITY_TO_SUB_COMMANDS_SUCCESS,
 });
 
-export const loadOfferMetaData = (offerId, callback) => ({
+export const loadOfferMetaData = ({offerId, callback}) => ({
   type: actionsType.LOAD_OFFER_META_DATA,
   payload: { offerId, callback },
 });
