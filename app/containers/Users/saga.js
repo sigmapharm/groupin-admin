@@ -1,5 +1,4 @@
 import { all, put, takeLatest } from 'redux-saga/effects';
-import { callApi } from '../../services/saga';
 import {
   GET_USERS_LIST_ACTION,
   MANAGE_CREATE_USER_RESPONSE,
@@ -28,7 +27,7 @@ function* usersListWorker(action) {
         action.payload.page
         }&firstName=${action.payload.prenom}&lastName=${
         action.payload.nom
-        }&pharmacie=${action.payload.pharmacie}`;
+        }&pharmacy=${action.payload.pharmacie}`;
       const res = yield requestWithAuth(`/users${params}`, options);
       yield put(putUsersList(res));
       // yield callApi(`/users${params}`, putUsersList, options, null);

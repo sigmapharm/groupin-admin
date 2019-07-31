@@ -124,7 +124,7 @@ class ProviderForm extends React.PureComponent {
   }
 
   render() {
-    const { classes, cities } = this.props;
+    const { classes, cities, onClose } = this.props;
     const { errors, showInfoBar, infoBarParams } = this.state;
     const formattedCities = _.map(cities, this.formatCities);
     return (
@@ -183,7 +183,12 @@ class ProviderForm extends React.PureComponent {
           />
         </Grid>
         <Grid className={classes.btnsContainer} container>
-          <Button type="submit" variant="contained" color="primary">
+          <Button
+            onClick={onClose}
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
             Annuler
           </Button>
           <Button

@@ -38,6 +38,7 @@ export default withStyles(styles)(
           [<Checkbox checked={checkAllValue} onChange={onToggleCheckAll} />],
           commandHeaders,
         )}
+        emptyMsg="Aucune Commande soumise"
         pageable={false}
       >
         {commands.map((row, index) => (

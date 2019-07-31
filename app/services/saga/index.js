@@ -31,11 +31,7 @@ function* callApi(
   }
   try {
     let rawData = null;
-    try {
-      rawData = yield requestWithAuth(url, options);
-    } catch (e) {
-      // handle Json format when performing delete action
-    }
+    rawData = yield requestWithAuth(url, options);
     const formattedData = formatDataFunction
       ? formatDataFunction(rawData)
       : rawData;

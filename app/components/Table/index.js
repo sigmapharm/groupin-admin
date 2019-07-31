@@ -15,24 +15,31 @@ export default ({
   totalElements,
   pageSize,
   pageNumber,
-  pageable=true,
+  pageable = true,
   children: body,
+  emptyMsg,
 }) => (
   <Table>
     <TableHead>
       <Headers headers={headers} />
     </TableHead>
     <TableBody>
-      {!_.isEmpty(body) ? body : <EmptyBody colSpan={headers.length} />}
+      {!_.isEmpty(body) ? (
+        body
+      ) : (
+        <EmptyBody emptyMsg={emptyMsg} colSpan={headers.length} />
+      )}
     </TableBody>
-    {pageable && <TableFooter>
-      <Footer
-        onChangePage={onChangePage}
-        onChangeRowsPerPage={onChangeRowPerPage}
-        totalElements={totalElements}
-        pageSize={pageSize}
-        pageNumber={pageNumber}
-      />
-    </TableFooter>}
+    {pageable && (
+      <TableFooter>
+        <Footer
+          onChangePage={onChangePage}
+          onChangeRowsPerPage={onChangeRowPerPage}
+          totalElements={totalElements}
+          pageSize={pageSize}
+          pageNumber={pageNumber}
+        />
+      </TableFooter>
+    )}
   </Table>
 );

@@ -2,7 +2,7 @@
 import { request, requestBlob } from './request';
 import AccessTokenStorage from '../security/AccessTokenStorage';
 
-const requestWithAuth = (url, options, forBlob = false) => {
+const requestWithAuth = function * (url, options, forBlob = false) {
   const optionsWithAuth = {
     ...options,
     headers: {
@@ -10,7 +10,7 @@ const requestWithAuth = (url, options, forBlob = false) => {
       Authorization: AccessTokenStorage.get(),
     },
   };
-  return (forBlob ? requestBlob : request)(url, optionsWithAuth)
+  return yield (forBlob ? requestBlob : request)(url, optionsWithAuth);
 };
 
 export const get = (url, options) =>

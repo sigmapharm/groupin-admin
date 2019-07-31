@@ -92,7 +92,7 @@ function* submitClientCommandWorker(action) {
       yield put(submitClientCommandSuccess());
       yield callback && callback();
     } catch (e) {
-      yield callback && callback(e);
+      yield callback && callback(e, e.response);
     }
   });
 }

@@ -216,7 +216,7 @@ class Grouping extends React.PureComponent {
           showBtns={false}
           onClose={this.closeProviderForm}
         >
-          <ProviderForm onAddSuccess={this.closeProviderForm} />
+          <ProviderForm onClose={this.closeProviderForm} onAddSuccess={this.closeProviderForm} />
         </Dialog>
       </Paper>
     );

@@ -93,11 +93,21 @@ export class OffreListConsultation extends React.PureComponent {
     );
   };
 
-  handleSubmitResponse = response => {
-    if (_.isEmpty(response)) {
+  handleSubmitResponse = (err, response) => {
+    if (_.isEmpty(err)) {
       const { dismiss } = this.props;
       dismiss();
       history.push('/commands');
+    } else {
+      const {
+        errors: { error },
+      } = response;
+      this.setState({
+        showInfoBar: true,
+        infoBarParams: {
+          title: error,
+        },
+      });
     }
   };
 
@@ -139,7 +149,7 @@ export class OffreListConsultation extends React.PureComponent {
               showInfoBar: true,
               infoBarParams: {
                 title:
-                  "Le chargement des offres a échoué merci de contacter l'administrateur ",
+                  "Le chargement des articles a échoué merci de contacter l'administrateur ",
               },
             });
           }

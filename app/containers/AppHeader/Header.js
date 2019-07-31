@@ -32,7 +32,7 @@ class Header extends React.PureComponent {
           {!!user && (
             <>
               <span style={{ marginRight: '10px' }}>
-                <i> {username || ''}</i> -{' '}
+                <i> {username || ''}</i>{ username && ' - '}
                 <b>{(role || '').split('_').join(' ')}</b>{' '}
               </span>
               <Fab

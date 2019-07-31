@@ -527,6 +527,7 @@ class Command extends PureComponent {
             totalElements={totalElements}
             pageSize={size}
             pageNumber={number}
+            emptyMsg="Aucune Commande soumise"
             onChangeRowPerPage={this.onPageSizeChange}
           >
             {!!commands.length && (

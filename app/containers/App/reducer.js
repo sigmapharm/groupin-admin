@@ -1,5 +1,6 @@
 import { fromJS } from 'immutable';
 import decode from 'jwt-decode';
+import _ from 'lodash';
 import {
   ADD_NEW_PHARMACIE_TO_STORE,
   RESET_USER_IN_STORE,
@@ -18,7 +19,7 @@ import AccessTokenStorage from '../../services/security/AccessTokenStorage';
 
 export const initialState = fromJS({
   loader: false,
-  user: null,
+  user: {},
   pharmacies: [],
   villes: [],
   regions: [],
@@ -41,7 +42,7 @@ function reducer(state = initialState, action) {
       });
     }
     case SET_USER_IN_STORE: {
-      if (!state.get('user')) {
+      if (_.isEmpty(state.get('user').toJS())) {
         const accessToken = AccessTokenStorage.get();
         const parsedToken = decode(accessToken);
         return state.merge({
@@ -51,7 +52,7 @@ function reducer(state = initialState, action) {
       return state;
     }
     case RESET_USER_IN_STORE: {
-      return state.merge({ user: null });
+      return state.merge({ user: {} });
     }
     case SET_PHARMACIES: {
       return state.merge({ pharmacies: [...action.payload] });
