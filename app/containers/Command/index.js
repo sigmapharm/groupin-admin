@@ -554,8 +554,8 @@ class Command extends PureComponent {
           <Dialog
             title={
               !this.state.update
-                ? 'Detail de la command'
-                : 'Modifier la command'
+                ? 'Détail de la commande'
+                : 'Modifier la commande'
             }
             open={this.state.showCommandDetail}
             showBtns={this.state.update}

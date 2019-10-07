@@ -216,7 +216,7 @@ export class OffreListConsultation extends React.PureComponent {
             </Typography>
           </div>
           <div className={classes.metaItems}>
-            <Typography color="textSecondary">Remise</Typography>
+            <Typography color="textSecondary">Escompte</Typography>
             <Typography variant="h6" component="h2">
               {row.globalDiscount}
             </Typography>
@@ -381,12 +381,12 @@ export class OffreListConsultation extends React.PureComponent {
             {commandMode && (
               <TableRow>
                 <TableCell style={{ textAlign: 'right' }} colSpan={7}>
-                  Total :{' '}
+                  Total Commande:{' '}
                 </TableCell>
                 <TableCell style={{ textAlign: 'center' }}>
                   {_.sumBy(
                     offerArticles,
-                    ({ quantity, computedPPH }) => computedPPH * quantity || 0,
+                    ({ quantity, pph }) => pph * quantity || 0,
                   ).toFixed(2)}
                 </TableCell>
               </TableRow>

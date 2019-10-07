@@ -18,6 +18,7 @@ export const articleHeaders = [
   { title: 'PPH' },
   { title: 'PPV' },
   { title: 'TVA' },
+  { title: 'Remise' },
   { title: 'PPH REMISE' },
   { title: 'QUANTITE' },
   { title: 'QUANTITE LIVREE' },

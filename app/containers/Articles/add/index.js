@@ -154,15 +154,25 @@ export class AddArticle extends React.PureComponent {
         },
       };
       this.props.dispatch(
-        createArticle(formattedData, (err)=>(res) => {
+        createArticle(formattedData, err => res => {
           if (err) {
-            this.setState({
-              showInfoBar: true,
-              infoBarParams: {
-                title:
-                  "La Modification des articles a échoué merci de contacter l'administrateur ",
-              },
-            });
+            if (editMode) {
+              this.setState({
+                showInfoBar: true,
+                infoBarParams: {
+                  title:
+                    "La modification a échoué merci de contacter l'administrateur ",
+                },
+              });
+            } else {
+              this.setState({
+                showInfoBar: true,
+                infoBarParams: {
+                  title:
+                    "L'ajout d'un article  a échoué merci de contacter l'administrateur ",
+                },
+              });
+            }
           } else {
             this.handleSubmitResponse(res);
           }
@@ -282,7 +292,9 @@ export class AddArticle extends React.PureComponent {
             open
             TransitionComponent={Fade}
             message={
-              <span id="message-id">L'article a été {editMode ? 'mis à jour ' : 'créé'}  avec succès.</span>
+              <span id="message-id">
+                L'article a été {editMode ? 'mis à jour ' : 'créé'} avec succès.
+              </span>
             }
             action={[
               <Button

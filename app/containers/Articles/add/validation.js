@@ -70,7 +70,7 @@ export const fields = {
   },
   gamme: {
     name: 'gamme',
-    label: 'Gamme ' + "d'" + 'article',
+    label: `gamme d'article`,
     validator: validators.stringNotBlank,
   },
   codebare: {
@@ -101,7 +101,7 @@ export const fields = {
   },
   tva: {
     name: 'tva',
-    label: 'TVA',
+    label: `TVA \u00A0\u00A0\u00A0\u00A0\u00A0\u00A0 %`,
     validator: validators.stringNotBlank,
   },
   ppv: {

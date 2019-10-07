@@ -125,7 +125,7 @@ export const fields = {
   },
   globalDiscount: {
     name: 'globalDiscount',
-    label: 'Remise % appliquer au montant total',
+    label: 'Escompte % ',
     type: 'number',
     validator: validators.stringNotBlank,
   },

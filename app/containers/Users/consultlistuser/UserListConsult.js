@@ -57,7 +57,7 @@ export class UserListConsult extends React.PureComponent {
           <TextField
             disabled
             id="standard-disabled"
-            label="Nom"
+            label="Prénom"
             value={row.firstName}
             className={classes.textField}
             inputProps={{
@@ -79,7 +79,7 @@ export class UserListConsult extends React.PureComponent {
           <TextField
             disabled
             id="standard-disabled"
-            label="Prénom "
+            label="Nom "
             value={row.lastName}
             className={classes.textField}
             inputProps={{

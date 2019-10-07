@@ -48,14 +48,14 @@ export default withStyles(styles)(
     isAdmin,
     forAdmin,
     copyQuantities,
-    globalDiscount
   }) => {
-    const deliveredTotalAmount = _.sumBy(
-      list,
-      ({ modifiedQuantity, computedPPH, selected }) =>
-        selected * (modifiedQuantity || 0) * computedPPH || 0,
-    ) || 0;
-    const discount = (1-globalDiscount/100) || 1
+    const deliveredTotalAmount =
+      _.sumBy(
+        list,
+        ({ modifiedQuantity, computedPPH, selected }) =>
+          selected * (modifiedQuantity || 0) * computedPPH || 0,
+      ) || 0;
+    const discount = 1 - metadata.globalDiscount / 100 || 1;
     return (
       <>
         <div className={classes.metaContainer}>
@@ -78,15 +78,27 @@ export default withStyles(styles)(
             </Typography>
           </div>
           <div className={classes.metaItems}>
-            <Typography color="textSecondary">Total Commande</Typography>
+            <Typography color="textSecondary">Escompte</Typography>
+            <Typography variant="h6" component="h2">
+              {metadata.globalDiscount}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Total commande </Typography>
             <Typography variant="h6" component="h2">
               {(metadata.totalAmount || 1).toFixed(2)}
             </Typography>
           </div>
           <div className={classes.metaItems}>
-            <Typography color="textSecondary">Total Commande Remisé</Typography>
+            <Typography color="textSecondary"> Total Remisé </Typography>
             <Typography variant="h6" component="h2">
-              {(metadata.totalAmount * discount || 1).toFixed(2)}
+              {metadata.totalAmountDiscount}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">Total Aprés Escompte</Typography>
+            <Typography variant="h6" component="h2">
+              {(metadata.totalAmountDiscount * discount || 1).toFixed(2)}
             </Typography>
           </div>
           <div className={classes.metaItems}>
@@ -94,10 +106,13 @@ export default withStyles(styles)(
             <Typography variant="h6" component="h2">
               {deliveredTotalAmount.toFixed(2)}
             </Typography>
-          </div><div className={classes.metaItems}>
-            <Typography color="textSecondary">Total Livraison Remisé</Typography>
+          </div>
+          <div className={classes.metaItems}>
+            <Typography color="textSecondary">
+              Total Livraison Remisé
+            </Typography>
             <Typography variant="h6" component="h2">
-              {(deliveredTotalAmount*discount).toFixed(2)}
+              {(deliveredTotalAmount * discount).toFixed(2)}
             </Typography>
           </div>
         </div>
@@ -107,36 +122,39 @@ export default withStyles(styles)(
             readMode
               ? articleHeaders
               : isAdmin
-              ? forAdmin
-                ? adminCommandArticlesHeadersForUpdate(
-                  <>
-                    <span>QUANTITE</span>
-                    <Tooltip
-                      placement="top"
-                      title="Copier les quantités vers les quantités livrées"
-                    >
-                      <IconButton
-                        onClick={copyQuantities}
-                        style={{ padding: 5 }}
-                      >
-                        <ListIcon color="primary" />
-                      </IconButton>
-                    </Tooltip>
-                  </>,
-                )
-                : _.tail(articleHeadersForUpdate)
-              : articleHeadersForUpdate
+                ? forAdmin
+                  ? adminCommandArticlesHeadersForUpdate(
+                      <>
+                        <span>QUANTITE</span>
+                        <Tooltip
+                          placement="top"
+                          title="Copier les quantités vers les quantités livrées"
+                        >
+                          <IconButton
+                            onClick={copyQuantities}
+                            style={{ padding: 5 }}
+                          >
+                            <ListIcon color="primary" />
+                          </IconButton>
+                        </Tooltip>
+                      </>,
+                    )
+                  : _.tail(articleHeadersForUpdate)
+                : articleHeadersForUpdate
           }
           pageable={false}
         >
           {!!list.length && (
             <>
               {list
-                .filter(({ selected }) => (readMode || (isAdmin && !forAdmin)  ? selected : true))
+                .filter(
+                  ({ selected }) =>
+                    readMode || (isAdmin && !forAdmin) ? selected : true,
+                )
                 .map((article, index) => (
                   <TableRow key={article.offerArticleId}>
                     {!isAdmin &&
-                    !readMode && (
+                      !readMode && (
                       <TableCell>
                         <Checkbox
                           onChange={({ target: { checked } }) =>
@@ -150,6 +168,7 @@ export default withStyles(styles)(
                     <TableCell>{article.pph.toFixed(2)}</TableCell>
                     <TableCell>{article.ppv.toFixed(2)}</TableCell>
                     <TableCell>{article.tva.toFixed(2)}</TableCell>
+                    <TableCell>{article.discount}</TableCell>
                     <TableCell>{article.computedPPH.toFixed(2)}</TableCell>
                     <TableCell>
                       {!readMode &&
@@ -196,6 +215,6 @@ export default withStyles(styles)(
           )}
         </Table>
       </>
-    )
-  }
+    );
+  },
 );

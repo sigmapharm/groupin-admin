@@ -78,7 +78,7 @@ function reducer(state = initialState, action) {
     }
     case MANAGE_CREATE_ARTICLE_RESPONSE:
     case CLEAR_ARTICLE_FORM: {
-      const articleFormData = state.get('articleFormData').toJS();
+      const articleFormData = articleFormDataInitialState.toJS();
       return state.merge({
         articleFormData,
       });

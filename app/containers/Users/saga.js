@@ -25,9 +25,9 @@ function* usersListWorker(action) {
     try {
       const params = `?size=${action.payload.rowsPerPage}&page=${
         action.payload.page
-        }&firstName=${action.payload.prenom}&lastName=${
+      }&firstName=${action.payload.prenom}&lastName=${
         action.payload.nom
-        }&pharmacy=${action.payload.pharmacie}`;
+      }&pharmacy=${action.payload.pharmacie}`;
       const res = yield requestWithAuth(`/users${params}`, options);
       yield put(putUsersList(res));
       // yield callApi(`/users${params}`, putUsersList, options, null);
@@ -36,7 +36,7 @@ function* usersListWorker(action) {
       console.log(e); // eslint-disable-line
       yield callback && callback(e);
     }
-  })
+  });
 }
 
 function* addNewUserWorker(action) {
