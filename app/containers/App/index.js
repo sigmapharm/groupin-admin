@@ -24,7 +24,7 @@ export default function App() {
       <Header position="static" history={history} />
       <Switch>
         <Route exact path="/login" component={SignIn} />
-        <Route exact path="/register/:token" component={RegisterPage} />
+        <Route exact path="/register/:username/:token" component={RegisterPage} />
         <Route component={InternalApp} />
       </Switch>
       <GlobalStyle />

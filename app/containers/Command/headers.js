@@ -1,9 +1,5 @@
-export const commandHeadersWithOption = [
-  { title: 'Offre désignation' },
-  { title: 'Laboratoire' },
-  { title: 'Pharmacie' },
-  { title: 'Date de commande' },
-  { title: 'Montant Command' },
+export const commandHeadersWithOption = (C) => [
+    ...C,
   { title: 'Actions' },
 ];
 export const commandHeaders = [

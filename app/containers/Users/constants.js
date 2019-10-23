@@ -9,3 +9,5 @@ export const MANAGE_CREATE_USER_RESPONSE =
 export const SUBMIT_UPDATE_USER = 'app/users/SUBMIT_UPDATE_USER';
 export const MANAGE_UPDATE_USER_RESPONSE =
   'app/users/MANAGE_UPDATE_USER_RESPONSE';
+
+export const DELETE_USER = 'app/users/DELETE_USER';

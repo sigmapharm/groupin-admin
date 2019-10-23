@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { verifyToken, registerUser } from './actions';
+import { submitLogin } from '../Login/actions';
 
 /* istanbul ignore next */
 const styles = theme => ({
@@ -53,7 +54,7 @@ export class RegisterPage extends React.PureComponent {
   componentWillMount() {
     const { params } = this.props.match;
     if (params) {
-      const { token } = params;
+      const { username, token } = params;
       this.props.dispatch(verifyToken(token, this.setTokenValid));
     }
   }
@@ -75,9 +76,22 @@ export class RegisterPage extends React.PureComponent {
     e.preventDefault();
     const { params } = this.props.match;
     if (params) {
-      const { token } = params;
+      const { token, username } = params;
       const { password, passwordConfirmation } = this.state;
-      this.props.dispatch(registerUser(token, password, passwordConfirmation));
+      this.props.dispatch(
+        registerUser(token, password, passwordConfirmation, err => {
+          if (err) {
+            alert('erreur');
+          } else {
+            this.props.dispatch(
+              submitLogin({
+                username,
+                password,
+              }),
+            );
+          }
+        }),
+      );
     }
   };
 

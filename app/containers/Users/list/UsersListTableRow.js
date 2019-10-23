@@ -2,6 +2,7 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import Search from '@material-ui/icons/Search';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ResetIcon from '@material-ui/icons/SettingsBackupRestore';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -109,6 +110,11 @@ export class UsersListTableRow extends React.PureComponent {
     this.props.resetUser();
   };
 
+  delete = () => {
+    // eslint-disable-next-line react/prop-types
+    this.props.deleteUser();
+  };
+
   closeEditMode = () => {
     this.setState({
       ...initialState,
@@ -149,6 +155,11 @@ export class UsersListTableRow extends React.PureComponent {
               value={row.enabled}
               color="primary"
             />
+            <Tooltip placement="top" title="Supprimer">
+              <IconButton onClick={this.delete} style={{ padding: 5 }}>
+                <DeleteIcon color="primary" />
+              </IconButton>
+            </Tooltip>
           </TableCell>
         </TableRow>
         {detailsOpen && (

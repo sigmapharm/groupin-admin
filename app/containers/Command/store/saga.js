@@ -23,7 +23,7 @@ function* downloadCommandFormWorker({ payload: { commandId, callback } }) {
   const options = {
     method: 'GET',
   };
-  yield networking(function *() {
+  yield networking(function*() {
     try {
       const blob = yield requestWithAuth(
         `/commands/${commandId}/print`,
@@ -34,7 +34,7 @@ function* downloadCommandFormWorker({ payload: { commandId, callback } }) {
     } catch (e) {
       yield callback && callback(e);
     }
-  })
+  });
 }
 
 function* dispatchQuantityWorker({ payload: { id, callback } }) {
@@ -44,7 +44,7 @@ function* dispatchQuantityWorker({ payload: { id, callback } }) {
       'Content-Type': 'application/json',
     },
   };
-  yield networking(function *() {
+  yield networking(function*() {
     try {
       yield requestWithAuth(`/commands/aggregate/${id}/dispatch`, options);
       yield put(dispatchQuantitySuccess());
@@ -52,7 +52,7 @@ function* dispatchQuantityWorker({ payload: { id, callback } }) {
     } catch (e) {
       yield callback && callback(e);
     }
-  })
+  });
 }
 
 function* loadAggregateSubCommandsWorker({ payload: { id, callback } }) {
@@ -62,7 +62,7 @@ function* loadAggregateSubCommandsWorker({ payload: { id, callback } }) {
       'Content-Type': 'application/json',
     },
   };
-  yield networking(function *() {
+  yield networking(function*() {
     try {
       const res = yield requestWithAuth(`/commands/aggregate/${id}`, options);
       yield put(loadAggregateSubCommandsSuccess(res));
@@ -70,7 +70,7 @@ function* loadAggregateSubCommandsWorker({ payload: { id, callback } }) {
     } catch (e) {
       yield callback && callback(e);
     }
-  })
+  });
 }
 
 function* updateClientCommandWorker({
@@ -143,7 +143,7 @@ function* deleteCommandWorker({ payload: { id, callback, isAggregate } }) {
 }
 
 function* loadCommandsWorker({
-  payload: { offerId, isAggregate, callback, ...payload },
+  payload: { offerId, cols, isAggregate, callback, ...payload },
 }) {
   const options = {
     method: 'GET',
@@ -151,6 +151,10 @@ function* loadCommandsWorker({
       'Content-Type': 'application/json',
     },
   };
+  const sortQuery = cols.filter(({ selected }) => selected).reduce(
+    (acc, n) => acc.concat(`&sort=${n.colName},${n.order}`),
+    '',
+  );
   const queryString = Object.keys(payload)
     .map(key => `${key}=${payload[key]}`)
     .join('&');
@@ -158,7 +162,7 @@ function* loadCommandsWorker({
     try {
       const res = yield requestWithAuth(
         `/commands/${isAggregate ? 'aggregate/' : ''}${offerId ||
-          ''}?${queryString}`,
+          ''}?${queryString}${sortQuery}`,
         options,
       );
       yield put(loadCommandsSuccess(res));

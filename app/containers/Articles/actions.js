@@ -43,9 +43,10 @@ export const createArticle = (formData, callback) => ({
   payload: { ...formData },
   callback,
 });
-export const deleteArticle = formData => ({
+export const deleteArticle = (articleId, callback) => ({
   type: SUBMIT_DELETE_ARTICLE,
-  payload: { ...formData },
+  payload: { articleId },
+  callback,
 });
 
 const changeArticleFormData = payload => ({
@@ -65,6 +66,8 @@ const getArticleDetailsSuccess = payload => ({
 const clearArticleForm = () => ({
   type: CLEAR_ARTICLE_FORM,
 });
+
+
 
 export {
   clearArticleForm,

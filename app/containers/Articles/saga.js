@@ -1,7 +1,6 @@
 import { takeLatest, all, put } from 'redux-saga/effects';
 import { callApi } from '../../services/saga';
 import {
-  deleteArticle,
   getArticleDetailsSuccess,
   manageCreateArticleResponse,
   putArticlesList,
@@ -15,7 +14,7 @@ import {
   SUBMIT_DELETE_ARTICLE,
 } from './constants';
 import requestWithAuth from '../../services/request/request-with-auth';
-import * as GlobalActions from "../App/actions";
+import * as GlobalActions from '../App/actions';
 
 // TODO : optimize options http header later ;)
 
@@ -41,13 +40,17 @@ function* articlesListWorker(action) {
       'Content-Type': 'application/json',
     },
   };
-  yield networking(function *() {
+  yield networking(function*() {
     try {
+      const { cols } = action.payload;
+      const sortQuery = cols
+        .filter(({ selected }) => selected)
+        .reduce((acc, n) => acc.concat(`&sort=${n.colName},${n.order}`), '');
       const params = `?size=${action.payload.rowsPerPage}&page=${
         action.payload.page
-        }&categorie=${action.payload.categorie}&nom=${
+      }&categorie=${action.payload.categorie}&nom=${
         action.payload.nom
-        }&laboratory=${action.payload.laboratoire}`;
+      }&laboratory=${action.payload.laboratoire}${sortQuery}`;
       // yield callApi(`/articles${params}`, putArticlesList, options, null);
       const res = yield requestWithAuth(`/articles${params}`, options);
       yield put(putArticlesList(res));
@@ -56,34 +59,30 @@ function* articlesListWorker(action) {
       yield callback && callback(e);
       // eslint-disable-line
     }
-  })
+  });
 }
 
 // Saga artilses of a single Labo
 
-function* deleteArticleworker(id) {
-  // eslint-disable-next-line no-unused-vars
-  // eslint-disable-next-line no-undef
+function* deleteArticleworker(action) {
   const { payload, callback } = action;
   const options = {
-    method: 'delete',
+    method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
   };
-  try {
-    yield callApi(
-      ApiRoutes.ARTICLES,
-      deleteArticle,
-      options,
-      null,
-      false,
-      false,
-      callback,
-    );
-  } catch (e) {
-    callback(null);
-  }
+  yield networking(function*() {
+    try {
+      yield requestWithAuth(
+        `${ApiRoutes.ARTICLES}/${payload.articleId}`,
+        options,
+      );
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
 }
 
 function* addOrUpdateArticleWorker(action) {
@@ -114,8 +113,8 @@ function* addOrUpdateArticleWorker(action) {
       callback && callback(),
     );
   } catch (e) {
-    yield put(manageCreateArticleResponse(e.response,callback(e)))
-    //callback && callback(e)(e.response);
+    yield put(manageCreateArticleResponse(e.response, callback(e)));
+    // callback && callback(e)(e.response);
   }
 }
 

@@ -58,9 +58,6 @@ function reducer(state = initialState, action) {
         laboratoire: action.payload,
       });
     }
-    case SUBMIT_DELETE_ARTICLE: {
-      return state.filter(row => row.id !== action.id);
-    }
     case CHANGE_ARTICLE_FORM_DATA: {
       const articleFormData = state.get('articleFormData').toJS();
       return state.merge({

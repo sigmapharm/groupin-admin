@@ -89,6 +89,7 @@ const initialState = {
 // Change component name later
 export class AddOffre extends React.PureComponent {
   handleFormDataChange = ({ target: { name, value } }) => {
+    console.log(name,value)
     this.props.dispatch(changeOfferFormData({ [name]: value }));
   };
 

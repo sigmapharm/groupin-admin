@@ -8,15 +8,23 @@ import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
 import AddIcon from '@material-ui/icons/Add';
 import TableCell from '@material-ui/core/TableCell';
+import Tooltip from '@material-ui/core/Tooltip';
 import Table from '@material-ui/core/Table';
 import Paper from '@material-ui/core/Paper';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import Fab from '@material-ui/core/Fab';
 import Divider from '@material-ui/core/Divider';
 import history from 'utils/history';
 import Typography from '@material-ui/core/Typography';
-import { getUsersList, resetUser, toggleUser, updateUser } from './actions';
+import {
+  deleteUser,
+  getUsersList,
+  resetUser,
+  toggleUser,
+  updateUser,
+} from './actions';
 import UsersListTableRow from './list/UsersListTableRow';
 import UsersListSearch from './list/UsersListSearch';
 import {
@@ -32,6 +40,7 @@ import UsersListTableFooter from './list/UsersListTableFooter';
 import { selectCities } from '../App/selectors';
 import { formatCityToLabelValue } from './add/utils';
 import InfoBar from '../../components/Snackbar/InfoBar';
+import GeneriqueDialog from '../../components/Alert';
 
 /* istanbul ignore next */
 const styles = theme => ({
@@ -63,10 +72,46 @@ export class UsersList extends React.PureComponent {
       pharmacie: '',
       showInfoBar: false,
       infoBarParams: {},
+      showPopConfirmation: false,
+      popConfirmationParams: {},
+      cols: [
+        {
+          label: 'Utilisateur',
+          colName: 'firstName',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'Email',
+          selected: false,
+          colName: 'email',
+          order: 'asc',
+        },
+        {
+          label: 'Pharmacie',
+          colName: 'pharmacy.denomination',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'Role',
+          colName: 'role',
+          selected: false,
+          order: 'asc',
+        },
+      ],
     };
   }
 
   componentDidMount() {
+    this.loadUsers();
+  }
+
+  handleChangePage = (event, page) => {
+    this.setState({ page }, () => this.loadUsers());
+  };
+
+  loadUsers() {
     this.props.dispatch(
       getUsersList(this.state, err => {
         if (err) {
@@ -82,58 +127,43 @@ export class UsersList extends React.PureComponent {
     );
   }
 
-  handleChangePage = (event, page) => {
-    this.setState({ page }, () =>
-      this.props.dispatch(
-        getUsersList(this.state, err => {
-          if (err) {
-            this.setState({
-              showInfoBar: true,
-              infoBarParams: {
-                title:
-                  "le chargement des utilisateur à échoué merci de contacter l'administrateur ",
-              },
-            });
-          }
-        }),
-      ),
-    );
-  };
-
   handleChangeRowsPerPage = event => {
     this.setState(
       { page: 0, rowsPerPage: parseInt(event.target.value, 10) },
-      () =>
-        this.props.dispatch(
-          getUsersList(this.state, err => {
-            if (err) {
-              this.setState({
-                showInfoBar: true,
-                infoBarParams: {
-                  title:
-                    "le chargement des utilisateur  à échoué merci de contacter l'administrateur ",
-                },
-              });
-            }
-          }),
-        ),
+      () => this.loadUsers(),
     );
   };
 
+  openPopConfirmation = ({ title, textContent, onClose, onSubmit }) => {
+    this.setState({
+      showPopConfirmation: true,
+      popConfirmationParams: {
+        title,
+        textContent,
+        onClose,
+        onSubmit,
+      },
+    });
+  };
+
+  performDeleteCommand = user => () => {
+    this.openPopConfirmation({
+      title: 'Suppression',
+      textContent: 'Êtes-vous sûr de supprimer cet user ? ',
+      onClose: this.closePopConfirmation,
+      onSubmit: this.deleteUser(user),
+    });
+  };
+
+  closePopConfirmation = () => {
+    this.setState({
+      showPopConfirmation: false,
+      popConfirmationParams: {},
+    });
+  };
+
   handleSearchUsers = () => {
-    this.props.dispatch(
-      getUsersList(this.state, err => {
-        if (err) {
-          this.setState({
-            showInfoBar: true,
-            infoBarParams: {
-              title:
-                "le chargement des utilisateur  à échoué merci de contacter l'administrateur ",
-            },
-          });
-        }
-      }),
-    );
+    this.loadUsers();
   };
 
   handleChange = event => {
@@ -174,9 +204,29 @@ export class UsersList extends React.PureComponent {
             },
           });
         } else {
+          // eslint-disable-next-line no-unused-expressions
           successCallback && successCallback();
           this.handleSearchUsers();
         }
+      }),
+    );
+  };
+
+  deleteUser = user => () => {
+    this.props.dispatch(
+      deleteUser(user.id, err => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title: "La suppression de l'utilisteur a echoue  ",
+            },
+          });
+        } else {
+          // eslint-disable-next-line no-unused-expressions
+          this.handleSearchUsers();
+        }
+        this.closePopConfirmation();
       }),
     );
   };
@@ -201,8 +251,35 @@ export class UsersList extends React.PureComponent {
 
   closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
 
+  changeColumnSort = index => () => {
+    let { cols } = this.state;
+    const { [index]: col } = cols;
+    cols = cols.map((a, i) => ({
+      ...a,
+      selected: false,
+      order: i === index ? a.order : 'asc',
+    }));
+    this.setState(
+      {
+        ...this.state,
+        cols: _.merge([], cols, {
+          [index]: { order: col.order === 'desc' ? 'asc' : 'desc' ,  selected:true},
+        }),
+      },
+      this.loadUsers,
+    );
+  };
+
   render() {
-    const { rowsPerPage, page, showInfoBar, infoBarParams } = this.state;
+    const {
+      rowsPerPage,
+      page,
+      showInfoBar,
+      infoBarParams,
+      showPopConfirmation,
+      popConfirmationParams,
+      cols,
+    } = this.state;
     const { classes, usersList, cities } = this.props;
     const totalElements = usersList.totalElements ? usersList.totalElements : 0;
     const rows = usersList.content;
@@ -228,10 +305,23 @@ export class UsersList extends React.PureComponent {
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
-                <TableCell>Utilisateur</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Pharmacie</TableCell>
-                <TableCell>Rôle</TableCell>
+                {cols.map(({ colName, label, order }, index) => (
+                  <TableCell key={colName}>
+                    <Tooltip
+                      title="Sort"
+                      placement="bottom-start"
+                      enterDelay={300}
+                    >
+                      <TableSortLabel
+                        active
+                        direction={order}
+                        onClick={this.changeColumnSort(index)}
+                      >
+                        {label}
+                      </TableSortLabel>
+                    </Tooltip>
+                  </TableCell>
+                ))}
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -244,6 +334,7 @@ export class UsersList extends React.PureComponent {
                     key={row.id}
                     toggleUser={this.toggleUser(row)}
                     updateUser={this.updateUser(row)}
+                    deleteUser={this.performDeleteCommand(row)}
                     resetUser={this.resetUser(row)}
                   />
                 ))}
@@ -260,6 +351,10 @@ export class UsersList extends React.PureComponent {
             open={showInfoBar}
             onClose={this.closeInfoBar}
             {...infoBarParams}
+          />
+          <GeneriqueDialog
+            open={showPopConfirmation}
+            {...popConfirmationParams}
           />
         </Paper>
         <Fab

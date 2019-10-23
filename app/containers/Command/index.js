@@ -11,6 +11,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import history from 'utils/history';
 import moment from 'moment';
 import _ from 'lodash';
+import TableCell from '@material-ui/core/TableCell';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import TableRow from '@material-ui/core/TableRow';
 import authenticated from '../HOC/authenticated/authenticated';
 import styles from './style';
 import Search from './components/search/index';
@@ -46,7 +49,7 @@ class Command extends PureComponent {
   });
 
   onSearch = () => {
-    const { searchData } = this.state;
+    const { searchData, cols } = this.state;
     const {
       match: {
         params: { offerId, callback },
@@ -56,6 +59,7 @@ class Command extends PureComponent {
     } = this.props;
     loadCommands({
       ...searchData,
+      cols,
       offerId,
       size,
       page: number,
@@ -267,6 +271,25 @@ class Command extends PureComponent {
     });
   };
 
+  changeColumnSort = index => () => {
+    let { cols } = this.state;
+    const { [index]: col } = cols;
+    cols = cols.map((a, i) => ({
+      ...a,
+      selected: false,
+      order: i === index ? a.order : 'asc',
+    }));
+    this.setState(
+      {
+        ...this.state,
+        cols: _.merge([], cols, {
+          [index]: { order: col.order === 'desc' ? 'asc' : 'desc' ,  selected:true},
+        }),
+      },
+      this.onSearch,
+    );
+  };
+
   onRowChange = payload => {
     const { changeCommandArticle } = this.props;
     changeCommandArticle(payload);
@@ -312,6 +335,38 @@ class Command extends PureComponent {
       infoBarParams: {},
       showPopConfirmation: false,
       popConfirmationParams: {},
+      cols: [
+        {
+          label: 'Offre désignation',
+          colName: 'offer.designation',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'Laboratoire',
+          colName: 'offer.laboratory.nom',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'Pharmacie',
+          colName: 'user.pharmacy.denomination',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'Date de commande',
+          colName: 'createdAt',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'Montant Command',
+          colName: 'totalAmount',
+          selected: false,
+          order: 'asc',
+        },
+      ],
     };
   }
 
@@ -485,6 +540,7 @@ class Command extends PureComponent {
       infoBarParams,
       showPopConfirmation,
       popConfirmationParams,
+      cols,
     } = this.state;
     return (
       <>
@@ -522,7 +578,24 @@ class Command extends PureComponent {
 
         <Paper className={classes.root}>
           <Table
-            headers={commandHeadersWithOption}
+            headers={commandHeadersWithOption(
+              cols.map(({ colName, label, order }, index) => (
+                <Tooltip
+                  key={colName}
+                  title="Sort"
+                  placement="bottom-start"
+                  enterDelay={300}
+                >
+                  <TableSortLabel
+                    active
+                    direction={order}
+                    onClick={this.changeColumnSort(index)}
+                  >
+                    {label}
+                  </TableSortLabel>
+                </Tooltip>
+              )),
+            )}
             onChangePage={this.onPageChange}
             totalElements={totalElements}
             pageSize={size}

@@ -24,8 +24,8 @@ import { LOAD_OFFER_META_DATA_SUCCESS } from '../Command/store/actions';
 
 export const formDataInitialState = fromJS({
   designation: '',
-  dateDebut: '',
-  dateFin: '',
+  dateDebut: null,
+  dateFin: null,
   montant: '',
   quantiteMin: '',
   status: '',

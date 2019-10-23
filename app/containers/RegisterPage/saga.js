@@ -25,7 +25,7 @@ function* verifyTokenWorker(action) {
 }
 
 function* registerUserWorker(action) {
-  const { payload } = action;
+  const { payload, callback } = action;
   const { token, password, passwordConfirmation } = payload;
   const options = {
     method: 'POST',
@@ -39,15 +39,14 @@ function* registerUserWorker(action) {
     }),
   };
   const baseApiPath = ApiPathService.getBasePath();
-  console.log(`${baseApiPath}${ApiRoutes.REGISTER}`, options)
   return fetch(`${baseApiPath}${ApiRoutes.REGISTER}`, options)
     .then(checkStatus)
     .then(res => res.json())
     .then(() => {
-      history.push('/login');
+      callback();
     })
     .catch(e => {
-        alert(e); // eslint-disable-line
+      callback(e)
     });
 }
 

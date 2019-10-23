@@ -1,5 +1,7 @@
 import { all, put, takeLatest } from 'redux-saga/effects';
 import {
+  // eslint-disable-next-line import/named
+  DELETE_USER,
   GET_USERS_LIST_ACTION,
   MANAGE_CREATE_USER_RESPONSE,
   MANAGE_UPDATE_USER_RESPONSE,
@@ -23,11 +25,16 @@ function* usersListWorker(action) {
   };
   yield networking(function*() {
     try {
+      const { cols } = action.payload;
+      const sortQuery = cols.filter(({ selected }) => selected).reduce(
+        (acc, n) => acc.concat(`&sort=${n.colName},${n.order}`),
+        '',
+      );
       const params = `?size=${action.payload.rowsPerPage}&page=${
         action.payload.page
       }&firstName=${action.payload.prenom}&lastName=${
         action.payload.nom
-      }&pharmacy=${action.payload.pharmacie}`;
+      }&pharmeacy=${action.payload.pharmacie}${sortQuery}`;
       const res = yield requestWithAuth(`/users${params}`, options);
       yield put(putUsersList(res));
       // yield callApi(`/users${params}`, putUsersList, options, null);
@@ -118,6 +125,24 @@ function* updateUserWorker(action) {
   });
 }
 
+function *deleteUserWorker(action) {
+  const { payload, callback } = action;
+  const options = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  yield networking(function*() {
+    try {
+      yield requestWithAuth(`${ApiRoutes.USERS}/${payload.userId}`, options);
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
+}
+
 function* resetUserWorker(action) {
   const { payload, callback } = action;
   const options = {
@@ -163,6 +188,7 @@ function* usersListSagas() {
     takeLatest(SUBMIT_UPDATE_USER, updateUserWorker),
     takeLatest(RESET_USER, resetUserWorker),
     takeLatest(MANAGE_UPDATE_USER_RESPONSE, manageUpdateUserResponseWorker),
+    takeLatest(DELETE_USER, deleteUserWorker),
   ]);
 }
 

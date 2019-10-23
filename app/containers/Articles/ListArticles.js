@@ -15,13 +15,14 @@ import history from 'utils/history';
 import AddIcon from '@material-ui/icons/Add';
 
 import { makeSelectArticlesList } from './selectors';
-import { getArticlesList } from './actions';
+import { deleteArticle, getArticlesList } from './actions';
 import authenticated from '../HOC/authenticated/authenticated';
 import ArticlesListTableRow from './list/ArticlesListTableRow';
 import ArticlesListTableFooter from './list/ArticlesListTableFooter';
 import ArticlesListSearch from './list/ArticlesListSearch';
 import ArticlesListTableHeader from './list/ArticlesListTableHeader';
 import InfoBar from '../../components/Snackbar/InfoBar';
+import GeneriqueDialog from '../../components/Alert';
 
 const styles = theme => ({
   root: {
@@ -72,67 +73,115 @@ class ListeArticles extends React.Component {
       laboratoire: '',
       showInfoBar: false,
       infoBarParams: {},
+      showPopConfirmation: false,
+      popConfirmationParams: {},
+      cols: [
+        {
+          label: 'Laboratoire',
+          colName: 'laboratory.nom',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'Catégorie',
+          selected: false,
+          colName: 'categorie',
+          order: 'asc',
+        },
+        {
+          label: 'Désignation',
+          colName: 'nom',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'PPH',
+          colName: 'PPH',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'PPV',
+          colName: 'PPV',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'TVA',
+          colName: 'TVA',
+          selected: false,
+          order: 'asc',
+        },
+      ],
     };
   }
 
   componentDidMount() {
-    this.props.dispatch(
-      getArticlesList(this.state, err => {
-        if (err) {
-          this.setState({
-            showPopConfirmation: false,
-            showInfoBar: true,
-            infoBarParams: {
-              title:
-                "Le chargement des articles à échoué merci de contacter l'administrateur ",
-            },
-          });
-        }
-      }),
-    );
+    this.loadArticles();
   }
 
+  openPopConfirmation = ({ title, textContent, onClose, onSubmit }) => {
+    this.setState({
+      showPopConfirmation: true,
+      popConfirmationParams: {
+        title,
+        textContent,
+        onClose,
+        onSubmit,
+      },
+    });
+  };
+
+  performDeleteCommand = article => () => {
+    this.openPopConfirmation({
+      title: 'Suppression',
+      textContent: 'Êtes-vous sûr de supprimer cet article ? ',
+      onClose: this.closePopConfirmation,
+      onSubmit: this.deleteArticle(article),
+    });
+  };
+
+  closePopConfirmation = () => {
+    this.setState({
+      showPopConfirmation: false,
+      popConfirmationParams: {},
+    });
+  };
+
   handleChangePage = (event, page) => {
-    this.setState({ page }, () =>
-      this.props.dispatch(
-        getArticlesList(this.state, err => {
-          if (err) {
-            this.setState({
-              showPopConfirmation: false,
-              showInfoBar: true,
-              infoBarParams: {
-                title:
-                  "Le chargement des articles à échoué merci de contacter l'administrateur ",
-              },
-            });
-          }
-        }),
-      ),
-    );
+    this.setState({ page }, () => this.loadArticles());
   };
 
   handleChangeRowsPerPage = event => {
     this.setState(
       { page: 0, rowsPerPage: parseInt(event.target.value, 10) },
-      () =>
-        this.props.dispatch(
-          getArticlesList(this.state, err => {
-            if (err) {
-              this.setState({
-                showPopConfirmation: false,
-                showInfoBar: true,
-                infoBarParams: {
-                  title:
-                    "Le chargement des articles à échoué merci de contacter l'administrateur ",
-                },
-              });
-            }
-          }),
-        ),
+      () => this.loadArticles());
+  };
+
+  deleteArticle = article => () => {
+    this.props.dispatch(
+      deleteArticle(article.id, err => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title: "La suppression de l'article a echoue  ",
+            },
+          });
+        } else {
+          // eslint-disable-next-line no-unused-expressions
+          this.handleSearchArticles();
+        }
+        this.closePopConfirmation();
+      }),
     );
   };
 
   handleSearchArticles = () => {
+    this.loadArticles();
+  };
+
+  loadArticles() {
     this.props.dispatch(
       getArticlesList(this.state, err => {
         if (err) {
@@ -146,6 +195,25 @@ class ListeArticles extends React.Component {
           });
         }
       }),
+    );
+  }
+
+  changeColumnSort = () => index => () => {
+    let { cols } = this.state;
+    const { [index]: col } = cols;
+    cols = cols.map((a, i) => ({
+      ...a,
+      selected: false,
+      order: i === index ? a.order : 'asc',
+    }));
+    this.setState(
+      {
+        ...this.state,
+        cols: _.merge([], cols, {
+          [index]: { order: col.order === 'desc' ? 'asc' : 'desc' ,  selected:true},
+        }),
+      },
+      this.loadArticles,
     );
   };
 
@@ -160,7 +228,15 @@ class ListeArticles extends React.Component {
   closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
 
   render() {
-    const { rowsPerPage, page, showInfoBar, infoBarParams } = this.state;
+    const {
+      rowsPerPage,
+      page,
+      showInfoBar,
+      infoBarParams,
+      showPopConfirmation,
+      popConfirmationParams,
+      cols
+    } = this.state;
     // eslint-disable-next-line react/prop-types
     const { classes, articlesList } = this.props;
     const totalElements = articlesList.totalElements
@@ -188,7 +264,10 @@ class ListeArticles extends React.Component {
         <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
-              <ArticlesListTableHeader />
+              <ArticlesListTableHeader
+                cols={cols}
+                changeHandler={this.changeColumnSort()}
+              />
             </TableHead>
 
             <TableBody>
@@ -197,7 +276,7 @@ class ListeArticles extends React.Component {
                   <ArticlesListTableRow
                     key={row.id}
                     row={row}
-                    deletearticle={deletearticle}
+                    deleteArticle={this.performDeleteCommand(row)}
                   />
                 ))}
             </TableBody>
@@ -213,6 +292,10 @@ class ListeArticles extends React.Component {
             open={showInfoBar}
             onClose={this.closeInfoBar}
             {...infoBarParams}
+          />
+          <GeneriqueDialog
+            open={showPopConfirmation}
+            {...popConfirmationParams}
           />
         </Paper>
         <Fab

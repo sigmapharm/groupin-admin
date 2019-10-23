@@ -1,6 +1,7 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Search from '@material-ui/icons/Search';
@@ -60,7 +61,8 @@ export class ArticlesListTableRow extends React.PureComponent {
 
   edit = ({ id }) => history.push(`/articles/edit/${id}`);
 
-  closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
+  // eslint-disable-next-line react/prop-types
+  delete  = () => this.props.deleteArticle()
 
   render() {
     const { row } = this.props;
@@ -89,6 +91,14 @@ export class ArticlesListTableRow extends React.PureComponent {
                   style={{ padding: 5 }}
                 >
                   <EditIcon color="primary" style={typo3syle} />
+                </IconButton>
+              </Tooltip>
+              <Tooltip placement="top" title="Supprimer">
+                <IconButton
+                  onClick={this.delete}
+                  style={{ padding: 5 }}
+                >
+                  <DeleteIcon color="primary" />
                 </IconButton>
               </Tooltip>
             </WithRoles>

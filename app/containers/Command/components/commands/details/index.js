@@ -92,7 +92,7 @@ export default withStyles(styles)(
           <div className={classes.metaItems}>
             <Typography color="textSecondary"> Total Remisé </Typography>
             <Typography variant="h6" component="h2">
-              {metadata.totalAmountDiscount}
+              {(metadata.totalAmountDiscount || 1).toFixed(2)}
             </Typography>
           </div>
           <div className={classes.metaItems}>

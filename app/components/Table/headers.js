@@ -3,8 +3,6 @@ import TableRow from '@material-ui/core/TableRow/TableRow';
 import TableCell from '@material-ui/core/TableCell/TableCell';
 
 export default React.memo(({ headers }) => {
-  console.log({ headers });
-
   return (
     <TableRow>
       {headers.map((e, index) => (

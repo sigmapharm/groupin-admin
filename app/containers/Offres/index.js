@@ -115,42 +115,59 @@ export class OffresList extends React.PureComponent {
       articledtos: '',
       showInfoBar: false,
       infoBarParams: {},
+      cols: [
+        {
+          label: 'Titre',
+          colName: 'designation',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'Laboratoire',
+          selected: false,
+          colName: 'laboratory.nom',
+          order: 'asc',
+        },
+        {
+          label: 'Date de début',
+          colName: 'dateDebut',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'Date de fin',
+          colName: 'dateFin',
+          selected: false,
+          order: 'asc',
+        },
+      ],
     };
   }
 
   componentDidMount() {
-    this.props.dispatch(
-      getOffreList(this.state, err => {
-        if (err) {
-          this.setState({
-            showPopConfirmation: false,
-            showInfoBar: true,
-            infoBarParams: {
-              title:
-                "Le chargement des articles à échoué merci de contacter l'administrateur ",
-            },
-          });
-        }
-      }),
-    );
+    this.loadOffers()
   }
 
   handleChangePage = (event, page) => {
-    this.setState({ page }, () =>
-      this.props.dispatch(
-        getOffreList(this.state, err => {
-          if (err) {
-            this.setState({
-              showPopConfirmation: false,
-              showInfoBar: true,
-              infoBarParams: {
-                title:
-                  "Le chargement des articles à échoué merci de contacter l'administrateur ",
-              },
-            });
-          }
+    this.setState({ page }, this.loadOffers);
+  };
+
+  changeColumnSort = () => index => () => {
+    let { cols } = this.state;
+    const { [index]: col } = cols;
+    cols = cols.map((a, i) => ({
+      ...a,
+      selected: false,
+      order: i === index ? a.order : 'asc',
+    }));
+    this.setState(
+      {
+        ...this.state,
+        cols: _.merge([], cols, {
+          [index]: { order: col.order === 'desc' ? 'asc' : 'desc' ,  selected:true},
         }),
-      ),
+      },
+      this.loadOffers,
     );
   };
 
@@ -161,29 +178,11 @@ export class OffresList extends React.PureComponent {
   handleChangeRowsPerPage = event => {
     this.setState(
       { page: 0, rowsPerPage: parseInt(event.target.value, 10) },
-      () =>
-        this.props.dispatch(
-          getOffreList(this.state, err => {
-            if (err) {
-              this.setState({
-                showPopConfirmation: false,
-                showInfoBar: true,
-                infoBarParams: {
-                  title:
-                    "Le chargement des articles à échoué merci de contacter l'administrateur ",
-                },
-              });
-            }
-          }),
-        ),
+      () => this.loadOffers(),
     );
   };
 
-  handleSelctChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  handleSearchOffres = () => {
+  loadOffers = () =>
     this.props.dispatch(
       getOffreList(this.state, err => {
         if (err) {
@@ -198,6 +197,13 @@ export class OffresList extends React.PureComponent {
         }
       }),
     );
+
+  handleSelctChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
+  handleSearchOffres = () => {
+    this.loadOffers()
   };
 
   handleChange = event => {
@@ -213,7 +219,7 @@ export class OffresList extends React.PureComponent {
   closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
 
   render() {
-    const { rowsPerPage, page, showInfoBar, infoBarParams } = this.state;
+    const { rowsPerPage, page, showInfoBar, infoBarParams,cols } = this.state;
     // eslint-disable-next-line react/prop-types
     const { classes, offresList, user } = this.props;
     const totalElements = offresList.totalElements
@@ -242,7 +248,10 @@ export class OffresList extends React.PureComponent {
         <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
-              <OffresListTableHeaders />
+              <OffresListTableHeaders
+                cols={cols}
+                changeHandler={this.changeColumnSort()}
+              />
             </TableHead>
             <TableBody>
               {rows.length != 0 ? (

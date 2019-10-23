@@ -1,14 +1,25 @@
 import React from 'react';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 
-export function OffresListTableHeader() {
+export function OffresListTableHeader({ changeHandler, cols }) {
   return (
     <TableRow>
-      <TableCell>Titre</TableCell>
-      <TableCell>Laboratoire</TableCell>
-      <TableCell>Date de début</TableCell>
-      <TableCell>Date de fin</TableCell>
+      {cols.map(({ colName, label, order }, index) => (
+        <TableCell key={colName}>
+          <Tooltip title="Sort" placement="bottom-start" enterDelay={300}>
+            <TableSortLabel
+              active
+              direction={order}
+              onClick={changeHandler(index)}
+            >
+              {label}
+            </TableSortLabel>
+          </Tooltip>
+        </TableCell>
+      ))}
       <TableCell style={{ textAlign: 'center' }}>Actions</TableCell>
     </TableRow>
   );

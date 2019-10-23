@@ -149,7 +149,11 @@ function* loadArticleOfferWorker({ payload: { id }, callback }) {
 }
 
 function* offresListWorker(action) {
-  const { callback } = action.payload;
+  const { callback, cols } = action.payload;
+  const sortQuery = cols.filter(({ selected }) => selected).reduce(
+    (acc, n) => acc.concat(`&sort=${n.colName},${n.order}`),
+    '',
+  );
   const options = {
     method: 'GET',
     headers: {
@@ -162,7 +166,7 @@ function* offresListWorker(action) {
         action.payload.page
       }&designation=${action.payload.designation}&laboratory=${
         action.payload.laboratoire
-      }&status=${action.payload.status}`;
+      }&status=${action.payload.status}${sortQuery}`;
       const res = yield requestWithAuth(`/offres${params}`, options);
       yield put(putOffresList(res));
       // yield callApi(`/offres${params}`, putOffresList, options, null);
