@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import Fab from '@material-ui/core/Fab';
 import Divider from '@material-ui/core/Divider';
 import history from 'utils/history';
+import _ from 'lodash';
 import Typography from '@material-ui/core/Typography';
 import {
   deleteUser,
