@@ -175,7 +175,7 @@ export class OffresListTableRow extends React.PureComponent {
     const {
       row: { id },
       dispatch,
-      filters,
+      filters
     } = this.props;
     dispatch(
       cloneOffer(id, filters, err => {
@@ -185,7 +185,7 @@ export class OffresListTableRow extends React.PureComponent {
             showInfoBar: true,
             infoBarParams: {
               title:
-                "La supression des offres à échoué merci de contacter l'administrateur ",
+                "La duplication de l'offre à échoué merci de contacter l'administrateur ",
             },
           });
         }
@@ -218,14 +218,14 @@ export class OffresListTableRow extends React.PureComponent {
     const now = Date.now();
     const startDate = new Date(row.dateDebut);
     const endDate = new Date(row.dateFin);
-    const hasStarted = moment(new Date()).isSameOrAfter(startDate,'day');
+    const hasStarted = moment(new Date()).isSameOrAfter(startDate, 'day');
     // const globalDuration = (startDate - endDate) / mSecondsPerDay;
     // const elapsedDuration = (now - endDate) / mSecondsPerDay;
 
     const totalDays = moment(endDate).diff(startDate, 'days');
     const elapsedDays = moment(new Date()).diff(startDate, 'days');
     let progress = _.round((elapsedDays / totalDays) * 100, 2);
-    progress = (progress > 100 || totalDays == 0) ? 100 : progress;
+    progress = progress > 100 || totalDays == 0 ? 100 : progress;
     const remainingDays = totalDays - elapsedDays;
 
     // const status = Math.min(elapsedDuration / globalDuration, 1) * 100 || 0;

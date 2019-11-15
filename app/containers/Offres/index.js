@@ -260,6 +260,7 @@ export class OffresList extends React.PureComponent {
                     key={row.id}
                     filters={{
                       ..._.pick(this.state, [
+                        'cols',
                         'status',
                         'designation',
                         'laboratoire',
