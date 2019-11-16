@@ -27,7 +27,7 @@ function* addPharmacieWorker(action) {
       callback,
     );
   } catch (e) {
-    callback(null);
+    callback(e.response);
   }
 }
 
