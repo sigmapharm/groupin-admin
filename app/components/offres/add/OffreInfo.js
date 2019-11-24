@@ -80,10 +80,11 @@ export function OffreInfo(props) {
         </Grid>
         <Grid xs={12} md={6} item>
           <DateFormatInput
+
             name={fields.dateFin.name}
             // fields.dateDebut.label
             label={fields.dateFin.label}
-            disabled={disable}
+            disabled={disableAll}
             dateFormat={(date)=>moment(date).format("DD/MM/YYYY")}
             min={moment()
               .add(2, 'day')

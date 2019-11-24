@@ -138,7 +138,7 @@ function *deleteUserWorker(action) {
       yield requestWithAuth(`${ApiRoutes.USERS}/${payload.userId}`, options);
       yield callback && callback();
     } catch (e) {
-      yield callback && callback(e);
+      yield callback && callback(e.response);
     }
   });
 }

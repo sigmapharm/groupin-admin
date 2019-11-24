@@ -147,6 +147,20 @@ export function AddOffreForm(props) {
             errors={errors.messages}
           />
         </Grid>
+        <Grid xs={12} item>
+          <Typography
+            style={{ color: 'red', fontSize: '1em' }}
+            variant="h6"
+            color="red"
+          >
+            {!(editMode && disableAllFieldsExceptDate)  && (<span style={{ display: 'block' }}>
+              -  Date début doit être supérieur à J + 1
+            </span>)}
+            {!(disableAllFields) && (<span style={{ display: 'block' }}>
+              -  Date début doit être supérieur à J + 2
+            </span>)}
+          </Typography>
+        </Grid>
         <OffreInfo
           disableAllWithoutDate={disableAllFieldsExceptDate}
           disableAll={disableAllFields}
@@ -247,9 +261,15 @@ export function AddOffreForm(props) {
             <TableHead>
               <ArticlesListTableHeader
                 checkAllValue={
-                  (disableAllFields || disableAllFieldsExceptDate) || (rows.length == 0 ? false : checkAllValue)
+                  disableAllFields ||
+                  disableAllFieldsExceptDate ||
+                  (rows.length == 0 ? false : checkAllValue)
                 }
-                onCheckAllChange={(disableAllFields || disableAllFieldsExceptDate) ? null : toggleAllSelection}
+                onCheckAllChange={
+                  disableAllFields || disableAllFieldsExceptDate
+                    ? null
+                    : toggleAllSelection
+                }
               />
             </TableHead>
             <TableBody>

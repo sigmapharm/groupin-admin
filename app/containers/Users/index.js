@@ -147,7 +147,7 @@ export class UsersList extends React.PureComponent {
     });
   };
 
-  performDeleteCommand = user => () => {
+  performDeleteUser = user => () => {
     this.openPopConfirmation({
       title: 'Suppression',
       textContent: 'Êtes-vous sûr de supprimer cet user ? ',
@@ -220,7 +220,11 @@ export class UsersList extends React.PureComponent {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title: "La suppression de l'utilisteur a echoue  ",
+              title: _.get(
+                err,
+                'errors.error',
+                "La suppression de l'utilisteur a echoue  ",
+              ),
             },
           });
         } else {
@@ -264,7 +268,10 @@ export class UsersList extends React.PureComponent {
       {
         ...this.state,
         cols: _.merge([], cols, {
-          [index]: { order: col.order === 'desc' ? 'asc' : 'desc' ,  selected:true},
+          [index]: {
+            order: col.order === 'desc' ? 'asc' : 'desc',
+            selected: true,
+          },
         }),
       },
       this.loadUsers,
@@ -335,7 +342,7 @@ export class UsersList extends React.PureComponent {
                     key={row.id}
                     toggleUser={this.toggleUser(row)}
                     updateUser={this.updateUser(row)}
-                    deleteUser={this.performDeleteCommand(row)}
+                    deleteUser={this.performDeleteUser(row)}
                     resetUser={this.resetUser(row)}
                   />
                 ))}
