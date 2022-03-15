@@ -1,7 +1,4 @@
-export const commandHeadersWithOption = (C) => [
-    ...C,
-  { title: 'Actions' },
-];
+export const commandHeadersWithOption = C => [...C, { title: 'Actions' }];
 export const commandHeaders = [
   { title: 'Offre désignation' },
   { title: 'Laboratoire' },
@@ -19,7 +16,7 @@ export const articleHeaders = [
   { title: 'QUANTITE' },
   { title: 'QUANTITE LIVREE' },
 ];
-export const adminCommandArticlesHeadersForUpdate = (Component)=> [
+export const adminCommandArticlesHeadersForUpdate = Component => [
   { title: 'DESIGNATION' },
   { title: 'PPH' },
   { title: 'PPV' },
@@ -30,7 +27,7 @@ export const adminCommandArticlesHeadersForUpdate = (Component)=> [
   { title: 'QUANTITE LIVREE' },
 ];
 export const articleHeadersForUpdate = [
-  { title: '' },
+  // { title: '' },
   { title: 'DESIGNATION' },
   { title: 'PPH' },
   { title: 'PPV' },
@@ -40,4 +37,3 @@ export const articleHeadersForUpdate = [
   { title: 'QUANTITE' },
   { title: 'QUANTITE LIVREE' },
 ];
-

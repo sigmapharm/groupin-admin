@@ -28,6 +28,7 @@ const MenuByRole = props => {
 
 const MyMenu = props => {
   const { classes, user } = props;
+  console.log('user', user);
   return (
     <div style={{ flexGrow: 1 }}>
       {user && <MenuByRole classes={classes} user={user} />}
@@ -43,6 +44,9 @@ MyMenu.propTypes = {
 const styles = () => ({
   label: {
     color: 'white',
+    textTransform: 'Capitalize',
+    fontWeight: '400',
+    letterSpacing: 0.5,
   },
   button: {
     marginLeft: '20px',

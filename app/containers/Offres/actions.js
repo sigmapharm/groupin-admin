@@ -65,7 +65,13 @@ const changeArticleOffer = ({
   discount,
 }) => ({
   type: CHANGE_ARTICLE_OFFER,
-  payload: { index, id, selected, discount, minQuantity },
+  payload: {
+    index,
+    id,
+    selected: discount || minQuantity ? true : false,
+    discount,
+    minQuantity,
+  },
 });
 
 const getOfferWithDetails = ({ id }) => ({

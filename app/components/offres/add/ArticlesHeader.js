@@ -7,9 +7,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 export default ({ onCheckAllChange, checkAllValue }) => (
   <TableRow>
-    <TableCell>
+    {/* <TableCell>
       <Checkbox onChange={onCheckAllChange} checked={checkAllValue} />
-    </TableCell>
+    </TableCell> */}
     <TableCell>Désignation</TableCell>
     <TableCell>
       <span style={{ textDecoration: 'line-through' }}>PPH</span>

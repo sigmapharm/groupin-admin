@@ -7,22 +7,25 @@ import SearchIcon from '@material-ui/icons/Search';
 
 const styles = theme => ({
   root: {
-    width: '80%',
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
-    marginLeft: '10%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: '1200px',
+    width: '100%',
+    padding: '0 17px',
   },
   filtersSection: {
     display: 'flex',
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
   textField: {
-    marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
     width: 200,
   },
   button: {
-    margin: theme.spacing.unit,
+    //  margin: theme.spacing.unit,
   },
   select: {
     marginTop: theme.spacing.unit * 2,

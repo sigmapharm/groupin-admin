@@ -2,15 +2,21 @@ import { all, put, takeLatest } from 'redux-saga/effects';
 import {
   // eslint-disable-next-line import/named
   DELETE_USER,
+  GET_PROFILE,
   GET_USERS_LIST_ACTION,
   MANAGE_CREATE_USER_RESPONSE,
   MANAGE_UPDATE_USER_RESPONSE,
+  RESET_PASSWORD,
   RESET_USER,
   SUBMIT_CREATE_USER,
   SUBMIT_UPDATE_USER,
   TOGGLE_USER,
 } from './constants';
-import { manageCreateUserResponse, putUsersList } from './actions';
+import {
+  manageCreateUserResponse,
+  putUsersList,
+  putUserProfile,
+} from './actions';
 import requestWithAuth from '../../services/request/request-with-auth';
 import ApiRoutes from '../../core/ApiRoutes';
 import * as GlobalActions from '../App/actions';
@@ -26,10 +32,9 @@ function* usersListWorker(action) {
   yield networking(function*() {
     try {
       const { cols } = action.payload;
-      const sortQuery = cols.filter(({ selected }) => selected).reduce(
-        (acc, n) => acc.concat(`&sort=${n.colName},${n.order}`),
-        '',
-      );
+      const sortQuery = cols
+        .filter(({ selected }) => selected)
+        .reduce((acc, n) => acc.concat(`&sort=${n.colName},${n.order}`), '');
       const params = `?size=${action.payload.rowsPerPage}&page=${
         action.payload.page
       }&firstName=${action.payload.prenom}&lastName=${
@@ -37,7 +42,25 @@ function* usersListWorker(action) {
       }&pharmeacy=${action.payload.pharmacie}${sortQuery}`;
       const res = yield requestWithAuth(`/users${params}`, options);
       yield put(putUsersList(res));
-      // yield callApi(`/users${params}`, putUsersList, options, null);
+      yield callback && callback();
+    } catch (e) {
+      console.log(e); // eslint-disable-line
+      yield callback && callback(e);
+    }
+  });
+}
+function* getProfileWorker(action) {
+  const { callback } = action;
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(`/users/profile`, options);
+      yield put(putUserProfile(res));
       yield callback && callback();
     } catch (e) {
       console.log(e); // eslint-disable-line
@@ -125,7 +148,7 @@ function* updateUserWorker(action) {
   });
 }
 
-function *deleteUserWorker(action) {
+function* deleteUserWorker(action) {
   const { payload, callback } = action;
   const options = {
     method: 'DELETE',
@@ -179,6 +202,29 @@ function* manageUpdateUserResponseWorker(action) {
   }
 }
 
+function* restePasswordWorker(action) {
+  const { callback, payload } = action;
+  const body = JSON.stringify(payload);
+  const options = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body,
+  };
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(
+        `${ApiRoutes.USERS}/update/password`,
+        options,
+      );
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
+}
+
 function* usersListSagas() {
   yield all([
     takeLatest(TOGGLE_USER, toggleUserWorker),
@@ -189,6 +235,8 @@ function* usersListSagas() {
     takeLatest(RESET_USER, resetUserWorker),
     takeLatest(MANAGE_UPDATE_USER_RESPONSE, manageUpdateUserResponseWorker),
     takeLatest(DELETE_USER, deleteUserWorker),
+    takeLatest(RESET_PASSWORD, restePasswordWorker),
+    takeLatest(GET_PROFILE, getProfileWorker),
   ]);
 }
 

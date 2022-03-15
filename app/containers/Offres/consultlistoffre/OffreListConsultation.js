@@ -26,7 +26,7 @@ import {
   submitClientCommand,
 } from '../actions';
 import { makeSelectUser } from '../../App/selectors';
-import { ADMIN, SUPER_ADMIN } from '../../AppHeader/Roles';
+import { SUPER_ADMIN } from '../../AppHeader/Roles';
 
 const styles = theme => ({
   container: {
@@ -79,19 +79,19 @@ export class OffreListConsultation extends React.PureComponent {
       changeOfferArticle({
         id,
         quantity: +value,
-        hasError: +value < minQuantity,
+        hasError: value && +value < minQuantity,
       }),
     );
   };
 
-  handSelectArticleChange = id => ({ target: { checked } }) => {
-    this.props.dispatch(
-      changeOfferArticle({
-        id,
-        selected: checked,
-      }),
-    );
-  };
+  // handSelectArticleChange = id => ({ target: { checked } }) => {
+  //   this.props.dispatch(
+  //     changeOfferArticle({
+  //       id,
+  //       selected: checked,
+  //     }),
+  //   );
+  // };
 
   handleSubmitResponse = (err, response) => {
     if (_.isEmpty(err)) {
@@ -121,11 +121,14 @@ export class OffreListConsultation extends React.PureComponent {
 
   get allowCommandSubmit() {
     const { offerArticles } = this.props;
-    return _.every(
-      offerArticles.filter(({ selected }) => !!selected),
-      ({ quantity, selected, minQuantity }) =>
-        selected && quantity >= minQuantity,
-    );
+    return offerArticles.filter(
+      ({ quantity, minQuantity }) => quantity >= minQuantity,
+    ).length > 0 &&
+      offerArticles
+        .filter(({ quantity }) => quantity > 0)
+        .every(({ hasError }) => hasError === false)
+      ? true
+      : false;
   }
 
   get forAdmin() {
@@ -264,7 +267,7 @@ export class OffreListConsultation extends React.PureComponent {
         <Table>
           <TableHead>
             <TableRow>
-              {commandMode && <TableCell />}
+              {/* {commandMode && <TableCell />} */}
               <TableCell>Désignation</TableCell>
               <TableCell>PPV</TableCell>
               <TableCell>
@@ -341,19 +344,17 @@ export class OffreListConsultation extends React.PureComponent {
                 selected,
               }) => (
                 <TableRow
-                  {...(hasError && selected
-                    ? { className: classes.hasError }
-                    : {})}
+                  {...(hasError ? { className: classes.hasError } : {})}
                   key={id}
                 >
-                  {commandMode && (
+                  {/* {commandMode && (
                     <TableCell>
                       <Checkbox
                         onChange={this.handSelectArticleChange(id)}
                         checked={!!selected}
                       />
                     </TableCell>
-                  )}
+                  )} */}
                   <TableCell>{nom}</TableCell>
                   <TableCell>{ppv.toFixed(2)}</TableCell>
                   <TableCell>{pph.toFixed(2)}</TableCell>
@@ -367,7 +368,7 @@ export class OffreListConsultation extends React.PureComponent {
                         label="Quantité"
                         type="number"
                         value={quantity || ''}
-                        disabled={!selected}
+                        //disabled={!selected}
                         autoComplete="off"
                         inputProps={{ maxLength: 100 }}
                         onChange={this.handleQuantityChange(id, minQuantity)}

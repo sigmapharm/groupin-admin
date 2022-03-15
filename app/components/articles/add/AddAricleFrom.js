@@ -11,7 +11,6 @@ import Button from '@material-ui/core/Button';
 import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
 import ErrorsArea from '../../ErrorsArea';
 import ArticleInfo from './ArticleInfo';
-import {formatLaboratoireToLabelValue} from "../../../containers/Articles/add/utils";
 const styles = theme => ({
   root: {
     paddingLeft: theme.spacing.unit * 5,

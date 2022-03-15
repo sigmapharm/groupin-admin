@@ -8,14 +8,7 @@ import Table from '@material-ui/core/Table';
 import Progressbar from './Progressbar';
 import Divider from '@material-ui/core/Divider';
 
-
-const HeaderStyle = {
-  backgroundColor: 'lightgray',
-};
-
-
-const champprogress = {width: '20%'};
-
+const champprogress = { width: '20%' };
 
 export class OffreListConsultMembre extends React.PureComponent {
   constructor(props) {
@@ -24,12 +17,12 @@ export class OffreListConsultMembre extends React.PureComponent {
   }
 
   render() {
-    const {row, avancement} = this.props;
-//    const datefin = new Date(row.dateFin);
-//    const mSecondesParJour = 86400 * 1000;
-//    const joursRestants = Math.floor((datefin - new Date()) / mSecondesParJour) + 1;
-//    const joursLabel = joursRestants === 1 ? 'jour' : 'jours';
-//  const dateformat = new Intl.DateTimeFormat('fr-FR').format(datefin);
+    const { row, avancement } = this.props;
+    //    const datefin = new Date(row.dateFin);
+    //    const mSecondesParJour = 86400 * 1000;
+    //    const joursRestants = Math.floor((datefin - new Date()) / mSecondesParJour) + 1;
+    //    const joursLabel = joursRestants === 1 ? 'jour' : 'jours';
+    //  const dateformat = new Intl.DateTimeFormat('fr-FR').format(datefin);
     return (
       <React.Fragment>
         <Table>
@@ -38,42 +31,54 @@ export class OffreListConsultMembre extends React.PureComponent {
               <TableCell>Désignation</TableCell>
               <TableCell>Laboratoire</TableCell>
               <TableCell>quantité minimal ( par article)</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow></TableHead>
+              <TableCell />
+              <TableCell />
+            </TableRow>
+          </TableHead>
           <TableBody>
             <TableRow>
-              <TableCell component="th" scope="row">{row.designation}</TableCell>
+              <TableCell component="th" scope="row">
+                {row.designation}
+              </TableCell>
               <TableCell>{row.laboratoire && row.laboratoire.nom}</TableCell>
               <TableCell>{row.quantiteMin}</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
+              <TableCell />
+              <TableCell />
             </TableRow>
-          </TableBody></Table>
-        <div style={{height: '20px'}}></div>
-        <Divider variant="middle" style={{backgroundColor: '#276955', width: '50%', marginLeft: '25%'}}/>
-        <div style={{height: '20px'}}></div>
+          </TableBody>
+        </Table>
+        <div style={{ height: '20px' }} />
+        <Divider
+          variant="middle"
+          style={{
+            backgroundColor: '#276955',
+            width: '50%',
+            marginLeft: '25%',
+          }}
+        />
+        <div style={{ height: '20px' }} />
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Date fin</TableCell>
               <TableCell>TimeLine</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow></TableHead>
+              <TableCell />
+              <TableCell />
+            </TableRow>
+          </TableHead>
           <TableBody>
             <TableRow>
               <TableCell>{dateformat}</TableCell>
               <TableCell style={champprogress}>
-                <Progressbar progress={avancement}/>
-                {joursRestants > 0 ? 'Il vous reste ' + joursRestants + ' ' + joursLabel : 'Offre clôturée !'}
+                <Progressbar progress={avancement} />
+                {joursRestants > 0
+                  ? 'Il vous reste ' + joursRestants + ' ' + joursLabel
+                  : 'Offre clôturée !'}
               </TableCell>
             </TableRow>
-          </TableBody></Table>
-
-
+          </TableBody>
+        </Table>
       </React.Fragment>
-
     );
   }
 }
@@ -81,6 +86,5 @@ export class OffreListConsultMembre extends React.PureComponent {
 OffreListConsultMembre = {
   row: PropTypes.object.isRequired,
 };
-
 
 export default OffreListConsultMembre;

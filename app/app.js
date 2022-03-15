@@ -35,6 +35,7 @@ import configureStore from './configureStore';
 import { translationMessages } from './i18n';
 import GlobalLoadingDialog from './containers/GlobalLoadingDialog';
 import theme from './themes/theme';
+import { CircularProgress } from '@material-ui/core';
 
 // Create redux store with history
 const initialState = {};
@@ -85,6 +86,6 @@ if (!window.Intl) {
 // it's not most important operation and if main code fails,
 // we do not want it installed
 if (process.env.NODE_ENV === 'production') {
-  window.console.log = () => {}
+  window.console.log = () => {};
   require('offline-plugin/runtime').install(); // eslint-disable-line global-require
 }

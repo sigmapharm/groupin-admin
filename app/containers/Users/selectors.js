@@ -5,6 +5,9 @@ const usersState = store => store.get('users');
 const makeSelectUsersList = () =>
   createSelector(usersState, state => state.get('usersList').toJS());
 
+const makeSelectUserProfile = () =>
+  createSelector(usersState, state => state.get('userProfil').toJS());
+
 const makeSelectPage = () =>
   createSelector(usersState, state => state.get('page'));
 
@@ -27,4 +30,5 @@ export {
   makeSelectPrenom,
   makeSelectNom,
   makeSelectPharmacie,
+  makeSelectUserProfile,
 };

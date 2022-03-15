@@ -28,6 +28,7 @@ import {
   makeSelectquantiteMinimale,
   makeSelectstatus,
   makeSelectlaboratoire,
+  selectOfferArticleList,
 } from './selectors';
 import authenticated from '../HOC/authenticated/authenticated';
 import OffresListTableFooter from './list/OffresListTableFooter';
@@ -38,6 +39,9 @@ import OffresListTableHeaders from './list/OffresListTableHeader';
 import WithRoles from '../WithRoles';
 import { ADMIN, MEMBRE, SUPER_ADMIN } from '../AppHeader/Roles';
 import { makeSelectUser } from '../App/selectors';
+import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
+import OffresListCards from './responsive/OffresListCards';
+
 // import { makeSelectoffreArticledtos } from '../App/selectors';
 
 /* istanbul ignore next */
@@ -52,11 +56,12 @@ const actionsStyles = theme => ({
 
 const styles = theme => ({
   root: {
-    width: '80%',
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
-    overflowX: 'auto',
-    marginLeft: '10%',
+    maxWidth: '1200px',
+    width: '100%',
+    margin: '20px auto',
+    overflow: 'hidden',
   },
   table: {
     minWidth: 700,
@@ -101,6 +106,7 @@ export class OffresList extends React.PureComponent {
     super(props);
     const {
       user: { role },
+      location,
     } = props;
     this.state = {
       page: 0,
@@ -145,7 +151,12 @@ export class OffresList extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.loadOffers()
+    const params = new URLSearchParams(this.props.location.search);
+    const designation = params.get('designation');
+    console.log('designation', designation);
+    if (designation)
+      this.setState({ ...this.state, designation }, this.loadOffers);
+    else this.loadOffers();
   }
 
   handleChangePage = (event, page) => {
@@ -164,7 +175,10 @@ export class OffresList extends React.PureComponent {
       {
         ...this.state,
         cols: _.merge([], cols, {
-          [index]: { order: col.order === 'desc' ? 'asc' : 'desc' ,  selected:true},
+          [index]: {
+            order: col.order === 'desc' ? 'asc' : 'desc',
+            selected: true,
+          },
         }),
       },
       this.loadOffers,
@@ -203,97 +217,118 @@ export class OffresList extends React.PureComponent {
   };
 
   handleSearchOffres = () => {
-    this.loadOffers()
+    this.loadOffers();
   };
 
   handleChange = event => {
-    this.setState({ [event.target.name]: _.trim(event.target.value) });
-  };
-
-  handleStatutChange = name => event => {
     this.setState({
-      [name]: event.target.value,
+      [event.target.name]: _.trim(event.target.value),
     });
   };
 
-  closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
+  handleStatutChange = name => event => {
+    this.setState({ [name]: event.target.value });
+  };
+
+  closeInfoBar = () =>
+    this.setState({
+      showInfoBar: false,
+      infoBarParams: {},
+    });
 
   render() {
-    const { rowsPerPage, page, showInfoBar, infoBarParams,cols } = this.state;
+    console.log('props', this.props);
+    const { rowsPerPage, page, showInfoBar, infoBarParams, cols } = this.state;
     // eslint-disable-next-line react/prop-types
-    const { classes, offresList, user } = this.props;
+    const { classes, offresList, user, width } = this.props;
     const totalElements = offresList.totalElements
       ? offresList.totalElements
       : 0;
     const rows = offresList.content || [];
+    const isSmallDevice = isWidthDown('md', width);
 
     return (
       <div>
         <Typography component="h1" variant="h4" className={classes.root}>
           Liste des offres
         </Typography>
-        <Divider variant="middle" className={classes.root} />
+        {/* <Divider variant="middle" className={classes.root} /> */}
 
         <OffresListSearch
           handleChange={this.handleChange}
           handleSelctChange={this.handleSelctChange}
           handleSearchOffres={this.handleSearchOffres}
         />
-        <Divider variant="middle" className={classes.root} />
+        {/* <Divider variant="middle" className={classes.root} /> */}
 
         <Typography component="h1" variant="h6" className={classes.root}>
           {totalElements} offres trouvés
         </Typography>
 
-        <Paper className={classes.root}>
-          <Table className={classes.table}>
-            <TableHead>
-              <OffresListTableHeaders
-                cols={cols}
-                changeHandler={this.changeColumnSort()}
-              />
-            </TableHead>
-            <TableBody>
-              {rows.length != 0 ? (
-                rows.map(row => (
-                  <OffresListTableRow
-                    key={row.id}
-                    filters={{
-                      ..._.pick(this.state, [
-                        'cols',
-                        'status',
-                        'designation',
-                        'laboratoire',
-                        'rowsPerPage',
-                        'page',
-                      ]),
-                    }}
-                    dispatch={this.props.dispatch}
-                    row={row}
-                  />
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell className={classes.rowsEmpty} colSpan={5}>
-                    <span>Pas d'offres</span>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-            <OffresListTableFooter
+        {isSmallDevice ? (
+          <div className={classes.root}>
+            <OffresListCards
+              offresList={rows}
               totalElements={totalElements}
               rowsPerPage={rowsPerPage}
               page={page}
               handleChangePage={this.handleChangePage}
               handleChangeRowsPerPage={this.handleChangeRowsPerPage}
             />
-          </Table>
-          <InfoBar
-            open={showInfoBar}
-            onClose={this.closeInfoBar}
-            {...infoBarParams}
-          />
-        </Paper>
+          </div>
+        ) : (
+          <Paper className={classes.root}>
+            <Table className={classes.table}>
+              <TableHead>
+                <OffresListTableHeaders
+                  cols={cols}
+                  changeHandler={this.changeColumnSort()}
+                />
+              </TableHead>
+              <TableBody>
+                {rows.length != 0 ? (
+                  rows.map(row => (
+                    <OffresListTableRow
+                      key={row.id}
+                      filters={{
+                        ..._.pick(this.state, [
+                          'cols',
+                          'status',
+                          'designation',
+                          'laboratoire',
+                          'rowsPerPage',
+                          'page',
+                        ]),
+                      }}
+                      dispatch={this.props.dispatch}
+                      row={row}
+                      offerArticles={this.props.offerArticles}
+                    />
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell className={classes.rowsEmpty} colSpan={5}>
+                      <span>Pas d'offres</span>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+              <OffresListTableFooter
+                totalElements={totalElements}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                handleChangePage={this.handleChangePage}
+                handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+              />
+            </Table>
+          </Paper>
+        )}
+
+        <InfoBar
+          open={showInfoBar}
+          onClose={this.closeInfoBar}
+          {...infoBarParams}
+        />
         <WithRoles user={user} roles={[ADMIN, SUPER_ADMIN]}>
           <Fab
             color="primary"
@@ -325,6 +360,7 @@ const mapStateToProps = createStructuredSelector({
   status: makeSelectstatus(),
   laboratoire: makeSelectlaboratoire(),
   user: makeSelectUser(),
+  offerArticles: selectOfferArticleList(),
   // offreArticledtos: makeSelectoffreArticledtos(),
 });
 
@@ -345,4 +381,5 @@ export default compose(
   authenticated,
   withConnect,
   withStyles(styles),
+  withWidth(),
 )(OffresList);

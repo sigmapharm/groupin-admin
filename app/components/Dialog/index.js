@@ -17,13 +17,16 @@ export default ({
   showBtns = true,
   submitTitle,
   cancelTitle,
-}) => (open ?  (
+  style,
+}) =>
+  open ? (
     <Dialog
       open={open}
       maxWidth="lg"
       onClose={onClose}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
+      style={style}
     >
       <DialogTitle disableTypography>
         <Typography
@@ -65,4 +68,4 @@ export default ({
     </Dialog>
   ) : (
     <></>
-  ))
+  );

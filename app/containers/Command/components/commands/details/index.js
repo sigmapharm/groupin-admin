@@ -6,7 +6,6 @@ import TableRow from '@material-ui/core/TableRow/TableRow';
 import TableCell from '@material-ui/core/TableCell/TableCell';
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
-import Checkbox from '@material-ui/core/Checkbox/Checkbox';
 import TextField from '@material-ui/core/TextField/TextField';
 import Tooltip from '@material-ui/core/Tooltip/Tooltip';
 import IconButton from '@material-ui/core/IconButton/IconButton';
@@ -153,7 +152,7 @@ export default withStyles(styles)(
                 )
                 .map((article, index) => (
                   <TableRow key={article.offerArticleId}>
-                    {!isAdmin &&
+                    {/* {!isAdmin &&
                       !readMode && (
                       <TableCell>
                         <Checkbox
@@ -163,7 +162,7 @@ export default withStyles(styles)(
                           checked={!!article.selected}
                         />
                       </TableCell>
-                    )}
+                    )} */}
                     <TableCell>{article.label}</TableCell>
                     <TableCell>{article.pph.toFixed(2)}</TableCell>
                     <TableCell>{article.ppv.toFixed(2)}</TableCell>
@@ -202,7 +201,7 @@ export default withStyles(styles)(
                           onChange={({ target: { value } }) =>
                             onChange({ index, modifiedQuantity: +value })
                           }
-                          disabled={!article.selected}
+                          //disabled={!article.selected}
                           autoComplete="off"
                           inputProps={{ maxLength: 100 }}
                           fullWidth

@@ -3,17 +3,14 @@ import Typography from '@material-ui/core/Typography/Typography';
 import { createStructuredSelector } from 'reselect';
 import connect from 'react-redux/es/connect/connect';
 import { bindActionCreators, compose } from 'redux';
-import { withStyles } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider/Divider';
+import { withStyles, withWidth } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper/Paper';
 import Button from '@material-ui/core/Button/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import history from 'utils/history';
 import moment from 'moment';
 import _ from 'lodash';
-import TableCell from '@material-ui/core/TableCell';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import TableRow from '@material-ui/core/TableRow';
 import authenticated from '../HOC/authenticated/authenticated';
 import styles from './style';
 import Search from './components/search/index';
@@ -35,7 +32,10 @@ import { makeSelectUser } from '../App/selectors';
 import { ADMIN, SUPER_ADMIN } from '../AppHeader/Roles';
 import { clearSelectedOffer } from '../Offres/actions';
 import { selectSelectedOffer } from '../Offres/selectors';
+
 import GeneriqueDialog from '../../components/Alert';
+import { isWidthDown } from '@material-ui/core/withWidth';
+import CommandListCards from './components/responsive/CommandListCards';
 
 class Command extends PureComponent {
   searchFields = searchFields(fieldData => {
@@ -90,7 +90,7 @@ class Command extends PureComponent {
   };
 
   onPageChange = (event, page) => {
-    const { searchData } = this.state;
+    const { searchData, cols } = this.state;
     const {
       loadCommands,
       commandPageable: { size },
@@ -104,6 +104,7 @@ class Command extends PureComponent {
       size,
       page: +page,
       isAggregate: this.forAdminCommands,
+      cols,
       callback: err => {
         if (err) {
           this.setState({
@@ -120,7 +121,7 @@ class Command extends PureComponent {
   };
 
   onPageSizeChange = ({ target: { value } }) => {
-    const { searchData } = this.state;
+    const { searchData, cols } = this.state;
     const {
       commandPageable: { number },
       match: {
@@ -134,8 +135,10 @@ class Command extends PureComponent {
       size: +value,
       page: number,
       isAggregate: this.forAdminCommands,
+      cols,
       callback: err => {
         if (err) {
+          console.log('err', err);
           this.setState({
             showPopConfirmation: false,
             showInfoBar: true,
@@ -283,7 +286,10 @@ class Command extends PureComponent {
       {
         ...this.state,
         cols: _.merge([], cols, {
-          [index]: { order: col.order === 'desc' ? 'asc' : 'desc' ,  selected:true},
+          [index]: {
+            order: col.order === 'desc' ? 'asc' : 'desc',
+            selected: true,
+          },
         }),
       },
       this.onSearch,
@@ -463,7 +469,7 @@ class Command extends PureComponent {
             title: 'Les quantités sont bien dispatchées',
             onSuccessTitle: 'Consulter',
             onSuccess: () => history.push(`offres/${offerId}/commands`),
-        },
+          },
     });
   };
 
@@ -533,6 +539,7 @@ class Command extends PureComponent {
       subCommands,
       selectedOffer,
       copyQtIntoModifiedQt,
+      width,
     } = this.props;
     const {
       selectedCommand,
@@ -542,6 +549,8 @@ class Command extends PureComponent {
       popConfirmationParams,
       cols,
     } = this.state;
+    const isSmallDevice = isWidthDown('md', width);
+
     return (
       <>
         <Typography component="h1" variant="h4" className={classes.root}>
@@ -554,7 +563,8 @@ class Command extends PureComponent {
             <OfferMetaData offer={selectedOffer} />
           </div>
         )}
-        <Divider variant="middle" className={classes.root} />
+
+        {/* <Divider variant="middle" className={classes.root} /> */}
         <Search fields={this.searchFields} onSearch={this.onSearch} />
 
         {this.canGroup && (
@@ -575,96 +585,124 @@ class Command extends PureComponent {
             </Button>
           </div>
         )}
+        <div style={{ height: '8px' }} />
 
-        <Paper className={classes.root}>
-          <Table
-            headers={commandHeadersWithOption(
-              cols.map(({ colName, label, order }, index) => (
-                <Tooltip
-                  key={colName}
-                  title="Sort"
-                  placement="bottom-start"
-                  enterDelay={300}
-                >
-                  <TableSortLabel
-                    active
-                    direction={order}
-                    onClick={this.changeColumnSort(index)}
-                  >
-                    {label}
-                  </TableSortLabel>
-                </Tooltip>
-              )),
-            )}
-            onChangePage={this.onPageChange}
-            totalElements={totalElements}
-            pageSize={size}
-            pageNumber={number}
-            emptyMsg="Aucune Commande soumise"
-            onChangeRowPerPage={this.onPageSizeChange}
-          >
+        {isSmallDevice ? (
+          <div className={classes.root}>
             {!!commands.length && (
-              <CommandBody
-                list={commands}
-                user={user}
-                forAdmin={this.forAdminCommands}
-                isAdmin={this.isAdmin}
-                dispatchQuantity={this.performDispatching}
-                updateCommand={this.updateCommandDetail}
-                selectCommand={this.showCommandDetail}
-                deleteCommand={this.performDeleteCommand}
+              <CommandListCards
+                commandsList={commands}
+                totalElements={totalElements}
+                rowsPerPage={size}
+                page={number}
+                handleChangePage={this.onPageChange}
+                handleChangeRowsPerPage={this.onPageSizeChange}
                 printCommand={this.printCommand}
+                deleteCommand={this.performDeleteCommand}
+                updateCommand={this.updateCommandDetail}
+                onRowChange={this.onRowChange}
+                isAdmin={this.isAdmin}
                 canDelete={!this.canGroup}
                 disableClientEditCommand={this.disableGroupingBtn}
-                showSubCommands={this.showSubCommandsModel}
+                clearCommandArticles={this.props.clearCommandArticles}
               />
             )}
-          </Table>
-          <GeneriqueDialog
-            open={showPopConfirmation}
-            {...popConfirmationParams}
-          />
-          <Dialog
-            title={
-              !this.state.update
-                ? 'Détail de la commande'
-                : 'Modifier la commande'
-            }
-            open={this.state.showCommandDetail}
-            showBtns={this.state.update}
-            cancelTitle="Annuler"
-            submitTitle="Mettre à jour"
-            onClose={this.closeCommandDetail}
-            onSubmit={this.onUpdate}
-          >
-            <CommandFullDetail
-              onChange={this.onRowChange}
-              readMode={!this.state.update}
-              isAdmin={this.isAdmin}
-              copyQuantities={copyQtIntoModifiedQt}
-              forAdmin={this.forAdminCommands}
-              metadata={selectedCommand}
-              list={commandArticles}
+            <GeneriqueDialog
+              open={showPopConfirmation}
+              {...popConfirmationParams}
             />
-          </Dialog>
-          <Dialog
-            title="List des commands associées"
-            open={this.state.showSubCommands}
-            showBtns={false}
-            onClose={this.closeSubCommandsModel}
-          >
-            <Table headers={commandHeaders} pageable={false}>
-              {!!subCommands.length && (
-                <CommandBody withOptions={false} list={subCommands} />
+          </div>
+        ) : (
+          <Paper className={classes.root}>
+            <Table
+              headers={commandHeadersWithOption(
+                cols.map(({ colName, label, order }, index) => (
+                  <Tooltip
+                    key={colName}
+                    title="Sort"
+                    placement="bottom-start"
+                    enterDelay={300}
+                  >
+                    <TableSortLabel
+                      active
+                      direction={order}
+                      onClick={this.changeColumnSort(index)}
+                    >
+                      {label}
+                    </TableSortLabel>
+                  </Tooltip>
+                )),
+              )}
+              onChangePage={this.onPageChange}
+              totalElements={totalElements}
+              pageSize={size}
+              pageNumber={number}
+              emptyMsg="Aucune Commande soumise"
+              onChangeRowPerPage={this.onPageSizeChange}
+            >
+              {!!commands.length && (
+                <CommandBody
+                  list={commands}
+                  user={user}
+                  forAdmin={this.forAdminCommands}
+                  isAdmin={this.isAdmin}
+                  dispatchQuantity={this.performDispatching}
+                  updateCommand={this.updateCommandDetail}
+                  selectCommand={this.showCommandDetail}
+                  deleteCommand={this.performDeleteCommand}
+                  printCommand={this.printCommand}
+                  canDelete={!this.canGroup}
+                  disableClientEditCommand={this.disableGroupingBtn}
+                  showSubCommands={this.showSubCommandsModel}
+                />
               )}
             </Table>
-          </Dialog>
-          <InfoBar
-            open={showInfoBar}
-            onClose={this.closeInfoBar}
-            {...infoBarParams}
-          />
-        </Paper>
+            <GeneriqueDialog
+              open={showPopConfirmation}
+              {...popConfirmationParams}
+            />
+            <Dialog
+              title={
+                !this.state.update
+                  ? 'Détail de la commande'
+                  : 'Modifier la commande'
+              }
+              open={this.state.showCommandDetail}
+              showBtns={this.state.update}
+              cancelTitle="Annuler"
+              submitTitle="Mettre à jour"
+              onClose={this.closeCommandDetail}
+              onSubmit={this.onUpdate}
+            >
+              <CommandFullDetail
+                onChange={this.onRowChange}
+                readMode={!this.state.update}
+                isAdmin={this.isAdmin}
+                copyQuantities={copyQtIntoModifiedQt}
+                forAdmin={this.forAdminCommands}
+                metadata={selectedCommand}
+                list={commandArticles}
+              />
+            </Dialog>
+            <Dialog
+              title="List des commands associées"
+              open={this.state.showSubCommands}
+              showBtns={false}
+              onClose={this.closeSubCommandsModel}
+            >
+              <Table headers={commandHeaders} pageable={false}>
+                {!!subCommands.length && (
+                  <CommandBody withOptions={false} list={subCommands} />
+                )}
+              </Table>
+            </Dialog>
+            <InfoBar
+              open={showInfoBar}
+              onClose={this.closeInfoBar}
+              {...infoBarParams}
+            />
+          </Paper>
+        )}
       </>
     );
   }
@@ -693,4 +731,5 @@ export default compose(
   authenticated,
   withConnect,
   withStyles(styles),
+  withWidth(),
 )(Command);

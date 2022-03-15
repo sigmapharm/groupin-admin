@@ -18,7 +18,7 @@ export class AticlesListTableRow extends React.PureComponent {
     const { row, handleArticleRowChange, index } = this.props;
     return (
       <TableRow key={row.id}>
-        <TableCell component="th" scope="row">
+        {/*  <TableCell component="th" scope="row">
           <Checkbox
             onChange={({ target: { checked } }) =>
               handleArticleRowChange({
@@ -29,8 +29,8 @@ export class AticlesListTableRow extends React.PureComponent {
               })
             }
             checked={!!row.selected}
-          />
-        </TableCell>
+          /> 
+        </TableCell>*/}
         <TableCell>{row.nom}</TableCell>
         <TableCell>{row.pph.toFixed(2)}</TableCell>
         <TableCell>{row.ppv.toFixed(2)}</TableCell>
@@ -45,13 +45,14 @@ export class AticlesListTableRow extends React.PureComponent {
               handleArticleRowChange({
                 discount: +value,
                 minQuantity: row.minQuantity,
-                selected: row.selected,
+                selected: !!value,
                 index,
               })
             }
-            disabled={!row.selected}
             autoComplete="off"
-            inputProps={{ maxLength: 100 }}
+            inputProps={
+              { maxLength: 100 } // disabled={!row.selected}
+            }
             fullWidth
           />
         </TableCell>
@@ -65,17 +66,23 @@ export class AticlesListTableRow extends React.PureComponent {
               handleArticleRowChange({
                 minQuantity: +value,
                 discount: row.discount,
-                selected: row.selected,
+                //selected: row.selected,
                 index,
               })
             }
-            disabled={!row.selected}
             autoComplete="off"
-            inputProps={{ maxLength: 100 }}
+            inputProps={
+              { maxLength: 100 } //disabled={!row.selected}
+            }
             fullWidth
           />
         </TableCell>
-        <TableCell>{(row.selected ? row.pph * (1 - (row.discount || 0) / 100) : 0).toFixed(2)}</TableCell>
+        <TableCell>
+          {(row.discount
+            ? row.pph * (1 - (row.discount || 0) / 100)
+            : 0
+          ).toFixed(2)}
+        </TableCell>
       </TableRow>
     );
   }

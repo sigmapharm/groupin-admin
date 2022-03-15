@@ -14,6 +14,8 @@ import articlesReducer from 'containers/Articles/reducer';
 import offresReducer from 'containers/Offres/reducer';
 import commandsReducer from 'containers/Command/store/reducer';
 import groupingReducer from 'containers/Grouping/store/reducer';
+import statisticsReducer from 'containers/statistics/reducer';
+import reportingReducer from 'containers/Reporting/reducer';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
@@ -29,6 +31,8 @@ export default function createReducer(injectedReducers = {}) {
     offres: offresReducer,
     commands: commandsReducer,
     grouping: groupingReducer,
+    statistics: statisticsReducer,
+    reporting: reportingReducer,
   });
 
   // Wrap the root reducer and return a new root reducer with router state

@@ -11,3 +11,7 @@ export const MANAGE_UPDATE_USER_RESPONSE =
   'app/users/MANAGE_UPDATE_USER_RESPONSE';
 
 export const DELETE_USER = 'app/users/DELETE_USER';
+export const RESET_PASSWORD = 'app/users/RESET_PASSWORD';
+export const RESET_PASSWORD_SUCCESS = 'app/users/RESET_PASSWORD_SUCCESS';
+export const GET_PROFILE = 'app/users/GET_PROFILE';
+export const PUT_USER_PROFILE = 'app/users/PUT_USER_PROFILE';

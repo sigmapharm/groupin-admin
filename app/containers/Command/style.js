@@ -1,10 +1,12 @@
 export default theme => ({
   root: {
-    width: '80%',
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
-    overflowX: 'auto',
-    marginLeft: '10%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: '1200px',
+    width: '100%',
+    padding: '0 17px',
   },
   table: {
     minWidth: 700,

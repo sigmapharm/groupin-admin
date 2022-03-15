@@ -37,21 +37,24 @@ export default ({
         {withOptions && (
           <TableCell>
             <Tooltip placement="top" title="Imprimer la commande">
-              <IconButton
-                onClick={printCommand(row)}
-                style={{ padding: 5 }}
-              >
-                <PrintIcon color="primary"/>
+              <IconButton onClick={printCommand(row)} style={{ padding: 5 }}>
+                <PrintIcon color="primary" />
               </IconButton>
             </Tooltip>
             <Tooltip placement="top" title="Modifier la commande">
               <IconButton
-                disabled={(!isAdmin && !row.canDelete) || disableClientEditCommand}
+                disabled={
+                  (!isAdmin && !row.canDelete) || disableClientEditCommand
+                }
                 onClick={updateCommand(row)}
                 style={{ padding: 5 }}
               >
                 <EditIcon
-                  color={(!isAdmin && !row.canDelete) || disableClientEditCommand ? 'disabled':'primary'}
+                  color={
+                    (!isAdmin && !row.canDelete) || disableClientEditCommand
+                      ? 'disabled'
+                      : 'primary'
+                  }
                 />
               </IconButton>
             </Tooltip>

@@ -153,12 +153,16 @@ export function AddOffreForm(props) {
             variant="h6"
             color="red"
           >
-            {!(editMode && disableAllFieldsExceptDate)  && (<span style={{ display: 'block' }}>
-              -  Date début doit être supérieur à J + 1
-            </span>)}
-            {!(disableAllFields) && (<span style={{ display: 'block' }}>
-              -  Date début doit être supérieur à J + 2
-            </span>)}
+            {!(editMode && disableAllFieldsExceptDate) && (
+              <span style={{ display: 'block' }}>
+                - Date début doit être supérieur à J + 1
+              </span>
+            )}
+            {!disableAllFields && (
+              <span style={{ display: 'block' }}>
+                - Date début doit être supérieur à J + 2
+              </span>
+            )}
           </Typography>
         </Grid>
         <OffreInfo

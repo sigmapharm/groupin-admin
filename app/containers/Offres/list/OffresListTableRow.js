@@ -33,6 +33,7 @@ import {
 } from '../actions';
 import GeneriqueDialog from '../../../components/Alert';
 import InfoBar from '../../../components/Snackbar/InfoBar';
+import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 
 const closeStyle = {
   float: 'right',
@@ -51,7 +52,6 @@ export class OffresListTableRow extends React.PureComponent {
       infoBarParams: {},
     };
   }
-
   openPopConfirmation = ({ title, textContent, onClose, onSubmit }) => {
     this.setState({
       showPopConfirmation: true,
@@ -72,16 +72,11 @@ export class OffresListTableRow extends React.PureComponent {
   };
 
   setIsShown = isShown => {
-    this.setState({
-      isShown,
-    });
+    this.setState({ isShown });
   };
 
   showDetails = () => {
-    this.setState({
-      isShown: true,
-      commandMode: false,
-    });
+    this.setState({ isShown: true, commandMode: false });
   };
 
   command = () => {
@@ -175,7 +170,7 @@ export class OffresListTableRow extends React.PureComponent {
     const {
       row: { id },
       dispatch,
-      filters
+      filters,
     } = this.props;
     dispatch(
       cloneOffer(id, filters, err => {
@@ -203,10 +198,13 @@ export class OffresListTableRow extends React.PureComponent {
     return moment(new Date()).isBetween(startDate, endDate, null, 'day');
   }
 
-  closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
-
+  closeInfoBar = () =>
+    this.setState({
+      showInfoBar: false,
+      infoBarParams: {},
+    });
   render() {
-    const { row } = this.props;
+    const { row, width, offerArticles } = this.props;
     const {
       isShown,
       showPopConfirmation,
@@ -215,7 +213,6 @@ export class OffresListTableRow extends React.PureComponent {
       showInfoBar,
       infoBarParams,
     } = this.state;
-    const now = Date.now();
     const startDate = new Date(row.dateDebut);
     const endDate = new Date(row.dateFin);
     const hasStarted = moment(new Date()).isSameOrAfter(startDate, 'day');
@@ -231,6 +228,16 @@ export class OffresListTableRow extends React.PureComponent {
     // const status = Math.min(elapsedDuration / globalDuration, 1) * 100 || 0;
     // const remainingDays = Math.floor((startDate - now) / mSecondsPerDay) + 1;
     const dayLabel = remainingDays === 1 ? 'jour' : 'jours';
+    const total = _.sumBy(
+      offerArticles,
+      ({ quantity, pph }) => pph * quantity || 0,
+    ).toFixed(2);
+
+    const discount = _.sumBy(
+      offerArticles,
+      ({ quantity, computedPPH, pph }) =>
+        quantity ? quantity * pph - quantity * computedPPH : 0,
+    ).toFixed(2);
     return (
       <>
         <TableRow key={row.id}>
@@ -243,9 +250,11 @@ export class OffresListTableRow extends React.PureComponent {
             <Progressbar progress={hasStarted ? progress : 0} />
             {moment(endDate).format('DD/MM/YYYY')}
             <br />
-            {remainingDays > 0 // eslint-disable-line
+            {remainingDays > 0
               ? hasStarted
-                ? `Il reste ${remainingDays} ${dayLabel}`
+                ? `Il reste ${
+                    remainingDays // eslint-disable-line
+                  } ${dayLabel}`
                 : `L'offre n'a pas encore commencé`
               : 'Offre clôturée !'}
           </TableCell>
@@ -341,7 +350,7 @@ export class OffresListTableRow extends React.PureComponent {
           >
             <MuiDialogTitle disableTypography>
               <Typography variant="h5" color="primary">
-                {`Détails offre`}{' '}
+                Détails offre
                 <IconButton
                   color="primary"
                   aria-label="Close"
@@ -352,7 +361,44 @@ export class OffresListTableRow extends React.PureComponent {
                 </IconButton>
               </Typography>
             </MuiDialogTitle>
+
             <MuiDialogContent>
+              {total > 0 && (
+                <div
+                  style={{
+                    position: 'sticky',
+                    top: 0,
+                    backgroundColor: 'white',
+                    paddingBottom: '20px',
+                    display: 'flex',
+                    width: '100%',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <div style={{ display: 'flex', marginRight: '30px' }}>
+                    <Typography
+                      variant="h6"
+                      color="textSecondary"
+                      style={{ marginRight: 10 }}
+                    >
+                      Total:
+                    </Typography>
+                    <Typography variant="h6">{total}</Typography>
+                  </div>
+                  <div style={{ display: 'flex' }}>
+                    <Typography
+                      variant="h6"
+                      color="textSecondary"
+                      style={{ marginRight: 10 }}
+                    >
+                      Total remise:
+                    </Typography>
+                    <Typography variant="h6">{discount}</Typography>
+                  </div>
+                  <div />
+                </div>
+              )}
+
               <OffreListConsultation
                 dismiss={this.closeDetails}
                 hasStarted={hasStarted}
@@ -406,4 +452,4 @@ OffresListTableRow.propTypes = {
   row: PropTypes.object.isRequired,
   filters: PropTypes.any,
 };
-export default OffresListTableRow;
+export default withWidth()(OffresListTableRow);

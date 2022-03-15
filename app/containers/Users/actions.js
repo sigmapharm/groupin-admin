@@ -6,7 +6,12 @@ import {
   SUBMIT_CREATE_USER,
   SUBMIT_UPDATE_USER,
   TOGGLE_USER,
-  RESET_USER, DELETE_USER,
+  RESET_USER,
+  DELETE_USER,
+  RESET_PASSWORD,
+  GET_PROFILE,
+  PUT_USER_PROFILE,
+  RESET_PASSWORD_SUCCESS,
 } from './constants';
 
 const getUsersList = (values, callback) => ({
@@ -69,10 +74,32 @@ export const deleteUser = (userId, callback) => ({
   callback,
 });
 
+export const resetPassword = ({ newPassword, oldPassword }, callback) => ({
+  type: RESET_PASSWORD,
+  payload: { newPassword, oldPassword },
+  callback,
+});
+const resetPasswordSuccess = payload => ({
+  type: RESET_PASSWORD_SUCCESS,
+  payload,
+});
+
+export const getProfile = callback => ({
+  type: GET_PROFILE,
+  payload: {},
+  callback,
+});
+
+export const putUserProfile = values => ({
+  type: PUT_USER_PROFILE,
+  payload: { ...values },
+});
+
 export {
   toggleUser,
   getUsersList,
   putUsersList,
   manageCreateUserResponse,
   manageUpdateserResponse,
+  resetPasswordSuccess,
 };

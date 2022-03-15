@@ -89,7 +89,6 @@ const initialState = {
 // Change component name later
 export class AddOffre extends React.PureComponent {
   handleFormDataChange = ({ target: { name, value } }) => {
-    console.log(name,value)
     this.props.dispatch(changeOfferFormData({ [name]: value }));
   };
 
@@ -146,11 +145,11 @@ export class AddOffre extends React.PureComponent {
   };
 
   handleSubmitResponse = response => {
-    const { errors, editMode } = this.state
+    const { errors, editMode } = this.state;
     if (_.isEmpty(response)) {
-      if(editMode){
-        history.goBack()
-        return
+      if (editMode) {
+        history.goBack();
+        return;
       }
       this.setState({
         ...initialState,

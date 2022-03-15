@@ -151,10 +151,9 @@ function* loadCommandsWorker({
       'Content-Type': 'application/json',
     },
   };
-  const sortQuery = cols.filter(({ selected }) => selected).reduce(
-    (acc, n) => acc.concat(`&sort=${n.colName},${n.order}`),
-    '',
-  );
+  const sortQuery = cols
+    .filter(({ selected }) => selected)
+    .reduce((acc, n) => acc.concat(`&sort=${n.colName},${n.order}`), '');
   const queryString = Object.keys(payload)
     .map(key => `${key}=${payload[key]}`)
     .join('&');

@@ -68,8 +68,8 @@ function reducer(state = initialState, action) {
       return state.merge({
         articlesListlabo: articlesListlabo.map(({ selected, ...article }) => ({
           ...article,
-          selected,
-          ...(selected ? payload : {}),
+          // selected,
+          payload,
         })),
       });
     }
@@ -133,7 +133,7 @@ function reducer(state = initialState, action) {
     }
     case PUT_ARTICLESLABO_LIST_ACTION: {
       return state.merge({
-        selectedAll:false,
+        selectedAll: false,
         articlesListlabo: action.payload || [],
       });
     }
@@ -141,9 +141,9 @@ function reducer(state = initialState, action) {
       const { errors } = action.payload;
       return _.isEmpty(errors)
         ? state.merge({
-          articlesListlabo: [],
-          offerFormData: formDataInitialState.toJS(),
-        })
+            articlesListlabo: [],
+            offerFormData: formDataInitialState.toJS(),
+          })
         : state;
     }
     case CHANGE_OFFER_FORM_DATA: {
@@ -155,7 +155,7 @@ function reducer(state = initialState, action) {
     case GET_OFFER_WITH_DETAILS_SUCCESS: {
       const { dateDebut, dateFin } = action.payload;
       return state.merge({
-        selectedAll:true,
+        selectedAll: true,
         articlesListlabo: action.payload.articleDtos,
         offerFormData: _.merge(_.omit(action.payload, 'articleDtos'), {
           dateDebut: moment(dateDebut).format('YYYY-MM-DD'),
@@ -174,9 +174,9 @@ function reducer(state = initialState, action) {
       return state.merge({
         articlesListlabo: _.merge(articlesListlabo, {
           [index]: {
-            selected,
-            discount: selected ? discount : 0,
-            minQuantity: selected ? minQuantity : 0,
+            selected: discount || minQuantity ? true : false,
+            discount: discount ? discount : 0,
+            minQuantity: minQuantity ? minQuantity : 0,
           },
         }),
       });
