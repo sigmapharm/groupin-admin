@@ -1,23 +1,22 @@
 import { all, put, takeLatest } from 'redux-saga/effects';
-import { GET_STATISTICS_ACTION } from './constants';
-import { putStatistics } from './actions';
+import { GET_REPORTING_ACTION } from './constants';
+import { putReporting } from './actions';
 
 import requestWithAuth from '../../services/request/request-with-auth';
 import * as GlobalActions from '../App/actions';
-function* offresListWorker(action) {
-  const { callback, userRole } = action.payload;
+function* reportingListWorker(action) {
+  const { callback } = action.payload;
   const options = {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
   };
+
   yield networking(function*() {
     try {
-      const endpoint =
-        userRole === 'MEMBRE' ? '/statistics/member' : '/statistics';
-      const res = yield requestWithAuth(endpoint, options);
-      yield put(putStatistics(res));
+      const res = yield requestWithAuth('/statistics/reporting', options);
+      yield put(putReporting(res));
       yield callback && callback();
     } catch (e) {
       yield callback && callback(e);
@@ -31,8 +30,8 @@ function* networking(func) {
   yield put(GlobalActions.setNetworkingInactive());
 }
 
-function* statisticsSagas() {
-  yield all([takeLatest(GET_STATISTICS_ACTION, offresListWorker)]);
+function* reportingSagas() {
+  yield all([takeLatest(GET_REPORTING_ACTION, reportingListWorker)]);
 }
 
-export default statisticsSagas;
+export default reportingSagas;

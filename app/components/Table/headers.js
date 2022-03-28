@@ -6,9 +6,7 @@ export default React.memo(({ headers }) => {
   return (
     <TableRow>
       {headers.map((e, index) => (
-        <TableCell key={index}>
-          {e.$$typeof ? e : <span>{e.title}</span>}
-        </TableCell>
+        <TableCell key={index}>{e.$$typeof ? e : <span style={{ color: '#fff' }}>{e.title}</span>}</TableCell>
       ))}
     </TableRow>
   );

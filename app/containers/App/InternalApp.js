@@ -6,7 +6,9 @@ import { CircularProgress } from '@material-ui/core';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { getConfiguration } from './actions';
+import { getConfiguration, getRegions } from './actions';
+import { selectRegions } from './selectors';
+import { createStructuredSelector } from 'reselect';
 
 const ListArticles = React.lazy(() => import('../Articles/ListArticles'));
 const AddArticle = React.lazy(() => import('../Articles/add/index'));
@@ -16,10 +18,12 @@ const OffresList = React.lazy(() => import('../Offres'));
 const UsersList = React.lazy(() => import('../Users'));
 const Commands = React.lazy(() => import('../Command'));
 const Grouping = React.lazy(() => import('../Grouping'));
-const Statistics = React.lazy(() => import('../Statistics'));
+const statistiques = React.lazy(() => import('../statistiques'));
 const Reporting = React.lazy(() => import('../Reporting'));
 const OffersHome = React.lazy(() => import('../OffersHome'));
 const Profile = React.lazy(() => import('../Profile'));
+const Dashboard = React.lazy(() => import('../Dashboards'));
+
 class InternalApp extends React.PureComponent {
   componentWillMount() {
     this.props.dispatch(getConfiguration());
@@ -36,27 +40,22 @@ class InternalApp extends React.PureComponent {
       >
         <Switch>
           <Route exact path="/" component={OffersHome} />
+          <Route exact path="/dashboard" component={Dashboard} />
           <Route exact path="/articles" component={ListArticles} />
           <Route exact path="/offres" component={OffresList} />
           <Route exact path="/users" component={UsersList} />
           <Route exact path="/users/add" component={AddUser} />
           <Route exact path="/articles/add" component={AddArticle} />
-          <Route
-            exact
-            path="/articles/edit/:articleId"
-            component={AddArticle}
-          />
+          <Route exact path="/articles/edit/:articleId" component={AddArticle} />
           <Route exact path="/offres/add" component={AddOffre} />
           <Route exact path="/offres/edit/:offerId" component={AddOffre} />
           <Route exact path="/commands" component={Commands} />
-          <Route exact path="/statistiques" component={Statistics} />
+          <Route exact path="/statistiques" component={statistiques} />
           <Route exact path="/reporting" component={Reporting} />
           <Route
             exact
             path="/offres/:offerId/commands"
-            render={props => (
-              <Commands {...props} key={props.match.params.offerId} />
-            )}
+            render={props => <Commands {...props} key={props.match.params.offerId} />}
           />
           <Route exact path="/grouping/:offerId" component={Grouping} />
           <Route exact path="/profile" component={Profile} />

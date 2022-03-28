@@ -10,7 +10,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import PrintIcon from '@material-ui/icons/Print';
 import Tooltip from '@material-ui/core/Tooltip';
 import ListIcon from '@material-ui/icons/List';
-import CheckIcon from '@material-ui/icons/Check';
+import { Done } from '@material-ui/icons';
 
 export default ({
   list = [],
@@ -34,6 +34,7 @@ export default ({
         <TableCell>{row.pharmacyName}</TableCell>
         <TableCell>{moment(row.creationDate).format('DD/MM/YYYY')}</TableCell>
         <TableCell>{row.totalAmount.toFixed(2)}</TableCell>
+        <TableCell>livré</TableCell>
         {withOptions && (
           <TableCell>
             <Tooltip placement="top" title="Imprimer la commande">
@@ -43,19 +44,11 @@ export default ({
             </Tooltip>
             <Tooltip placement="top" title="Modifier la commande">
               <IconButton
-                disabled={
-                  (!isAdmin && !row.canDelete) || disableClientEditCommand
-                }
+                disabled={(!isAdmin && !row.canDelete) || disableClientEditCommand}
                 onClick={updateCommand(row)}
                 style={{ padding: 5 }}
               >
-                <EditIcon
-                  color={
-                    (!isAdmin && !row.canDelete) || disableClientEditCommand
-                      ? 'disabled'
-                      : 'primary'
-                  }
-                />
+                <EditIcon color={(!isAdmin && !row.canDelete) || disableClientEditCommand ? 'disabled' : 'primary'} />
               </IconButton>
             </Tooltip>
             <Tooltip placement="top" title="Afficher le detail">
@@ -72,32 +65,30 @@ export default ({
                   })}
                   style={{ padding: 5 }}
                 >
-                  <HighlightOff
-                    color={!isAdmin && !row.canDelete ? 'disabled' : 'error'}
-                  />
+                  <HighlightOff color={!isAdmin && !row.canDelete ? 'disabled' : 'error'} />
                 </IconButton>
               </Tooltip>
             )}
             {forAdmin && (
               <>
                 <Tooltip placement="top" title="Liste des sous-commands">
-                  <IconButton
-                    onClick={showSubCommands(row)}
-                    style={{ padding: 5 }}
-                  >
+                  <IconButton onClick={showSubCommands(row)} style={{ padding: 5 }}>
                     <ListIcon color="primary" />
                   </IconButton>
                 </Tooltip>
-                <Tooltip placement="top" title="Dispatcher les quantités">
-                  <IconButton
-                    onClick={dispatchQuantity(row)}
-                    style={{ padding: 5 }}
-                  >
+
+                {/* <Tooltip placement="top" title="Dispatcher les quantités">
+                  <IconButton onClick={dispatchQuantity(row)} style={{ padding: 5 }}>
                     <CheckIcon color="primary" />
                   </IconButton>
-                </Tooltip>
+                </Tooltip> */}
               </>
             )}
+            <Tooltip placement="top" title="commande livré avec succès">
+              <IconButton onClick={dispatchQuantity(row)} style={{ padding: 5 }}>
+                <Done color="primary" />
+              </IconButton>
+            </Tooltip>
           </TableCell>
         )}
       </TableRow>

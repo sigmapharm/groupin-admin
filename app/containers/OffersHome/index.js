@@ -39,11 +39,7 @@ const OffersHome = ({ classes, dispatch, offresList, history }) => {
       <div className={classes.cards}>
         {offresList.content &&
           offresList.content.map(offre => (
-            <div
-              key={offre.id}
-              className={classes.card}
-              onClick={handleClick.bind(this, offre)}
-            >
+            <div key={offre.id} className={classes.card} onClick={handleClick.bind(this, offre)}>
               <img src={image} className={classes.image} alt="" />
               <div
                 style={{
@@ -54,9 +50,7 @@ const OffersHome = ({ classes, dispatch, offresList, history }) => {
               >
                 <h4 style={{ fontSize: '15px' }}>{offre.laboratoryName}</h4>
                 <span style={{ margin: '0 5px', fontSize: '15px' }}>-</span>
-                <span className={classes.date}>
-                  {moment(offre.dateDebut).format('YYYY MMMM')}
-                </span>
+                <span className={classes.date}>{moment(offre.dateDebut).format('YYYY MMMM')}</span>
               </div>
               <Countdown
                 date={Date.now() + moment(offre.dateFin).diff(new Date())}

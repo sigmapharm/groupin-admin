@@ -8,13 +8,9 @@ import { makeSelectUser } from '../App/selectors';
 import Member from './Member';
 import Admin from './Admin';
 
-const Statistics = ({ user }) => {
+const Dashboard = ({ user }) => {
   if (!user) return null;
-  return user.role === 'MEMBRE' ? (
-    <Member userRole="MEMBRE" />
-  ) : (
-    <Admin userRole="ADMIN" />
-  );
+  return user.role === 'MEMBRE' ? <Member userRole="MEMBRE" /> : <Admin userRole="ADMIN" />;
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -31,4 +27,4 @@ const withConnect = connect(
 export default compose(
   authenticated,
   withConnect,
-)(Statistics);
+)(Dashboard);

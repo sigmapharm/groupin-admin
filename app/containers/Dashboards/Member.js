@@ -30,55 +30,27 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
         <Grid container spacing={24}>
           <Grid item lg={3} md={12} sm={12} xs={12}>
             <div className={classes.container}>
-              <SmallCard
-                title="Nbr commande"
-                backgroundColor="#FF92A5"
-                value={statistics.totalCommande}
-              />
+              <SmallCard title="Nbr commande" backgroundColor="#FF92A5" value={statistics.totalCommande} />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard
-                title="Ca commande"
-                backgroundColor="#4F51C0"
-                value={Number(statistics.totalCACommande).toFixed(2)}
-              />
+              <SmallCard title="Ca commande" backgroundColor="#4F51C0" value={Number(statistics.totalCACommande).toFixed(2)} />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard
-                title="Total remise"
-                backgroundColor="#FED674"
-                value={Number(statistics.totalRemise).toFixed(2)}
-              />
+              <SmallCard title="Total remise" backgroundColor="#FED674" value={Number(statistics.totalRemise).toFixed(2)} />
               <div style={{ marginBottom: '10px' }} />
             </div>
           </Grid>
           <Grid item lg={6} md={12} sm={12} xs={12}>
             <div className={classes.container}>
               <PieChart
-                data={
-                  statistics.caparLabo
-                    ? statistics.caparLabo.map(v => v.value)
-                    : []
-                }
-                labels={
-                  statistics.caparLabo
-                    ? statistics.caparLabo.map(v => v.name)
-                    : []
-                }
+                data={statistics.caparLabo ? statistics.caparLabo.map(v => v.value) : []}
+                labels={statistics.caparLabo ? statistics.caparLabo.map(v => v.name) : []}
                 label="Chiffre d'affaire par laboratoire(%)"
               />
             </div>
             <div style={{ marginBottom: '24px' }} />
             <div className={classes.container}>
               <PieChart
-                data={
-                  statistics.caparArticle
-                    ? statistics.caparArticle.map(v => v.value)
-                    : []
-                }
-                labels={
-                  statistics.caparArticle
-                    ? statistics.caparArticle.map(v => v.name)
-                    : []
-                }
+                data={statistics.caparArticle ? statistics.caparArticle.map(v => v.value) : []}
+                labels={statistics.caparArticle ? statistics.caparArticle.map(v => v.name) : []}
                 label="Chiffre d'affaire par article(%)"
               />
             </div>

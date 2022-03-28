@@ -18,14 +18,13 @@ function* submitLoginWorker(action) {
 
   try {
     yield callApi('/login', manageLoginResponse, options, null);
-  } catch (e) {
-
-  }
+  } catch (e) {}
 }
 
 function* manageLoginResponseWorker(action) {
   const { access_token } = action.payload; // eslint-disable-line
-  if (access_token) { // eslint-disable-line
+  if (access_token) {
+    // eslint-disable-line
     AccessTokenStorage.set(access_token);
     history.push('/');
   } else {

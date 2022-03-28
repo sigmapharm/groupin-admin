@@ -19,11 +19,7 @@ import { commandHeaders, commandHeadersWithOption } from './headers';
 import Table from '../../components/Table/index';
 import CommandBody from './components/commands/metadata/index';
 import OfferMetaData from './components/offer/metadata';
-import {
-  getCommandArticles,
-  getCommandsList,
-  getSubCommands,
-} from './store/selectors';
+import { getCommandArticles, getCommandsList, getSubCommands } from './store/selectors';
 import * as actionCreators from './store/actions.creators';
 import Dialog from '../../components/Dialog/index';
 import CommandFullDetail from './components/commands/details';
@@ -69,8 +65,7 @@ class Command extends PureComponent {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title:
-                "Le chargement des commands a échoué merci de contacter l'administrateur ",
+              title: "Le chargement des commands a échoué merci de contacter l'administrateur ",
             },
           });
         }
@@ -111,8 +106,7 @@ class Command extends PureComponent {
             showPopConfirmation: false,
             showInfoBar: true,
             infoBarParams: {
-              title:
-                "le chargement des commands à échoué merci de contacter l'administrateur ",
+              title: "le chargement des commands à échoué merci de contacter l'administrateur ",
             },
           });
         }
@@ -143,8 +137,7 @@ class Command extends PureComponent {
             showPopConfirmation: false,
             showInfoBar: true,
             infoBarParams: {
-              title:
-                "La pagination des commands à échoué merci de contacter l'administrateur ",
+              title: "La pagination des commands à échoué merci de contacter l'administrateur ",
             },
           });
         }
@@ -163,8 +156,7 @@ class Command extends PureComponent {
               showPopConfirmation: false,
               showInfoBar: true,
               infoBarParams: {
-                title:
-                  "Suppresion de commande  à échoué merci de contacter l'administrateur",
+                title: "Suppresion de commande  à échoué merci de contacter l'administrateur",
               },
             });
           } else {
@@ -203,8 +195,7 @@ class Command extends PureComponent {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title:
-                " L'affichage de commande  à échoué merci de contacter l'administrateur ",
+              title: " L'affichage de commande  à échoué merci de contacter l'administrateur ",
             },
           });
         } else {
@@ -228,8 +219,7 @@ class Command extends PureComponent {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title:
-                " La modification d'une commande  à échoué merci de contacter l'administrateur",
+              title: " La modification d'une commande  à échoué merci de contacter l'administrateur",
             },
           });
         } else {
@@ -252,8 +242,7 @@ class Command extends PureComponent {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title:
-                " La génération du pdf à échoué merci de contacter l'administrateur",
+              title: " La génération du pdf à échoué merci de contacter l'administrateur",
             },
           });
         } else {
@@ -372,6 +361,12 @@ class Command extends PureComponent {
           selected: false,
           order: 'asc',
         },
+        {
+          label: 'status',
+          colName: 'status',
+          selected: false,
+          order: 'asc',
+        },
       ],
     };
   }
@@ -384,8 +379,7 @@ class Command extends PureComponent {
         this.setState({
           showInfoBar: true,
           infoBarParams: {
-            title:
-              " La list des sous commmande  à échoué merci de contacter l'administrateur",
+            title: " La list des sous commmande  à échoué merci de contacter l'administrateur",
           },
         });
       }
@@ -437,8 +431,7 @@ class Command extends PureComponent {
     const endDate = _.get(selectedOffer, 'dateFin');
     const startDate = _.get(selectedOffer, 'dateDebut');
     return (
-      moment(new Date()).isBetween(new Date(startDate), new Date(endDate)) ||
-      moment(new Date()).isBefore(new Date(startDate))
+      moment(new Date()).isBetween(new Date(startDate), new Date(endDate)) || moment(new Date()).isBefore(new Date(startDate))
     );
   }
 
@@ -497,8 +490,7 @@ class Command extends PureComponent {
             this.setState({
               showInfoBar: true,
               infoBarParams: {
-                title:
-                  "le chargement des commands a échoué merci de contacter l'administrateur ",
+                title: "le chargement des commands a échoué merci de contacter l'administrateur ",
               },
             });
           }
@@ -541,14 +533,7 @@ class Command extends PureComponent {
       copyQtIntoModifiedQt,
       width,
     } = this.props;
-    const {
-      selectedCommand,
-      showInfoBar,
-      infoBarParams,
-      showPopConfirmation,
-      popConfirmationParams,
-      cols,
-    } = this.state;
+    const { selectedCommand, showInfoBar, infoBarParams, showPopConfirmation, popConfirmationParams, cols } = this.state;
     const isSmallDevice = isWidthDown('md', width);
 
     return (
@@ -570,9 +555,7 @@ class Command extends PureComponent {
         {this.canGroup && (
           <div className={`${classes.root} ${classes.groupingContainer}`}>
             {this.disableGroupingBtn && (
-              <span className={classes.groupingMsg}>
-                * Vous ne pouvez pas grouper jusqu'à ce que l'offre soit clôturé
-              </span>
+              <span className={classes.groupingMsg}>* Vous ne pouvez pas grouper jusqu'à ce que l'offre soit clôturé</span>
             )}
             <Button
               type="submit"
@@ -607,27 +590,15 @@ class Command extends PureComponent {
                 clearCommandArticles={this.props.clearCommandArticles}
               />
             )}
-            <GeneriqueDialog
-              open={showPopConfirmation}
-              {...popConfirmationParams}
-            />
+            <GeneriqueDialog open={showPopConfirmation} {...popConfirmationParams} />
           </div>
         ) : (
           <Paper className={classes.root}>
             <Table
               headers={commandHeadersWithOption(
                 cols.map(({ colName, label, order }, index) => (
-                  <Tooltip
-                    key={colName}
-                    title="Sort"
-                    placement="bottom-start"
-                    enterDelay={300}
-                  >
-                    <TableSortLabel
-                      active
-                      direction={order}
-                      onClick={this.changeColumnSort(index)}
-                    >
+                  <Tooltip key={colName} title="Sort" placement="bottom-start" enterDelay={300}>
+                    <TableSortLabel style={{ color: '#fff' }} active direction={order} onClick={this.changeColumnSort(index)}>
                       {label}
                     </TableSortLabel>
                   </Tooltip>
@@ -657,16 +628,9 @@ class Command extends PureComponent {
                 />
               )}
             </Table>
-            <GeneriqueDialog
-              open={showPopConfirmation}
-              {...popConfirmationParams}
-            />
+            <GeneriqueDialog open={showPopConfirmation} {...popConfirmationParams} />
             <Dialog
-              title={
-                !this.state.update
-                  ? 'Détail de la commande'
-                  : 'Modifier la commande'
-              }
+              title={!this.state.update ? 'Détail de la commande' : 'Modifier la commande'}
               open={this.state.showCommandDetail}
               showBtns={this.state.update}
               cancelTitle="Annuler"
@@ -691,16 +655,10 @@ class Command extends PureComponent {
               onClose={this.closeSubCommandsModel}
             >
               <Table headers={commandHeaders} pageable={false}>
-                {!!subCommands.length && (
-                  <CommandBody withOptions={false} list={subCommands} />
-                )}
+                {!!subCommands.length && <CommandBody withOptions={false} list={subCommands} />}
               </Table>
             </Dialog>
-            <InfoBar
-              open={showInfoBar}
-              onClose={this.closeInfoBar}
-              {...infoBarParams}
-            />
+            <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
           </Paper>
         )}
       </>
@@ -708,11 +666,11 @@ class Command extends PureComponent {
   }
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    _.merge({}, actionCreators, { clearSelectedOffer }),
-    dispatch,
-  );
+const mapDispatchToProps = dispatch => bindActionCreators(_.merge({}, actionCreators, { clearSelectedOffer }), dispatch);
+
+// const styles = styles => ({
+//   backgourndColor: 'green',
+// });
 
 const mapStateToProps = createStructuredSelector({
   commandPageable: getCommandsList(),

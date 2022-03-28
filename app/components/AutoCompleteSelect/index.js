@@ -33,12 +33,7 @@ const styles = theme => ({
     margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
   },
   chipFocused: {
-    backgroundColor: emphasize(
-      theme.palette.type === 'light'
-        ? theme.palette.grey[300]
-        : theme.palette.grey[700],
-      0.08,
-    ),
+    backgroundColor: emphasize(theme.palette.type === 'light' ? theme.palette.grey[300] : theme.palette.grey[700], 0.08),
   },
   noOptionsMessage: {
     padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
@@ -65,11 +60,7 @@ const styles = theme => ({
 
 function NoOptionsMessage(props) {
   return (
-    <Typography
-      color="textSecondary"
-      className={props.selectProps.classes.noOptionsMessage}
-      {...props.innerProps}
-    >
+    <Typography color="textSecondary" className={props.selectProps.classes.noOptionsMessage} {...props.innerProps}>
       Aucune option
     </Typography>
   );
@@ -115,11 +106,7 @@ function Option(props) {
 
 function Placeholder(props) {
   return (
-    <Typography
-      color="textSecondary"
-      className={props.selectProps.classes.placeholder}
-      {...props.innerProps}
-    >
+    <Typography color="textSecondary" className={props.selectProps.classes.placeholder} {...props.innerProps}>
       {props.children}
     </Typography>
   );
@@ -127,21 +114,14 @@ function Placeholder(props) {
 
 function SingleValue(props) {
   return (
-    <Typography
-      className={props.selectProps.classes.singleValue}
-      {...props.innerProps}
-    >
+    <Typography className={props.selectProps.classes.singleValue} {...props.innerProps}>
       {props.children}
     </Typography>
   );
 }
 
 function ValueContainer(props) {
-  return (
-    <div className={props.selectProps.classes.valueContainer}>
-      {props.children}
-    </div>
-  );
+  return <div className={props.selectProps.classes.valueContainer}>{props.children}</div>;
 }
 
 function MultiValue(props) {
@@ -160,11 +140,7 @@ function MultiValue(props) {
 
 function Menu(props) {
   return (
-    <Paper
-      square
-      className={props.selectProps.classes.paper}
-      {...props.innerProps}
-    >
+    <Paper square className={props.selectProps.classes.paper} {...props.innerProps}>
       {props.children}
     </Paper>
   );
@@ -182,15 +158,7 @@ export const components = {
 };
 
 function SingleAutoCompleteSelect(props) {
-  const {
-    classes,
-    className,
-    theme,
-    options,
-    onChange,
-    placeholder,
-    value,
-  } = props;
+  const { classes, className, theme, options, onChange, placeholder, value, style } = props;
 
   const selectStyles = {
     input: base => ({
@@ -203,7 +171,7 @@ function SingleAutoCompleteSelect(props) {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={style}>
       <NoSsr>
         <Select
           className={className}
@@ -226,6 +194,4 @@ SingleAutoCompleteSelect.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(
-  SingleAutoCompleteSelect,
-);
+export default withStyles(styles, { withTheme: true })(SingleAutoCompleteSelect);

@@ -17,6 +17,7 @@ const defaultOptions = {
  * @param callbackParams : array
  * @returns {IterableIterator<*>}
  */
+
 function* callApi(
   url,
   callbackAction,
@@ -32,9 +33,7 @@ function* callApi(
   try {
     let rawData = null;
     rawData = yield requestWithAuth(url, options);
-    const formattedData = formatDataFunction
-      ? formatDataFunction(rawData)
-      : rawData;
+    const formattedData = formatDataFunction ? formatDataFunction(rawData) : rawData;
     if (callbackAction) {
       yield put(callbackAction(formattedData, callbackParams));
     }

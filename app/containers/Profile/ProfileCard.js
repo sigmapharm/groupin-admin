@@ -12,9 +12,7 @@ const ProfileCard = ({ user, classes }) => {
       </div>
       <div className={classes.row}>
         <Typography className={classes.text}>Nom et prenom</Typography>
-        <Typography className={classes.text}>{`${user.lastName} ${
-          user.firstName
-        }`}</Typography>
+        <Typography className={classes.text}>{`${user.lastName} ${user.firstName}`}</Typography>
       </div>
       <div className={classes.row}>
         <Typography className={classes.text}>Titre</Typography>
@@ -26,9 +24,7 @@ const ProfileCard = ({ user, classes }) => {
       </div>
       <div className={classes.row}>
         <Typography className={classes.text}>Date de creation</Typography>
-        <Typography className={classes.text}>
-          {new Date(user.dateCreation).toLocaleDateString('fr')}
-        </Typography>
+        <Typography className={classes.text}>{new Date(user.dateCreation).toLocaleDateString('fr')}</Typography>
       </div>
       <div className={classes.row}>
         <Typography className={classes.text}>Adresse email</Typography>
@@ -74,7 +70,7 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     padding: '15px 20px',
-    backgroundColor: '#276955',
+    backgroundColor: theme.palette.primary.main,
   },
   row: {
     display: 'flex',

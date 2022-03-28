@@ -154,9 +154,7 @@ class ListeArticles extends React.Component {
   };
 
   handleChangeRowsPerPage = event => {
-    this.setState(
-      { page: 0, rowsPerPage: parseInt(event.target.value, 10) },
-      () => this.loadArticles());
+    this.setState({ page: 0, rowsPerPage: parseInt(event.target.value, 10) }, () => this.loadArticles());
   };
 
   deleteArticle = article => () => {
@@ -190,8 +188,7 @@ class ListeArticles extends React.Component {
             showPopConfirmation: false,
             showInfoBar: true,
             infoBarParams: {
-              title:
-                "Le chargement des articles à échoué merci de contacter l'administrateur ",
+              title: "Le chargement des articles à échoué merci de contacter l'administrateur ",
             },
           });
         }
@@ -211,7 +208,7 @@ class ListeArticles extends React.Component {
       {
         ...this.state,
         cols: _.merge([], cols, {
-          [index]: { order: col.order === 'desc' ? 'asc' : 'desc' ,  selected:true},
+          [index]: { order: col.order === 'desc' ? 'asc' : 'desc', selected: true },
         }),
       },
       this.loadArticles,
@@ -229,20 +226,10 @@ class ListeArticles extends React.Component {
   closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
 
   render() {
-    const {
-      rowsPerPage,
-      page,
-      showInfoBar,
-      infoBarParams,
-      showPopConfirmation,
-      popConfirmationParams,
-      cols
-    } = this.state;
+    const { rowsPerPage, page, showInfoBar, infoBarParams, showPopConfirmation, popConfirmationParams, cols } = this.state;
     // eslint-disable-next-line react/prop-types
     const { classes, articlesList } = this.props;
-    const totalElements = articlesList.totalElements
-      ? articlesList.totalElements
-      : 0;
+    const totalElements = articlesList.totalElements ? articlesList.totalElements : 0;
     const rows = articlesList.content;
     const deletearticle = articlesList.content;
     return (
@@ -251,10 +238,7 @@ class ListeArticles extends React.Component {
           Liste des articles
         </Typography>
         <Divider variant="middle" className={classes.root} />
-        <ArticlesListSearch
-          handleChange={this.handleChange}
-          handleSearchArticle={this.handleSearchArticles}
-        />
+        <ArticlesListSearch handleChange={this.handleChange} handleSearchArticle={this.handleSearchArticles} />
 
         <Divider variant="middle" className={classes.root} />
 
@@ -265,21 +249,12 @@ class ListeArticles extends React.Component {
         <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
-              <ArticlesListTableHeader
-                cols={cols}
-                changeHandler={this.changeColumnSort()}
-              />
+              <ArticlesListTableHeader cols={cols} changeHandler={this.changeColumnSort()} />
             </TableHead>
 
             <TableBody>
               {rows &&
-                rows.map(row => (
-                  <ArticlesListTableRow
-                    key={row.id}
-                    row={row}
-                    deleteArticle={this.performDeleteCommand(row)}
-                  />
-                ))}
+                rows.map(row => <ArticlesListTableRow key={row.id} row={row} deleteArticle={this.performDeleteCommand(row)} />)}
             </TableBody>
             <ArticlesListTableFooter
               totalElements={totalElements}
@@ -289,21 +264,10 @@ class ListeArticles extends React.Component {
               handleChangeRowsPerPage={this.handleChangeRowsPerPage}
             />
           </Table>
-          <InfoBar
-            open={showInfoBar}
-            onClose={this.closeInfoBar}
-            {...infoBarParams}
-          />
-          <GeneriqueDialog
-            open={showPopConfirmation}
-            {...popConfirmationParams}
-          />
+          <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
+          <GeneriqueDialog open={showPopConfirmation} {...popConfirmationParams} />
         </Paper>
-        <Fab
-          color="primary"
-          className={classes.addArticlesButton}
-          onClick={this.handleArticlesAddClick}
-        >
+        <Fab color="primary" className={classes.addArticlesButton} onClick={this.handleArticlesAddClick}>
           <AddIcon />
         </Fab>
       </div>

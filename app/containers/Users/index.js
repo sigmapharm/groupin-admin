@@ -19,13 +19,7 @@ import Divider from '@material-ui/core/Divider';
 import history from 'utils/history';
 import _ from 'lodash';
 import Typography from '@material-ui/core/Typography';
-import {
-  deleteUser,
-  getUsersList,
-  resetUser,
-  toggleUser,
-  updateUser,
-} from './actions';
+import { deleteUser, getUsersList, resetUser, toggleUser, updateUser } from './actions';
 import UsersListTableRow from './list/UsersListTableRow';
 import UsersListSearch from './list/UsersListSearch';
 import {
@@ -59,6 +53,9 @@ const styles = theme => ({
     position: 'fixed',
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2,
+  },
+  tableHead: {
+    backgroundColor: theme.palette.primary.main,
   },
 });
 
@@ -119,8 +116,7 @@ export class UsersList extends React.PureComponent {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title:
-                "le chargement des utilisateur à échoué merci de contacter l'administrateur ",
+              title: "le chargement des utilisateur à échoué merci de contacter l'administrateur ",
             },
           });
         }
@@ -129,10 +125,7 @@ export class UsersList extends React.PureComponent {
   }
 
   handleChangeRowsPerPage = event => {
-    this.setState(
-      { page: 0, rowsPerPage: parseInt(event.target.value, 10) },
-      () => this.loadUsers(),
-    );
+    this.setState({ page: 0, rowsPerPage: parseInt(event.target.value, 10) }, () => this.loadUsers());
   };
 
   openPopConfirmation = ({ title, textContent, onClose, onSubmit }) => {
@@ -182,8 +175,7 @@ export class UsersList extends React.PureComponent {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title:
-                "La activation / desactivation  d'un utilisateur  à échoué merci de contacter l'administrateur ",
+              title: "La activation / desactivation  d'un utilisateur  à échoué merci de contacter l'administrateur ",
             },
           });
         } else {
@@ -200,8 +192,7 @@ export class UsersList extends React.PureComponent {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title:
-                "La modification d'un utilisateur  à échoué merci de contacter l'administrateur ",
+              title: "La modification d'un utilisateur  à échoué merci de contacter l'administrateur ",
             },
           });
         } else {
@@ -220,11 +211,7 @@ export class UsersList extends React.PureComponent {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title: _.get(
-                err,
-                'errors.error',
-                "La suppression de l'utilisteur a echoue  ",
-              ),
+              title: _.get(err, 'errors.error', "La suppression de l'utilisteur a echoue  "),
             },
           });
         } else {
@@ -243,8 +230,7 @@ export class UsersList extends React.PureComponent {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title:
-                "La renitialisation d'un utilisateur  à échoué merci de contacter l'administrateur ",
+              title: "La renitialisation d'un utilisateur  à échoué merci de contacter l'administrateur ",
             },
           });
         } else {
@@ -279,15 +265,7 @@ export class UsersList extends React.PureComponent {
   };
 
   render() {
-    const {
-      rowsPerPage,
-      page,
-      showInfoBar,
-      infoBarParams,
-      showPopConfirmation,
-      popConfirmationParams,
-      cols,
-    } = this.state;
+    const { rowsPerPage, page, showInfoBar, infoBarParams, showPopConfirmation, popConfirmationParams, cols } = this.state;
     const { classes, usersList, cities } = this.props;
     const totalElements = usersList.totalElements ? usersList.totalElements : 0;
     const rows = usersList.content;
@@ -298,10 +276,7 @@ export class UsersList extends React.PureComponent {
           Liste des utilisateurs
         </Typography>
         <Divider variant="middle" className={classes.root} />
-        <UsersListSearch
-          handleChange={this.handleChange}
-          handleSearchUsers={this.handleSearchUsers}
-        />
+        <UsersListSearch handleChange={this.handleChange} handleSearchUsers={this.handleSearchUsers} />
 
         <Divider variant="middle" className={classes.root} />
 
@@ -311,26 +286,18 @@ export class UsersList extends React.PureComponent {
 
         <Paper className={classes.root}>
           <Table className={classes.table}>
-            <TableHead>
+            <TableHead className={classes.tableHead}>
               <TableRow>
                 {cols.map(({ colName, label, order }, index) => (
                   <TableCell key={colName}>
-                    <Tooltip
-                      title="Sort"
-                      placement="bottom-start"
-                      enterDelay={300}
-                    >
-                      <TableSortLabel
-                        active
-                        direction={order}
-                        onClick={this.changeColumnSort(index)}
-                      >
+                    <Tooltip title="Sort" placement="bottom-start" enterDelay={300}>
+                      <TableSortLabel style={{ color: '#fff' }} active direction={order} onClick={this.changeColumnSort(index)}>
                         {label}
                       </TableSortLabel>
                     </Tooltip>
                   </TableCell>
                 ))}
-                <TableCell>Actions</TableCell>
+                <TableCell style={{ color: '#fff' }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -355,21 +322,10 @@ export class UsersList extends React.PureComponent {
               handleChangeRowsPerPage={this.handleChangeRowsPerPage}
             />
           </Table>
-          <InfoBar
-            open={showInfoBar}
-            onClose={this.closeInfoBar}
-            {...infoBarParams}
-          />
-          <GeneriqueDialog
-            open={showPopConfirmation}
-            {...popConfirmationParams}
-          />
+          <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
+          <GeneriqueDialog open={showPopConfirmation} {...popConfirmationParams} />
         </Paper>
-        <Fab
-          color="primary"
-          className={classes.addUserButton}
-          onClick={this.handleUserAddClick}
-        >
+        <Fab color="primary" className={classes.addUserButton} onClick={this.handleUserAddClick}>
           <AddIcon />
         </Fab>
       </div>
