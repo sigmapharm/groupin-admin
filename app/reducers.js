@@ -14,7 +14,7 @@ import articlesReducer from 'containers/Articles/reducer';
 import offresReducer from 'containers/Offres/reducer';
 import commandsReducer from 'containers/Command/store/reducer';
 import groupingReducer from 'containers/Grouping/store/reducer';
-import statisticsReducer from 'containers/statistics/reducer';
+import statisticsReducer from 'containers/Dashboards/reducer';
 import reportingReducer from 'containers/Reporting/reducer';
 
 /**

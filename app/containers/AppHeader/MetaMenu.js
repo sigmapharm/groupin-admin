@@ -3,21 +3,9 @@ import { ADMIN, SUPER_ADMIN, MEMBRE } from './Roles';
 export const MetaMenu = [
   {
     key: 0,
-    label: 'Accueil',
-    link: '/',
+    label: 'Dashboard',
+    link: '/dashboard',
     allowedRoles: [MEMBRE, ADMIN, SUPER_ADMIN],
-  },
-  {
-    key: 6,
-    label: 'Statistiques',
-    link: '/statistiques',
-    allowedRoles: [MEMBRE, ADMIN, SUPER_ADMIN],
-  },
-  {
-    key: 7,
-    label: 'Reporting',
-    link: '/reporting',
-    allowedRoles: [ADMIN, SUPER_ADMIN],
   },
   {
     key: 1,
@@ -37,11 +25,24 @@ export const MetaMenu = [
     link: '/offres',
     allowedRoles: [MEMBRE, ADMIN, SUPER_ADMIN],
   },
-  { key: 4, label: 'Mes Commandes', link: '/commands', allowedRoles: [MEMBRE] },
   {
     key: 5,
-    label: 'Mes Commandes Groupés',
+    label: 'Commandes Groupés',
     link: '/commands',
     allowedRoles: [ADMIN, SUPER_ADMIN],
   },
+  {
+    key: 6,
+    label: 'Statistiques',
+    link: '/statistiques',
+    allowedRoles: [SUPER_ADMIN],
+  },
+  {
+    key: 7,
+    label: 'Reporting',
+    link: '/reporting',
+    allowedRoles: [ADMIN, SUPER_ADMIN],
+  },
+
+  { key: 4, label: 'Mes Commandes', link: '/commands', allowedRoles: [MEMBRE] },
 ];

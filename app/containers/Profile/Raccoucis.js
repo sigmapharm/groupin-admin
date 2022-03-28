@@ -17,12 +17,10 @@ const handleValidation = values => {
     isError = true;
   }
   if (!newPasswordConfirm) {
-    errors.newPasswordConfirm =
-      'la confirmation de nouveau mot passe est obligatoir';
+    errors.newPasswordConfirm = 'la confirmation de nouveau mot passe est obligatoir';
     isError = true;
   } else if (newPassword !== newPasswordConfirm) {
-    errors.newPasswordConfirm =
-      'la confirmation de nouveau mot passe est difirente';
+    errors.newPasswordConfirm = 'la confirmation de nouveau mot passe est difirente';
     isError = true;
   }
   return [isError, errors];
@@ -37,8 +35,7 @@ const Raccoucis = ({ classes, handleRestPassword }) => {
   const [open, setOpen] = useState();
   const [error, setError] = useState({});
   const toggleRestModal = () => setOpen(!open);
-  const handleRestPasswordFormChange = (name, value) =>
-    setResetPasswordFormState({ ...resetPasswordFormState, [name]: value });
+  const handleRestPasswordFormChange = (name, value) => setResetPasswordFormState({ ...resetPasswordFormState, [name]: value });
 
   const handleRestPasswordSubmit = () => {
     const [isError, errors] = handleValidation(resetPasswordFormState);
@@ -58,9 +55,7 @@ const Raccoucis = ({ classes, handleRestPassword }) => {
           </Typography>
         </div>
         <div className={classes.row} onClick={toggleRestModal}>
-          <Typography className={classes.text}>
-            Réinitialiser le mot de passe
-          </Typography>
+          <Typography className={classes.text}>Réinitialiser le mot de passe</Typography>
           <ChevronRight className={classes.text} />
         </div>
       </div>
@@ -74,10 +69,7 @@ const Raccoucis = ({ classes, handleRestPassword }) => {
         onClose={toggleRestModal}
         style={{ minWidth: '400px', maxWidth: '96%', margin: '0 auto' }}
       >
-        <ResetPasswordForm
-          handleChange={handleRestPasswordFormChange}
-          errors={error}
-        />
+        <ResetPasswordForm handleChange={handleRestPasswordFormChange} errors={error} />
       </Dialog>
     </>
   );
@@ -95,7 +87,7 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     padding: '15px 20px',
-    backgroundColor: '#276955',
+    backgroundColor: theme.palette.primary.main,
   },
   row: {
     display: 'flex',

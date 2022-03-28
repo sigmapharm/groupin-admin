@@ -8,7 +8,7 @@ import laboratoiresSaga from 'containers/laboratoire/saga';
 import registrationSaga from 'containers/RegisterPage/saga';
 import commandSagas from 'containers/Command/store/saga';
 import groupingSagas from 'containers/Grouping/store/saga';
-import statisticsSagas from 'containers/statistics/saga';
+import statisticsSagas from 'containers/Dashboards/saga';
 import reportingSagas from 'containers/Reporting/saga';
 
 export default [

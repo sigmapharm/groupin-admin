@@ -51,4 +51,7 @@ export default theme => ({
     color: 'red',
     marginRight: '5px',
   },
+  tableHeader: {
+    backgroundColor: 'green',
+  },
 });
