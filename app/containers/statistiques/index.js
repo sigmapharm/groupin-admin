@@ -1,5 +1,5 @@
 import { Divider, Typography, withStyles, Fab } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search } from '@material-ui/icons';
 import connect from 'react-redux/es/connect/connect';
 import { compose } from 'redux';
@@ -12,7 +12,7 @@ import PharmaciesChart from './charts/PharmaciesChart';
 import LaboChart from './charts/LaboratoireChart';
 import moment from 'moment';
 import _ from 'lodash';
-
+import { useFecth } from '../../hooks/useFetch';
 // test data
 import testdata1 from './data/testdata1';
 import testdata2 from './data/testdata2';
@@ -34,6 +34,13 @@ const Dashboard = ({ classes }) => {
 
   const [startDate, setStartDate] = useState(lastMonthDate);
   const [endDate, setEndDate] = useState(new Date());
+
+  const articles = useFecth('/statistics/article', { method: 'GET' });
+  const cities = useFecth('/statistics/city', { method: 'GET' });
+  const labos = useFecth('/statistics/laboratory', { method: 'GET' });
+  const pharmas = useFecth('/statistics/pharmacy', { method: 'GET' });
+
+  console.log(pharmas.data);
 
   return (
     <div className={classes.root}>

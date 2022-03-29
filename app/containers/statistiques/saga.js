@@ -1,5 +1,5 @@
 import { all, put, takeLatest } from 'redux-saga/effects';
-import { GET_REPORTING_ACTION } from './constants';
+import { GET_ARTICLE_STATS } from './constants';
 import { putReporting } from './actions';
 
 import requestWithAuth from '../../services/request/request-with-auth';
@@ -15,7 +15,7 @@ function* reportingListWorker(action) {
 
   yield networking(function*() {
     try {
-      const res = yield requestWithAuth('/statistics/reporting', options);
+      const res = yield requestWithAuth('/statistics/article', options);
       yield put(putReporting(res));
       yield callback && callback();
     } catch (e) {
@@ -31,7 +31,7 @@ function* networking(func) {
 }
 
 function* reportingSagas() {
-  yield all([takeLatest(GET_REPORTING_ACTION, reportingListWorker)]);
+  yield all([takeLatest(GET_ARTICLE_STATS, reportingListWorker)]);
 }
 
 export default reportingSagas;
