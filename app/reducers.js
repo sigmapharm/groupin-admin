@@ -16,6 +16,7 @@ import commandsReducer from 'containers/Command/store/reducer';
 import groupingReducer from 'containers/Grouping/store/reducer';
 import statisticsReducer from 'containers/Dashboards/reducer';
 import reportingReducer from 'containers/Reporting/reducer';
+import stateReport from './containers/statistiques/reducer';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
@@ -33,6 +34,7 @@ export default function createReducer(injectedReducers = {}) {
     grouping: groupingReducer,
     statistics: statisticsReducer,
     reporting: reportingReducer,
+    stateReport: stateReport,
   });
 
   // Wrap the root reducer and return a new root reducer with router state

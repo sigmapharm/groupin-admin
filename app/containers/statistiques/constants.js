@@ -7,3 +7,7 @@ export const PUT_REPORTING_ACTION = 'app/statics/putList';
 
 export const GET_LABORATOIRES = 'app/statics/getList';
 export const GET_ARTICLE = 'app/statics/getArticle';
+
+// constant
+
+export const GET_ARTICLE_STATS = 'app/state/articles';
