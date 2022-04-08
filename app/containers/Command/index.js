@@ -25,15 +25,109 @@ import Dialog from '../../components/Dialog/index';
 import CommandFullDetail from './components/commands/details';
 import InfoBar from '../../components/Snackbar/InfoBar';
 import { makeSelectUser } from '../App/selectors';
-import { ADMIN, SUPER_ADMIN } from '../AppHeader/Roles';
+import { ADMIN, SUPER_ADMIN, MEMBRE } from '../AppHeader/Roles';
 import { clearSelectedOffer } from '../Offres/actions';
 import { selectSelectedOffer } from '../Offres/selectors';
 
 import GeneriqueDialog from '../../components/Alert';
 import { isWidthDown } from '@material-ui/core/withWidth';
 import CommandListCards from './components/responsive/CommandListCards';
+import { saveAs } from 'file-saver';
+
+const adminCols = [
+  {
+    label: 'Offre désignation',
+    colName: 'offer.designation',
+    selected: false,
+    order: 'asc',
+  },
+  {
+    label: 'Laboratoire',
+    colName: 'offer.laboratory.nom',
+    selected: false,
+    order: 'asc',
+  },
+  {
+    label: 'Pharmacie',
+    colName: 'user.pharmacy.denomination',
+    selected: false,
+    order: 'asc',
+  },
+  {
+    label: 'Date de commande',
+    colName: 'createdAt',
+    selected: false,
+    order: 'asc',
+  },
+  {
+    label: 'Montant Remisé',
+    colName: 'totalAmount',
+    selected: false,
+    order: 'asc',
+  },
+];
+
+const memberCols = [
+  {
+    label: 'Offre désignation',
+    colName: 'offer.designation',
+    selected: false,
+    order: 'asc',
+  },
+  {
+    label: 'Laboratoire',
+    colName: 'offer.laboratory.nom',
+    selected: false,
+    order: 'asc',
+  },
+  {
+    label: 'Pharmacie',
+    colName: 'user.pharmacy.denomination',
+    selected: false,
+    order: 'asc',
+  },
+  {
+    label: 'Date de commande',
+    colName: 'createdAt',
+    selected: false,
+    order: 'asc',
+  },
+  {
+    label: 'Montant Remisé',
+    colName: 'totalAmount',
+    selected: false,
+    order: 'asc',
+  },
+
+  {
+    label: 'date de livraison',
+    colName: 'date_livraison',
+    selected: false,
+    order: 'asc',
+  },
+];
 
 class Command extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      update: false,
+      showCommandDetail: false,
+      showSubCommands: false,
+      selectedCommand: {},
+      searchData: {
+        laboratoryName: '',
+        offerName: '',
+      },
+      showInfoBar: false,
+      infoBarParams: {},
+      showPopConfirmation: false,
+      popConfirmationParams: {},
+      cols: this.isMember || this.canGroup ? memberCols : adminCols,
+      blobUrl: '',
+    };
+  }
+
   searchFields = searchFields(fieldData => {
     const { searchData } = this.state;
     this.setState({
@@ -178,8 +272,8 @@ class Command extends PureComponent {
 
   performDispatching = ({ commandId, offerId }) => () => {
     this.openPopConfirmation({
-      title: 'Dipatching',
-      textContent: 'Êtes-vous sûr de dispatcher les quantités  ? ',
+      title: 'livraison',
+      textContent: 'marquer cette commande comme livrée ',
       onClose: this.closePopConfirmation,
       onSubmit: this.dispatchQuantity({ commandId, offerId }),
     });
@@ -247,7 +341,7 @@ class Command extends PureComponent {
           });
         } else {
           const pdfBlob = new Blob([blob], { type: blob.type });
-          window.open(URL.createObjectURL(pdfBlob));
+          saveAs(pdfBlob, `${row.laboratoryName}/${moment(row.creationDate).format('DD/MM/YYYY')}/${row.commandId}`);
         }
       },
     });
@@ -315,62 +409,6 @@ class Command extends PureComponent {
     });
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      update: false,
-      showCommandDetail: false,
-      showSubCommands: false,
-      selectedCommand: {},
-      searchData: {
-        laboratoryName: '',
-        offerName: '',
-      },
-      showInfoBar: false,
-      infoBarParams: {},
-      showPopConfirmation: false,
-      popConfirmationParams: {},
-      cols: [
-        {
-          label: 'Offre désignation',
-          colName: 'offer.designation',
-          selected: false,
-          order: 'asc',
-        },
-        {
-          label: 'Laboratoire',
-          colName: 'offer.laboratory.nom',
-          selected: false,
-          order: 'asc',
-        },
-        {
-          label: 'Pharmacie',
-          colName: 'user.pharmacy.denomination',
-          selected: false,
-          order: 'asc',
-        },
-        {
-          label: 'Date de commande',
-          colName: 'createdAt',
-          selected: false,
-          order: 'asc',
-        },
-        {
-          label: 'Montant Command',
-          colName: 'totalAmount',
-          selected: false,
-          order: 'asc',
-        },
-        {
-          label: 'status',
-          colName: 'status',
-          selected: false,
-          order: 'asc',
-        },
-      ],
-    };
-  }
-
   showSubCommandsModel = row => () => {
     const { commandId } = row;
     const { loadAggregateSubCommands } = this.props;
@@ -403,7 +441,16 @@ class Command extends PureComponent {
     const {
       user: { role },
     } = this.props;
+
     return role === SUPER_ADMIN;
+  }
+
+  get isMember() {
+    const {
+      user: { role },
+    } = this.props;
+
+    return role === MEMBRE;
   }
 
   get forAdminCommands() {
@@ -459,11 +506,12 @@ class Command extends PureComponent {
       infoBarParams: error
         ? { title: 'Merci remplir toutes les quantités livrées !' }
         : {
-            title: 'Les quantités sont bien dispatchées',
+            title: 'votre commnde est enregistrée comme livrée',
             onSuccessTitle: 'Consulter',
             onSuccess: () => history.push(`offres/${offerId}/commands`),
           },
     });
+    this.forceUpdate();
   };
 
   closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
@@ -625,6 +673,8 @@ class Command extends PureComponent {
                   canDelete={!this.canGroup}
                   disableClientEditCommand={this.disableGroupingBtn}
                   showSubCommands={this.showSubCommandsModel}
+                  blob={this.state.blobUrl}
+                  isMember={this.isMember}
                 />
               )}
             </Table>

@@ -23,6 +23,7 @@ export function useSelectFormat(__array, __criteria) {
         const obj = {
           value: item[__criteria.value],
           label: item[__criteria.label],
+          id: item.id,
         };
 
         // check if there is any allowed keys

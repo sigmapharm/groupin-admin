@@ -78,15 +78,17 @@ export class UsersListTableRow extends React.PureComponent {
   handleSubmitEdit = e => {
     e.preventDefault();
     const { formData } = this.state;
-    this.props.updateUser({
-      ...formData,
-      ville: { id: formData.ville && formData.ville.value },
-    },()=>{
-      this.setState({
-        editMode: false,
-      });
-    });
-
+    this.props.updateUser(
+      {
+        ...formData,
+        ville: { id: formData.ville && formData.ville.value },
+      },
+      () => {
+        this.setState({
+          editMode: false,
+        });
+      },
+    );
   };
 
   handeledit = e => {
@@ -133,6 +135,7 @@ export class UsersListTableRow extends React.PureComponent {
           <TableCell>{row.email}</TableCell>
           <TableCell>{row.pharmacie && row.pharmacie.denomination}</TableCell>
           <TableCell>{row.role}</TableCell>
+          <TableCell>{row.lastCommand ? row.lastCommand.split('T')[0] : 'no Commands'}</TableCell>
           <TableCell style={{ padding: 0 }}>
             <Tooltip placement="top" title="Mofidier">
               <IconButton onClick={this.edit} style={{ padding: 5 }}>
@@ -149,12 +152,7 @@ export class UsersListTableRow extends React.PureComponent {
                 <ResetIcon color="primary" />
               </IconButton>
             </Tooltip>
-            <Switch
-              checked={row.enabled}
-              onChange={this.toggle}
-              value={row.enabled}
-              color="primary"
-            />
+            <Switch checked={row.enabled} onChange={this.toggle} value={row.enabled} color="primary" />
             <Tooltip placement="top" title="Supprimer">
               <IconButton onClick={this.delete} style={{ padding: 5 }}>
                 <DeleteIcon color="primary" />
@@ -164,19 +162,11 @@ export class UsersListTableRow extends React.PureComponent {
         </TableRow>
         {detailsOpen && (
           <Dialog maxWidth="lg" onClose={this.handleClose} open>
-            <MuiDialogTitle
-              style={{ display: 'flex', justifyContent: 'space-between' }}
-              disableTypography
-            >
+            <MuiDialogTitle style={{ display: 'flex', justifyContent: 'space-between' }} disableTypography>
               <Typography variant="h5" color="primary">
                 {`Details Utilisateur`}
               </Typography>
-              <IconButton
-                color="primary"
-                aria-label="Close"
-                style={closeButton}
-                onClick={this.closeDetails}
-              >
+              <IconButton color="primary" aria-label="Close" style={closeButton} onClick={this.closeDetails}>
                 <CloseIcon />
               </IconButton>
             </MuiDialogTitle>
@@ -187,18 +177,11 @@ export class UsersListTableRow extends React.PureComponent {
         )}
         {editMode && (
           <Dialog maxWidth="lg" onClose={this.handleClose} open>
-            <MuiDialogTitle
-              style={{ display: 'flex', justifyContent: 'space-between' }}
-              disableTypography
-            >
+            <MuiDialogTitle style={{ display: 'flex', justifyContent: 'space-between' }} disableTypography>
               <Typography variant="h5" color="primary">
                 {`Modifier Utilisateur`}
               </Typography>
-              <IconButton
-                color="primary"
-                aria-label="Close"
-                onClick={this.closeEditMode}
-              >
+              <IconButton color="primary" aria-label="Close" onClick={this.closeEditMode}>
                 <CloseIcon />
               </IconButton>
             </MuiDialogTitle>

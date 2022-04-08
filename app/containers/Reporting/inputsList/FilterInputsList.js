@@ -1,5 +1,5 @@
 import { withStyles } from '@material-ui/core';
-import React, { useState, useReducer } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import DateInput from '../../../components/DateInput';
 import Select from './select';
 import FilterButton from './FilterButton';
@@ -7,79 +7,95 @@ import PrintButton from './PrintButton';
 import { useSelectFormat } from '../hooks/useSelectFormat';
 import ReactExport from 'react-data-export';
 import _ from 'lodash';
-import ReactToPdf from 'react-to-pdf';
 import PDFButton from './PdfButton';
 import history from 'utils/history';
+import moment from 'moment';
+import { getReportingPDF } from '../actions';
+import { saveAs } from 'file-saver';
+import connect from 'react-redux/es/connect/connect';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import authenticated from '../../HOC/authenticated/authenticated';
+import { selectReportingPdf } from '../selectors';
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
-function reducres(state = {}, { type, payload, value }) {
-  console.log(type);
-  switch (type) {
-    case 'LABO':
-      return { ...state, laboName: payload, value };
-    case 'ARTICLES':
-      return { ...state, articles: payload, value };
-    case 'PHARMACIES':
-      return { ...state, pharmacies: payload, value };
-    case 'REGIONS':
-      return { ...state, regions: payload, value };
-    case 'VILLES':
-      return { ...state, villes: payload, value };
-    case 'DATE-DE':
-      return { ...state, date_de: payload };
-    case 'DATE-A':
-      return { ...state, date_a: payload };
-    default:
-      return state;
-  }
-}
+const FilterInputsList = ({ classes, laboratoires, regions, pharmacies, rows, dispatch, getReporting, reportPdf }) => {
+  const day = moment().get('date');
+  const year = moment().get('year');
+  const month = moment().get('month');
+  //
+  const lastMonthDate = moment(new Date(`${month}/${day}/${year}`), 'YYYY-MM-DD')
+    .format()
+    .split('T')[0];
 
-const FilterInputsList = ({ classes, laboratoires, regions, pharmacies, setRows, rows, tableRef, pdf }) => {
-  // sub-selects
-  const [villes, setVilles] = useState([]);
-  const [articles, setArticles] = useState([]);
-  const [clearInput, setClearInput] = useState(null);
+  // select values
 
-  //  format select rows
+  const [lab, setLab] = useState('');
+  const [region, setRegion] = useState('');
+  const [city, setCity] = useState([]);
+  const [pharma, setPharma] = useState('');
+  const [article, setArticle] = useState('');
+  const [dateFrom, setDateFrom] = useState(lastMonthDate);
+  const [dateTo, setDateTo] = useState(
+    moment(new Date(), 'YYYY-MM-DD')
+      .format()
+      .split('T')[0],
+  );
+  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedArticle, setSelectedArticle] = useState('');
+
   const labOptions = useSelectFormat(laboratoires, { label: 'nom', value: 'nom', allow: ['articledto'] });
-  const articlesOptions = useSelectFormat(articles, { label: 'nom', value: 'nom' });
+  const articlesOptions = useSelectFormat(article, { label: 'nom', value: 'nom' });
   const regionOptions = useSelectFormat(regions, { label: 'name', value: 'code', allow: ['cities'] });
-  const villeOptiosn = useSelectFormat(villes, { label: 'name', value: 'code' });
+  const villeOptiosn = useSelectFormat(city, { label: 'name', value: 'code' });
   const pharmaciesOptiosn = useSelectFormat(pharmacies, { label: 'denomination', value: 'denomination' });
 
-  const [state, dispatch] = useReducer(reducres, {});
+  // useEffect(() => {
+  //   dispatch(getReportingPDF(''));
+  // }, []);
 
   // performe filter
   const handleTablefilter = e => {
     // reset the browser to default
     e.preventDefault();
 
-    // map value to filter
-    const __filterdstate = _.mapValues(state, (obj, key) => {
-      //  dont forget to fix the date
-      // if (key === 'date_de' || key === 'date_a') {
-      //   return obj;
-      // }
-      return obj.value;
-    });
-
-    // remove undefined values
-    Object.keys(__filterdstate).forEach(key => (__filterdstate[key] === undefined ? delete __filterdstate[key] : {}));
-
-    const filterdRows = _.filter(rows, _.matches(__filterdstate));
-
-    console.log('rows', filterdRows);
-    console.log('__filterdstate', __filterdstate);
-
-    setRows(filterdRows);
+    dispatch(
+      getReporting(
+        `?lab=${lab ? lab.value : ''}&city=${selectedCity ? selectedCity.id : ''}&region=${region ? region.id : ''}&from=${
+          dateFrom === 'Invalid date' ? '' : dateFrom
+        }&to=${dateTo === 'Invalid date' ? '' : dateTo}&ar=${selectedArticle}&pha=${pharma ? pharma.value : ''}`,
+      ),
+    );
   };
 
-  const options = {
-    unit: 'in',
-    format: [4, 2],
+  const handlePdfPrint = () => {
+    dispatch(
+      getReportingPDF({
+        searchInput: `?lab=${lab ? lab.value : ''}&city=${selectedCity ? selectedCity.id : ''}&region=${
+          region ? region.id : ''
+        }&from=${dateFrom === 'Invalid date' ? '' : dateFrom}&to=${
+          dateTo === 'Invalid date' ? '' : dateTo
+        }&ar=${selectedArticle}&pha=${pharma ? pharma.value : ''}`,
+        callback: (err, blob) => {
+          if (err) {
+            console.log('print err', err);
+            return;
+          }
+          const pdfBlob = new Blob([blob], { type: blob.type });
+          saveAs(
+            pdfBlob,
+            `reporting-${
+              moment(new Date(), 'YYYY-MM-DD')
+                .format()
+                .split('T')[0]
+            }.pdf`,
+          );
+        },
+      }),
+    );
   };
 
   return (
@@ -88,87 +104,63 @@ const FilterInputsList = ({ classes, laboratoires, regions, pharmacies, setRows,
       <Select
         placeholder="Laboratoires"
         options={labOptions}
-        onChange={(lab, prop) => {
-          if (prop.action === 'clear') {
-            dispatch({ type: 'LABO', payload: '', value: '' });
-            return;
-          }
-
-          dispatch({ type: 'LABO', payload: lab, value: lab.value });
-          setArticles(lab.articledto);
+        onChange={e => {
+          setLab(e);
+          setSelectedArticle('');
         }}
-        value={state.laboName}
+        value={lab}
       />
       {/* articles  select input  */}
       <Select
         options={articlesOptions}
-        onChange={(article, prop) => {
-          if (prop.action === 'clear') {
-            dispatch({ type: 'ARTICLES', payload: '', value: '' });
-            return;
-          }
-
-          dispatch({ type: 'ARTICLES', payload: article, value: article.value });
+        onChange={e => {
+          setSelectedArticle(e);
         }}
-        placeholder="Désignation d'article"
+        value={selectedArticle}
       />
       {/* pharmacies select input  */}
       <Select
         placeholder="pharmacies"
         options={pharmaciesOptiosn}
-        onChange={(pharma, prop) => {
-          if (prop.action === 'clear') {
-            dispatch({ type: 'PHARMACIES', payload: '', value: '' });
-            return;
-          }
-
-          dispatch({ type: 'PHARMACIES', payload: pharma, value: pharma.value });
+        onChange={e => {
+          setPharma(e);
         }}
+        value={pharma}
       />
       {/* Regions select inputs */}
       <Select
         placeholder="Regions"
         options={regionOptions}
-        onChange={(reg, prop) => {
-          if (prop.action === 'clear') {
-            dispatch({ type: 'REGIONS', payload: '', value: '' });
-            setClearInput(null);
-          }
-
-          dispatch({ type: 'REGIONS', payload: reg, value: reg.value });
-          setVilles(reg.cities);
-          setClearInput(null);
+        onChange={e => {
+          setRegion(e);
+          setCity(e.cities);
+          setSelectedCity('');
         }}
-        value={state.regions}
+        value={region}
       />
       {/* villes select input */}
       <Select
         placeholder="Ville"
         options={villeOptiosn}
-        onChange={(ville, prop) => {
-          if (prop.action === 'clear') {
-            dispatch({ type: 'VILLES', payload: '', value: '' });
-            return;
-          }
-
-          dispatch({ type: 'VILLES', payload: ville, value: ville.value });
-          setClearInput(ville);
+        onChange={e => {
+          setSelectedCity(e);
         }}
-        value={clearInput}
+        value={selectedCity}
       />
       {/* date inputs */}
       <DateInput
         label="De"
-        onChange={value => {
-          dispatch({ type: 'DATE-DE', payload: value });
+        onChange={e => {
+          setDateFrom(e);
         }}
-        value={new Date()}
+        value={dateFrom}
       />
       <DateInput
         label="A"
-        onChange={value => {
-          dispatch({ type: 'DATE-A', payload: value });
+        onChange={e => {
+          setDateTo(e);
         }}
+        value={dateTo}
       />
       {/* buttons */}
       <FilterButton className={classes.buttons} type="submit" />
@@ -182,7 +174,8 @@ const FilterInputsList = ({ classes, laboratoires, regions, pharmacies, setRows,
           <ExcelColumn label="chiffre d'affaires" value="ca" />
         </ExcelSheet>
       </ExcelFile>
-      <a href={pdf.url} download="reporting.pdf">
+
+      <a onClick={handlePdfPrint}>
         <PDFButton className={classes.buttons} />
       </a>
     </form>
@@ -200,4 +193,23 @@ const style = {
   },
 };
 
-export default withStyles(style)(FilterInputsList);
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+const mapStateToProps = createStructuredSelector({
+  reportPdf: selectReportingPdf(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(
+  authenticated,
+  withConnect,
+  withStyles(style),
+)(FilterInputsList);
+
+// export default withStyles(style)(FilterInputsList);

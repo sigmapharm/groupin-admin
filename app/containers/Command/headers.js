@@ -4,7 +4,8 @@ export const commandHeaders = [
   { title: 'Laboratoire' },
   { title: 'Pharmacie' },
   { title: 'Date commande' },
-  { title: 'Total' },
+  { title: 'Total Remisé' },
+  { title: 'date de livraison' },
 ];
 export const articleHeaders = [
   { title: 'DESIGNATION' },

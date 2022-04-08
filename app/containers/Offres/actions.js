@@ -57,13 +57,7 @@ const deleteOffer = ({ id, filters, callback }) => ({
 
 const deleteOfferSuccess = payload => ({ type: DELETE_OFFER_SUCCESS, payload });
 
-const changeArticleOffer = ({
-  index,
-  id,
-  selected,
-  minQuantity,
-  discount,
-}) => ({
+const changeArticleOffer = ({ index, id, selected, minQuantity, discount }) => ({
   type: CHANGE_ARTICLE_OFFER,
   payload: {
     index,
@@ -110,12 +104,7 @@ const manageCreateOffreResponse = (response, callback) => ({
   callback,
 });
 
-const createOrUpdateOffre = (
-  formData,
-  offerArticledtos,
-  updateOnlyDate,
-  callback,
-) => ({
+const createOrUpdateOffre = (formData, offerArticledtos, updateOnlyDate, callback) => ({
   type: SUBMIT_CREATE_OFFRE,
   payload: { ...formData, offerArticledtos, updateOnlyDate },
   callback,
@@ -161,10 +150,13 @@ const toggleCheckAll = () => ({
   type: TOGGLE_CHECK_ALL,
 });
 
-const applyGlobalRemiseOrMinQt = payload => ({
-  type: APPLY_GLOBAL_REMISE_OR_MIN_QT,
-  payload,
-});
+const applyGlobalRemiseOrMinQt = payload => {
+  console.log('payload', payload);
+  return {
+    type: APPLY_GLOBAL_REMISE_OR_MIN_QT,
+    payload,
+  };
+};
 
 export {
   applyGlobalRemiseOrMinQt,

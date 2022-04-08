@@ -71,9 +71,7 @@ export class OffreListConsultMembre extends React.PureComponent {
               <TableCell>{dateformat}</TableCell>
               <TableCell style={champprogress}>
                 <Progressbar progress={avancement} />
-                {joursRestants > 0
-                  ? 'Il vous reste ' + joursRestants + ' ' + joursLabel
-                  : 'Offre clôturée !'}
+                {joursRestants > 0 ? 'Il vous reste ' + joursRestants + ' ' + joursLabel : 'Offre clôturée !'}
               </TableCell>
             </TableRow>
           </TableBody>

@@ -11,7 +11,7 @@ export function useFecth(path, options) {
 
   useEffect(
     () => {
-      fetch(`http://localhost:8080${path}`, {
+      fetch(`http://192.168.11.104:8080${path}`, {
         ...options,
         headers: {
           Authorization: Auth.get(),

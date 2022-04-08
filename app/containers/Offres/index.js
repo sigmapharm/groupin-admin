@@ -154,11 +154,9 @@ export class OffresList extends React.PureComponent {
     const params = new URLSearchParams(this.props.location.search);
     const designation = params.get('designation');
     console.log('designation', designation);
-    if (designation)
-      this.setState({ ...this.state, designation }, this.loadOffers);
+    if (designation) this.setState({ ...this.state, designation }, this.loadOffers);
     else this.loadOffers();
   }
-
   handleChangePage = (event, page) => {
     this.setState({ page }, this.loadOffers);
   };
@@ -190,10 +188,7 @@ export class OffresList extends React.PureComponent {
   };
 
   handleChangeRowsPerPage = event => {
-    this.setState(
-      { page: 0, rowsPerPage: parseInt(event.target.value, 10) },
-      () => this.loadOffers(),
-    );
+    this.setState({ page: 0, rowsPerPage: parseInt(event.target.value, 10) }, () => this.loadOffers());
   };
 
   loadOffers = () =>
@@ -204,8 +199,7 @@ export class OffresList extends React.PureComponent {
             showPopConfirmation: false,
             showInfoBar: true,
             infoBarParams: {
-              title:
-                "Le chargement des articles à échoué merci de contacter l'administrateur ",
+              title: "Le chargement des articles à échoué merci de contacter l'administrateur ",
             },
           });
         }
@@ -241,9 +235,7 @@ export class OffresList extends React.PureComponent {
     const { rowsPerPage, page, showInfoBar, infoBarParams, cols } = this.state;
     // eslint-disable-next-line react/prop-types
     const { classes, offresList, user, width } = this.props;
-    const totalElements = offresList.totalElements
-      ? offresList.totalElements
-      : 0;
+    const totalElements = offresList.totalElements ? offresList.totalElements : 0;
     const rows = offresList.content || [];
     const isSmallDevice = isWidthDown('md', width);
 
@@ -280,10 +272,7 @@ export class OffresList extends React.PureComponent {
           <Paper className={classes.root}>
             <Table className={classes.table}>
               <TableHead>
-                <OffresListTableHeaders
-                  cols={cols}
-                  changeHandler={this.changeColumnSort()}
-                />
+                <OffresListTableHeaders cols={cols} changeHandler={this.changeColumnSort()} />
               </TableHead>
               <TableBody>
                 {rows.length != 0 ? (
@@ -291,14 +280,7 @@ export class OffresList extends React.PureComponent {
                     <OffresListTableRow
                       key={row.id}
                       filters={{
-                        ..._.pick(this.state, [
-                          'cols',
-                          'status',
-                          'designation',
-                          'laboratoire',
-                          'rowsPerPage',
-                          'page',
-                        ]),
+                        ..._.pick(this.state, ['cols', 'status', 'designation', 'laboratoire', 'rowsPerPage', 'page']),
                       }}
                       dispatch={this.props.dispatch}
                       row={row}
@@ -324,17 +306,9 @@ export class OffresList extends React.PureComponent {
           </Paper>
         )}
 
-        <InfoBar
-          open={showInfoBar}
-          onClose={this.closeInfoBar}
-          {...infoBarParams}
-        />
+        <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
         <WithRoles user={user} roles={[ADMIN, SUPER_ADMIN]}>
-          <Fab
-            color="primary"
-            className={classes.addOffresButton}
-            onClick={this.handleOffresAddClick}
-          >
+          <Fab color="primary" className={classes.addOffresButton} onClick={this.handleOffresAddClick}>
             <AddIcon />
           </Fab>
         </WithRoles>

@@ -20,11 +20,7 @@ import _ from 'lodash';
 import InfoBar from '../../../components/Snackbar/InfoBar';
 import { selectOfferArticleList } from '../selectors';
 // import { makeSelectoffreArticledtos } from '../../App/selectors';
-import {
-  changeOfferArticle,
-  loadArticleOffer,
-  submitClientCommand,
-} from '../actions';
+import { changeOfferArticle, loadArticleOffer, submitClientCommand } from '../actions';
 import { makeSelectUser } from '../../App/selectors';
 import { SUPER_ADMIN } from '../../AppHeader/Roles';
 
@@ -121,12 +117,9 @@ export class OffreListConsultation extends React.PureComponent {
 
   get allowCommandSubmit() {
     const { offerArticles } = this.props;
-    return offerArticles.filter(
-      ({ quantity, minQuantity }) => quantity >= minQuantity,
-    ).length > 0 &&
-      offerArticles
-        .filter(({ quantity }) => quantity > 0)
-        .every(({ hasError }) => hasError === false)
+
+    return offerArticles.filter(({ quantity, minQuantity }) => quantity >= minQuantity).length > 0 &&
+      offerArticles.filter(({ quantity }) => quantity > 0).every(({ hasError }) => hasError === false)
       ? true
       : false;
   }
@@ -136,6 +129,17 @@ export class OffreListConsultation extends React.PureComponent {
       user: { role },
     } = this.props;
     return role === SUPER_ADMIN;
+  }
+
+  get isCommandAllowed() {
+    const { totalRemise, row } = this.props;
+    const isValide = parseInt(totalRemise) >= parseInt(row.minToOrder) ? true : false;
+
+    if (this.allowCommandSubmit && isValide) {
+      return false;
+    }
+
+    return true;
   }
 
   componentWillMount() {
@@ -151,8 +155,7 @@ export class OffreListConsultation extends React.PureComponent {
             this.setState({
               showInfoBar: true,
               infoBarParams: {
-                title:
-                  "Le chargement des articles a échoué merci de contacter l'administrateur ",
+                title: "Le chargement des articles a échoué merci de contacter l'administrateur ",
               },
             });
           }
@@ -164,16 +167,7 @@ export class OffreListConsultation extends React.PureComponent {
   closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
 
   render() {
-    const {
-      row,
-      classes,
-      remainingDays,
-      hasStarted,
-      progress,
-      offerArticles,
-      commandMode,
-      dismiss,
-    } = this.props;
+    const { row, classes, remainingDays, hasStarted, progress, offerArticles, commandMode, dismiss } = this.props;
     const { showInfoBar, infoBarParams } = this.state;
     const datefin = new Date(row.dateFin);
     const startDate = new Date(row.dateDebut);
@@ -181,10 +175,8 @@ export class OffreListConsultation extends React.PureComponent {
     // const avancementMontant = Math.min(row.montant / 100000, 1) * 100;
 
     const dateformat = new Intl.DateTimeFormat('fr-FR').format(datefin);
-    const startDateFormated = new Intl.DateTimeFormat('fr-FR').format(
-      startDate,
-    );
-
+    const startDateFormated = new Intl.DateTimeFormat('fr-FR').format(startDate);
+    console.log(this.isCommandAllowed);
     return (
       <React.Fragment>
         <div className={classes.metaContainer}>
@@ -314,6 +306,17 @@ export class OffreListConsultation extends React.PureComponent {
                   }}
                 />
               </TableCell>
+              <TableCell>
+                Quantité Commandée
+                <hr
+                  style={{
+                    width: '45%',
+                    marginLeft: '0',
+                    height: '3px',
+                    backgroundColor: 'red',
+                  }}
+                />
+              </TableCell>
               {commandMode && (
                 <TableCell>
                   Quantité
@@ -330,24 +333,9 @@ export class OffreListConsultation extends React.PureComponent {
             </TableRow>
           </TableHead>
           <TableBody>
-            {offerArticles.map(
-              ({
-                id,
-                nom,
-                ppv,
-                pph,
-                discount,
-                computedPPH,
-                quantity,
-                minQuantity,
-                hasError,
-                selected,
-              }) => (
-                <TableRow
-                  {...(hasError ? { className: classes.hasError } : {})}
-                  key={id}
-                >
-                  {/* {commandMode && (
+            {offerArticles.map(({ id, nom, ppv, pph, discount, computedPPH, quantity, minQuantity, hasError, selected }) => (
+              <TableRow {...(hasError ? { className: classes.hasError } : {})} key={id}>
+                {/* {commandMode && (
                     <TableCell>
                       <Checkbox
                         onChange={this.handSelectArticleChange(id)}
@@ -355,40 +343,37 @@ export class OffreListConsultation extends React.PureComponent {
                       />
                     </TableCell>
                   )} */}
-                  <TableCell>{nom}</TableCell>
-                  <TableCell>{ppv.toFixed(2)}</TableCell>
-                  <TableCell>{pph.toFixed(2)}</TableCell>
-                  <TableCell>{discount}</TableCell>
-                  <TableCell>{computedPPH.toFixed(2)}</TableCell>
-                  <TableCell>{minQuantity}</TableCell>
-                  {commandMode && (
-                    <TableCell>
-                      <TextField
-                        name="quantity"
-                        label="Quantité"
-                        type="number"
-                        value={quantity || ''}
-                        //disabled={!selected}
-                        autoComplete="off"
-                        inputProps={{ maxLength: 100 }}
-                        onChange={this.handleQuantityChange(id, minQuantity)}
-                        fullWidth
-                      />
-                    </TableCell>
-                  )}
-                </TableRow>
-              ),
-            )}
+                <TableCell>{nom}</TableCell>
+                <TableCell>{ppv.toFixed(2)}</TableCell>
+                <TableCell>{pph.toFixed(2)}</TableCell>
+                <TableCell>{discount}</TableCell>
+                <TableCell>{computedPPH.toFixed(2)}</TableCell>
+                <TableCell>{minQuantity}</TableCell>
+                <TableCell>{quantity}</TableCell>
+                {commandMode && (
+                  <TableCell>
+                    <TextField
+                      name="quantity"
+                      label="Quantité"
+                      type="number"
+                      value={quantity || ''}
+                      //disabled={!selected}
+                      autoComplete="off"
+                      inputProps={{ maxLength: 100 }}
+                      onChange={this.handleQuantityChange(id, minQuantity)}
+                      fullWidth
+                    />
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
             {commandMode && (
               <TableRow>
                 <TableCell style={{ textAlign: 'right' }} colSpan={7}>
-                  Total Commande:{' '}
+                  Total Commande:
                 </TableCell>
                 <TableCell style={{ textAlign: 'center' }}>
-                  {_.sumBy(
-                    offerArticles,
-                    ({ quantity, pph }) => pph * quantity || 0,
-                  ).toFixed(2)}
+                  {_.sumBy(offerArticles, ({ quantity, pph }) => pph * quantity || 0).toFixed(2)}
                 </TableCell>
               </TableRow>
             )}
@@ -396,13 +381,7 @@ export class OffreListConsultation extends React.PureComponent {
         </Table>
         {commandMode && (
           <Grid justify="center" container>
-            <Button
-              className={classes.cancelButton}
-              type="submit"
-              variant="contained"
-              color="primary"
-              onClick={dismiss}
-            >
+            <Button className={classes.cancelButton} type="submit" variant="contained" color="primary" onClick={dismiss}>
               Annuler
             </Button>
             <Button
@@ -410,7 +389,7 @@ export class OffreListConsultation extends React.PureComponent {
               type="submit"
               variant="contained"
               color="primary"
-              disabled={!this.allowCommandSubmit}
+              disabled={this.isCommandAllowed}
               onClick={() =>
                 this.allowCommandSubmit &&
                 this.props.dispatch(
@@ -428,11 +407,7 @@ export class OffreListConsultation extends React.PureComponent {
             </Button>
           </Grid>
         )}
-        <InfoBar
-          open={showInfoBar}
-          onClose={this.closeInfoBar}
-          {...infoBarParams}
-        />
+        <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
       </React.Fragment>
     );
   }

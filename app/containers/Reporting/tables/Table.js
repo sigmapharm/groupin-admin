@@ -54,7 +54,7 @@ function ReportingTable({ rows = [], classes, tableRef }) {
                   <TableCell>{row.totalOffers}</TableCell>
                   <TableCell>{row.totalCommandes}</TableCell>
                   <TableCell>{row.totalArticalesCommandes}</TableCell>
-                  <TableCell>{row.ca}</TableCell>
+                  <TableCell>{row.ca.toFixed(3)}</TableCell>
                 </TableRow>
               ))}
             {emptyRows > 0 && (

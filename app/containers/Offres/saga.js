@@ -78,12 +78,10 @@ function* submitClientCommandWorker(action) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(
-      offerArticles
-        .filter(({ selected }) => !!selected)
-        .map(({ id, quantity }) => ({
-          offerArticleId: id,
-          quantity: quantity || 0,
-        })),
+      offerArticles.filter(({ selected }) => !!selected).map(({ id, quantity }) => ({
+        offerArticleId: id,
+        quantity: quantity || 0,
+      })),
     ),
   };
   yield networking(function*() {
@@ -150,9 +148,7 @@ function* loadArticleOfferWorker({ payload: { id }, callback }) {
 
 function* offresListWorker(action) {
   const { callback, cols } = action.payload;
-  const sortQuery = cols
-    .filter(({ selected }) => selected)
-    .reduce((acc, n) => acc.concat(`&sort=${n.colName},${n.order}`), '');
+  const sortQuery = cols.filter(({ selected }) => selected).reduce((acc, n) => acc.concat(`&sort=${n.colName},${n.order}`), '');
   const options = {
     method: 'GET',
     headers: {
@@ -161,11 +157,9 @@ function* offresListWorker(action) {
   };
   yield networking(function*() {
     try {
-      const params = `?size=${action.payload.rowsPerPage}&page=${
-        action.payload.page
-      }&designation=${action.payload.designation}&laboratory=${
-        action.payload.laboratoire
-      }&status=${action.payload.status}${sortQuery}`;
+      const params = `?size=${action.payload.rowsPerPage}&page=${action.payload.page}&designation=${
+        action.payload.designation
+      }&laboratory=${action.payload.laboratoire}&status=${action.payload.status}${sortQuery}`;
       const res = yield requestWithAuth(`/offres${params}`, options);
       yield put(putOffresList(res));
       // yield callApi(`/offres${params}`, putOffresList, options, null);
@@ -178,15 +172,9 @@ function* offresListWorker(action) {
 }
 
 function* addNewOffreWorker(action) {
+  console.log('request body', action.payload);
   const {
-    payload: {
-      offerArticledtos,
-      offerId,
-      laboratoryId,
-      laboratoire,
-      updateOnlyDate,
-      ...payload
-    },
+    payload: { offerArticledtos, offerId, laboratoryId, laboratoire, updateOnlyDate, ...payload },
     callback,
   } = action;
 
@@ -210,9 +198,7 @@ function* addNewOffreWorker(action) {
   yield networking(function*() {
     try {
       const res = yield requestWithAuth(
-        updateOnlyDate
-          ? `/offres/${offerId}/extend-end-date`
-          : `/offres/${laboratoryId}${offerId ? `/${offerId}` : ''}`,
+        updateOnlyDate ? `/offres/${offerId}/extend-end-date` : `/offres/${laboratoryId}${offerId ? `/${offerId}` : ''}`,
         options,
       );
       yield put(manageCreateOffreResponse(res, callback && callback()));
@@ -238,12 +224,7 @@ function* laboArticlesListWorker(action) {
     },
   };
   try {
-    yield callApi(
-      `/laboratoires/${payload.value}/articles`,
-      putArticleslaboList,
-      options,
-      null,
-    );
+    yield callApi(`/laboratoires/${payload.value}/articles`, putArticleslaboList, options, null);
   } catch (e) {
     alert(e); // eslint-disable-line
   }
@@ -256,15 +237,7 @@ function* networking(func) {
 
 function* offersListSagas() {
   yield all([
-    takeLatest(
-      [
-        GET_OFFRES_LIST_ACTION,
-        DELETE_OFFER_SUCCESS,
-        CLOSE_OFFER_SUCCESS,
-        CLONE_OFFER_SUCCESS,
-      ],
-      offresListWorker,
-    ),
+    takeLatest([GET_OFFRES_LIST_ACTION, DELETE_OFFER_SUCCESS, CLOSE_OFFER_SUCCESS, CLONE_OFFER_SUCCESS], offresListWorker),
     takeLatest(SUBMIT_CREATE_OFFRE, addNewOffreWorker),
     takeLatest(GET_LABO_ARTICLES_LIST_ACTION, laboArticlesListWorker),
     takeLatest(MANAGE_CREATE_OFFRE_RESPONSE, manageCreateArticleResponseWorker),

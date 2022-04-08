@@ -8,10 +8,9 @@ import moment from 'moment';
 import { fields } from '../../../containers/Offres/add/validation';
 
 const styles = () => ({
-  offreInputs: {
-  },
+  offreInputs: {},
   dateInputs: {
-    "& > div > div > div ":{height:30},
+    '& > div > div > div ': { height: 30 },
   },
   specialProps: {
     InputLabelProps: {
@@ -24,17 +23,9 @@ const styles = () => ({
   },
 });
 export function OffreInfo(props) {
-  const {
-    formData,
-    errors,
-    classes,
-    onChange,
-    maxLength,
-    children,
-    disableAllWithoutDate,
-    disableAll,
-  } = props;
+  const { formData, errors, classes, onChange, maxLength, children, disableAllWithoutDate, disableAll } = props;
   const disable = disableAllWithoutDate || disableAll;
+  console.log(formData);
   return (
     <>
       <>
@@ -62,11 +53,11 @@ export function OffreInfo(props) {
             // fields.dateDebut.label
             label={fields.dateDebut.label}
             disabled={disable}
-            dateFormat={(date)=>moment(date).format("DD/MM/YYYY")}
+            dateFormat={date => moment(date).format('DD/MM/YYYY')}
             min={moment()
-              .add(1, 'day')
+              .add(0, 'day')
               .toDate()}
-            value={!!formData[fields.dateDebut.name] ? new Date(formData[fields.dateDebut.name] ) : null}
+            value={!!formData[fields.dateDebut.name] ? new Date(formData[fields.dateDebut.name]) : null}
             onChange={date => {
               console.log(date);
               onChange({
@@ -74,22 +65,21 @@ export function OffreInfo(props) {
               });
             }}
             type={fields.dateDebut.type}
-            className={[classes.dateInputs,classes.offreInputs]}
+            className={[classes.dateInputs, classes.offreInputs]}
             fullWidth
           />
         </Grid>
         <Grid xs={12} md={6} item>
           <DateFormatInput
-
             name={fields.dateFin.name}
             // fields.dateDebut.label
             label={fields.dateFin.label}
             disabled={disableAll}
-            dateFormat={(date)=>moment(date).format("DD/MM/YYYY")}
+            dateFormat={date => moment(date).format('DD/MM/YYYY')}
             min={moment()
               .add(2, 'day')
               .toDate()}
-            value={!!formData[fields.dateFin.name] ? new Date(formData[fields.dateFin.name] ) : null}
+            value={!!formData[fields.dateFin.name] ? new Date(formData[fields.dateFin.name]) : null}
             onChange={date => {
               console.log(date);
               onChange({
@@ -165,6 +155,28 @@ export function OffreInfo(props) {
             value={formData[fields.globalDiscount.name] || ''}
             type={fields.globalDiscount.type}
             error={!!errors[fields.globalDiscount.name]}
+            onChange={onChange}
+            disabled={disable}
+            className={classes.offreInputs}
+            inputProps={{
+              maxLength,
+            }}
+            fullWidth
+            multiline
+            rows={1}
+            rowsMax={2}
+          />
+        </Grid>
+        <Grid xs={12} md={6} item>
+          <TextField
+            required
+            noValidate
+            autoComplete="off"
+            name={fields.minToOrder.name}
+            label={fields.minToOrder.label}
+            value={formData[fields.minToOrder.name] || ''}
+            type={fields.minToOrder.type}
+            error={!!errors[fields.minToOrder.name]}
             onChange={onChange}
             disabled={disable}
             className={classes.offreInputs}

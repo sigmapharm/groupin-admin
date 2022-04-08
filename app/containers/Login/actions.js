@@ -1,8 +1,4 @@
-import {
-  MANAGE_LOGIN_RESPONSE,
-  SUBMIT_LOGIN,
-  DISPLAY_LOGIN_ERROR,
-} from './constants';
+import { MANAGE_LOGIN_RESPONSE, SUBMIT_LOGIN, DISPLAY_LOGIN_ERROR, PUT_EMAIL_RESET, GET_EMAIL_RESET } from './constants';
 
 const submitLogin = values => ({
   type: SUBMIT_LOGIN,
@@ -19,4 +15,15 @@ const displayLoginError = values => ({
   payload: { ...values },
 });
 
-export { submitLogin, manageLoginResponse, displayLoginError };
+// password reset
+const getEmailAddress = payload => ({
+  type: GET_EMAIL_RESET,
+  payload,
+});
+
+const putEmailAddress = payload => ({
+  type: PUT_EMAIL_RESET,
+  payload,
+});
+
+export { submitLogin, manageLoginResponse, displayLoginError, getEmailAddress, putEmailAddress };

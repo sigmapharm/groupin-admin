@@ -13,7 +13,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import history from 'utils/history';
 import Dialog from '../../components/Dialog';
-import GlobalStyle from '../../global-styles';
+// import GlobalStyle from '../../global-styles';
 
 import Header from '../AppHeader/Header';
 
@@ -34,14 +34,10 @@ export default function App() {
         <Header position="static" history={history} />
         <Switch>
           <Route exact path="/login" component={SignIn} />
-          <Route
-            exact
-            path="/register/:username/:token"
-            component={RegisterPage}
-          />
+          <Route exact path="/register/:username/:token" component={RegisterPage} />
           <Route component={InternalApp} />
         </Switch>
-        <GlobalStyle />
+        {/* <GlobalStyle /> */}
       </div>
     </React.Suspense>
   );

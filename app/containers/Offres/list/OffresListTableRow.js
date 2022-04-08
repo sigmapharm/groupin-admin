@@ -24,13 +24,7 @@ import OffreListConsultation from '../consultlistoffre/OffreListConsultation';
 import Progressbar from '../consultlistoffre/Progress';
 import WithRoles from '../../WithRoles';
 import { ADMIN, MEMBRE, SUPER_ADMIN } from '../../AppHeader/Roles';
-import {
-  clearOffer,
-  cloneOffer,
-  closeOffer,
-  deleteOffer,
-  selectOffer,
-} from '../actions';
+import { clearOffer, cloneOffer, closeOffer, deleteOffer, selectOffer } from '../actions';
 import GeneriqueDialog from '../../../components/Alert';
 import InfoBar from '../../../components/Snackbar/InfoBar';
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
@@ -50,6 +44,7 @@ export class OffresListTableRow extends React.PureComponent {
       popConfirmationParams: {},
       showInfoBar: false,
       infoBarParams: {},
+      montantObjectif: 0,
     };
   }
   openPopConfirmation = ({ title, textContent, onClose, onSubmit }) => {
@@ -79,11 +74,12 @@ export class OffresListTableRow extends React.PureComponent {
     this.setState({ isShown: true, commandMode: false });
   };
 
-  command = () => {
+  command = row => {
     this.allowOrderButton &&
       this.setState({
         isShown: true,
         commandMode: true,
+        montantObjectif: row.objectiveAmount,
       });
   };
 
@@ -123,8 +119,7 @@ export class OffresListTableRow extends React.PureComponent {
                 showPopConfirmation: false,
                 showInfoBar: true,
                 infoBarParams: {
-                  title:
-                    "La supression des offres à échoué merci de contacter l'administrateur ",
+                  title: "La supression des offres à échoué merci de contacter l'administrateur ",
                 },
               });
             }
@@ -156,8 +151,7 @@ export class OffresListTableRow extends React.PureComponent {
               showPopConfirmation: false,
               showInfoBar: true,
               infoBarParams: {
-                title:
-                  "La supression des offres à échoué merci de contacter l'administrateur ",
+                title: "La supression des offres à échoué merci de contacter l'administrateur ",
               },
             });
           }
@@ -179,8 +173,7 @@ export class OffresListTableRow extends React.PureComponent {
             showPopConfirmation: false,
             showInfoBar: true,
             infoBarParams: {
-              title:
-                "La duplication de l'offre à échoué merci de contacter l'administrateur ",
+              title: "La duplication de l'offre à échoué merci de contacter l'administrateur ",
             },
           });
         }
@@ -205,14 +198,7 @@ export class OffresListTableRow extends React.PureComponent {
     });
   render() {
     const { row, width, offerArticles } = this.props;
-    const {
-      isShown,
-      showPopConfirmation,
-      popConfirmationParams,
-      commandMode,
-      showInfoBar,
-      infoBarParams,
-    } = this.state;
+    const { isShown, showPopConfirmation, popConfirmationParams, commandMode, showInfoBar, infoBarParams } = this.state;
     const startDate = new Date(row.dateDebut);
     const endDate = new Date(row.dateFin);
     const hasStarted = moment(new Date()).isSameOrAfter(startDate, 'day');
@@ -228,24 +214,28 @@ export class OffresListTableRow extends React.PureComponent {
     // const status = Math.min(elapsedDuration / globalDuration, 1) * 100 || 0;
     // const remainingDays = Math.floor((startDate - now) / mSecondsPerDay) + 1;
     const dayLabel = remainingDays === 1 ? 'jour' : 'jours';
-    const total = _.sumBy(
-      offerArticles,
-      ({ quantity, pph }) => pph * quantity || 0,
-    ).toFixed(2);
+    const totalRemise = _.sumBy(offerArticles, ({ quantity, computedPPH }) => computedPPH * quantity || 0).toFixed(2);
+
+    const total = _.sumBy(offerArticles, ({ quantity, pph }) => pph * quantity || 0).toFixed(2);
+
+    const totalTva = _.sumBy(offerArticles, ({ TVA }) => {
+      const calcTva = (TVA / 100) * totalRemise;
+      return calcTva + parseInt(totalRemise);
+    }).toFixed(2);
+
+    const totalGain = (total - totalRemise).toFixed(2);
 
     const discount = _.sumBy(
       offerArticles,
-      ({ quantity, computedPPH, pph }) =>
-        quantity ? quantity * pph - quantity * computedPPH : 0,
+      ({ quantity, computedPPH, pph }) => (quantity ? quantity * pph - quantity * computedPPH : 0),
     ).toFixed(2);
+
     return (
       <>
         <TableRow key={row.id}>
           <TableCell style={tableCellsWidth}>{row.designation}</TableCell>
           <TableCell style={tableCellsWidth}>{row.laboratoryName}</TableCell>
-          <TableCell style={tableCellsWidth}>
-            {moment(startDate).format('DD/MM/YYYY')}
-          </TableCell>
+          <TableCell style={tableCellsWidth}>{moment(startDate).format('DD/MM/YYYY')}</TableCell>
           <TableCell style={tableCellsWidth}>
             <Progressbar progress={hasStarted ? progress : 0} />
             {moment(endDate).format('DD/MM/YYYY')}
@@ -258,9 +248,7 @@ export class OffresListTableRow extends React.PureComponent {
                 : `L'offre n'a pas encore commencé`
               : 'Offre clôturée !'}
           </TableCell>
-          <TableCell
-            style={{ ...tableCellsWidth, padding: 0, textAlign: 'center' }}
-          >
+          <TableCell style={{ ...tableCellsWidth, padding: 0, textAlign: 'center' }}>
             <Tooltip placement="top" title="Consulter">
               <IconButton onClick={this.showDetails} style={{ padding: 5 }}>
                 <Search color="secondary" />
@@ -268,102 +256,55 @@ export class OffresListTableRow extends React.PureComponent {
             </Tooltip>
             <WithRoles roles={[MEMBRE]}>
               <Tooltip placement="top" title="Commander">
-                <IconButton
-                  disabled={!this.allowOrderButton}
-                  onClick={this.command}
-                  style={{ padding: 5 }}
-                >
-                  <ShoppingCart
-                    color={!this.allowOrderButton ? 'disabled' : 'secondary'}
-                  />
+                <IconButton disabled={!this.allowOrderButton} onClick={() => this.command(row)} style={{ padding: 5 }}>
+                  <ShoppingCart color={!this.allowOrderButton ? 'disabled' : 'secondary'} />
                 </IconButton>
               </Tooltip>
             </WithRoles>
             <WithRoles roles={[ADMIN, SUPER_ADMIN]}>
               <Tooltip placement="top" title="Modifier">
-                <IconButton
-                  disabled={!this.canEdit(row)}
-                  onClick={this.edit}
-                  style={{ padding: 5 }}
-                >
-                  <EditIcon
-                    color={this.canEdit(row) ? 'primary' : 'disabled'}
-                  />
+                <IconButton disabled={!this.canEdit(row)} onClick={this.edit} style={{ padding: 5 }}>
+                  <EditIcon color={this.canEdit(row) ? 'primary' : 'disabled'} />
                 </IconButton>
               </Tooltip>
               <Tooltip placement="top" title="Annuler">
-                <IconButton
-                  disabled={!this.canDelete(row)}
-                  onClick={this.performDelete}
-                  style={{ padding: 5 }}
-                >
-                  <HighlightOff
-                    color={this.canDelete(row) ? 'error' : 'disabled'}
-                  />
+                <IconButton disabled={!this.canDelete(row)} onClick={this.performDelete} style={{ padding: 5 }}>
+                  <HighlightOff color={this.canDelete(row) ? 'error' : 'disabled'} />
                 </IconButton>
               </Tooltip>
               <Tooltip placement="top" title="Clôturer l'offre">
-                <IconButton
-                  disabled={!this.canCloseOffer}
-                  onClick={this.performCloseOffer}
-                  style={{ padding: 5 }}
-                >
-                  <DealOffIcon
-                    color={this.canCloseOffer ? 'primary' : 'disabled'}
-                  />
+                <IconButton disabled={!this.canCloseOffer} onClick={this.performCloseOffer} style={{ padding: 5 }}>
+                  <DealOffIcon color={this.canCloseOffer ? 'primary' : 'disabled'} />
                 </IconButton>
               </Tooltip>
               <Tooltip placement="top" title="List des commands">
-                <IconButton
-                  onClick={this.goToSubCommands(row)}
-                  style={{ padding: 5 }}
-                >
+                <IconButton onClick={this.goToSubCommands(row)} style={{ padding: 5 }}>
                   <ListIcon color="primary" />
                 </IconButton>
               </Tooltip>
               <Tooltip placement="top" title="Dupliquer une offre">
-                <IconButton
-                  onClick={this.performCloneOffer}
-                  style={{ padding: 5 }}
-                >
+                <IconButton onClick={this.performCloneOffer} style={{ padding: 5 }}>
                   <CloneIcon color="primary" />
                 </IconButton>
               </Tooltip>
             </WithRoles>
           </TableCell>
         </TableRow>
-        <GeneriqueDialog
-          open={showPopConfirmation}
-          {...popConfirmationParams}
-        />
-        <InfoBar
-          open={showInfoBar}
-          onClose={this.closeInfoBar}
-          {...infoBarParams}
-        />
+        <GeneriqueDialog open={showPopConfirmation} {...popConfirmationParams} />
+        <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
         {isShown && (
-          <Dialog
-            maxWidth="lg"
-            onClose={this.handleClose}
-            aria-labelledby="customized-dialog-title"
-            open
-          >
+          <Dialog maxWidth="lg" onClose={this.handleClose} aria-labelledby="customized-dialog-title" open>
             <MuiDialogTitle disableTypography>
               <Typography variant="h5" color="primary">
                 Détails offre
-                <IconButton
-                  color="primary"
-                  aria-label="Close"
-                  onClick={this.closeDetails}
-                  style={closeStyle}
-                >
+                <IconButton color="primary" aria-label="Close" onClick={this.closeDetails} style={closeStyle}>
                   <CloseIcon />
                 </IconButton>
               </Typography>
             </MuiDialogTitle>
 
             <MuiDialogContent>
-              {total > 0 && (
+              {totalGain > 0 && (
                 <div
                   style={{
                     position: 'sticky',
@@ -376,24 +317,22 @@ export class OffresListTableRow extends React.PureComponent {
                   }}
                 >
                   <div style={{ display: 'flex', marginRight: '30px' }}>
-                    <Typography
-                      variant="h6"
-                      color="textSecondary"
-                      style={{ marginRight: 10 }}
-                    >
-                      Total:
+                    <Typography variant="h6" color="textSecondary" style={{ marginRight: 10 }}>
+                      Total remisé:
                     </Typography>
-                    <Typography variant="h6">{total}</Typography>
+                    <Typography variant="h6">{totalTva}</Typography>
                   </div>
                   <div style={{ display: 'flex' }}>
-                    <Typography
-                      variant="h6"
-                      color="textSecondary"
-                      style={{ marginRight: 10 }}
-                    >
-                      Total remise:
+                    <Typography variant="h6" color="textSecondary" style={{ marginRight: 10 }}>
+                      Total gain:
                     </Typography>
-                    <Typography variant="h6">{discount}</Typography>
+                    <Typography variant="h6">{totalGain}</Typography>
+                  </div>
+                  <div style={{ display: 'flex', marginLeft: '30px' }}>
+                    <Typography variant="h6" color="textSecondary" style={{ marginRight: 10 }}>
+                      Min à commander:
+                    </Typography>
+                    <Typography variant="h6">{row.minToOrder}</Typography>
                   </div>
                   <div />
                 </div>
@@ -406,6 +345,7 @@ export class OffresListTableRow extends React.PureComponent {
                 row={row}
                 remainingDays={remainingDays}
                 progress={progress}
+                totalRemise={totalTva}
               />
             </MuiDialogContent>
           </Dialog>

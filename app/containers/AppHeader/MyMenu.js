@@ -14,12 +14,7 @@ const MenuByRole = props => {
   const { classes } = props;
   return MetaMenu.map(menu => (
     <WithRoles key={menu.key} roles={menu.allowedRoles}>
-      <Button
-        key={menu.key}
-        className={classes.button}
-        classes={{ label: classes.label }}
-        onClick={onMenuItemClick(menu.link)}
-      >
+      <Button key={menu.key} className={classes.button} classes={{ label: classes.label }} onClick={onMenuItemClick(menu.link)}>
         {menu.label}
       </Button>
     </WithRoles>
@@ -28,12 +23,8 @@ const MenuByRole = props => {
 
 const MyMenu = props => {
   const { classes, user } = props;
-  console.log('user', user);
-  return (
-    <div style={{ flexGrow: 1 }}>
-      {user && <MenuByRole classes={classes} user={user} />}
-    </div>
-  );
+  // console.log('user', user);
+  return <div style={{ flexGrow: 1 }}>{user && <MenuByRole classes={classes} user={user} />}</div>;
 };
 
 MyMenu.propTypes = {

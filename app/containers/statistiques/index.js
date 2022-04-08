@@ -12,35 +12,37 @@ import PharmaciesChart from './charts/PharmaciesChart';
 import LaboChart from './charts/LaboratoireChart';
 import moment from 'moment';
 import _ from 'lodash';
-import { useFecth } from '../../hooks/useFetch';
-// test data
-import testdata1 from './data/testdata1';
-import testdata2 from './data/testdata2';
-import testdata3 from './data/testdata3';
-import testdata4 from './data/testdata4';
+import { selectArticles, selectPharmas, selectlabos, selectCity, selectPrintPharma } from './selectors';
+import { getArticles, getPharmas, getLabos, getCity, getPrintPharama } from './actions';
 
-const Dashboard = ({ classes }) => {
-  // get date of the last month
+const Statistiques = ({ classes, articles, dispatch, pharmas, labos, city, printPharma }) => {
+  console.log('print', printPharma);
 
-  // prepare date
-
+  //
   const day = moment().get('date');
   const year = moment().get('year');
   const month = moment().get('month');
-
-  const lastMonthDate = new Date(`${month}/${day}/${year}`);
+  //
+  const lastMonthDate = moment(new Date(`${month}/${day}/${year}`), 'YYYY-MM-DD')
+    .format()
+    .split('T')[0];
 
   // set the start date last month by default
 
   const [startDate, setStartDate] = useState(lastMonthDate);
-  const [endDate, setEndDate] = useState(new Date());
+  //
+  const [endDate, setEndDate] = useState(
+    moment(new Date(), 'YYYY-MM-DD')
+      .format()
+      .split('T')[0],
+  );
 
-  const articles = useFecth('/statistics/article', { method: 'GET' });
-  const cities = useFecth('/statistics/city', { method: 'GET' });
-  const labos = useFecth('/statistics/laboratory', { method: 'GET' });
-  const pharmas = useFecth('/statistics/pharmacy', { method: 'GET' });
-
-  console.log(pharmas.data);
+  const handleSearch = () => {
+    dispatch(getArticles(`?from=${startDate}&to=${endDate}`));
+    dispatch(getPharmas(`?from=${startDate}&to=${endDate}`));
+    dispatch(getLabos(`?from=${startDate}&to=${endDate}`));
+    dispatch(getCity(`?from=${startDate}&to=${endDate}`));
+  };
 
   return (
     <div className={classes.root}>
@@ -51,17 +53,25 @@ const Dashboard = ({ classes }) => {
       <div className={classes.inputContainer}>
         <DateInput value={startDate} onChange={e => setStartDate(e)} label="De" />
         <DateInput value={endDate} onChange={e => setEndDate(e)} label="A" />
-        <Fab color="primary" className={classes.button}>
+        <Fab color="primary" className={classes.button} onClick={handleSearch}>
           <Search />
         </Fab>
 
         <Divider variant="middle" className={classes.divider} />
 
         <div className={classes.container}>
-          <ArticleChart rows={testdata1} />
-          <LaboChart rows={testdata4} />
-          <RegionChart rows={testdata2} />
-          <PharmaciesChart rows={testdata3} />
+          <ArticleChart rows={articles} tableUpdate={getArticles} dispatch={dispatch} fromDate={startDate} toDate={endDate} />
+          <LaboChart rows={labos} tableUpdate={getLabos} dispatch={dispatch} fromDate={startDate} toDate={endDate} />
+          <RegionChart rows={city} tableUpdate={getCity} dispatch={dispatch} fromDate={startDate} toDate={endDate} />
+          <PharmaciesChart
+            rows={pharmas}
+            tableUpdate={getPharmas}
+            dispatch={dispatch}
+            fromDate={startDate}
+            toDate={endDate}
+            printPharma={printPharma}
+            getPrintPharama={getPrintPharama}
+          />
         </div>
       </div>
       <div className={classes.space} />
@@ -109,7 +119,13 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
-const mapStateToProps = createStructuredSelector({});
+const mapStateToProps = createStructuredSelector({
+  articles: selectArticles(),
+  pharmas: selectPharmas(),
+  labos: selectlabos(),
+  city: selectCity(),
+  printPharma: selectPrintPharma(),
+});
 
 const withConnect = connect(
   mapStateToProps,
@@ -120,4 +136,4 @@ export default compose(
   authenticated,
   withConnect,
   withStyles(styles),
-)(Dashboard);
+)(Statistiques);

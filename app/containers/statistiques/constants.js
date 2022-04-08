@@ -1,13 +1,19 @@
-export const GET_STATICS_ARTICLES_ACTION = 'app/statics/getArticles';
-export const GET_STATICS_LABO_ACTION = 'app/statics/labo';
+// articles
+export const GET_ARTICLE_STATS = 'app/statics/getArticlesList';
+export const PUT_REPORTING_ACTION = 'app/statics/putArticlesList';
 
-export const PUT_REPORTING_ACTION = 'app/statics/putList';
+// pharma
+export const GET_PHARMA_STATS = 'app/statics/getPharmaList';
+export const PUT_PHARMA_STATS = 'app/statics/putPharmaList';
 
-//  filter constant
+// labos
+export const GET_LABOS_STATS = 'app/statics/getLabosList';
+export const PUT_LABOS_STATS = 'app/statics/putLabosList';
 
-export const GET_LABORATOIRES = 'app/statics/getList';
-export const GET_ARTICLE = 'app/statics/getArticle';
+// city
+export const GET_CITY_STATS = 'app/statics/getCityList';
+export const PUT_CITY_STATS = 'app/statics/putCityList';
 
-// constant
-
-export const GET_ARTICLE_STATS = 'app/state/articles';
+// print Pharma
+export const GET_PRINT_PHRAMA_STATS = 'app/statics/getPharamaPrint';
+export const PUT_PRINT_PHRAMA_STATS = 'app/statics/putPharamaPrint';

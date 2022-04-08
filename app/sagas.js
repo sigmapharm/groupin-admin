@@ -10,7 +10,7 @@ import commandSagas from 'containers/Command/store/saga';
 import groupingSagas from 'containers/Grouping/store/saga';
 import statisticsSagas from 'containers/Dashboards/saga';
 import reportingSagas from 'containers/Reporting/saga';
-import StateSaga from './containers/statistiques/saga';
+import StateSaga from 'containers/statistiques/saga';
 
 export default [
   loginSagas,

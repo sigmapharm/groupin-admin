@@ -43,7 +43,7 @@ const styles = theme => ({
     width: '80%',
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
-    overflowX: 'auto',
+    overflowX: 'hide',
     marginLeft: '10%',
   },
   tableWrapper: {
@@ -94,6 +94,12 @@ export class UsersList extends React.PureComponent {
         {
           label: 'Role',
           colName: 'role',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'dernière commande',
+          colName: 'last_commande',
           selected: false,
           order: 'asc',
         },
