@@ -73,16 +73,21 @@ const styles = theme => ({
 });
 
 export function LoginForm(props) {
-  const { classes, username, password, handleChange, onSubmit, error } = props;
-  const [isOpen, setIsOpen] = useState(false);
+  const {
+    classes,
+    username,
+    password,
+    handleChange,
+    onSubmit,
+    error,
+    handlePasswordReset,
+    isOpen,
+    handleClose,
+    handleOpen,
+    errorMessage,
+  } = props;
 
-  const handleClickOpen = () => {
-    setIsOpen(true);
-  };
-
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  const [email, setEmail] = useState('');
 
   return (
     <main className={classes.main}>
@@ -114,7 +119,7 @@ export function LoginForm(props) {
             <Input name="password" value={password} type="password" onChange={handleChange} error={error} />
           </FormControl>
           <div className={classes.resetPassword}>
-            <a href="#" className={classes.resetLink} onClick={handleClickOpen}>
+            <a href="#" className={classes.resetLink} onClick={handleOpen}>
               mot passe oublié ?
             </a>
           </div>
@@ -136,13 +141,23 @@ export function LoginForm(props) {
       >
         <DialogContent>
           <DialogContentText style={{ width: 500 }}>Reset Your Passwword</DialogContentText>
-          <TextField autoFocus margin="dense" id="name" label="Email Address" type="email" fullWidth />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            label="Email Address"
+            type="email"
+            fullWidth
+          />
+          {errorMessage && <Typography style={{ color: 'red' }}>{errorMessage}</Typography>}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handlePasswordReset(email)} color="primary">
             send Link
           </Button>
         </DialogActions>

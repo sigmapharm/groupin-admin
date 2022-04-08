@@ -1,9 +1,9 @@
 import { all, put, takeLatest } from 'redux-saga/effects';
 import history from 'utils/history';
 import { callApi } from '../../services/saga';
-import { MANAGE_LOGIN_RESPONSE, SUBMIT_LOGIN } from './constants';
+import { GET_EMAIL_RESET, MANAGE_LOGIN_RESPONSE, SUBMIT_LOGIN } from './constants';
 import AccessTokenStorage from '../../services/security/AccessTokenStorage';
-import { manageLoginResponse, displayLoginError } from './actions';
+import { manageLoginResponse, displayLoginError, putEmailAddress } from './actions';
 import { LOGOUT } from '../App/constants';
 import { resetUserInStore } from '../App/actions';
 
@@ -19,6 +19,19 @@ function* submitLoginWorker(action) {
   try {
     yield callApi('/login', manageLoginResponse, options, null);
   } catch (e) {}
+}
+
+function* emailPasswordResetWorker({ payload: { email, callback } }) {
+  const options = {
+    method: 'GET',
+  };
+
+  try {
+    yield callApi(`/users/forgotPassword?email=${email}`, putEmailAddress, options, null);
+    yield callback && callback(true);
+  } catch (e) {
+    yield callback && callback(false);
+  }
 }
 
 function* manageLoginResponseWorker(action) {
@@ -43,6 +56,7 @@ function* loginPageSagas() {
     takeLatest(SUBMIT_LOGIN, submitLoginWorker),
     takeLatest(MANAGE_LOGIN_RESPONSE, manageLoginResponseWorker),
     takeLatest(LOGOUT, logoutWorker),
+    takeLatest(GET_EMAIL_RESET, emailPasswordResetWorker),
   ]);
 }
 export default loginPageSagas;

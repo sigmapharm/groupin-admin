@@ -18,10 +18,7 @@ const validate = (result, field, value) => {
   return { ...result };
 };
 export const validateArticleList = (result, offerArticles) => {
-  const validation = _.some(
-    offerArticles,
-    ({ selected,minQuantity }) => selected && (minQuantity || 0) <= 0,
-  );
+  const validation = _.some(offerArticles, ({ selected, minQuantity }) => selected && (minQuantity || 0) <= 0);
   if (validation) {
     return {
       fields: {
@@ -38,37 +35,17 @@ export const validateArticleList = (result, offerArticles) => {
 };
 export const validateFormData = formData => {
   let validationResult = {};
-  validationResult = validate(
-    validationResult,
-    fields.designation,
-    formData.designation,
-  );
-  validationResult = validate(
-    validationResult,
-    fields.dateDebut,
-    formData.dateDebut,
-  );
-  validationResult = validate(
-    validationResult,
-    fields.dateFin,
-    formData.dateFin,
-  );
+  validationResult = validate(validationResult, fields.designation, formData.designation);
+  // validationResult = validate(
+  //   validationResult,
+  //   fields.dateDebut,
+  //   formData.dateDebut,
+  // );
+  validationResult = validate(validationResult, fields.dateFin, formData.dateFin);
   fields.dateFin.validator = validators.isBeforeValidation(formData.dateDebut);
-  validationResult = validate(
-    validationResult,
-    fields.dateFin,
-    formData.dateFin,
-  );
-  validationResult = validate(
-    validationResult,
-    fields.montant,
-    formData.montant,
-  );
-  validationResult = validate(
-    validationResult,
-    fields.globalDiscount,
-    formData.globalDiscount,
-  );
+  validationResult = validate(validationResult, fields.dateFin, formData.dateFin);
+  validationResult = validate(validationResult, fields.montant, formData.montant);
+  validationResult = validate(validationResult, fields.globalDiscount, formData.globalDiscount);
 
   return validationResult;
 };
@@ -133,5 +110,10 @@ export const fields = {
     name: 'comment',
     label: 'Comment',
     type: 'text',
+  },
+  minToOrder: {
+    name: 'minToOrder',
+    label: 'min To Order',
+    type: 'number',
   },
 };

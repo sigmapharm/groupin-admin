@@ -16,7 +16,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: "chiffre d' affaires par Region (MAD)",
+      text: "chiffre d' affaires par Villes (MAD)",
     },
   },
 };
@@ -25,56 +25,85 @@ const labels = ['1', '2', '3', '4', '5', '6', '7'];
 
 const cols = [
   {
-    label: '#id',
-    colName: 'id',
-  },
-  {
-    label: 'Region',
-    colName: 'region',
+    label: 'City',
+    colName: 'designation',
+    order: 'asc',
+    orderName: 'name',
   },
   {
     label: 'Articles commandés',
-    colName: 'article_commandes',
+    colName: 'articlesCommandes',
+    order: 'asc',
+    orderName: 'total',
   },
   {
     label: "chiffre d'affaires",
-    colName: 'chiffre_affaires',
+    colName: 'ca',
+    order: 'asc',
+    orderName: '',
   },
 ];
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Chiffre d'affaires",
-      data: [9828, 1665, 2862, 9272, 272, 9732, 254],
-      borderColor: '#034CD5',
-      backgroundColor: '#034CD5',
-    },
-  ],
-};
+function LineChart(props) {
+  const {
+    classes,
+    rows: { content = [], pageable, sort, totalPages, first, last, numberOfElements, totalElements, empty },
+    tableUpdate,
+    dispatch,
+    fromDate,
+    toDate,
+  } = props;
 
-function LineChart({ classes, rows }) {
+  const _labels = _.map(content, row => {
+    return row.designation;
+  });
+
+  const _dataSet = _.map(content, row => {
+    return row.ca;
+  });
+
+  const data = {
+    labels: _labels,
+    datasets: [
+      {
+        label: "Chiffre d'affaires (MAD) ",
+        data: _dataSet,
+        borderColor: '#034CD5',
+        backgroundColor: '#034CD5',
+      },
+    ],
+  };
+
   return (
     <Paper className={classes.chartContainer}>
       <div className={classes.chart}>
         <Bar options={options} data={data} height="100%" />
       </div>
-      <ChartTable cols={cols} rows={rows}>
-        {({ page, rowsPerPage }) => {
-          return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-            return (
-              <TableRow key={index}>
-                <TableCell component="th" scope="row">
-                  {row.id}
-                </TableCell>
-                <TableCell>{row.region}</TableCell>
-                <TableCell>{row.article_commandes}</TableCell>
-                <TableCell>{row.chiffre_affaires}</TableCell>
-              </TableRow>
-            );
-          });
-        }}
+      <ChartTable
+        cols={cols}
+        rows={content}
+        pageable={pageable}
+        sort={sort}
+        totalPages={totalPages}
+        first={first}
+        last={last}
+        numberOfElements={numberOfElements}
+        totalElements={totalElements}
+        empty={empty}
+        tableUpdate={tableUpdate}
+        dispatch={dispatch}
+        fromDate={fromDate}
+        toDate={toDate}
+      >
+        {content.map((row, index) => {
+          return (
+            <TableRow key={index}>
+              <TableCell>{row.designation}</TableCell>
+              <TableCell>{row.articlesCommandes}</TableCell>
+              <TableCell>{row.ca}</TableCell>
+            </TableRow>
+          );
+        })}
       </ChartTable>
     </Paper>
   );

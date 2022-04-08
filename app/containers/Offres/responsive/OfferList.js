@@ -76,49 +76,27 @@ const OfferList = ({ offer, offerArticles, dispatch }) => {
               {/* </div> */}
               <div style={styles.row}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     PPV:
                   </Typography>
-                  <Typography variant="h6">
-                    {Number(article.ppv).toFixed(2)}
-                  </Typography>
+                  <Typography variant="h6">{Number(article.ppv).toFixed(2)}</Typography>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     PPH:
                   </Typography>
-                  <Typography variant="h6">
-                    {Number(article.pph).toFixed(2)}
-                  </Typography>
+                  <Typography variant="h6">{Number(article.pph).toFixed(2)}</Typography>
                 </div>
               </div>
               <div style={styles.row}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     PPH Remise:
                   </Typography>
-                  <Typography variant="h6">
-                    {Number(article.computedPPH).toFixed(2)}
-                  </Typography>
+                  <Typography variant="h6">{Number(article.computedPPH).toFixed(2)}</Typography>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     Remise(%):
                   </Typography>
                   <Typography variant="h6">{article.discount}</Typography>
@@ -126,11 +104,7 @@ const OfferList = ({ offer, offerArticles, dispatch }) => {
               </div>
               <div style={styles.row}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     Quantité Minimal:
                   </Typography>
                   <Typography variant="h6">{article.minQuantity}</Typography>

@@ -25,11 +25,7 @@ function* downloadCommandFormWorker({ payload: { commandId, callback } }) {
   };
   yield networking(function*() {
     try {
-      const blob = yield requestWithAuth(
-        `/commands/${commandId}/print`,
-        options,
-        true,
-      );
+      const blob = yield requestWithAuth(`/commands/${commandId}/print`, options, true);
       yield callback && callback(null, blob);
     } catch (e) {
       yield callback && callback(e);
@@ -39,14 +35,14 @@ function* downloadCommandFormWorker({ payload: { commandId, callback } }) {
 
 function* dispatchQuantityWorker({ payload: { id, callback } }) {
   const options = {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
   };
   yield networking(function*() {
     try {
-      yield requestWithAuth(`/commands/aggregate/${id}/dispatch`, options);
+      yield requestWithAuth(`/commands/aggregate/${id}/status`, options);
       yield put(dispatchQuantitySuccess());
       yield callback && callback();
     } catch (e) {
@@ -73,24 +69,17 @@ function* loadAggregateSubCommandsWorker({ payload: { id, callback } }) {
   });
 }
 
-function* updateClientCommandWorker({
-  payload: { commandId, commandArticles, callback, isAggregate },
-}) {
+function* updateClientCommandWorker({ payload: { commandId, commandArticles, callback, isAggregate } }) {
   const options = {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(
-      commandArticles.filter(({ selected }) => selected || isAggregate),
-    ),
+    body: JSON.stringify(commandArticles.filter(({ selected }) => selected || isAggregate)),
   };
   yield networking(function*() {
     try {
-      const res = yield requestWithAuth(
-        `/commands/${isAggregate ? 'aggregate' : 'client'}/${commandId}`,
-        options,
-      );
+      const res = yield requestWithAuth(`/commands/${isAggregate ? 'aggregate' : 'client'}/${commandId}`, options);
       yield put(updateCommandDetailSuccess(res));
       yield callback && callback();
     } catch (e) {
@@ -108,10 +97,7 @@ function* loadCommandArticleWorker({ payload: { id, isAggregate, callback } }) {
   };
   yield networking(function*() {
     try {
-      const res = yield requestWithAuth(
-        `/commands/${isAggregate ? 'aggregate/' : ''}${id}/articles`,
-        options,
-      );
+      const res = yield requestWithAuth(`/commands/${isAggregate ? 'aggregate/' : ''}${id}/articles`, options);
       yield put(loadCommandArticlesSuccess(res));
       yield callback && callback();
     } catch (e) {
@@ -129,10 +115,7 @@ function* deleteCommandWorker({ payload: { id, callback, isAggregate } }) {
   };
   yield networking(function*() {
     try {
-      const res = yield requestWithAuth(
-        `/commands/${isAggregate ? 'aggregate/' : ''}${id}`,
-        options,
-      );
+      const res = yield requestWithAuth(`/commands/${isAggregate ? 'aggregate/' : ''}${id}`, options);
       yield put(deleteCommandSuccess(res));
 
       yield callback && callback();
@@ -142,26 +125,21 @@ function* deleteCommandWorker({ payload: { id, callback, isAggregate } }) {
   });
 }
 
-function* loadCommandsWorker({
-  payload: { offerId, cols, isAggregate, callback, ...payload },
-}) {
+function* loadCommandsWorker({ payload: { offerId, cols, isAggregate, callback, ...payload } }) {
   const options = {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
   };
-  const sortQuery = cols
-    .filter(({ selected }) => selected)
-    .reduce((acc, n) => acc.concat(`&sort=${n.colName},${n.order}`), '');
+  const sortQuery = cols.filter(({ selected }) => selected).reduce((acc, n) => acc.concat(`&sort=${n.colName},${n.order}`), '');
   const queryString = Object.keys(payload)
     .map(key => `${key}=${payload[key]}`)
     .join('&');
   yield networking(function*() {
     try {
       const res = yield requestWithAuth(
-        `/commands/${isAggregate ? 'aggregate/' : ''}${offerId ||
-          ''}?${queryString}${sortQuery}`,
+        `/commands/${isAggregate ? 'aggregate/' : ''}${offerId || ''}?${queryString}${sortQuery}`,
         options,
       );
       yield put(loadCommandsSuccess(res));

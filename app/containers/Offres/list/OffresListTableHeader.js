@@ -10,12 +10,7 @@ export function OffresListTableHeader({ changeHandler, cols }) {
       {cols.map(({ colName, label, order }, index) => (
         <CustomTableCell key={colName}>
           <Tooltip title="Sort" placement="bottom-start" enterDelay={300}>
-            <TableSortLabel
-              active
-              direction={order}
-              onClick={changeHandler(index)}
-              style={{ color: 'white' }}
-            >
+            <TableSortLabel active direction={order} onClick={changeHandler(index)} style={{ color: 'white' }}>
               {label}
             </TableSortLabel>
           </Tooltip>

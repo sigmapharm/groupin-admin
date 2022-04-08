@@ -16,10 +16,7 @@ import {
   SELECT_OFFER,
   TOGGLE_CHECK_ALL,
 } from './constants';
-import {
-  GET_LABO_ARTICLES_LIST_ACTION,
-  PUT_ARTICLESLABO_LIST_ACTION,
-} from '../App/constants';
+import { GET_LABO_ARTICLES_LIST_ACTION, PUT_ARTICLESLABO_LIST_ACTION } from '../App/constants';
 import { LOAD_OFFER_META_DATA_SUCCESS } from '../Command/store/actions';
 
 export const formDataInitialState = fromJS({
@@ -52,6 +49,7 @@ export const initialState = fromJS({
     montantMax: '',
     laboratoire: '',
     comment: '',
+    minToOrder: '',
   },
   selectedOffer: {},
   selectedAll: false,

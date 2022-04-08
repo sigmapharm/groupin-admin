@@ -15,6 +15,7 @@ const Admin = ({ classes, dispatch, statistics, userRole }) => {
   useEffect(() => {
     dispatch(getStatistics(userRole));
   }, []);
+
   console.log('statistics', statistics);
   return (
     <div className={classes.root}>
@@ -63,6 +64,8 @@ const Admin = ({ classes, dispatch, statistics, userRole }) => {
               <SmallCard title="Nbr commande" backgroundColor="#4F51C0" value={statistics.totalCommande} />
               <div style={{ marginBottom: '10px' }} />
               <SmallCard title="CA commandée" backgroundColor="#BAA2F8" value={Number(statistics.totalCACommande).toFixed(2)} />
+              <div style={{ marginBottom: '10px' }} />
+              <SmallCard title="CA Livré" backgroundColor="#50DFB3" value={Number(statistics.totalCALivré).toFixed(2)} />
               {/* <div style={{ marginBottom: '10px' }} />
               <SmallCard
                 title="CA livrée"

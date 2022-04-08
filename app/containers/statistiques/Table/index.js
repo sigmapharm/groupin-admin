@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -6,123 +6,91 @@ import TableCell from '@material-ui/core/TableCell';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import IconButton from '@material-ui/core/IconButton';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
 import TableHead from '@material-ui/core/TableHead';
 import _ from 'lodash';
+import { TableSortLabel, Tooltip } from '@material-ui/core';
 
-const actionsStyles = theme => ({
-  root: {
-    flexShrink: 0,
-    color: theme.palette.text.secondary,
-    marginLeft: theme.spacing.unit * 2.5,
-  },
-});
+function ChartTable(props) {
+  const { cols = [], classes, children, tableUpdate, dispatch, fromDate = '', toDate = '' } = props;
 
-class TablePaginationActions extends React.Component {
-  handleFirstPageButtonClick = event => {
-    this.props.onChangePage(event, 0);
+  const { pageable = {}, sort, totalPages, first, last, numberOfElements, totalElements, empty } = props;
+
+  const [sorting, setSorting] = useState({ order: 'desc', desg: '' });
+  const [pageSize, setPageSize] = useState(5);
+
+  const handleNextPage = (event, _page) => {
+    dispatch(tableUpdate(`?page=${pageable.pageNumber + 1}&size=${pageSize}&from=${fromDate}&to=${toDate}`));
   };
 
-  handleBackButtonClick = event => {
-    this.props.onChangePage(event, this.props.page - 1);
+  const handleBackPage = (event, _page) => {
+    dispatch(tableUpdate(`?page=${pageable.pageNumber - 1}&size=${pageSize}&from=${fromDate}&to=${toDate}`));
   };
 
-  handleNextButtonClick = event => {
-    this.props.onChangePage(event, this.props.page + 1);
+  useEffect(() => {
+    dispatch(tableUpdate(`?from=${fromDate}&to=${toDate}`));
+  }, []);
+
+  const handleChangeRowsPerPage = event => {
+    dispatch(tableUpdate(`?size=${event.target.value}&from=${fromDate}&to=${toDate}`));
+    setPageSize(event.target.value);
   };
 
-  handleLastPageButtonClick = event => {
-    this.props.onChangePage(event, Math.max(0, Math.ceil(this.props.count / this.props.rowsPerPage) - 1));
+  const handleSorting = desg => {
+    const order = sorting.order === 'desc' ? 'asc' : 'desc';
+
+    setSorting({ order, desg });
+    dispatch(tableUpdate(`?direction=${order}&field=${desg || ''}&from=${fromDate}&to=${toDate}`));
   };
 
-  render() {
-    const { classes, count, page, rowsPerPage, theme } = this.props;
-
-    return (
-      <div className={classes.root}>
-        <IconButton onClick={this.handleFirstPageButtonClick} disabled={page === 0} aria-label="First Page">
-          {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-        </IconButton>
-        <IconButton onClick={this.handleBackButtonClick} disabled={page === 0} aria-label="Previous Page">
-          {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-        </IconButton>
-        <IconButton
-          onClick={this.handleNextButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label="Next Page"
-        >
-          {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-        </IconButton>
-        <IconButton
-          onClick={this.handleLastPageButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label="Last Page"
-        >
-          {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-        </IconButton>
-      </div>
-    );
-  }
-}
-
-const TablePaginationActionsWrapped = withStyles(actionsStyles, { withTheme: true })(TablePaginationActions);
-
-class ChartTable extends React.Component {
-  state = {
-    page: 0,
-    rowsPerPage: 7,
-    rows: this.props.rows || [],
-  };
-
-  handleChangePage = (event, page) => {
-    this.setState({ page });
-  };
-
-  handleChangeRowsPerPage = event => {
-    this.setState({ page: 0, rowsPerPage: event.target.value });
-  };
-  render() {
-    const { cols = [], classes, children } = this.props;
-    const { rowsPerPage, page, rows } = this.state;
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
-    return (
-      <div className={classes.container}>
-        <Table>
-          <TableHead className={classes.tableHead}>
-            <TableRow>
-              {cols.map(({ colName, label }, index) => (
-                <TableCell style={{ color: '#fff' }} key={colName}>
-                  {label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>{children({ page, rowsPerPage, emptyRows })}</TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  native: true,
-                }}
-                onChangePage={this.handleChangePage}
-                onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActionsWrapped}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </div>
-    );
-  }
+  return (
+    <div className={classes.container}>
+      <Table>
+        <TableHead className={classes.tableHead}>
+          <TableRow>
+            {cols.map(({ colName, label, order, orderName }, index) => (
+              <TableCell key={colName}>
+                <Tooltip title="Sort" placement="bottom-start" enterDelay={300}>
+                  <TableSortLabel
+                    active
+                    direction={orderName === sorting.desg ? sorting.order : 'asc'}
+                    onClick={() => handleSorting(orderName)}
+                    style={{ color: 'white' }}
+                  >
+                    {label}
+                  </TableSortLabel>
+                </Tooltip>
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>{children}</TableBody>
+        <TableFooter>
+          <TableRow>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              count={totalElements}
+              rowsPerPage={numberOfElements}
+              page={pageable.pageNumber}
+              SelectProps={{
+                native: true,
+              }}
+              onChangePage={handleNextPage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+              backIconButtonProps={{
+                'aria-label': 'Previous Page',
+                disabled: pageable.pageNumber === 0,
+                onClick: handleBackPage,
+              }}
+              nextIconButtonProps={{
+                'aria-label': 'Next Page',
+                disabled: pageable.pageNumber === parseInt(totalPages - 1) ? true : false,
+              }}
+            />
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </div>
+  );
 }
 
 const styles = theme => ({

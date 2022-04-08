@@ -124,10 +124,7 @@ export function AddOffreForm(props) {
     applyGlobalVars,
   } = props;
   const disableAllFields = disableAll(editMode, originalFormData);
-  const disableAllFieldsExceptDate = editOnlyDateField(
-    editMode,
-    originalFormData,
-  );
+  const disableAllFieldsExceptDate = editOnlyDateField(editMode, originalFormData);
   const onGlobalVarsChange = _.debounce(handleGlobalVarsChange, 500);
   return (
     <Paper className={classes.paper}>
@@ -141,28 +138,16 @@ export function AddOffreForm(props) {
 
       <Grid className={classes.gridContainer} spacing={8} container>
         <Grid xs={12} item>
-          <ErrorsArea
-            variant="success"
-            prefix="Vous avez les erreurs suivantes"
-            errors={errors.messages}
-          />
+          <ErrorsArea variant="success" prefix="Vous avez les erreurs suivantes" errors={errors.messages} />
         </Grid>
         <Grid xs={12} item>
-          <Typography
-            style={{ color: 'red', fontSize: '1em' }}
-            variant="h6"
-            color="red"
-          >
-            {!(editMode && disableAllFieldsExceptDate) && (
+          <Typography style={{ color: 'red', fontSize: '1em' }} variant="h6" color="red">
+            {/* {!(editMode && disableAllFieldsExceptDate) && (
               <span style={{ display: 'block' }}>
                 - Date début doit être supérieur à J + 1
               </span>
-            )}
-            {!disableAllFields && (
-              <span style={{ display: 'block' }}>
-                - Date début doit être supérieur à J + 2
-              </span>
-            )}
+            )} */}
+            {!disableAllFields && <span style={{ display: 'block' }}>- Date Fin doit être supérieur à J + 2</span>}
           </Typography>
         </Grid>
         <OffreInfo
@@ -203,9 +188,7 @@ export function AddOffreForm(props) {
                 name="globalDiscountPerArticle"
                 label="Global remise"
                 type="number"
-                onChange={({ target: { value } }) =>
-                  onGlobalVarsChange({ globalDiscountPerArticle: +value })
-                }
+                onChange={({ target: { value } }) => onGlobalVarsChange({ globalDiscountPerArticle: +value })}
                 className={classes.offreInputs}
                 fullWidth
                 multiline
@@ -213,9 +196,7 @@ export function AddOffreForm(props) {
                 rowsMax={2}
               />
               <IconButton
-                onClick={() =>
-                  applyGlobalVars('globalDiscountPerArticle', 'discount')
-                }
+                onClick={() => applyGlobalVars('globalDiscountPerArticle', 'discount')}
                 className={classes.globalVarsIcon}
                 aria-label="Delete"
               >
@@ -229,9 +210,7 @@ export function AddOffreForm(props) {
                 name="globalMinQuantity"
                 label="Global min quantite"
                 type="number"
-                onChange={({ target: { value } }) =>
-                  onGlobalVarsChange({ globalMinQuantity: +value })
-                }
+                onChange={({ target: { value } }) => onGlobalVarsChange({ globalMinQuantity: +value })}
                 className={classes.offreInputs}
                 fullWidth
                 multiline
@@ -239,9 +218,7 @@ export function AddOffreForm(props) {
                 rowsMax={2}
               />
               <IconButton
-                onClick={() =>
-                  applyGlobalVars('globalMinQuantity', 'minQuantity')
-                }
+                onClick={() => applyGlobalVars('globalMinQuantity', 'minQuantity')}
                 className={classes.globalVarsIcon}
                 aria-label="Delete"
               >
@@ -252,11 +229,7 @@ export function AddOffreForm(props) {
         </OffreInfo>
 
         <Grid className={classes.gridContainer} spacing={8} container>
-          <Typography
-            variant="h5"
-            color="primary"
-            className={classes.infoArticle}
-          >
+          <Typography variant="h5" color="primary" className={classes.infoArticle}>
             {`Articles de l'offre`}
           </Typography>
         </Grid>
@@ -264,16 +237,8 @@ export function AddOffreForm(props) {
           <Table className={classes.table} style={{ marginLeft: '1%' }}>
             <TableHead>
               <ArticlesListTableHeader
-                checkAllValue={
-                  disableAllFields ||
-                  disableAllFieldsExceptDate ||
-                  (rows.length == 0 ? false : checkAllValue)
-                }
-                onCheckAllChange={
-                  disableAllFields || disableAllFieldsExceptDate
-                    ? null
-                    : toggleAllSelection
-                }
+                checkAllValue={disableAllFields || disableAllFieldsExceptDate || (rows.length == 0 ? false : checkAllValue)}
+                onCheckAllChange={disableAllFields || disableAllFieldsExceptDate ? null : toggleAllSelection}
               />
             </TableHead>
             <TableBody>
@@ -281,11 +246,7 @@ export function AddOffreForm(props) {
                 rows.map((row, index) => (
                   <AticlesListTableRow
                     index={index}
-                    handleArticleRowChange={
-                      disableAllFields || disableAllFieldsExceptDate
-                        ? () => {}
-                        : handleArticleRowChange
-                    }
+                    handleArticleRowChange={disableAllFields || disableAllFieldsExceptDate ? () => {} : handleArticleRowChange}
                     key={row.id}
                     row={row}
                   />
@@ -313,13 +274,7 @@ export function AddOffreForm(props) {
           >
             {editMode ? 'Mettre à jour ' : 'Valider'}
           </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.buttons}
-            onClick={onCancel}
-          >
+          <Button type="submit" variant="contained" color="primary" className={classes.buttons} onClick={onCancel}>
             Annuler
           </Button>
         </Grid>

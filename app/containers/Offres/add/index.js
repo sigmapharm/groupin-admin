@@ -27,12 +27,7 @@ import InfoBar from '../../../components/Snackbar/InfoBar';
 import { formatLaboratoireToLabelValue } from './utils';
 import { makeSelectLaboratoires } from '../../App/selectors';
 import { getLaboArticlesList } from '../../App/actions';
-import {
-  getSelectedAllValue,
-  makeSelectarticlesListlabo,
-  selectOfferFormData,
-  selectOriginalOfferFormData,
-} from '../selectors';
+import { getSelectedAllValue, makeSelectarticlesListlabo, selectOfferFormData, selectOriginalOfferFormData } from '../selectors';
 
 const styles = theme => ({
   root: {
@@ -76,6 +71,7 @@ const initialState = {
     laboratoire: '',
     comment: '',
     globalDiscount: '',
+    minToOrder: '',
   },
   globalMinQuantity: '',
   globalDiscountPerArticle: '',
@@ -120,26 +116,21 @@ export class AddOffre extends React.PureComponent {
         },
       };
       this.props.dispatch(
-        createOrUpdateOffre(
-          formattedData,
-          articlesListlabo,
-          updateOnlyDate,
-          err => response => {
-            if (err) {
-              this.setState({
-                showInfoBar: true,
-                infoBarParams: {
-                  title: `  ${
-                    editMode ? 'La Modification' : "L'ajoute"
-                  }  des commands a échoué merci de contacter l'administrateur `,
-                },
-              });
-              this.handleSubmitResponse(response);
-            } else {
-              this.handleSubmitResponse(response);
-            }
-          },
-        ),
+        createOrUpdateOffre(formattedData, articlesListlabo, updateOnlyDate, err => response => {
+          if (err) {
+            this.setState({
+              showInfoBar: true,
+              infoBarParams: {
+                title: `  ${
+                  editMode ? 'La Modification' : "L'ajoute"
+                }  des commands a échoué merci de contacter l'administrateur `,
+              },
+            });
+            this.handleSubmitResponse(response);
+          } else {
+            this.handleSubmitResponse(response);
+          }
+        }),
       );
     }
   };
@@ -153,6 +144,7 @@ export class AddOffre extends React.PureComponent {
       }
       this.setState({
         ...initialState,
+
         isSuccess: true,
       });
     } else if (response.errors) {
@@ -216,8 +208,7 @@ export class AddOffre extends React.PureComponent {
         editMode: !!offerId,
         offerId,
       },
-      () =>
-        !!offerId && this.props.dispatch(getOfferWithDetails({ id: offerId })),
+      () => !!offerId && this.props.dispatch(getOfferWithDetails({ id: offerId })),
     );
   }
 
@@ -232,30 +223,16 @@ export class AddOffre extends React.PureComponent {
   applyGlobalVars = (key, keyPerArticle) => {
     const { dispatch } = this.props;
     const keyValue = _.get(this.state, key);
+    console.log(keyValue);
     dispatch(applyGlobalRemiseOrMinQt({ [keyPerArticle]: keyValue }));
   };
 
   closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
 
   render() {
-    const {
-      classes,
-      laboratoires,
-      articlesListlabo,
-      offerFormData,
-      originalOfferFormData,
-      checkAllValue,
-    } = this.props;
-    const {
-      editMode,
-      errors,
-      isSuccess,
-      showInfoBar,
-      infoBarParams,
-    } = this.state;
-    const formattedLaboratoire = laboratoires.map(
-      formatLaboratoireToLabelValue,
-    );
+    const { classes, laboratoires, articlesListlabo, offerFormData, originalOfferFormData, checkAllValue } = this.props;
+    const { editMode, errors, isSuccess, showInfoBar, infoBarParams } = this.state;
+    const formattedLaboratoire = laboratoires.map(formatLaboratoireToLabelValue);
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
@@ -284,29 +261,16 @@ export class AddOffre extends React.PureComponent {
             TransitionComponent={Fade}
             message={<span id="message-id">Offre a été créé avec succès.</span>}
             action={[
-              <Button
-                key="undo"
-                color="secondary"
-                size="small"
-                onClick={this.handleGoToOffresList}
-              >
+              <Button key="undo" color="secondary" size="small" onClick={this.handleGoToOffresList}>
                 Liste des offres
               </Button>,
-              <IconButton
-                key="close"
-                color="inherit"
-                onClick={this.handleCloseSuccessMessage}
-              >
+              <IconButton key="close" color="inherit" onClick={this.handleCloseSuccessMessage}>
                 <CloseIcon />
               </IconButton>,
             ]}
           />
         )}
-        <InfoBar
-          open={showInfoBar}
-          onClose={this.closeInfoBar}
-          {...infoBarParams}
-        />
+        <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
       </div>
     );
   }

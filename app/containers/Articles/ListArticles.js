@@ -30,7 +30,7 @@ const styles = theme => ({
     width: '80%',
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
-    overflowX: 'auto',
+    overflowX: 'hide',
     marginLeft: '10%',
   },
   table: {

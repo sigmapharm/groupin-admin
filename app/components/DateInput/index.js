@@ -3,13 +3,18 @@ import React, { useEffect, useState } from 'react';
 import MomentUtils from '@date-io/moment';
 import { withStyles } from '@material-ui/core';
 import { CalendarToday } from '@material-ui/icons';
+import moment from 'moment';
 
 const DateInput = ({ classes, label, onChange, value = null }) => {
   const [selectedDate, handleDateChange] = useState(value);
 
   useEffect(
     () => {
-      onChange(new Date(selectedDate).toUTCString());
+      onChange(
+        moment(selectedDate, 'YYYY-MM-DD')
+          .format()
+          .split('T')[0],
+      );
     },
     [selectedDate],
   );
@@ -24,11 +29,12 @@ const DateInput = ({ classes, label, onChange, value = null }) => {
           placeholder="Select Date"
           value={selectedDate}
           onChange={handleDateChange}
-          format="MM/DD/yyyy"
+          format="YYYY-MM-DD"
           autoOk
           InputProps={{
             endAdornment: <CalendarToday />,
           }}
+          cl
         />
       </MuiPickersUtilsProvider>
     </div>
