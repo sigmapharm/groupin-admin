@@ -61,7 +61,7 @@ const styles = theme => ({
     maxWidth: '1200px',
     width: '100%',
     margin: '20px auto',
-    overflow: 'hidden',
+    overflow: 'auto',
   },
   table: {
     minWidth: 700,

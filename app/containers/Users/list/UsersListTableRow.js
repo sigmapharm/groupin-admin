@@ -147,11 +147,11 @@ export class UsersListTableRow extends React.PureComponent {
                 <Search color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip placement="top" title="Rénitialiser mot de passe">
+            {/* <Tooltip placement="top" title="Rénitialiser mot de passe">
               <IconButton onClick={this.reset} style={{ padding: 5 }}>
                 <ResetIcon color="primary" />
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
             <Switch checked={row.enabled} onChange={this.toggle} value={row.enabled} color="primary" />
             <Tooltip placement="top" title="Supprimer">
               <IconButton onClick={this.delete} style={{ padding: 5 }}>

@@ -35,7 +35,7 @@ class SignIn extends React.PureComponent {
   };
 
   handleClose = () => {
-    this.setState({ isOpen: true });
+    this.setState({ isOpen: false });
   };
 
   handlePasswordReset = email => () => {

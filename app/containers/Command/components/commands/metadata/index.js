@@ -27,6 +27,7 @@ export default ({
   withOptions = true,
   blob,
   isMember,
+  canGroup,
 }) => {
   return (
     <>
@@ -38,7 +39,9 @@ export default ({
           <TableCell>{moment(row.creationDate).format('DD/MM/YYYY')}</TableCell>
           <TableCell>{row.totalAmountDiscount.toFixed(2)}</TableCell>
           {isMember ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null}
-          {!isMember && row.isLinked ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null}
+          {!isMember && row.isLinked && !canGroup ? (
+            <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell>
+          ) : null}
           {withOptions && (
             <TableCell>
               <Tooltip placement="top" title="Imprimer la commande">

@@ -214,12 +214,21 @@ export class OffresListTableRow extends React.PureComponent {
     // const status = Math.min(elapsedDuration / globalDuration, 1) * 100 || 0;
     // const remainingDays = Math.floor((startDate - now) / mSecondsPerDay) + 1;
     const dayLabel = remainingDays === 1 ? 'jour' : 'jours';
-    const totalRemise = _.sumBy(offerArticles, ({ quantity, computedPPH }) => computedPPH * quantity || 0).toFixed(2);
+    const totalRemise = _.sumBy(offerArticles, ({ quantity, computedPPH, tva }) => {
+      const RemiseCalc = computedPPH * quantity;
+
+      const calcTva = (tva / 100) * RemiseCalc;
+
+      return parseInt(calcTva) + parseInt(RemiseCalc) || 0;
+    }).toFixed(2);
+
+    console.log('total remise', totalRemise);
 
     const total = _.sumBy(offerArticles, ({ quantity, pph }) => pph * quantity || 0).toFixed(2);
 
-    const totalTva = _.sumBy(offerArticles, ({ TVA }) => {
-      const calcTva = (TVA / 100) * totalRemise;
+    const totalTva = _.sumBy(offerArticles, ({ tva }) => {
+      const calcTva = (tva / 100) * totalRemise;
+
       return calcTva + parseInt(totalRemise);
     }).toFixed(2);
 
@@ -320,7 +329,7 @@ export class OffresListTableRow extends React.PureComponent {
                     <Typography variant="h6" color="textSecondary" style={{ marginRight: 10 }}>
                       Total remisé:
                     </Typography>
-                    <Typography variant="h6">{totalTva}</Typography>
+                    <Typography variant="h6">{totalRemise}</Typography>
                   </div>
                   <div style={{ display: 'flex' }}>
                     <Typography variant="h6" color="textSecondary" style={{ marginRight: 10 }}>

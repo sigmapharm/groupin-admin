@@ -96,6 +96,7 @@ function ChartTable(props) {
 const styles = theme => ({
   container: {
     marginTop: 30,
+    overflowX: 'auto',
   },
   tableHead: {
     backgroundColor: theme.palette.primary.main,

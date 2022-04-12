@@ -43,7 +43,7 @@ const styles = theme => ({
     width: '80%',
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
-    overflowX: 'hide',
+    overflowX: 'auto',
     marginLeft: '10%',
   },
   tableWrapper: {
