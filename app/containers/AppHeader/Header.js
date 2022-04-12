@@ -77,6 +77,7 @@ class Header extends React.Component {
     const { username, role, region } = user || {};
     const { open } = this.state;
     const isSmallDevice = isWidthDown('md', width);
+    console.log('user', user);
     return (
       <AppBar className={classes.container} position={position}>
         <Toolbar className={classes.toolbar}>
@@ -105,19 +106,21 @@ class Header extends React.Component {
               >
                 <AccountCircle height={32} width={32} />
               </IconButton>
-              <Popper open={open} anchorEl={this.anchorEl} transition disablePortal placement="bottom-end">
+              <Popper open={open} anchorEl={this.anchorEl} transition placement="bottom-end">
                 {({ TransitionProps, placement }) => (
                   <Grow
                     {...TransitionProps}
                     id="menu-list-grow"
                     style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
                   >
-                    <Paper className={classes.menuContainer}>
+                    <Paper className={classes.menuContainer} style={{ zIndex: 100 }}>
                       <ClickAwayListener onClickAway={this.handleClose}>
                         <MenuList>
                           <Typography className={classes.textMenu}>{username}</Typography>
                           <Divider />
-                          <Typography className={classes.textMenu}>{role}</Typography>
+                          <Typography className={classes.textMenu} style={{ textTransform: 'lowercase' }}>
+                            {role}
+                          </Typography>
                           <Divider />
                           <MenuItem onClick={this.handleProfileLinkClick}>
                             <ListItemIcon>

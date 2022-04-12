@@ -306,17 +306,19 @@ export class OffreListConsultation extends React.PureComponent {
                   }}
                 />
               </TableCell>
-              <TableCell>
-                Quantité Commandée
-                <hr
-                  style={{
-                    width: '45%',
-                    marginLeft: '0',
-                    height: '3px',
-                    backgroundColor: 'red',
-                  }}
-                />
-              </TableCell>
+              {this.forAdmin && (
+                <TableCell>
+                  Quantité Commandée
+                  <hr
+                    style={{
+                      width: '45%',
+                      marginLeft: '0',
+                      height: '3px',
+                      backgroundColor: 'red',
+                    }}
+                  />
+                </TableCell>
+              )}
               {commandMode && (
                 <TableCell>
                   Quantité
@@ -348,7 +350,7 @@ export class OffreListConsultation extends React.PureComponent {
                 <TableCell>{pph.toFixed(2)}</TableCell>
                 <TableCell>{discount}</TableCell>
                 <TableCell>{computedPPH.toFixed(2)}</TableCell>
-                <TableCell>{minQuantity}</TableCell>
+                {this.forAdmin && <TableCell>{minQuantity}</TableCell>}
                 <TableCell>{quantity}</TableCell>
                 {commandMode && (
                   <TableCell>
@@ -367,7 +369,7 @@ export class OffreListConsultation extends React.PureComponent {
                 )}
               </TableRow>
             ))}
-            {commandMode && (
+            {/* {commandMode && (
               <TableRow>
                 <TableCell style={{ textAlign: 'right' }} colSpan={7}>
                   Total Commande:
@@ -376,7 +378,7 @@ export class OffreListConsultation extends React.PureComponent {
                   {_.sumBy(offerArticles, ({ quantity, pph }) => pph * quantity || 0).toFixed(2)}
                 </TableCell>
               </TableRow>
-            )}
+            )} */}
           </TableBody>
         </Table>
         {commandMode && (

@@ -40,7 +40,7 @@ function ReportingTable({ rows = [], classes, tableRef }) {
 
   return (
     <div ref={tableRef}>
-      <Paper>
+      <Paper className={classes.root}>
         <Table>
           <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
           <TableBody>
@@ -80,10 +80,10 @@ function ReportingTable({ rows = [], classes, tableRef }) {
   );
 }
 
-const tableStyles = theme => ({
-  pag: {
-    // display: 'flex',
+const styles = theme => ({
+  root: {
+    overflowX: 'auto',
   },
 });
 
-export default withStyles(tableStyles)(ReportingTable);
+export default withStyles(styles)(ReportingTable);

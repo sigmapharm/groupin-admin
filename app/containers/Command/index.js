@@ -123,7 +123,7 @@ class Command extends PureComponent {
       infoBarParams: {},
       showPopConfirmation: false,
       popConfirmationParams: {},
-      cols: this.isMember || this.canGroup ? memberCols : adminCols,
+      cols: this.isMember ? memberCols : adminCols,
       blobUrl: '',
     };
   }
@@ -675,6 +675,7 @@ class Command extends PureComponent {
                   showSubCommands={this.showSubCommandsModel}
                   blob={this.state.blobUrl}
                   isMember={this.isMember}
+                  canGroup={this.canGroup}
                 />
               )}
             </Table>
