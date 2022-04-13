@@ -133,9 +133,11 @@ export class OffreListConsultation extends React.PureComponent {
 
   get isCommandAllowed() {
     const { totalRemise, row } = this.props;
-    const isValide = parseInt(totalRemise) >= parseInt(row.minToOrder) ? true : false;
+    const isEqual = totalRemise === parseInt(row.minToOrder) ? true : false;
 
-    if (this.allowCommandSubmit && isValide) {
+    const isGreater = totalRemise > parseInt(row.minToOrder) ? true : false;
+
+    if (this.allowCommandSubmit && (isEqual || isGreater)) {
       return false;
     }
 
@@ -350,8 +352,8 @@ export class OffreListConsultation extends React.PureComponent {
                 <TableCell>{pph.toFixed(2)}</TableCell>
                 <TableCell>{discount}</TableCell>
                 <TableCell>{computedPPH.toFixed(2)}</TableCell>
-                {this.forAdmin && <TableCell>{minQuantity}</TableCell>}
-                <TableCell>{quantity}</TableCell>
+                <TableCell>{minQuantity}</TableCell>
+                {this.forAdmin && <TableCell>{quantity}</TableCell>}
                 {commandMode && (
                   <TableCell>
                     <TextField

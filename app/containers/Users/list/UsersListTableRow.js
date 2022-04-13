@@ -135,7 +135,7 @@ export class UsersListTableRow extends React.PureComponent {
           <TableCell>{row.email}</TableCell>
           <TableCell>{row.pharmacie && row.pharmacie.denomination}</TableCell>
           <TableCell>{row.role}</TableCell>
-          <TableCell>{row.lastCommand ? row.lastCommand.split('T')[0] : 'no Commands'}</TableCell>
+          <TableCell>{row.lastCommad ? row.lastCommad.split('T')[0] : 'no Commands'}</TableCell>
           <TableCell style={{ padding: 0 }}>
             <Tooltip placement="top" title="Mofidier">
               <IconButton onClick={this.edit} style={{ padding: 5 }}>
