@@ -219,25 +219,26 @@ export class OffresListTableRow extends React.PureComponent {
 
       const calcTva = (tva / 100) * RemiseCalc;
 
-      return parseInt(calcTva) + parseInt(RemiseCalc) || 0;
-    }).toFixed(2);
+      return parseFloat(calcTva) + parseFloat(RemiseCalc) || 0;
+    });
 
-    console.log('total remise', totalRemise);
+    let total = _.sumBy(offerArticles, ({ quantity, pph, tva }) => pph * quantity + pph * quantity * (tva / 100) || 0);
 
-    const total = _.sumBy(offerArticles, ({ quantity, pph }) => pph * quantity || 0).toFixed(2);
+    const GLobalDiscount = parseFloat(totalRemise) * (parseFloat(row.globalDiscount) / 100);
 
-    const totalTva = _.sumBy(offerArticles, ({ tva }) => {
-      const calcTva = (tva / 100) * totalRemise;
+    console.log('totalRemise', totalRemise, 'GLobalDiscount', GLobalDiscount);
 
-      return calcTva + parseInt(totalRemise);
-    }).toFixed(2);
+    let totalWidthGlobalDiscount = totalRemise - GLobalDiscount;
+    const totalGain = (total - totalWidthGlobalDiscount).toFixed(2);
 
-    const totalGain = (total - totalRemise).toFixed(2);
+    //arrondir les valeurs
+    totalWidthGlobalDiscount = totalWidthGlobalDiscount.toFixed(2);
+    total = total.toFixed(2);
 
-    const discount = _.sumBy(
-      offerArticles,
-      ({ quantity, computedPPH, pph }) => (quantity ? quantity * pph - quantity * computedPPH : 0),
-    ).toFixed(2);
+    // const discount = _.sumBy(
+    //   offerArticles,
+    //   ({ quantity, computedPPH, pph }) => (quantity ? quantity * pph - quantity * computedPPH : 0),
+    // ).toFixed(2);
 
     return (
       <>
@@ -313,7 +314,7 @@ export class OffresListTableRow extends React.PureComponent {
             </MuiDialogTitle>
 
             <MuiDialogContent>
-              {totalGain > 0 && (
+              {totalGain > 0 && this.props.isMember ? (
                 <div
                   style={{
                     position: 'sticky',
@@ -329,7 +330,7 @@ export class OffresListTableRow extends React.PureComponent {
                     <Typography variant="h6" color="textSecondary" style={{ marginRight: 10 }}>
                       Total remisé:
                     </Typography>
-                    <Typography variant="h6">{totalRemise}</Typography>
+                    <Typography variant="h6">{totalWidthGlobalDiscount}</Typography>
                   </div>
                   <div style={{ display: 'flex' }}>
                     <Typography variant="h6" color="textSecondary" style={{ marginRight: 10 }}>
@@ -345,7 +346,7 @@ export class OffresListTableRow extends React.PureComponent {
                   </div>
                   <div />
                 </div>
-              )}
+              ) : null}
 
               <OffreListConsultation
                 dismiss={this.closeDetails}
@@ -354,7 +355,7 @@ export class OffresListTableRow extends React.PureComponent {
                 row={row}
                 remainingDays={remainingDays}
                 progress={progress}
-                totalRemise={totalTva}
+                totalRemise={totalWidthGlobalDiscount}
               />
             </MuiDialogContent>
           </Dialog>

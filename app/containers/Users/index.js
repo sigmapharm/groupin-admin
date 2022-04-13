@@ -40,11 +40,11 @@ import GeneriqueDialog from '../../components/Alert';
 /* istanbul ignore next */
 const styles = theme => ({
   root: {
-    width: '80%',
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
     overflowX: 'auto',
-    marginLeft: '10%',
+    display: 'flex',
+    justifyContent: 'center',
   },
   tableWrapper: {
     overflowX: 'auto',
@@ -56,6 +56,9 @@ const styles = theme => ({
   },
   tableHead: {
     backgroundColor: theme.palette.primary.main,
+  },
+  table: {
+    width: '85%',
   },
 });
 
@@ -99,7 +102,7 @@ export class UsersList extends React.PureComponent {
         },
         {
           label: 'dernière commande',
-          colName: 'last_commande',
+          colName: 'lastCommand',
           selected: false,
           order: 'asc',
         },
@@ -331,7 +334,7 @@ export class UsersList extends React.PureComponent {
           <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
           <GeneriqueDialog open={showPopConfirmation} {...popConfirmationParams} />
         </Paper>
-        <Fab color="primary" className={classes.addUserButton} onClick={this.handleUserAddClick}>
+        <Fab color="primary" className={classes.addUserButton} style={{}} onClick={this.handleUserAddClick}>
           <AddIcon />
         </Fab>
       </div>

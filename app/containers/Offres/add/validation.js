@@ -113,7 +113,7 @@ export const fields = {
   },
   minToOrder: {
     name: 'minToOrder',
-    label: 'min To Order',
+    label: 'min à commander',
     type: 'number',
   },
 };

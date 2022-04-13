@@ -183,6 +183,14 @@ export class OffresList extends React.PureComponent {
     );
   };
 
+  get isMember() {
+    const {
+      user: { role },
+    } = this.props;
+
+    return role === MEMBRE;
+  }
+
   handleOffresAddClick = () => {
     history.push('/offres/add');
   };
@@ -285,6 +293,7 @@ export class OffresList extends React.PureComponent {
                       dispatch={this.props.dispatch}
                       row={row}
                       offerArticles={this.props.offerArticles}
+                      isMember={this.isMember}
                     />
                   ))
                 ) : (

@@ -85,7 +85,7 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
                   },
                   {
                     label: 'CA commandée',
-                    value: Number(statistics.totalCACommande).toFixed(2),
+                    value: Number(statistics.totalCACommandeGlobal).toFixed(2),
                   },
                 ]}
               />
