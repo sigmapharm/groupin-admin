@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import { DateFormatInput } from 'material-ui-next-pickers';
 import moment from 'moment';
 import { fields } from '../../../containers/Offres/add/validation';
+import DateInput from '../../../components/DateInput';
 
 const styles = () => ({
   offreInputs: {},
@@ -25,7 +26,7 @@ const styles = () => ({
 export function OffreInfo(props) {
   const { formData, errors, classes, onChange, maxLength, children, disableAllWithoutDate, disableAll } = props;
   const disable = disableAllWithoutDate || disableAll;
-  console.log(formData);
+
   return (
     <>
       <>
@@ -48,7 +49,7 @@ export function OffreInfo(props) {
           />
         </Grid>
         <Grid container xs={12} md={6} item>
-          <DateFormatInput
+          <DateInput
             name={fields.dateDebut.name}
             // fields.dateDebut.label
             label={fields.dateDebut.label}
@@ -67,10 +68,12 @@ export function OffreInfo(props) {
             type={fields.dateDebut.type}
             className={[classes.dateInputs, classes.offreInputs]}
             fullWidth
+            disableContainerStyle
+            format="DD/MM/YYYY"
           />
         </Grid>
         <Grid xs={12} md={6} item>
-          <DateFormatInput
+          <DateInput
             name={fields.dateFin.name}
             // fields.dateDebut.label
             label={fields.dateFin.label}
@@ -89,6 +92,8 @@ export function OffreInfo(props) {
             type={fields.dateFin.type}
             className={[classes.dateInputs, classes.offreInputs]}
             fullWidth
+            disableContainerStyle
+            format="DD/MM/YYYY"
           />
         </Grid>
         <Grid xs={12} md={6} item>

@@ -178,7 +178,7 @@ export class OffreListConsultation extends React.PureComponent {
 
     const dateformat = new Intl.DateTimeFormat('fr-FR').format(datefin);
     const startDateFormated = new Intl.DateTimeFormat('fr-FR').format(startDate);
-    console.log(this.isCommandAllowed);
+
     return (
       <React.Fragment>
         <div className={classes.metaContainer}>

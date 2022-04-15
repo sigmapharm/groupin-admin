@@ -16,6 +16,7 @@ export class AticlesListTableRow extends React.PureComponent {
 
   render() {
     const { row, handleArticleRowChange, index } = this.props;
+    console.log('row', row);
     return (
       <TableRow key={row.id}>
         {/*  <TableCell component="th" scope="row">

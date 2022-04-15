@@ -48,6 +48,7 @@ const styles = theme => ({
   },
   tableWrapper: {
     overflowX: 'auto',
+    padding: '0px 70px',
   },
   addUserButton: {
     position: 'fixed',
@@ -58,7 +59,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.primary.main,
   },
   table: {
-    width: '85%',
+    width: '100%',
   },
 });
 
@@ -90,7 +91,7 @@ export class UsersList extends React.PureComponent {
         },
         {
           label: 'Pharmacie',
-          colName: 'pharmacy.denomination',
+          colName: 'pharmacy',
           selected: false,
           order: 'asc',
         },
@@ -281,7 +282,7 @@ export class UsersList extends React.PureComponent {
     const formatedCities = cities.map(formatCityToLabelValue);
     return (
       <div>
-        <Typography component="h1" variant="h4" className={classes.root}>
+        <Typography component="h1" variant="h4" style={{ marginLeft: 100, marginTop: 20 }}>
           Liste des utilisateurs
         </Typography>
         <Divider variant="middle" className={classes.root} />
@@ -293,7 +294,7 @@ export class UsersList extends React.PureComponent {
           {totalElements} utilisateurs trouvés
         </Typography>
 
-        <Paper className={classes.root}>
+        <Paper className={classes.tableWrapper}>
           <Table className={classes.table}>
             <TableHead className={classes.tableHead}>
               <TableRow>

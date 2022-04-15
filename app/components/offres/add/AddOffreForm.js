@@ -210,7 +210,9 @@ export function AddOffreForm(props) {
                 name="globalMinQuantity"
                 label="Global min quantite"
                 type="number"
-                onChange={({ target: { value } }) => onGlobalVarsChange({ globalMinQuantity: +value })}
+                onChange={({ target: { value } }) => {
+                  onGlobalVarsChange({ globalMinQuantity: +value });
+                }}
                 className={classes.offreInputs}
                 fullWidth
                 multiline

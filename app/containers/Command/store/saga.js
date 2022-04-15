@@ -42,8 +42,8 @@ function* dispatchQuantityWorker({ payload: { id, callback } }) {
   };
   yield networking(function*() {
     try {
-      yield requestWithAuth(`/commands/aggregate/${id}/status`, options);
-      yield put(dispatchQuantitySuccess());
+      const req = yield requestWithAuth(`/commands/aggregate/${id}/status`, options);
+      yield put(loadCommandsSuccess(req));
       yield callback && callback();
     } catch (e) {
       yield callback && callback(e);

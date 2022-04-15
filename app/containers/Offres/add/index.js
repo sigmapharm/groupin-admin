@@ -223,7 +223,6 @@ export class AddOffre extends React.PureComponent {
   applyGlobalVars = (key, keyPerArticle) => {
     const { dispatch } = this.props;
     const keyValue = _.get(this.state, key);
-    console.log(keyValue);
     dispatch(applyGlobalRemiseOrMinQt({ [keyPerArticle]: keyValue }));
   };
 
