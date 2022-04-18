@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { LOCAL_API_BASE_PATH } from '../services/api/constants';
 import Auth from '../services/security/AccessTokenStorage';
 
 export function useFecth(path, options) {
@@ -11,7 +12,7 @@ export function useFecth(path, options) {
 
   useEffect(
     () => {
-      fetch(`http://192.168.11.104:8080${path}`, {
+      fetch(`${LOCAL_API_BASE_PATH}${path}`, {
         ...options,
         headers: {
           Authorization: Auth.get(),
