@@ -11,12 +11,9 @@ import {
   SUBMIT_CREATE_USER,
   SUBMIT_UPDATE_USER,
   TOGGLE_USER,
+  GET_USER_INFO,
 } from './constants';
-import {
-  manageCreateUserResponse,
-  putUsersList,
-  putUserProfile,
-} from './actions';
+import { manageCreateUserResponse, putUsersList, putUserProfile } from './actions';
 import requestWithAuth from '../../services/request/request-with-auth';
 import ApiRoutes from '../../core/ApiRoutes';
 import * as GlobalActions from '../App/actions';
@@ -35,11 +32,9 @@ function* usersListWorker(action) {
       const sortQuery = cols
         .filter(({ selected }) => selected)
         .reduce((acc, n) => acc.concat(`&sort=${n.colName},${n.order}`), '');
-      const params = `?size=${action.payload.rowsPerPage}&page=${
-        action.payload.page
-      }&firstName=${action.payload.prenom}&lastName=${
-        action.payload.nom
-      }&pharmeacy=${action.payload.pharmacie}${sortQuery}`;
+      const params = `?size=${action.payload.rowsPerPage}&page=${action.payload.page}&firstName=${
+        action.payload.prenom
+      }&lastName=${action.payload.nom}&pharmeacy=${action.payload.pharmacie}${sortQuery}`;
       const res = yield requestWithAuth(`/users${params}`, options);
       yield put(putUsersList(res));
       yield callback && callback();
@@ -65,6 +60,25 @@ function* getProfileWorker(action) {
     } catch (e) {
       console.log(e); // eslint-disable-line
       yield callback && callback(e);
+    }
+  });
+}
+
+function* getUserInfo(action) {
+  const { callback, id } = action.payload;
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(`/users/${id || ''}`, options);
+      yield callback && callback(false, res);
+    } catch (e) {
+      console.log(e); // eslint-disable-line
+      yield callback && callback(true, null);
     }
   });
 }
@@ -109,10 +123,7 @@ function* toggleUserWorker(action) {
   };
   yield networking(function*() {
     try {
-      yield requestWithAuth(
-        `${ApiRoutes.USERS}/${userId}/${nextState}`,
-        options,
-      );
+      yield requestWithAuth(`${ApiRoutes.USERS}/${userId}/${nextState}`, options);
       yield callback && callback();
     } catch (e) {
       yield callback && callback(e);
@@ -179,10 +190,7 @@ function* resetUserWorker(action) {
   };
   yield networking(function*() {
     try {
-      yield requestWithAuth(
-        `${ApiRoutes.USERS}/${payload.userId}/reset`,
-        options,
-      );
+      yield requestWithAuth(`${ApiRoutes.USERS}/${payload.userId}/reset`, options);
       yield callback && callback();
     } catch (e) {
       yield callback && callback(e);
@@ -214,10 +222,7 @@ function* restePasswordWorker(action) {
   };
   yield networking(function*() {
     try {
-      const res = yield requestWithAuth(
-        `${ApiRoutes.USERS}/update/password`,
-        options,
-      );
+      const res = yield requestWithAuth(`${ApiRoutes.USERS}/update/password`, options);
       yield callback && callback();
     } catch (e) {
       yield callback && callback(e);
@@ -237,6 +242,7 @@ function* usersListSagas() {
     takeLatest(DELETE_USER, deleteUserWorker),
     takeLatest(RESET_PASSWORD, restePasswordWorker),
     takeLatest(GET_PROFILE, getProfileWorker),
+    takeLatest(GET_USER_INFO, getUserInfo),
   ]);
 }
 

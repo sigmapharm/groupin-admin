@@ -44,7 +44,7 @@ const ProfileCard = ({ user, classes }) => {
       </div>
       <div className={classes.row}>
         <Typography className={classes.text}>Ville</Typography>
-        <Typography className={classes.text}>{user.ville}</Typography>
+        <Typography className={classes.text}>{user.ville ? user.ville.name : ''}</Typography>
       </div>
       <div className={classes.row}>
         <Typography className={classes.text}>Code postal</Typography>
@@ -52,7 +52,7 @@ const ProfileCard = ({ user, classes }) => {
       </div>
       <div className={classes.row}>
         <Typography className={classes.text}>Region</Typography>
-        <Typography className={classes.text}>{user.region}</Typography>
+        <Typography className={classes.text}>{user.region ? user.region.name : ''}</Typography>
       </div>
     </div>
   );

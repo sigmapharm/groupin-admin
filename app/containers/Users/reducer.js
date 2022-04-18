@@ -5,6 +5,8 @@ import {
   GET_USERS_LIST_ACTION,
   SUBMIT_UPDATE_USER,
   PUT_USER_PROFILE,
+  GET_USER_INFO,
+  PUT_USER_INFO,
 } from './constants';
 
 import AccessTokenStorage from '../../services/security/AccessTokenStorage';
@@ -14,6 +16,7 @@ export const initialState = fromJS({
   page: 0,
   rowsPerPage: 10,
   userProfil: {},
+  userInfo: {},
 });
 
 function reducer(state = initialState, action) {
@@ -41,6 +44,14 @@ function reducer(state = initialState, action) {
       }
       return state;
     }
+    case PUT_USER_INFO: {
+      return state.merge({ userInfo: action.payload });
+    }
+
+    case GET_USER_INFO: {
+      return state.merge({ userInfo: action.payload });
+    }
+
     default: {
       return state;
     }
