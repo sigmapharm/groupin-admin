@@ -47,8 +47,11 @@ const styles = theme => ({
     justifyContent: 'center',
   },
   tableWrapper: {
+    width: '80%',
+    marginTop: theme.spacing.unit * 3,
+    marginBottom: theme.spacing.unit * 3,
     overflowX: 'auto',
-    padding: '0px 70px',
+    marginLeft: '10%',
   },
   addUserButton: {
     position: 'fixed',
@@ -282,7 +285,7 @@ export class UsersList extends React.PureComponent {
     const formatedCities = cities.map(formatCityToLabelValue);
     return (
       <div>
-        <Typography component="h1" variant="h4" style={{ marginLeft: 100, marginTop: 20 }}>
+        <Typography component="h1" variant="h4" className={classes.tableWrapper}>
           Liste des utilisateurs
         </Typography>
         <Divider variant="middle" className={classes.root} />

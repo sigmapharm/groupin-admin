@@ -5,7 +5,7 @@ import { withStyles, Paper } from '@material-ui/core';
 import ChartTable from '../Table/index';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
-
+import _ from 'lodash';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export const options = {

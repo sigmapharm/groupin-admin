@@ -13,7 +13,7 @@ import { createStructuredSelector } from 'reselect';
 import authenticated from '../../HOC/authenticated/authenticated';
 import { selectPrintPharma } from '../selectors';
 import { getPrintPharama } from '../actions';
-
+import _ from 'lodash';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const options = {
