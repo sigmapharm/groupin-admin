@@ -35,7 +35,7 @@ const styles = theme => ({
     },
   },
   paper: {
-    width: '1000px',
+    width: '1250px',
     // padding: 50,
     display: 'flex',
     minHeight: 450,
