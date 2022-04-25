@@ -27,11 +27,12 @@ import GeneriqueDialog from '../../components/Alert';
 
 const styles = theme => ({
   root: {
-    width: '80%',
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
-    overflowX: 'auto',
-    marginLeft: '10%',
+    maxWidth: '1200px',
+    width: '100%',
+    margin: '20px auto',
+    overflow: 'auto',
   },
   table: {
     minWidth: 700,

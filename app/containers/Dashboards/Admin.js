@@ -10,6 +10,7 @@ import Card from './Card';
 import { selectStatistics } from './selectors';
 import PieChart from './charts/PieChart';
 import SmallCard from './SmallCard';
+import { formatNumber } from '../../utils/formatNumber';
 
 const Admin = ({ classes, dispatch, statistics, userRole }) => {
   useEffect(() => {
@@ -40,18 +41,20 @@ const Admin = ({ classes, dispatch, statistics, userRole }) => {
           </Grid>
           <Grid item lg={6} md={12} sm={12} xs={12}>
             <div className={classes.container}>
+              <Typography className={classes.title}>Chiffre d'affaire par laboratoire(%)</Typography>
               <PieChart
                 data={statistics.caparLabo ? statistics.caparLabo.map(v => v.value) : []}
                 labels={statistics.caparLabo ? statistics.caparLabo.map(v => v.name) : []}
-                label="Chiffre d'affaire par laboratoire(%)"
+                // label="Chiffre d'affaire par laboratoire(%)"
               />
             </div>
             <div style={{ marginBottom: '24px' }} />
             <div className={classes.container}>
+              <Typography className={classes.title}>Chiffre d'affaire par region(%)</Typography>
               <PieChart
                 data={statistics.caparRegion ? statistics.caparRegion.map(v => v.value) : []}
                 labels={statistics.caparRegion ? statistics.caparRegion.map(v => v.name) : []}
-                label="Chiffre d'affaire par region(%)"
+                // label="Chiffre d'affaire par region(%)"
               />
             </div>
           </Grid>
@@ -63,13 +66,13 @@ const Admin = ({ classes, dispatch, statistics, userRole }) => {
               <div style={{ marginBottom: '10px' }} />
               <SmallCard title="Nbr commande" backgroundColor="#4F51C0" value={statistics.totalCommande} />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard title="CA commandée" backgroundColor="#BAA2F8" value={Number(statistics.totalCACommande).toFixed(2)} />
+              <SmallCard title="CA commandée" backgroundColor="#BAA2F8" value={formatNumber.format(statistics.totalCACommande)} />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard title="CA Livré" backgroundColor="#50DFB3" value={Number(statistics.totalCALivré).toFixed(2)} />
+              <SmallCard title="CA Livré" backgroundColor="#50DFB3" value={formatNumber.format(statistics.totalCALivré)} />
               {/* <div style={{ marginBottom: '10px' }} />
               <SmallCard
-                title="CA livrée"
-                backgroundColor="#FED674"
+                title="CA livrée" statistics.totalCACommande
+                backgroundColor="#FED674" formatNumber
                 value={100}
               /> */}
             </div>
@@ -97,6 +100,9 @@ const styles = theme => ({
     [theme.breakpoints.down(430)]: {
       fontSize: '15px',
     },
+  },
+  title: {
+    textAlign: 'center',
   },
 });
 

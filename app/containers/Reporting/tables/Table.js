@@ -8,6 +8,7 @@ import Table from '@material-ui/core/Table';
 import { CustomTablePagination } from './Pagination';
 import EnhancedTableHead, { stableSort, getSorting } from './sorting';
 import _ from 'lodash';
+import { formatNumber } from '../../../utils/formatNumber';
 
 function ReportingTable({ rows = [], classes, tableRef }) {
   const [page, setPage] = useState(0);
@@ -54,7 +55,7 @@ function ReportingTable({ rows = [], classes, tableRef }) {
                   <TableCell>{row.totalOffers}</TableCell>
                   <TableCell>{row.totalCommandes}</TableCell>
                   <TableCell>{row.totalArticalesCommandes}</TableCell>
-                  <TableCell>{row.ca.toFixed(3)}</TableCell>
+                  <TableCell>{formatNumber.format(row.ca)}</TableCell>
                 </TableRow>
               ))}
             {emptyRows > 0 && (
