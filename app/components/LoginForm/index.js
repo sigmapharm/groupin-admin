@@ -35,7 +35,7 @@ const styles = theme => ({
     },
   },
   paper: {
-    width: '100%',
+    width: '1250px',
     // padding: 50,
     display: 'flex',
     minHeight: 450,
@@ -53,23 +53,27 @@ const styles = theme => ({
     width: '100%',
     textAlign: 'center',
     padding: '0px 30px',
-    paddingTop: 50,
+    paddingTop: 40,
     [theme.breakpoints.up('md')]: {
       width: 450,
     },
+    // border: '1px solid black',
   },
   slides: {
     // border: '1px solid black',
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: 'calc(100% - 450px)',
+      width: 'calc(100% - 400px)',
     },
   },
   resetPassword: {
     display: 'flex',
     marginBottom: 5,
   },
-  resetLink: {},
+  resetLink: {
+    color: '#19317e',
+    textDecoration: 'none',
+  },
 });
 
 export function LoginForm(props) {
