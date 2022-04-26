@@ -33,9 +33,10 @@ const Statistiques = ({ classes, articles, dispatch, pharmas, labos, city, print
   //
   const [endDate, setEndDate] = useState(null);
 
+  const isStartDateInValide = startDate === 'Invalid date' ? '' : startDate;
+  const isENdDAteInValide = endDate === 'Invalid date' ? '' : endDate;
+
   const handleSearch = () => {
-    const isStartDateInValide = startDate === 'Invalid date' ? '' : startDate;
-    const isENdDAteInValide = endDate === 'Invalid date' ? '' : endDate;
     dispatch(getArticles(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
     dispatch(getPharmas(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
     dispatch(getLabos(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
@@ -62,17 +63,29 @@ const Statistiques = ({ classes, articles, dispatch, pharmas, labos, city, print
             rows={articles}
             tableUpdate={getArticles}
             dispatch={dispatch}
-            fromDate={startDate || ''}
-            toDate={endDate || ''}
+            fromDate={isStartDateInValide}
+            toDate={isENdDAteInValide}
           />
-          <LaboChart rows={labos} tableUpdate={getLabos} dispatch={dispatch} fromDate={startDate || ''} toDate={endDate || ''} />
-          <RegionChart rows={city} tableUpdate={getCity} dispatch={dispatch} fromDate={startDate || ''} toDate={endDate || ''} />
+          <LaboChart
+            rows={labos}
+            tableUpdate={getLabos}
+            dispatch={dispatch}
+            fromDate={isStartDateInValide}
+            toDate={isENdDAteInValide}
+          />
+          <RegionChart
+            rows={city}
+            tableUpdate={getCity}
+            dispatch={dispatch}
+            fromDate={isStartDateInValide}
+            toDate={isENdDAteInValide}
+          />
           <PharmaciesChart
             rows={pharmas}
             tableUpdate={getPharmas}
             dispatch={dispatch}
-            fromDate={startDate || ''}
-            toDate={endDate || ''}
+            fromDate={isStartDateInValide}
+            toDate={isENdDAteInValide}
             printPharma={printPharma}
             getPrintPharama={getPrintPharama}
           />
