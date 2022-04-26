@@ -34,10 +34,12 @@ const Statistiques = ({ classes, articles, dispatch, pharmas, labos, city, print
   const [endDate, setEndDate] = useState(null);
 
   const handleSearch = () => {
-    dispatch(getArticles(`?from=${startDate}&to=${endDate}`));
-    dispatch(getPharmas(`?from=${startDate}&to=${endDate}`));
-    dispatch(getLabos(`?from=${startDate}&to=${endDate}`));
-    dispatch(getCity(`?from=${startDate}&to=${endDate}`));
+    const isStartDateInValide = startDate === 'Invalid date' ? '' : startDate;
+    const isENdDAteInValide = endDate === 'Invalid date' ? '' : endDate;
+    dispatch(getArticles(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
+    dispatch(getPharmas(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
+    dispatch(getLabos(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
+    dispatch(getCity(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
   };
 
   return (
