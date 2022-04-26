@@ -29,13 +29,9 @@ const Statistiques = ({ classes, articles, dispatch, pharmas, labos, city, print
 
   // set the start date last month by default
 
-  const [startDate, setStartDate] = useState(lastMonthDate);
+  const [startDate, setStartDate] = useState(null);
   //
-  const [endDate, setEndDate] = useState(
-    moment(new Date(), 'YYYY-MM-DD')
-      .format()
-      .split('T')[0],
-  );
+  const [endDate, setEndDate] = useState(null);
 
   const handleSearch = () => {
     dispatch(getArticles(`?from=${startDate}&to=${endDate}`));
@@ -60,15 +56,21 @@ const Statistiques = ({ classes, articles, dispatch, pharmas, labos, city, print
         <Divider variant="middle" className={classes.divider} />
 
         <div className={classes.container}>
-          <ArticleChart rows={articles} tableUpdate={getArticles} dispatch={dispatch} fromDate={startDate} toDate={endDate} />
-          <LaboChart rows={labos} tableUpdate={getLabos} dispatch={dispatch} fromDate={startDate} toDate={endDate} />
-          <RegionChart rows={city} tableUpdate={getCity} dispatch={dispatch} fromDate={startDate} toDate={endDate} />
+          <ArticleChart
+            rows={articles}
+            tableUpdate={getArticles}
+            dispatch={dispatch}
+            fromDate={startDate || ''}
+            toDate={endDate || ''}
+          />
+          <LaboChart rows={labos} tableUpdate={getLabos} dispatch={dispatch} fromDate={startDate || ''} toDate={endDate || ''} />
+          <RegionChart rows={city} tableUpdate={getCity} dispatch={dispatch} fromDate={startDate || ''} toDate={endDate || ''} />
           <PharmaciesChart
             rows={pharmas}
             tableUpdate={getPharmas}
             dispatch={dispatch}
-            fromDate={startDate}
-            toDate={endDate}
+            fromDate={startDate || ''}
+            toDate={endDate || ''}
             printPharma={printPharma}
             getPrintPharama={getPrintPharama}
           />
