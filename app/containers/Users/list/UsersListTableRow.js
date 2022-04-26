@@ -19,6 +19,11 @@ import UserListConsult from '../consultlistuser/UserListConsult';
 import authenticated from '../../HOC/authenticated/authenticated';
 import UpdateUserForm from '../Edit/UpdateUserForm';
 import { formatCityToLabelValue } from '../add/utils';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+
+import { withStyles } from '@material-ui/core/styles';
+import { getUserInfo } from '../actions';
 
 const closeButton = { float: 'right' };
 
@@ -48,6 +53,7 @@ export class UsersListTableRow extends React.PureComponent {
     super(props);
     this.state = {
       ...initialState,
+      userRow: {},
     };
   }
 
@@ -69,10 +75,22 @@ export class UsersListTableRow extends React.PureComponent {
     });
   };
 
-  openDetails = () => {
-    this.setState({
-      detailsOpen: true,
-    });
+  openDetails = id => () => {
+    this.props.dispatch(
+      getUserInfo({
+        callback: (err, data) => {
+          if (!err) {
+            this.setState({
+              userRow: data,
+              detailsOpen: true,
+            });
+            return;
+          }
+          console.log(err);
+        },
+        id,
+      }),
+    );
   };
 
   handleSubmitEdit = e => {
@@ -133,7 +151,7 @@ export class UsersListTableRow extends React.PureComponent {
             {row.firstName} {row.lastName}
           </TableCell>
           <TableCell>{row.email}</TableCell>
-          <TableCell>{row.pharmacie && row.pharmacie.denomination}</TableCell>
+          <TableCell>{row.pharmacy}</TableCell>
           <TableCell>{row.role}</TableCell>
           <TableCell>{row.lastCommad ? row.lastCommad.split('T')[0] : 'no Commands'}</TableCell>
           <TableCell style={{ padding: 0 }}>
@@ -143,7 +161,7 @@ export class UsersListTableRow extends React.PureComponent {
               </IconButton>
             </Tooltip>
             <Tooltip placement="top" title="Consulter">
-              <IconButton onClick={this.openDetails} style={{ padding: 5 }}>
+              <IconButton onClick={this.openDetails(row.id)} style={{ padding: 5 }}>
                 <Search color="secondary" />
               </IconButton>
             </Tooltip>
@@ -171,7 +189,7 @@ export class UsersListTableRow extends React.PureComponent {
               </IconButton>
             </MuiDialogTitle>
             <MuiDialogContent>
-              <UserListConsult row={row} />
+              <UserListConsult row={this.state.userRow} />
             </MuiDialogContent>
           </Dialog>
         )}
@@ -206,4 +224,21 @@ UsersListTableRow.propTypes = {
   resetUser: PropTypes.func.isRequired,
 };
 
-export default compose(authenticated)(UsersListTableRow);
+const styles = theme => ({});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+const mapStateToProps = createStructuredSelector({});
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(
+  authenticated,
+  withConnect,
+  withStyles(styles),
+)(UsersListTableRow);

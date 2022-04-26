@@ -5,13 +5,27 @@ import { withStyles } from '@material-ui/core';
 import { CalendarToday } from '@material-ui/icons';
 import moment from 'moment';
 
-const DateInput = ({ classes, label, onChange, value = null }) => {
+const DateInput = props => {
+  const {
+    classes,
+    label,
+    onChange,
+    value = null,
+    min,
+    fullWidth,
+    btnStyle,
+    disabled,
+    className,
+    disableContainerStyle,
+    format,
+  } = props;
+
   const [selectedDate, handleDateChange] = useState(value);
 
   useEffect(
     () => {
       onChange(
-        moment(selectedDate, 'YYYY-MM-DD')
+        moment(selectedDate, format ? format : 'YYYY-MM-DD')
           .format()
           .split('T')[0],
       );
@@ -20,21 +34,24 @@ const DateInput = ({ classes, label, onChange, value = null }) => {
   );
 
   return (
-    <div className={classes.dateInputContainer}>
+    <div className={disableContainerStyle ? classes.fullWitdh : classes.dateInputContainer}>
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <DatePicker
           clearable
-          className={classes.input}
+          className={[classes.input, className]}
           label={label}
           placeholder="Select Date"
           value={selectedDate}
           onChange={handleDateChange}
-          format="YYYY-MM-DD"
+          format={format ? format : 'YYYY-MM-DD'}
           autoOk
           InputProps={{
             endAdornment: <CalendarToday />,
+            style: btnStyle,
           }}
-          cl
+          minDate={min}
+          fullWidth={fullWidth}
+          disabled={disabled}
         />
       </MuiPickersUtilsProvider>
     </div>
@@ -47,6 +64,9 @@ const style = {
     marginLeft: 30,
   },
   input: {
+    width: '100%',
+  },
+  fullWitdh: {
     width: '100%',
   },
 };

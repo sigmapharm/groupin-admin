@@ -38,12 +38,12 @@ const FilterInputsList = ({ classes, laboratoires, regions, pharmacies, rows, di
   const [city, setCity] = useState([]);
   const [pharma, setPharma] = useState('');
   const [article, setArticle] = useState('');
-  const [dateFrom, setDateFrom] = useState(lastMonthDate);
-  const [dateTo, setDateTo] = useState(
-    moment(new Date(), 'YYYY-MM-DD')
-      .format()
-      .split('T')[0],
-  );
+  const [dateFrom, setDateFrom] = useState(null);
+  const [dateTo, setDateTo] = useState(null);
+
+  // moment(new Date(), 'YYYY-MM-DD')
+  // .format()
+  // .split('T')[0],
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedArticle, setSelectedArticle] = useState('');
 

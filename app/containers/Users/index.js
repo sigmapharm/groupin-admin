@@ -42,12 +42,13 @@ const styles = theme => ({
   root: {
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
-    overflowX: 'auto',
-    display: 'flex',
-    justifyContent: 'center',
+    maxWidth: '1200px',
+    width: '100%',
+    margin: '20px auto',
+    overflow: 'auto',
   },
-  tableWrapper: {
-    overflowX: 'auto',
+  table: {
+    minWidth: 700,
   },
   addUserButton: {
     position: 'fixed',
@@ -57,9 +58,9 @@ const styles = theme => ({
   tableHead: {
     backgroundColor: theme.palette.primary.main,
   },
-  table: {
-    width: '85%',
-  },
+  // table: {
+  //   width: '100%',
+  // },
 });
 
 export class UsersList extends React.PureComponent {
@@ -90,7 +91,7 @@ export class UsersList extends React.PureComponent {
         },
         {
           label: 'Pharmacie',
-          colName: 'pharmacy.denomination',
+          colName: 'pharmacy',
           selected: false,
           order: 'asc',
         },
@@ -285,6 +286,7 @@ export class UsersList extends React.PureComponent {
           Liste des utilisateurs
         </Typography>
         <Divider variant="middle" className={classes.root} />
+
         <UsersListSearch handleChange={this.handleChange} handleSearchUsers={this.handleSearchUsers} />
 
         <Divider variant="middle" className={classes.root} />

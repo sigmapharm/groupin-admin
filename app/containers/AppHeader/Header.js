@@ -77,7 +77,7 @@ class Header extends React.Component {
     const { username, role, region } = user || {};
     const { open } = this.state;
     const isSmallDevice = isWidthDown('md', width);
-    console.log('user', user);
+
     return (
       <AppBar className={classes.container} position={position}>
         <Toolbar className={classes.toolbar}>
@@ -87,7 +87,7 @@ class Header extends React.Component {
                 <MenuIcon />
               </IconButton>
             ) : null}
-            <img alt="logo" src={logo} style={{ width: '90px' }} onClick={() => history.push('/')} />
+            <img alt="logo" src={logo} style={{ width: '90px', cursor: 'pointer' }} onClick={() => history.push('/')} />
           </div>
 
           {isSmallDevice ? <SideBar visibale={this.state.darwerVisible} toggle={this.toggleDrawer} /> : <MyMenu user={user} />}

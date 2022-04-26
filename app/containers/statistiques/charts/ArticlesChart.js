@@ -5,7 +5,8 @@ import { withStyles, Paper } from '@material-ui/core';
 import ChartTable from '../Table/index';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
-
+import _ from 'lodash';
+import { formatNumber } from '../../../utils/formatNumber';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export const options = {
@@ -50,7 +51,7 @@ function LineChart(props) {
   } = props;
 
   const _labels = _.map(content, row => {
-    return row.designation;
+    return row.designation.slice(0, 20);
   });
 
   const _dataSet = _.map(content, row => {
@@ -95,7 +96,7 @@ function LineChart(props) {
             <TableRow key={index}>
               <TableCell>{row.designation}</TableCell>
               <TableCell>{row.articlesCommandes}</TableCell>
-              <TableCell>{row.ca}</TableCell>
+              <TableCell>{formatNumber.format(row.ca)}</TableCell>
             </TableRow>
           );
         })}

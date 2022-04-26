@@ -5,6 +5,8 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import { Bar } from 'react-chartjs-2';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+import _ from 'lodash';
+import { formatNumber } from '../../../utils/formatNumber';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -100,7 +102,7 @@ function LineChart(props) {
             <TableRow key={index}>
               <TableCell>{row.designation}</TableCell>
               <TableCell>{row.articlesCommandes}</TableCell>
-              <TableCell>{row.ca}</TableCell>
+              <TableCell>{formatNumber.format(row.ca)}</TableCell>
             </TableRow>
           );
         })}

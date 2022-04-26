@@ -13,7 +13,8 @@ import { createStructuredSelector } from 'reselect';
 import authenticated from '../../HOC/authenticated/authenticated';
 import { selectPrintPharma } from '../selectors';
 import { getPrintPharama } from '../actions';
-
+import _ from 'lodash';
+import { formatNumber } from '../../../utils/formatNumber';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const options = {
@@ -143,7 +144,7 @@ function LineChart(props) {
             <TableRow key={index}>
               <TableCell>{row.designation}</TableCell>
               <TableCell>{row.articlesCommandes}</TableCell>
-              <TableCell>{row.ca}</TableCell>
+              <TableCell>{formatNumber.format(row.ca)}</TableCell>
             </TableRow>
           );
         })}

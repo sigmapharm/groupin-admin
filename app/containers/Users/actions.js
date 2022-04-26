@@ -12,6 +12,8 @@ import {
   GET_PROFILE,
   PUT_USER_PROFILE,
   RESET_PASSWORD_SUCCESS,
+  GET_USER_INFO,
+  PUT_USER_INFO,
 } from './constants';
 
 const getUsersList = (values, callback) => ({
@@ -95,11 +97,14 @@ export const putUserProfile = values => ({
   payload: { ...values },
 });
 
-export {
-  toggleUser,
-  getUsersList,
-  putUsersList,
-  manageCreateUserResponse,
-  manageUpdateserResponse,
-  resetPasswordSuccess,
-};
+export const getUserInfo = payload => ({
+  type: GET_USER_INFO,
+  payload,
+});
+
+export const putUserInfo = payload => ({
+  type: PUT_USER_INFO,
+  payload,
+});
+
+export { toggleUser, getUsersList, putUsersList, manageCreateUserResponse, manageUpdateserResponse, resetPasswordSuccess };
