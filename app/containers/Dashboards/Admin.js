@@ -60,11 +60,11 @@ const Admin = ({ classes, dispatch, statistics, userRole }) => {
           </Grid>
           <Grid item lg={3} md={12} sm={12} xs={12}>
             <div className={classes.container}>
-              <Card title="Articales" items={[{ label: 'Total', value: statistics.totalArticle }]} backgroundColor="#FFCC3F" />
+              <Card title="Nbr Articles" items={[{ label: 'Total', value: statistics.totalArticle }]} backgroundColor="#FFCC3F" />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard title="Nbr fournisseur" backgroundColor="#FF92A5" value={statistics.totalFournisseur} />
+              <SmallCard title="Nbr fournisseurs" backgroundColor="#FF92A5" value={statistics.totalFournisseur} />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard title="Nbr commande" backgroundColor="#4F51C0" value={statistics.totalCommande} />
+              <SmallCard title="Nbr commandes" backgroundColor="#4F51C0" value={statistics.totalCommande} />
               <div style={{ marginBottom: '10px' }} />
               <SmallCard title="CA commandée" backgroundColor="#BAA2F8" value={formatNumber.format(statistics.totalCACommande)} />
               <div style={{ marginBottom: '10px' }} />
