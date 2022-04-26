@@ -122,15 +122,15 @@ export function LoginForm(props) {
             <InputLabel htmlFor="password">Mot de passe</InputLabel>
             <Input name="password" value={password} type="password" onChange={handleChange} error={error} />
           </FormControl>
-          <div className={classes.resetPassword}>
+          <br />
+          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} onClick={onSubmit}>
+            {"S'authentifier"}
+          </Button>
+          <div className={classes.resetPassword} style={{ marginTop: 7 }}>
             <a href="#" className={classes.resetLink} onClick={handleOpen}>
               mot passe oublié ?
             </a>
           </div>
-          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} onClick={onSubmit}>
-            {"S'authentifier"}
-          </Button>
-          <br />
         </div>
         <div className={classes.slides}>
           <SwipeableTextMobileStepper />
