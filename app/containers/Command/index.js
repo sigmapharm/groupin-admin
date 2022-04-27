@@ -347,6 +347,26 @@ class Command extends PureComponent {
     });
   };
 
+  printFacture = row => () => {
+    const { downloadCommandForm } = this.props;
+    downloadCommandForm({
+      commandId: row.commandId,
+      callback: (err, blob) => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title: " La génération du pdf à échoué merci de contacter l'administrateur",
+            },
+          });
+        } else {
+          const pdfBlob = new Blob([blob], { type: blob.type });
+          saveAs(pdfBlob, `${row.laboratoryName}/${moment(row.creationDate).format('DD/MM/YYYY')}/${row.commandId}`);
+        }
+      },
+    });
+  };
+
   closeCommandDetail = () => {
     const { clearCommandArticles } = this.props;
     clearCommandArticles();
@@ -638,6 +658,7 @@ class Command extends PureComponent {
                 canDelete={!this.canGroup}
                 disableClientEditCommand={this.disableGroupingBtn}
                 clearCommandArticles={this.props.clearCommandArticles}
+                printFacture={this.printFacture}
               />
             )}
             <GeneriqueDialog open={showPopConfirmation} {...popConfirmationParams} />

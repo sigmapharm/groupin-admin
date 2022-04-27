@@ -9,6 +9,8 @@ import {
   LOAD_COMMAND_ARTICLES_SUCCESS,
   LOAD_COMMANDS_WITH_FILTERS_SUCCESS,
   UPDATE_COMMAND_DETAIL_SUCCESS,
+  GET_DOWNLOAD_FACTURE_FORM,
+  PUT_DOWNLOAD_FACTURE_FORM,
 } from './actions';
 import _ from 'lodash';
 
@@ -21,6 +23,7 @@ export const initialState = fromJS({
   },
   commandArticlesDetail: [],
   subCommands: [],
+  facturePdf: {},
 });
 
 function reducer(state = initialState, action) {
@@ -38,13 +41,11 @@ function reducer(state = initialState, action) {
     case COPY_QUANTITIES_INTO_MODIFIED_QUANTITES: {
       const commandArticlesDetail = state.get('commandArticlesDetail').toJS();
       return state.merge({
-        commandArticlesDetail: commandArticlesDetail.map(
-          ({ quantity, modifiedQuantity, ...e }) => ({
-            ...e,
-            quantity,
-            modifiedQuantity: quantity,
-          }),
-        ),
+        commandArticlesDetail: commandArticlesDetail.map(({ quantity, modifiedQuantity, ...e }) => ({
+          ...e,
+          quantity,
+          modifiedQuantity: quantity,
+        })),
       });
     }
     case UPDATE_COMMAND_DETAIL_SUCCESS:
@@ -59,6 +60,16 @@ function reducer(state = initialState, action) {
     case CLEAR_AGGREGATE_SUB_COMMANDS: {
       return state.merge({
         subCommands: [],
+      });
+    }
+    case GET_DOWNLOAD_FACTURE_FORM: {
+      return state.merge({
+        ...action.payload,
+      });
+    }
+    case PUT_DOWNLOAD_FACTURE_FORM: {
+      return state.merge({
+        facturePdf: action.payload,
       });
     }
     case CHANGE_COMMAND_ARTICLE: {
