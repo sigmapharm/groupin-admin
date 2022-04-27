@@ -29,19 +29,18 @@ const Statistiques = ({ classes, articles, dispatch, pharmas, labos, city, print
 
   // set the start date last month by default
 
-  const [startDate, setStartDate] = useState(lastMonthDate);
+  const [startDate, setStartDate] = useState(null);
   //
-  const [endDate, setEndDate] = useState(
-    moment(new Date(), 'YYYY-MM-DD')
-      .format()
-      .split('T')[0],
-  );
+  const [endDate, setEndDate] = useState(null);
+
+  const isStartDateInValide = startDate === 'Invalid date' ? '' : startDate;
+  const isENdDAteInValide = endDate === 'Invalid date' ? '' : endDate;
 
   const handleSearch = () => {
-    dispatch(getArticles(`?from=${startDate}&to=${endDate}`));
-    dispatch(getPharmas(`?from=${startDate}&to=${endDate}`));
-    dispatch(getLabos(`?from=${startDate}&to=${endDate}`));
-    dispatch(getCity(`?from=${startDate}&to=${endDate}`));
+    dispatch(getArticles(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
+    dispatch(getPharmas(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
+    dispatch(getLabos(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
+    dispatch(getCity(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
   };
 
   return (
@@ -60,15 +59,33 @@ const Statistiques = ({ classes, articles, dispatch, pharmas, labos, city, print
         <Divider variant="middle" className={classes.divider} />
 
         <div className={classes.container}>
-          <ArticleChart rows={articles} tableUpdate={getArticles} dispatch={dispatch} fromDate={startDate} toDate={endDate} />
-          <LaboChart rows={labos} tableUpdate={getLabos} dispatch={dispatch} fromDate={startDate} toDate={endDate} />
-          <RegionChart rows={city} tableUpdate={getCity} dispatch={dispatch} fromDate={startDate} toDate={endDate} />
+          <ArticleChart
+            rows={articles}
+            tableUpdate={getArticles}
+            dispatch={dispatch}
+            fromDate={isStartDateInValide}
+            toDate={isENdDAteInValide}
+          />
+          <LaboChart
+            rows={labos}
+            tableUpdate={getLabos}
+            dispatch={dispatch}
+            fromDate={isStartDateInValide}
+            toDate={isENdDAteInValide}
+          />
+          <RegionChart
+            rows={city}
+            tableUpdate={getCity}
+            dispatch={dispatch}
+            fromDate={isStartDateInValide}
+            toDate={isENdDAteInValide}
+          />
           <PharmaciesChart
             rows={pharmas}
             tableUpdate={getPharmas}
             dispatch={dispatch}
-            fromDate={startDate}
-            toDate={endDate}
+            fromDate={isStartDateInValide}
+            toDate={isENdDAteInValide}
             printPharma={printPharma}
             getPrintPharama={getPrintPharama}
           />

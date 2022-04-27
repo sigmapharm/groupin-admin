@@ -27,7 +27,7 @@ function ChartTable(props) {
   };
 
   useEffect(() => {
-    dispatch(tableUpdate(`?from=${fromDate}&to=${toDate}`));
+    dispatch(tableUpdate(`?from=&to=`));
   }, []);
 
   const handleChangeRowsPerPage = event => {

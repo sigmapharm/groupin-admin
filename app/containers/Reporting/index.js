@@ -10,6 +10,8 @@ import { selectRegions, makeSelectLaboratoires, makeSelectPharmacies } from '../
 import * as _ from 'lodash';
 import FilterInputsList from './inputsList/FilterInputsList';
 import ReportingTable from './tables/Table';
+import { formatNumber } from '../../utils/formatNumber';
+import { getLaboratoires, getPharmacies, getRegions } from '../App/actions';
 
 const Reporting = props => {
   // props
@@ -18,7 +20,11 @@ const Reporting = props => {
   useEffect(() => {
     dispatch(getReporting());
     dispatch(getReportingCA());
+    dispatch(getRegions());
+    dispatch(getLaboratoires());
   }, []);
+
+  console.log(laboratoires);
 
   return (
     <div className={classes.root}>
@@ -38,7 +44,7 @@ const Reporting = props => {
       <div>
         <Typography component="h1" variant="h5" className={classes.title}>
           chiffre d'affaires Total / {laboratoires.length} laboratoires :
-          {typeof reportingCa === 'number' ? ` ${reportingCa.toFixed(2)}  MAD` : ' loading...'}
+          {typeof reportingCa === 'number' ? ` ${formatNumber.format(reportingCa)} ` : ' loading...'}
         </Typography>
         <Divider variant="middle" className={classes.divider} />
         <ReportingTable rows={reporting} />
@@ -49,7 +55,7 @@ const Reporting = props => {
   );
 };
 
-// styles
+// stylesreportingCa.toFixed(2)
 
 const styles = theme => ({
   root: {

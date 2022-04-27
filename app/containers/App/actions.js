@@ -62,10 +62,13 @@ export const setPharmacies = values => ({
   payload: values,
 });
 
-export const setRegions = values => ({
-  type: SET_REGIONS,
-  payload: values,
-});
+export const setRegions = values => {
+  console.log('reg', values);
+  return {
+    type: SET_REGIONS,
+    payload: values,
+  };
+};
 
 export const setVilles = values => ({
   type: SET_VILLES,

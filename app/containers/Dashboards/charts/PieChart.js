@@ -25,8 +25,11 @@ const PieChart = ({ data, labels, label }) => {
           labels: { usePointStyle: true },
           title: {
             display: true,
-            align: 'start',
+            align: 'top',
             text: label,
+            padding: {
+              bottom: 10,
+            },
           },
         },
       }}

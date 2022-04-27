@@ -42,16 +42,13 @@ const styles = theme => ({
   root: {
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 3,
-    overflowX: 'auto',
-    display: 'flex',
-    justifyContent: 'center',
+    maxWidth: '1200px',
+    width: '100%',
+    margin: '20px auto',
+    overflow: 'auto',
   },
-  tableWrapper: {
-    width: '80%',
-    marginTop: theme.spacing.unit * 3,
-    marginBottom: theme.spacing.unit * 3,
-    overflowX: 'auto',
-    marginLeft: '10%',
+  table: {
+    minWidth: 700,
   },
   addUserButton: {
     position: 'fixed',
@@ -61,9 +58,9 @@ const styles = theme => ({
   tableHead: {
     backgroundColor: theme.palette.primary.main,
   },
-  table: {
-    width: '100%',
-  },
+  // table: {
+  //   width: '100%',
+  // },
 });
 
 export class UsersList extends React.PureComponent {
@@ -285,10 +282,11 @@ export class UsersList extends React.PureComponent {
     const formatedCities = cities.map(formatCityToLabelValue);
     return (
       <div>
-        <Typography component="h1" variant="h4" className={classes.tableWrapper}>
+        <Typography component="h1" variant="h4" className={classes.root}>
           Liste des utilisateurs
         </Typography>
         <Divider variant="middle" className={classes.root} />
+
         <UsersListSearch handleChange={this.handleChange} handleSearchUsers={this.handleSearchUsers} />
 
         <Divider variant="middle" className={classes.root} />
@@ -297,7 +295,7 @@ export class UsersList extends React.PureComponent {
           {totalElements} utilisateurs trouvés
         </Typography>
 
-        <Paper className={classes.tableWrapper}>
+        <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead className={classes.tableHead}>
               <TableRow>
