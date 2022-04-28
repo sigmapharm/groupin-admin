@@ -3,18 +3,13 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import {
-  changeOfferArticle,
-  clearOffer,
-  loadArticleOffer,
-  submitClientCommand,
-} from '../actions';
+import { changeOfferArticle, clearOffer, loadArticleOffer, submitClientCommand } from '../actions';
 import { selectOfferArticleList } from '../selectors';
 import _ from 'lodash';
 import history from 'utils/history';
 
-const Demande = ({ offer, offerArticles, dispatch, ...props }) => {
-  console.log('offerArticles', offerArticles);
+const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDiscount, ...props }) => {
+  console.log('offerArticles', offer);
   const [error, setError] = useState('');
   useEffect(() => {
     dispatch(loadArticleOffer({ id: offer.id }));
@@ -42,31 +37,43 @@ const Demande = ({ offer, offerArticles, dispatch, ...props }) => {
   };
 
   const handleSubmit = () => {
-    dispatch(
-      submitClientCommand(
-        { offerId: offer.id, offerArticles },
-        handleSubmitResponse,
-      ),
-    );
+    dispatch(submitClientCommand({ offerId: offer.id, offerArticles }, handleSubmitResponse));
   };
+  // const allowCommandSubmit = () => {
+  //   return offerArticles.filter(({ quantity, minQuantity }) => quantity >= minQuantity).length > 0 &&
+  //     offerArticles.filter(({ quantity }) => quantity > 0).every(({ hasError }) => hasError === false)
+  //     ? true
+  //     : false;
+  // };
+
   const allowCommandSubmit = () => {
-    return offerArticles.filter(
-      ({ quantity, minQuantity }) => quantity >= minQuantity,
-    ).length > 0 &&
-      offerArticles
-        .filter(({ quantity }) => quantity > 0)
-        .every(({ hasError }) => hasError === false)
-      ? true
-      : false;
+    const { totalRemise, row } = props;
+    const isAllowed =
+      offerArticles.filter(({ quantity, minQuantity }) => quantity >= minQuantity).length > 0 &&
+      offerArticles.filter(({ quantity }) => quantity > 0).every(({ hasError }) => hasError === false)
+        ? true
+        : false;
+
+    console.log('row.minToOrder', row.minToOrder);
+
+    const isEqual = totalRemise === parseInt(row.minToOrder) ? true : false;
+
+    const isGreater = totalRemise > parseInt(row.minToOrder) ? true : false;
+
+    if (!row.minToOrder) {
+      return isAllowed;
+    }
+
+    if (isAllowed && (isEqual || isGreater)) {
+      return false;
+    }
+
+    return true;
   };
-  const total = _.sumBy(
-    offerArticles,
-    ({ quantity, pph }) => pph * quantity || 0,
-  ).toFixed(2);
+  const total = _.sumBy(offerArticles, ({ quantity, pph }) => pph * quantity || 0).toFixed(2);
   const discount = _.sumBy(
     offerArticles,
-    ({ quantity, computedPPH, pph }) =>
-      quantity ? quantity * pph - quantity * computedPPH : 0,
+    ({ quantity, computedPPH, pph }) => (quantity ? quantity * pph - quantity * computedPPH : 0),
   ).toFixed(2);
   return (
     <div>
@@ -115,28 +122,31 @@ const Demande = ({ offer, offerArticles, dispatch, ...props }) => {
             </div>
           </div>
           {total > 0 && (
-            <div style={{ ...styles.row }}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Typography
-                  color="textSecondary"
-                  variant="h6"
-                  style={{ marginRight: '10px' }}
-                >
-                  Total:
-                </Typography>
-                <Typography variant="h6">{total}</Typography>
+            <>
+              <div style={{ ...styles.row }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography color="textSecondary" variant="h6" style={{ marginRight: '10px' }}>
+                    Total remisé:
+                  </Typography>
+                  <Typography variant="h6">
+                    {/* {total} */}
+                    {totalWidthGlobalDiscount}
+                  </Typography>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography color="textSecondary" variant="h6" style={{ marginRight: '10px' }}>
+                    Total gain:
+                  </Typography>
+                  <Typography variant="h6">{totalGain}</Typography>
+                </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Typography
-                  color="textSecondary"
-                  variant="h6"
-                  style={{ marginRight: '10px' }}
-                >
-                  Total remise:
+                <Typography color="textSecondary" variant="h6" style={{ marginRight: '10px' }}>
+                  Min à commander:
                 </Typography>
-                <Typography variant="h6">{discount}</Typography>
+                <Typography variant="h6">{offerArticles.minToOrder}</Typography>
               </div>
-            </div>
+            </>
           )}
         </div>
         {offerArticles &&
@@ -145,14 +155,11 @@ const Demande = ({ offer, offerArticles, dispatch, ...props }) => {
               key={article.id}
               style={{
                 ...styles.card,
-                backgroundColor: article.hasError
-                  ? '#ff000042'
-                  : i % 2 === 0
-                    ? 'white'
-                    : '#f7f7f7',
+                backgroundColor: article.hasError ? '#ff000042' : i % 2 === 0 ? 'white' : '#f7f7f7',
               }}
             >
-              {/* <div style={{ display: 'flex', marginBottom: '15px' }}>
+              {/*
+               <div style={{ display: 'flex', marginBottom: '15px' }}>
                 <Typography variant="h6" color="textSecondary">
                   Designation:
                 </Typography> */}
@@ -162,49 +169,27 @@ const Demande = ({ offer, offerArticles, dispatch, ...props }) => {
               {/* </div> */}
               <div style={styles.row}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     PPV:
                   </Typography>
-                  <Typography variant="h6">
-                    {Number(article.ppv).toFixed(2)}
-                  </Typography>
+                  <Typography variant="h6">{Number(article.ppv).toFixed(2)}</Typography>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     PPH:
                   </Typography>
-                  <Typography variant="h6">
-                    {Number(article.pph).toFixed(2)}
-                  </Typography>
+                  <Typography variant="h6">{Number(article.pph).toFixed(2)}</Typography>
                 </div>
               </div>
               <div style={styles.row}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     PPH Remise:
                   </Typography>
-                  <Typography variant="h6">
-                    {Number(article.computedPPH).toFixed(2)}
-                  </Typography>
+                  <Typography variant="h6">{Number(article.computedPPH).toFixed(2)}</Typography>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     Remise(%):
                   </Typography>
                   <Typography variant="h6">{article.discount}</Typography>
@@ -212,11 +197,7 @@ const Demande = ({ offer, offerArticles, dispatch, ...props }) => {
               </div>
               <div style={styles.row}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     Quantité Minimal:
                   </Typography>
                   <Typography variant="h6">{article.minQuantity}</Typography>
@@ -236,12 +217,7 @@ const Demande = ({ offer, offerArticles, dispatch, ...props }) => {
 
         {allowCommandSubmit() && (
           <div style={styles.button}>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              onClick={handleSubmit}
-            >
+            <Button variant="contained" color="primary" fullWidth onClick={handleSubmit}>
               Commander
             </Button>
           </div>

@@ -658,7 +658,6 @@ class Command extends PureComponent {
                 canDelete={!this.canGroup}
                 disableClientEditCommand={this.disableGroupingBtn}
                 clearCommandArticles={this.props.clearCommandArticles}
-                printFacture={this.printFacture}
               />
             )}
             <GeneriqueDialog open={showPopConfirmation} {...popConfirmationParams} />
@@ -699,6 +698,7 @@ class Command extends PureComponent {
                   blob={this.state.blobUrl}
                   isMember={this.isMember}
                   canGroup={this.canGroup}
+                  printFacture={this.printFacture}
                 />
               )}
             </Table>

@@ -43,12 +43,7 @@ const CommandListCards = ({
       name,
     });
   const allowOrderButton = ({ dateFin, dateDebut }) =>
-    moment(new Date()).isBetween(
-      new Date(dateDebut),
-      new Date(dateFin),
-      null,
-      'day',
-    );
+    moment(new Date()).isBetween(new Date(dateDebut), new Date(dateFin), null, 'day');
   return (
     <>
       <div style={styles.conatiner}>
@@ -69,82 +64,45 @@ const CommandListCards = ({
 
               <div>
                 <div style={{ display: 'flex' }}>
-                  <Typography
-                    variant="h6"
-                    color="textSecondary"
-                    style={{ marginRight: '13px' }}
-                  >
+                  <Typography variant="h6" color="textSecondary" style={{ marginRight: '13px' }}>
                     laboratoire :
                   </Typography>
                   <Typography variant="h6">{command.laboratoryName}</Typography>
                 </div>
 
                 <div style={{ display: 'flex' }}>
-                  <Typography
-                    variant="h6"
-                    color="textSecondary"
-                    style={{ marginRight: '13px' }}
-                  >
+                  <Typography variant="h6" color="textSecondary" style={{ marginRight: '13px' }}>
                     Date de debut :
                   </Typography>
-                  <Typography variant="h6">
-                    {moment(command.dateDebut).format('DD/MM/YYYY')}
-                  </Typography>
+                  <Typography variant="h6">{moment(command.dateDebut).format('DD/MM/YYYY')}</Typography>
                 </div>
 
                 <div style={{ display: 'flex' }}>
-                  <Typography
-                    variant="h6"
-                    color="textSecondary"
-                    style={{ marginRight: '13px' }}
-                  >
+                  <Typography variant="h6" color="textSecondary" style={{ marginRight: '13px' }}>
                     Montant command :
                   </Typography>
-                  <Typography variant="h6">
-                    {Number(command.totalAmount).toFixed(2)}
-                  </Typography>
+                  <Typography variant="h6">{Number(command.totalAmount).toFixed(2)}</Typography>
                 </div>
                 <div style={{ display: 'flex' }}>
-                  <Typography
-                    variant="h6"
-                    color="textSecondary"
-                    style={{ marginRight: '13px' }}
-                  >
+                  <Typography variant="h6" color="textSecondary" style={{ marginRight: '13px' }}>
                     Montant remise :
                   </Typography>
-                  <Typography variant="h6">
-                    {Number(command.totalAmountDiscount).toFixed(2)}
-                  </Typography>
+                  <Typography variant="h6">{Number(command.totalAmountDiscount).toFixed(2)}</Typography>
                 </div>
               </div>
               <div style={styles.actions}>
-                <IconButton
-                  onClick={() => handleModel(DETAILS_MODEL, command)}
-                  style={{ padding: 5 }}
-                >
+                <IconButton onClick={() => handleModel(DETAILS_MODEL, command)} style={{ padding: 5 }}>
                   <Search color="secondary" />
                 </IconButton>
-                <IconButton
-                  onClick={printCommand(command)}
-                  style={{ padding: 5 }}
-                >
+                <IconButton onClick={printCommand(command)} style={{ padding: 5 }}>
                   <PrintIcon color="primary" />
                 </IconButton>
                 <IconButton
-                  disabled={
-                    (!isAdmin && !command.canDelete) || disableClientEditCommand
-                  }
+                  disabled={(!isAdmin && !command.canDelete) || disableClientEditCommand}
                   style={{ padding: 5 }}
                   onClick={() => handleModel(ORDER_MODEL, command)}
                 >
-                  <EditIcon
-                    color={
-                      (!isAdmin && !command.canDelete) ||
-                      disableClientEditCommand
-                        ? 'disabled'
-                        : 'primary'
-                    }
-                  />
+                  <EditIcon color={(!isAdmin && !command.canDelete) || disableClientEditCommand ? 'disabled' : 'primary'} />
                 </IconButton>
 
                 {canDelete && (
@@ -155,11 +113,7 @@ const CommandListCards = ({
                     })}
                     style={{ padding: 5 }}
                   >
-                    <HighlightOff
-                      color={
-                        !isAdmin && !command.canDelete ? 'disabled' : 'error'
-                      }
-                    />
+                    <HighlightOff color={!isAdmin && !command.canDelete ? 'disabled' : 'error'} />
                   </IconButton>
                 )}
               </div>
@@ -181,11 +135,7 @@ const CommandListCards = ({
       {modelsState.name === DETAILS_MODEL && (
         <Dialog maxWidth="lg" onClose={handleModel} open fullWidth fullScreen>
           <MuiDialogTitle disableTypography>
-            <Typography
-              variant="h5"
-              color="primary"
-              style={{ display: 'flex', justifyContent: 'space-between' }}
-            >
+            <Typography variant="h5" color="primary" style={{ display: 'flex', justifyContent: 'space-between' }}>
               Détails command
               <IconButton onClick={handleModel}>
                 <CloseIcon />
@@ -200,11 +150,7 @@ const CommandListCards = ({
       {modelsState.name === ORDER_MODEL && (
         <Dialog maxWidth="lg" onClose={handleModel} open fullWidth fullScreen>
           <MuiDialogTitle disableTypography>
-            <Typography
-              variant="h5"
-              color="primary"
-              style={{ display: 'flex', justifyContent: 'space-between' }}
-            >
+            <Typography variant="h5" color="primary" style={{ display: 'flex', justifyContent: 'space-between' }}>
               Modifier command
               <IconButton onClick={handleModel}>
                 <CloseIcon />

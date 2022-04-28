@@ -235,7 +235,7 @@ class ListeArticles extends React.Component {
     const deletearticle = articlesList.content;
     return (
       <div>
-        <Typography component="h1" variant="h4" className={classes.root}>
+        <Typography component="h1" variant="h4" className={classes.root} style={{ overflow: 'hidden' }}>
           Liste des articles
         </Typography>
         <Divider variant="middle" className={classes.root} />
