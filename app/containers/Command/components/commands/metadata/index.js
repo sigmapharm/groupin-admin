@@ -10,7 +10,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import PrintIcon from '@material-ui/icons/Print';
 import Tooltip from '@material-ui/core/Tooltip';
 import ListIcon from '@material-ui/icons/List';
-import { Done } from '@material-ui/icons';
+import { Done, Receipt } from '@material-ui/icons';
 
 export default ({
   list = [],
@@ -28,6 +28,7 @@ export default ({
   blob,
   isMember,
   canGroup,
+  printFacture,
 }) => {
   return (
     <>
@@ -49,6 +50,13 @@ export default ({
                   <PrintIcon color="primary" />
                 </a>
               </Tooltip>
+              {isMember && (
+                <Tooltip placement="top" title="Imprimer la commande">
+                  <IconButton onClick={printFacture(row)} disabled={row.deliveredAt ? false : true}>
+                    <Receipt color={row.deliveredAt ? 'primary' : ''} />
+                  </IconButton>
+                </Tooltip>
+              )}
               <Tooltip placement="top" title="Modifier la commande">
                 <IconButton
                   disabled={(!isAdmin && !row.canDelete) || disableClientEditCommand}

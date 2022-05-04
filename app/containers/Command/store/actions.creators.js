@@ -71,7 +71,7 @@ export const dispatchQuantitySuccess = () => ({
   type: actionsType.DISPATCH_QUANTITY_TO_SUB_COMMANDS_SUCCESS,
 });
 
-export const loadOfferMetaData = ({offerId, callback}) => ({
+export const loadOfferMetaData = ({ offerId, callback }) => ({
   type: actionsType.LOAD_OFFER_META_DATA,
   payload: { offerId, callback },
 });
@@ -87,7 +87,17 @@ export const copyQtIntoModifiedQt = () => ({
   type: actionsType.COPY_QUANTITIES_INTO_MODIFIED_QUANTITES,
 });
 
-export const downloadCommandForm = ({commandId, callback}) => ({
+export const downloadCommandForm = ({ commandId, callback }) => ({
   type: actionsType.DOWNLOAD_COMMAND_FORM,
   payload: { commandId, callback },
+});
+
+export const getDownloadFacture = ({ commandId, callback }) => ({
+  type: actionsType.GET_DOWNLOAD_FACTURE_FORM,
+  payload: { commandId, callback },
+});
+
+export const putDownloadFacture = payload => ({
+  type: actionsType.PUT_DOWNLOAD_FACTURE_FORM,
+  payload,
 });

@@ -249,7 +249,7 @@ export class OffresList extends React.PureComponent {
 
     return (
       <div>
-        <Typography component="h1" variant="h4" className={classes.root}>
+        <Typography component="h1" variant="h4" className={classes.root} style={{ overflow: 'hidden' }}>
           Liste des offres
         </Typography>
         {/* <Divider variant="middle" className={classes.root} /> */}
@@ -274,6 +274,7 @@ export class OffresList extends React.PureComponent {
               page={page}
               handleChangePage={this.handleChangePage}
               handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+              offerArticles={this.props.offerArticles}
             />
           </div>
         ) : (

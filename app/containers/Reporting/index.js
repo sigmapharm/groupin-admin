@@ -11,6 +11,7 @@ import * as _ from 'lodash';
 import FilterInputsList from './inputsList/FilterInputsList';
 import ReportingTable from './tables/Table';
 import { formatNumber } from '../../utils/formatNumber';
+import { getLaboratoires, getPharmacies, getRegions } from '../App/actions';
 
 const Reporting = props => {
   // props
@@ -19,7 +20,11 @@ const Reporting = props => {
   useEffect(() => {
     dispatch(getReporting());
     dispatch(getReportingCA());
+    dispatch(getRegions());
+    dispatch(getLaboratoires());
   }, []);
+
+  console.log(laboratoires);
 
   return (
     <div className={classes.root}>
