@@ -7,6 +7,7 @@ import {
   LOAD_COMMAND_ARTICLES,
   LOAD_COMMANDS_WITH_FILTERS,
   UPDATE_COMMAND_DETAIL,
+  GET_DOWNLOAD_FACTURE_FORM,
 } from './actions';
 import {
   deleteCommandSuccess,
@@ -26,6 +27,20 @@ function* downloadCommandFormWorker({ payload: { commandId, callback } }) {
   yield networking(function*() {
     try {
       const blob = yield requestWithAuth(`/commands/${commandId}/print`, options, true);
+      yield callback && callback(null, blob);
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
+}
+
+function* downloadFactureWorker({ payload: { commandId, callback } }) {
+  const options = {
+    method: 'GET',
+  };
+  yield networking(function*() {
+    try {
+      const blob = yield requestWithAuth(`/commands/${commandId}/printFacture`, options, true);
       yield callback && callback(null, blob);
     } catch (e) {
       yield callback && callback(e);
@@ -165,5 +180,6 @@ export default function* commandListSagas() {
     takeLatest(UPDATE_COMMAND_DETAIL, updateClientCommandWorker),
     takeLatest(LOAD_AGGREGATE_SUB_COMMANDS, loadAggregateSubCommandsWorker),
     takeLatest(DISPATCH_QUANTITY_TO_SUB_COMMANDS, dispatchQuantityWorker),
+    takeLatest(GET_DOWNLOAD_FACTURE_FORM, downloadFactureWorker),
   ]);
 }

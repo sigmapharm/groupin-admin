@@ -226,8 +226,6 @@ export class OffresListTableRow extends React.PureComponent {
 
     const GLobalDiscount = parseFloat(totalRemise) * (parseFloat(row.globalDiscount) / 100);
 
-    console.log('totalRemise', totalRemise, 'GLobalDiscount', GLobalDiscount);
-
     let totalWidthGlobalDiscount = totalRemise - GLobalDiscount;
     const totalGain = (total - totalWidthGlobalDiscount).toFixed(2);
 

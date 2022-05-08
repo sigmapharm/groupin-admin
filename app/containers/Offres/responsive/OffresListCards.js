@@ -24,27 +24,51 @@ const DETAILS_MODEL = 'details';
 const ORDER_MODEL = 'commande';
 
 const OffresListCards = ({
-  offresList,
+  offerArticles,
   totalElements,
   handleChangeRowsPerPage,
   page,
   rowsPerPage,
   handleChangePage,
+  offresList,
 }) => {
+  //
   const [modelsState, setModelsState] = useState({ name: '', data: null });
 
-  const handleModel = (name = '', data = null) =>
+  const [selectedOffre, setSelectedOffre] = useState(null);
+
+  const handleModel = (name = '', data = null) => {
     setModelsState({
       data,
       name,
     });
+
+    setSelectedOffre(data);
+  };
   const allowOrderButton = ({ dateFin, dateDebut }) =>
-    moment(new Date()).isBetween(
-      new Date(dateDebut),
-      new Date(dateFin),
-      null,
-      'day',
-    );
+    moment(new Date()).isBetween(new Date(dateDebut), new Date(dateFin), null, 'day');
+
+  const totalRemise = _.sumBy(offerArticles, ({ quantity, computedPPH, tva }) => {
+    const RemiseCalc = computedPPH * quantity;
+
+    const calcTva = (tva / 100) * RemiseCalc;
+
+    return parseFloat(calcTva) + parseFloat(RemiseCalc) || 0;
+  });
+
+  let total = _.sumBy(offerArticles, ({ quantity, pph, tva }) => pph * quantity + pph * quantity * (tva / 100) || 0);
+
+  console.log(selectedOffre);
+
+  const GLobalDiscount = parseFloat(totalRemise) * (parseFloat(selectedOffre ? selectedOffre.globalDiscount : 0) / 100);
+
+  let totalWidthGlobalDiscount = totalRemise - GLobalDiscount;
+  const totalGain = (total - totalWidthGlobalDiscount).toFixed(2);
+
+  //arrondir les valeurs
+  totalWidthGlobalDiscount = totalWidthGlobalDiscount.toFixed(2);
+  total = total.toFixed(2);
+
   return (
     <>
       <div style={styles.conatiner}>
@@ -67,35 +91,21 @@ const OffresListCards = ({
 
               <div>
                 <div style={{ display: 'flex' }}>
-                  <Typography
-                    variant="h6"
-                    color="textSecondary"
-                    style={{ marginRight: '13px' }}
-                  >
+                  <Typography variant="h6" color="textSecondary" style={{ marginRight: '13px' }}>
                     laboratoire :
                   </Typography>
                   <Typography variant="h6">{offre.laboratoryName}</Typography>
                 </div>
 
                 <div style={{ display: 'flex' }}>
-                  <Typography
-                    variant="h6"
-                    color="textSecondary"
-                    style={{ marginRight: '13px' }}
-                  >
+                  <Typography variant="h6" color="textSecondary" style={{ marginRight: '13px' }}>
                     Date de debut :
                   </Typography>
-                  <Typography variant="h6">
-                    {moment(offre.dateDebut).format('DD/MM/YYYY')}
-                  </Typography>
+                  <Typography variant="h6">{moment(offre.dateDebut).format('DD/MM/YYYY')}</Typography>
                 </div>
 
                 <div style={{ display: 'flex' }}>
-                  <Typography
-                    variant="h6"
-                    color="textSecondary"
-                    style={{ marginRight: '13px' }}
-                  >
+                  <Typography variant="h6" color="textSecondary" style={{ marginRight: '13px' }}>
                     Date de fin :
                   </Typography>
                   <Typography variant="h6">
@@ -112,10 +122,7 @@ const OffresListCards = ({
                 </div>
               </div>
               <div style={styles.actions}>
-                <IconButton
-                  onClick={() => handleModel(DETAILS_MODEL, offre)}
-                  style={{ padding: 5 }}
-                >
+                <IconButton onClick={() => handleModel(DETAILS_MODEL, offre)} style={{ padding: 5 }}>
                   <Search color="secondary" />
                 </IconButton>
                 <WithRoles roles={[MEMBRE]}>
@@ -124,11 +131,7 @@ const OffresListCards = ({
                     onClick={() => handleModel(ORDER_MODEL, offre)}
                     style={{ padding: 5 }}
                   >
-                    <ShoppingCart
-                      color={
-                        !allowOrderButton(offre) ? 'disabled' : 'secondary'
-                      }
-                    />
+                    <ShoppingCart color={!allowOrderButton(offre) ? 'disabled' : 'secondary'} />
                   </IconButton>
                 </WithRoles>
               </div>
@@ -150,11 +153,7 @@ const OffresListCards = ({
       {modelsState.name === DETAILS_MODEL && (
         <Dialog maxWidth="lg" onClose={handleModel} open fullWidth fullScreen>
           <MuiDialogTitle disableTypography>
-            <Typography
-              variant="h5"
-              color="primary"
-              style={{ display: 'flex', justifyContent: 'space-between' }}
-            >
+            <Typography variant="h5" color="primary" style={{ display: 'flex', justifyContent: 'space-between' }}>
               Détails offre
               <IconButton onClick={handleModel}>
                 <CloseIcon />
@@ -169,11 +168,7 @@ const OffresListCards = ({
       {modelsState.name === ORDER_MODEL && (
         <Dialog maxWidth="lg" onClose={handleModel} open fullWidth fullScreen>
           <MuiDialogTitle disableTypography>
-            <Typography
-              variant="h5"
-              color="primary"
-              style={{ display: 'flex', justifyContent: 'space-between' }}
-            >
+            <Typography variant="h5" color="primary" style={{ display: 'flex', justifyContent: 'space-between' }}>
               Demande offre
               <IconButton onClick={handleModel}>
                 <CloseIcon />
@@ -181,7 +176,13 @@ const OffresListCards = ({
             </Typography>
           </MuiDialogTitle>
           <MuiDialogContent style={{ padding: '0' }}>
-            <Demande offer={modelsState.data} />
+            <Demande
+              offer={modelsState.data}
+              totalRemise={totalRemise}
+              row={selectedOffre}
+              totalWidthGlobalDiscount={totalWidthGlobalDiscount}
+              totalGain={totalGain}
+            />
           </MuiDialogContent>
         </Dialog>
       )}
