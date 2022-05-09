@@ -30,8 +30,8 @@ export default [
   {
     label: "Chiffre d'affaires",
     colName: 'ca',
-    selected: false,
-    order: 'asc',
+    selected: true,
+    order: 'desc',
     id: 'ca',
   },
 ];

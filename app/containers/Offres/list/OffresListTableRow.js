@@ -2,6 +2,7 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import _ from 'lodash';
 import EditIcon from '@material-ui/icons/Edit';
+import { Settings } from '@material-ui/icons';
 import HighlightOff from '@material-ui/icons/HighlightOff';
 import ListIcon from '@material-ui/icons/List';
 import Search from '@material-ui/icons/Search';
@@ -28,6 +29,9 @@ import { clearOffer, cloneOffer, closeOffer, deleteOffer, selectOffer } from '..
 import GeneriqueDialog from '../../../components/Alert';
 import InfoBar from '../../../components/Snackbar/InfoBar';
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
+import { formatNumber } from '../../../utils/formatNumber';
+import { DropDown } from '../../../components/DropDown';
+import { ListItemIcon, MenuItem } from '@material-ui/core';
 
 const closeStyle = {
   float: 'right',
@@ -45,6 +49,7 @@ export class OffresListTableRow extends React.PureComponent {
       showInfoBar: false,
       infoBarParams: {},
       montantObjectif: 0,
+      open: false,
     };
   }
   openPopConfirmation = ({ title, textContent, onClose, onSubmit }) => {
@@ -160,6 +165,13 @@ export class OffresListTableRow extends React.PureComponent {
       );
   };
 
+  toggleProfileMenu = e => {
+    this.setState({
+      anchorEl: e.currentTarget,
+      open: true,
+    });
+  };
+
   duplicateOffer = () => {
     const {
       row: { id },
@@ -257,47 +269,72 @@ export class OffresListTableRow extends React.PureComponent {
               : 'Offre clôturée !'}
           </TableCell>
           <TableCell style={{ ...tableCellsWidth, padding: 0, textAlign: 'center' }}>
-            <Tooltip placement="top" title="Consulter">
+            <WithRoles roles={[MEMBRE]}>
+              <IconButton disabled={!this.allowOrderButton} onClick={() => this.command(row)} style={{ padding: 5 }}>
+                <ShoppingCart color={!this.allowOrderButton ? 'disabled' : 'secondary'} />
+              </IconButton>
               <IconButton onClick={this.showDetails} style={{ padding: 5 }}>
                 <Search color="secondary" />
               </IconButton>
-            </Tooltip>
-            <WithRoles roles={[MEMBRE]}>
-              <Tooltip placement="top" title="Commander">
-                <IconButton disabled={!this.allowOrderButton} onClick={() => this.command(row)} style={{ padding: 5 }}>
-                  <ShoppingCart color={!this.allowOrderButton ? 'disabled' : 'secondary'} />
-                </IconButton>
-              </Tooltip>
             </WithRoles>
+
             <WithRoles roles={[ADMIN, SUPER_ADMIN]}>
-              <Tooltip placement="top" title="Modifier">
-                <IconButton disabled={!this.canEdit(row)} onClick={this.edit} style={{ padding: 5 }}>
-                  <EditIcon color={this.canEdit(row) ? 'primary' : 'disabled'} />
-                </IconButton>
-              </Tooltip>
-              <Tooltip placement="top" title="Annuler">
-                <IconButton disabled={!this.canDelete(row)} onClick={this.performDelete} style={{ padding: 5 }}>
-                  <HighlightOff color={this.canDelete(row) ? 'error' : 'disabled'} />
-                </IconButton>
-              </Tooltip>
-              <Tooltip placement="top" title="Clôturer l'offre">
-                <IconButton disabled={!this.canCloseOffer} onClick={this.performCloseOffer} style={{ padding: 5 }}>
-                  <DealOffIcon color={this.canCloseOffer ? 'primary' : 'disabled'} />
-                </IconButton>
-              </Tooltip>
-              <Tooltip placement="top" title="List des commands">
-                <IconButton onClick={this.goToSubCommands(row)} style={{ padding: 5 }}>
-                  <ListIcon color="primary" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip placement="top" title="Dupliquer une offre">
-                <IconButton onClick={this.performCloneOffer} style={{ padding: 5 }}>
-                  <CloneIcon color="primary" />
-                </IconButton>
-              </Tooltip>
+              <IconButton
+                buttonRef={node => {
+                  this.anchorEl = node;
+                }}
+                onClick={this.toggleProfileMenu}
+              >
+                <Settings />
+              </IconButton>
             </WithRoles>
           </TableCell>
         </TableRow>
+        <DropDown open={this.state.open} anchorEl={this.state.anchorEl} handleClose={() => this.setState({ open: false })}>
+          <WithRoles roles={[ADMIN, SUPER_ADMIN]}>
+            <MenuItem onClick={this.showDetails}>
+              <ListItemIcon style={{ padding: 5 }}>
+                <Search color="secondary" />
+              </ListItemIcon>
+              <Typography>Consulter</Typography>
+            </MenuItem>
+
+            <MenuItem disabled={!this.canEdit(row)} onClick={this.edit}>
+              <ListItemIcon style={{ padding: 5 }}>
+                <EditIcon color={this.canEdit(row) ? 'primary' : 'disabled'} />
+              </ListItemIcon>
+              <Typography>Edit</Typography>
+            </MenuItem>
+
+            <MenuItem disabled={!this.canDelete(row)} onClick={this.performDelete}>
+              <ListItemIcon style={{ padding: 5 }}>
+                <HighlightOff color={this.canDelete(row) ? 'error' : 'disabled'} />
+              </ListItemIcon>
+              <Typography>Annuler</Typography>
+            </MenuItem>
+
+            <MenuItem disabled={!this.canCloseOffer} onClick={this.performCloseOffer}>
+              <ListItemIcon style={{ padding: 5 }}>
+                <DealOffIcon color={this.canCloseOffer ? 'primary' : 'disabled'} />
+              </ListItemIcon>
+              <Typography>clôture</Typography>
+            </MenuItem>
+
+            <MenuItem onClick={this.goToSubCommands(row)}>
+              <ListItemIcon style={{ padding: 5 }}>
+                <ListIcon color="primary" />
+              </ListItemIcon>
+              <Typography>List</Typography>
+            </MenuItem>
+
+            <MenuItem onClick={this.performCloneOffer}>
+              <ListItemIcon style={{ padding: 5 }}>
+                <CloneIcon color="primary" />
+              </ListItemIcon>
+              <Typography>Dupliquer</Typography>
+            </MenuItem>
+          </WithRoles>
+        </DropDown>
         <GeneriqueDialog open={showPopConfirmation} {...popConfirmationParams} />
         <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
         {isShown && (
@@ -324,23 +361,29 @@ export class OffresListTableRow extends React.PureComponent {
                     justifyContent: 'center',
                   }}
                 >
-                  <div style={{ display: 'flex', marginRight: '30px' }}>
-                    <Typography variant="h6" color="textSecondary" style={{ marginRight: 10 }}>
+                  <div style={{ display: 'flex', marginRight: '30px', color: '#034CD5' }}>
+                    <Typography variant="h6" color="textSecondary" style={{ marginRight: 10, color: 'inherit' }}>
                       Total remisé:
                     </Typography>
-                    <Typography variant="h6">{totalWidthGlobalDiscount}</Typography>
+                    <Typography variant="h6" style={{ color: 'inherit' }}>
+                      {formatNumber.format(totalWidthGlobalDiscount)}
+                    </Typography>
                   </div>
-                  <div style={{ display: 'flex' }}>
-                    <Typography variant="h6" color="textSecondary" style={{ marginRight: 10 }}>
+                  <div style={{ display: 'flex', color: '#4FB491' }}>
+                    <Typography variant="h6" color="textSecondary" style={{ marginRight: 10, color: 'inherit' }}>
                       Total gain:
                     </Typography>
-                    <Typography variant="h6">{totalGain}</Typography>
+                    <Typography variant="h6" style={{ color: 'inherit' }}>
+                      {formatNumber.format(totalGain)}
+                    </Typography>
                   </div>
-                  <div style={{ display: 'flex', marginLeft: '30px' }}>
-                    <Typography variant="h6" color="textSecondary" style={{ marginRight: 10 }}>
+                  <div style={{ display: 'flex', marginLeft: '30px', color: '#FF7E7E' }}>
+                    <Typography variant="h6" color="textSecondary" style={{ marginRight: 10, color: 'inherit' }}>
                       Min à commander:
                     </Typography>
-                    <Typography variant="h6">{row.minToOrder}</Typography>
+                    <Typography variant="h6" style={{ color: 'inherit' }}>
+                      {row.minToOrder ? formatNumber.format(row.minToOrder) : '-'}
+                    </Typography>
                   </div>
                   <div />
                 </div>

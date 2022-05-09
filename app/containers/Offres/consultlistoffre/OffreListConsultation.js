@@ -219,7 +219,7 @@ export class OffreListConsultation extends React.PureComponent {
           <div className={classes.metaItems}>
             <Typography color="textSecondary">Escompte</Typography>
             <Typography variant="h6" component="h2">
-              {row.globalDiscount}
+              {row.globalDiscount} %
             </Typography>
           </div>
           {this.forAdmin && (
