@@ -137,8 +137,8 @@ export class OffresList extends React.PureComponent {
         {
           label: 'Date de début',
           colName: 'dateDebut',
-          selected: false,
-          order: 'asc',
+          selected: true,
+          order: 'desc',
         },
         {
           label: 'Date de fin',
@@ -239,7 +239,6 @@ export class OffresList extends React.PureComponent {
     });
 
   render() {
-    console.log('props', this.props);
     const { rowsPerPage, page, showInfoBar, infoBarParams, cols } = this.state;
     // eslint-disable-next-line react/prop-types
     const { classes, offresList, user, width } = this.props;

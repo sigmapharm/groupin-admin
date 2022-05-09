@@ -13,7 +13,7 @@ import { formatNumber } from '../../../utils/formatNumber';
 function ReportingTable({ rows = [], classes, tableRef }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(7);
-  const [order, setOrder] = useState('asc');
+  const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('ca');
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
   const isRowsReady = _.isArray(rows) ? rows : [];

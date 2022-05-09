@@ -7,9 +7,9 @@ import { changeOfferArticle, clearOffer, loadArticleOffer, submitClientCommand }
 import { selectOfferArticleList } from '../selectors';
 import _ from 'lodash';
 import history from 'utils/history';
+import { formatNumber } from '../../../utils/formatNumber';
 
 const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDiscount, ...props }) => {
-  console.log('offerArticles', offer);
   const [error, setError] = useState('');
   useEffect(() => {
     dispatch(loadArticleOffer({ id: offer.id }));
@@ -81,7 +81,7 @@ const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDi
         <div style={styles.offer}>
           <div style={styles.row}>
             <div>
-              <Typography color="textSecondary">Designation</Typography>
+              <Typography color="textSecondary">Désignation</Typography>
               <Typography variant="h6" component="h2">
                 {offer.designation}
               </Typography>
@@ -117,34 +117,38 @@ const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDi
             <div>
               <Typography color="textSecondary">Escompte</Typography>
               <Typography variant="h6" component="h2">
-                {offer.globalDiscount}
+                {offer.globalDiscount} %
               </Typography>
             </div>
           </div>
           {total > 0 && (
             <>
-              <div style={{ ...styles.row }}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography color="textSecondary" variant="h6" style={{ marginRight: '10px' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', color: '#034CD5' }}>
+                  <Typography color="textSecondary" variant="h6" style={{ marginRight: '10px', color: 'inherit' }}>
                     Total remisé:
                   </Typography>
-                  <Typography variant="h6">
+                  <Typography variant="h6" style={{ color: 'inherit' }}>
                     {/* {total} */}
-                    {totalWidthGlobalDiscount}
+                    {formatNumber.format(totalWidthGlobalDiscount)}
                   </Typography>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography color="textSecondary" variant="h6" style={{ marginRight: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', color: '#4FB491' }}>
+                  <Typography color="textSecondary" variant="h6" style={{ marginRight: '10px', color: 'inherit' }}>
                     Total gain:
                   </Typography>
-                  <Typography variant="h6">{totalGain}</Typography>
+                  <Typography variant="h6" style={{ color: 'inherit' }}>
+                    {formatNumber.format(totalGain)}
+                  </Typography>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Typography color="textSecondary" variant="h6" style={{ marginRight: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', color: '#FF7E7E' }}>
+                <Typography color="textSecondary" variant="h6" style={{ marginRight: '10px', color: 'inherit' }}>
                   Min à commander:
                 </Typography>
-                <Typography variant="h6">{offerArticles.minToOrder}</Typography>
+                <Typography variant="h6" style={{ color: 'inherit' }}>
+                  {offerArticles.minToOrder ? formatNumber.format(offerArticles.minToOrder) : '-'}
+                </Typography>
               </div>
             </>
           )}
@@ -182,23 +186,27 @@ const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDi
                 </div>
               </div>
               <div style={styles.row}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
-                    PPH Remise:
+                <div style={{ display: 'flex', alignItems: 'center', color: '#4FB491' }}>
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px', color: 'inherit' }}>
+                    PPH Remisé:
                   </Typography>
-                  <Typography variant="h6">{Number(article.computedPPH).toFixed(2)}</Typography>
+                  <Typography variant="h6" style={{ color: 'inherit' }}>
+                    {Number(article.computedPPH).toFixed(2)}
+                  </Typography>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
-                    Remise(%):
+                <div style={{ display: 'flex', alignItems: 'center', color: '#4FB491' }}>
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px', color: 'inherit' }}>
+                    Remise:
                   </Typography>
-                  <Typography variant="h6">{article.discount}</Typography>
+                  <Typography variant="h6" style={{ color: 'inherit' }}>
+                    {article.discount}%
+                  </Typography>
                 </div>
               </div>
               <div style={styles.row}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
-                    Quantité Minimal:
+                    Quantité Minimale:
                   </Typography>
                   <Typography variant="h6">{article.minQuantity}</Typography>
                 </div>
@@ -208,8 +216,9 @@ const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDi
                 <TextField
                   type="number"
                   onChange={e => handleQuantityChange(article, e.target.value)}
-                  placeholder="Entrer quantity"
+                  placeholder="Entrer quantité"
                   fullWidth
+                  value={article.quantity}
                 />
               </div>
             </div>
