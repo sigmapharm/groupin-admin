@@ -10,6 +10,44 @@ import { makeSelectOffresList } from '../Offres/selectors';
 import image from '../../images/bayer.png';
 import Countdown from 'react-countdown';
 
+// images
+
+import BAYER from '../../images/labos/BAYER.png';
+import BLEDINA from '../../images/labos/BLEDINA.png';
+import GALENICA from '../../images/labos/GALENICA.png';
+import NESTLE from '../../images/labos/NESTLE.jpeg';
+import GSKMAROC from '../../images/labos/GSK_MAROC.jpeg';
+import IBERMA from '../../images/labos/IBERMA.png';
+import NACTALIA from '../../images/labos/NACTALIA.jpeg';
+import NOVOPHARMA from '../../images/labos/NOVOPHARMA.jpeg';
+import PHARMA5 from '../../images/labos/PHARMA5.png';
+import PHIMED from '../../images/labos/PHI MED.png';
+import PHIPARA from '../../images/labos/PHI PARA.png';
+import POLYMEDIC from '../../images/labos/POLYMEDIC.png';
+import PROMOPHARM from '../../images/labos/PROMOPHARM.jpeg';
+import SANOFI from '../../images/labos/SANOFI.jpeg';
+import ZENITH from '../../images/labos/ZENITH.png';
+
+import GROUPIN from '../../images/logo-color.png';
+
+const LabosImg = {
+  BAYER,
+  BLEDINA,
+  NESTLE,
+  GALENICA,
+  GSKMAROC,
+  IBERMA,
+  NACTALIA,
+  NOVOPHARMA,
+  PHARMA5,
+  PHIMED,
+  PHIPARA,
+  POLYMEDIC,
+  PROMOPHARM,
+  SANOFI,
+  ZENITH,
+};
+
 const params = {
   page: 0,
   rowsPerPage: 1000,
@@ -40,7 +78,15 @@ const OffersHome = ({ classes, dispatch, offresList, history }) => {
         {offresList.content &&
           offresList.content.map(offre => (
             <div key={offre.id} className={classes.card} onClick={handleClick.bind(this, offre)}>
-              <img src={image} className={classes.image} alt="" />
+              <img
+                src={
+                  LabosImg[offre.laboratoryName.split(' ').join('')]
+                    ? LabosImg[offre.laboratoryName.split(' ').join('')]
+                    : GROUPIN
+                }
+                className={classes.image}
+                alt={offre.laboratoryName}
+              />
               <div
                 style={{
                   display: 'flex',

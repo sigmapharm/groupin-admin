@@ -31,6 +31,7 @@ export default ({
   isMember,
   canGroup,
   printFacture,
+  printBL,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
@@ -48,27 +49,37 @@ export default ({
           <TableCell>{row.pharmacyName}</TableCell>
           <TableCell>{moment(row.creationDate).format('DD/MM/YYYY')}</TableCell>
           <TableCell>{row.totalAmountDiscount.toFixed(2)}</TableCell>
-          {isMember ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null}
-          {!isMember && row.isLinked && !canGroup ? (
-            <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell>
-          ) : null}
+          {/* {isMember ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null} */}
+          {/* {row.isLinked ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null} */}
+          {!row.isAggregate ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null}
           {/* start */}
 
           <DropDown open={open} anchorEl={anchorEl} handleClose={() => setOpen(false)}>
             {printCommand && (
-              <MenuItem onClick={printCommand(row)}>
+              <MenuItem onClick={printCommand && printCommand(row)}>
                 <ListItemIcon>
                   <PrintIcon color="primary" />
                 </ListItemIcon>
-                <Typography>Imprimer</Typography>
+                <Typography>Imprimer BC </Typography>
               </MenuItem>
             )}
-            {isMember && (
-              <MenuItem onClick={printFacture(row)} disabled={row.deliveredAt ? false : true}>
+            {!row.isAggregate && (
+              <MenuItem onClick={printFacture && printFacture(row)} disabled={row.deliveredAt ? false : true}>
                 <ListItemIcon>
-                  <Receipt color={row.deliveredAt ? 'primary' : ''} />
+                  {/* <Receipt color={row.deliveredAt ? 'primary' : ''} /> */}
+                  <PrintIcon color={row.deliveredAt ? 'primary' : ''} />
                 </ListItemIcon>
                 <Typography>Imprimer facture </Typography>
+              </MenuItem>
+            )}
+
+            {!row.isAggregate && (
+              <MenuItem onClick={printBL && printBL(row)} disabled={row.deliveredAt ? false : true}>
+                <ListItemIcon>
+                  {/* <Receipt color={row.deliveredAt ? 'primary' : ''} /> */}
+                  <PrintIcon color={row.deliveredAt ? 'primary' : ''} />
+                </ListItemIcon>
+                <Typography>Imprimer BL </Typography>
               </MenuItem>
             )}
 
@@ -112,11 +123,13 @@ export default ({
                 <Typography>Sous-Commandes</Typography>
               </MenuItem>
             )}
+
             {/* <Tooltip placement="top" title="Dispatcher les quantités">
                   <IconButton onClick={dispatchQuantity(row)} style={{ padding: 5 }}>
                     <CheckIcon color="primary" />
                   </IconButton>
                 </Tooltip> */}
+
             {isMember && row.isLinked ? (
               <MenuItem onClick={dispatchQuantity(row)} disabled={row.deliveredAt ? true : false}>
                 <ListItemIcon>

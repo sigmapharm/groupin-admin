@@ -123,7 +123,7 @@ class Command extends PureComponent {
       infoBarParams: {},
       showPopConfirmation: false,
       popConfirmationParams: {},
-      cols: this.isMember ? memberCols : adminCols,
+      cols: this.isMember ? memberCols : !this.isCommandsPage ? memberCols : adminCols,
       blobUrl: '',
     };
   }
@@ -341,15 +341,20 @@ class Command extends PureComponent {
           });
         } else {
           const pdfBlob = new Blob([blob], { type: blob.type });
-          saveAs(pdfBlob, `${row.laboratoryName}/${moment(row.creationDate).format('DD/MM/YYYY')}/${row.commandId}`);
+          saveAs(
+            pdfBlob,
+            `BC-${row.isAggregate ? row.laboratoryName : row.pharmacyName}/${moment(row.creationDate).format('DD/MM/YYYY')}-BC${
+              row.commandId
+            }`,
+          );
         }
       },
     });
   };
 
   printFacture = row => () => {
-    const { downloadCommandForm } = this.props;
-    downloadCommandForm({
+    const { getDownloadFacture } = this.props;
+    getDownloadFacture({
       commandId: row.commandId,
       callback: (err, blob) => {
         if (err) {
@@ -361,7 +366,37 @@ class Command extends PureComponent {
           });
         } else {
           const pdfBlob = new Blob([blob], { type: blob.type });
-          saveAs(pdfBlob, `${row.laboratoryName}/${moment(row.creationDate).format('DD/MM/YYYY')}/${row.commandId}`);
+          saveAs(
+            pdfBlob,
+            `facture-${row.isAggregate ? row.laboratoryName : row.pharmacyName}/${moment(
+              row.deliveredAt ? row.deliveredAt : row.creationDate,
+            ).format('DD/MM/YYYY')}-FAC${row.commandId}`,
+          );
+        }
+      },
+    });
+  };
+
+  printBL = row => () => {
+    const { getDownloadBL } = this.props;
+    getDownloadBL({
+      commandId: row.commandId,
+      callback: (err, blob) => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title: " La génération du pdf à échoué merci de contacter l'administrateur",
+            },
+          });
+        } else {
+          const pdfBlob = new Blob([blob], { type: blob.type });
+          saveAs(
+            pdfBlob,
+            `BL-${row.isAggregate ? row.laboratoryName : row.pharmacyName}/${moment(
+              row.deliveredAt ? row.deliveredAt : row.creationDate,
+            ).format('DD/MM/YYYY')}-BL${row.commandId}`,
+          );
         }
       },
     });
@@ -469,8 +504,14 @@ class Command extends PureComponent {
     const {
       user: { role },
     } = this.props;
-
     return role === MEMBRE;
+  }
+
+  get isCommandsPage() {
+    if (history.location.pathname === '/commands') {
+      return true;
+    }
+    return false;
   }
 
   get forAdminCommands() {
@@ -699,6 +740,7 @@ class Command extends PureComponent {
                   isMember={this.isMember}
                   canGroup={this.canGroup}
                   printFacture={this.printFacture}
+                  printBL={this.printBL}
                 />
               )}
             </Table>

@@ -97,6 +97,11 @@ export const getDownloadFacture = ({ commandId, callback }) => ({
   payload: { commandId, callback },
 });
 
+export const getDownloadBL = ({ commandId, callback }) => ({
+  type: actionsType.GET_DOWNLOAD_BL_FORM,
+  payload: { commandId, callback },
+});
+
 export const putDownloadFacture = payload => ({
   type: actionsType.PUT_DOWNLOAD_FACTURE_FORM,
   payload,
