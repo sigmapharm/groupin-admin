@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import * as PropTypes from 'prop-types';
 import _ from 'lodash';
 import EditIcon from '@material-ui/icons/Edit';
@@ -32,6 +32,19 @@ import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import { formatNumber } from '../../../utils/formatNumber';
 import { DropDown } from '../../../components/DropDown';
 import { ListItemIcon, MenuItem } from '@material-ui/core';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/light.css';
+
+const RowComponent = forwardRef((props, ref) => {
+  return (
+    <WithRoles roles={[ADMIN, SUPER_ADMIN]}>
+      <IconButton buttonRef={ref}>
+        <Settings />
+      </IconButton>
+    </WithRoles>
+  );
+});
 
 const closeStyle = {
   float: 'right',
@@ -277,64 +290,63 @@ export class OffresListTableRow extends React.PureComponent {
                 <Search color="secondary" />
               </IconButton>
             </WithRoles>
+            <Tippy
+              theme="light"
+              trigger="click"
+              interactive
+              content={
+                <>
+                  <WithRoles roles={[ADMIN, SUPER_ADMIN]}>
+                    <MenuItem onClick={this.showDetails}>
+                      <ListItemIcon style={{ padding: 5 }}>
+                        <Search color="secondary" />
+                      </ListItemIcon>
+                      <Typography>Consulter</Typography>
+                    </MenuItem>
 
-            <WithRoles roles={[ADMIN, SUPER_ADMIN]}>
-              <IconButton
-                buttonRef={node => {
-                  this.anchorEl = node;
-                }}
-                onClick={this.toggleProfileMenu}
-              >
-                <Settings />
-              </IconButton>
-            </WithRoles>
+                    <MenuItem disabled={!this.canEdit(row)} onClick={this.edit}>
+                      <ListItemIcon style={{ padding: 5 }}>
+                        <EditIcon color={this.canEdit(row) ? 'primary' : 'disabled'} />
+                      </ListItemIcon>
+                      <Typography>Edit</Typography>
+                    </MenuItem>
+
+                    <MenuItem disabled={!this.canDelete(row)} onClick={this.performDelete}>
+                      <ListItemIcon style={{ padding: 5 }}>
+                        <HighlightOff color={this.canDelete(row) ? 'error' : 'disabled'} />
+                      </ListItemIcon>
+                      <Typography>Annuler</Typography>
+                    </MenuItem>
+
+                    <MenuItem disabled={!this.canCloseOffer} onClick={this.performCloseOffer}>
+                      <ListItemIcon style={{ padding: 5 }}>
+                        <DealOffIcon color={this.canCloseOffer ? 'primary' : 'disabled'} />
+                      </ListItemIcon>
+                      <Typography>clôture</Typography>
+                    </MenuItem>
+
+                    <MenuItem onClick={this.goToSubCommands(row)}>
+                      <ListItemIcon style={{ padding: 5 }}>
+                        <ListIcon color="primary" />
+                      </ListItemIcon>
+                      <Typography>List</Typography>
+                    </MenuItem>
+
+                    <MenuItem onClick={this.performCloneOffer}>
+                      <ListItemIcon style={{ padding: 5 }}>
+                        <CloneIcon color="primary" />
+                      </ListItemIcon>
+                      <Typography>Dupliquer</Typography>
+                    </MenuItem>
+                  </WithRoles>
+                </>
+              }
+            >
+              <RowComponent />
+            </Tippy>
           </TableCell>
         </TableRow>
-        <DropDown open={this.state.open} anchorEl={this.state.anchorEl} handleClose={() => this.setState({ open: false })}>
-          <WithRoles roles={[ADMIN, SUPER_ADMIN]}>
-            <MenuItem onClick={this.showDetails}>
-              <ListItemIcon style={{ padding: 5 }}>
-                <Search color="secondary" />
-              </ListItemIcon>
-              <Typography>Consulter</Typography>
-            </MenuItem>
 
-            <MenuItem disabled={!this.canEdit(row)} onClick={this.edit}>
-              <ListItemIcon style={{ padding: 5 }}>
-                <EditIcon color={this.canEdit(row) ? 'primary' : 'disabled'} />
-              </ListItemIcon>
-              <Typography>Edit</Typography>
-            </MenuItem>
-
-            <MenuItem disabled={!this.canDelete(row)} onClick={this.performDelete}>
-              <ListItemIcon style={{ padding: 5 }}>
-                <HighlightOff color={this.canDelete(row) ? 'error' : 'disabled'} />
-              </ListItemIcon>
-              <Typography>Annuler</Typography>
-            </MenuItem>
-
-            <MenuItem disabled={!this.canCloseOffer} onClick={this.performCloseOffer}>
-              <ListItemIcon style={{ padding: 5 }}>
-                <DealOffIcon color={this.canCloseOffer ? 'primary' : 'disabled'} />
-              </ListItemIcon>
-              <Typography>clôture</Typography>
-            </MenuItem>
-
-            <MenuItem onClick={this.goToSubCommands(row)}>
-              <ListItemIcon style={{ padding: 5 }}>
-                <ListIcon color="primary" />
-              </ListItemIcon>
-              <Typography>List</Typography>
-            </MenuItem>
-
-            <MenuItem onClick={this.performCloneOffer}>
-              <ListItemIcon style={{ padding: 5 }}>
-                <CloneIcon color="primary" />
-              </ListItemIcon>
-              <Typography>Dupliquer</Typography>
-            </MenuItem>
-          </WithRoles>
-        </DropDown>
         <GeneriqueDialog open={showPopConfirmation} {...popConfirmationParams} />
         <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
         {isShown && (

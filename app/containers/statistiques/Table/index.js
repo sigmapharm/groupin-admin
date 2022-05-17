@@ -35,11 +35,11 @@ function ChartTable(props) {
     setPageSize(event.target.value);
   };
 
-  const handleSorting = desg => {
+  const handleSorting = (desg, colName) => {
     const order = sorting.order === 'desc' ? 'asc' : 'desc';
 
     setSorting({ order, desg });
-    dispatch(tableUpdate(`?direction=${order}&field=${desg || ''}&from=${fromDate}&to=${toDate}`));
+    dispatch(tableUpdate(`?direction=${order}&field=${colName || ''}&from=${fromDate}&to=${toDate}`));
   };
 
   return (
@@ -53,7 +53,7 @@ function ChartTable(props) {
                   <TableSortLabel
                     active
                     direction={orderName === sorting.desg ? sorting.order : 'asc'}
-                    onClick={() => handleSorting(orderName)}
+                    onClick={() => handleSorting(orderName, colName)}
                     style={{ color: 'white' }}
                   >
                     {label}

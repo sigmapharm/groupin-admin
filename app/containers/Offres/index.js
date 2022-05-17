@@ -41,6 +41,9 @@ import { ADMIN, MEMBRE, SUPER_ADMIN } from '../AppHeader/Roles';
 import { makeSelectUser } from '../App/selectors';
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 import OffresListCards from './responsive/OffresListCards';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/light.css';
 
 // import { makeSelectoffreArticledtos } from '../App/selectors';
 
