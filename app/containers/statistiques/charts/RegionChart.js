@@ -44,6 +44,12 @@ const cols = [
     order: 'asc',
     orderName: '',
   },
+  {
+    label: 'delai Livraison',
+    colName: 'delaiLivraison',
+    order: 'asc',
+    orderName: '',
+  },
 ];
 
 function LineChart(props) {
@@ -103,6 +109,7 @@ function LineChart(props) {
               <TableCell>{row.designation}</TableCell>
               <TableCell>{row.articlesCommandes}</TableCell>
               <TableCell>{formatNumber.format(row.ca)}</TableCell>
+              <TableCell>{row.delaiLivraison ? row.delaiLivraison + ' j' : '-'}</TableCell>
             </TableRow>
           );
         })}
