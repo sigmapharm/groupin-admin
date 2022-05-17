@@ -30,11 +30,11 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
         <Grid container spacing={24}>
           <Grid item lg={3} md={12} sm={12} xs={12}>
             <div className={classes.container}>
-              <SmallCard title="Nbr commande" backgroundColor="#FF92A5" value={statistics.totalCommande} />
+              <SmallCard title="Nbr commandes" backgroundColor="#FF92A5" value={statistics.totalCommande} />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard title="Ca commande" backgroundColor="#4F51C0" value={Number(statistics.totalCACommande).toFixed(2)} />
+              <SmallCard title="Total commandé" backgroundColor="#4F51C0" value={Number(statistics.totalCACommande).toFixed(2)} />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard title="Total remise" backgroundColor="#FED674" value={Number(statistics.totalRemise).toFixed(2)} />
+              <SmallCard title="Total gain" backgroundColor="#FED674" value={Number(statistics.totalRemise).toFixed(2)} />
               <div style={{ marginBottom: '10px' }} />
             </div>
           </Grid>
@@ -60,19 +60,19 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
               {/* <Typography variant="h6">Les statistics global</Typography>
               <div style={{ marginBottom: '20px' }} /> */}
               <Card
-                title="Les statistics global"
+                title="Statistiques globaux"
                 backgroundColor="#50DFB3"
                 items={[
                   {
-                    label: 'Nbr commande',
+                    label: 'Nbr commandes',
                     value: statistics.totalCommandeGlobal,
                   },
                   {
-                    label: 'Nbr articales',
+                    label: 'Nbr articles',
                     value: statistics.totalArticle,
                   },
                   {
-                    label: 'Nbr fournisseur',
+                    label: 'Nbr grossistes',
                     value: statistics.totalFournisseur,
                   },
                   {
@@ -83,10 +83,10 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
                     label: 'Nbr laboratoires',
                     value: statistics.totalLabos,
                   },
-                  {
-                    label: 'CA commandée',
-                    value: Number(statistics.totalCACommandeGlobal).toFixed(2),
-                  },
+                  // {
+                  //   label: 'CA commandée',
+                  //   value: Number(statistics.totalCACommandeGlobal).toFixed(2),
+                  // },
                 ]}
               />
             </div>

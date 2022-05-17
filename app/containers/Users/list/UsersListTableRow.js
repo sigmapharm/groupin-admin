@@ -24,6 +24,9 @@ import { connect } from 'react-redux';
 
 import { withStyles } from '@material-ui/core/styles';
 import { getUserInfo } from '../actions';
+import { DropDown } from '../../../components/DropDown';
+import { Person, PersonOutline, Settings } from '@material-ui/icons';
+import { Button, ListItemIcon, MenuItem } from '@material-ui/core';
 
 const closeButton = { float: 'right' };
 
@@ -54,6 +57,8 @@ export class UsersListTableRow extends React.PureComponent {
     this.state = {
       ...initialState,
       userRow: {},
+      open: false,
+      anchorEl: null,
     };
   }
 
@@ -141,6 +146,13 @@ export class UsersListTableRow extends React.PureComponent {
     });
   };
 
+  toggleProfileMenu = e => {
+    this.setState({
+      anchorEl: e.currentTarget,
+      open: true,
+    });
+  };
+
   render() {
     const { row, cities } = this.props;
     const { editMode, detailsOpen } = this.state;
@@ -153,31 +165,45 @@ export class UsersListTableRow extends React.PureComponent {
           <TableCell>{row.email}</TableCell>
           <TableCell>{row.pharmacy}</TableCell>
           <TableCell>{row.role}</TableCell>
-          <TableCell>{row.lastCommad ? row.lastCommad.split('T')[0] : 'no Commands'}</TableCell>
-          <TableCell style={{ padding: 0 }}>
-            <Tooltip placement="top" title="Mofidier">
-              <IconButton onClick={this.edit} style={{ padding: 5 }}>
-                <EditIcon color="primary" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip placement="top" title="Consulter">
-              <IconButton onClick={this.openDetails(row.id)} style={{ padding: 5 }}>
-                <Search color="secondary" />
-              </IconButton>
-            </Tooltip>
-            {/* <Tooltip placement="top" title="Rénitialiser mot de passe">
+          <TableCell>{row.lastCommad ? row.lastCommad.split('T')[0] : 'aucune commandes'}</TableCell>
+          <TableCell style={{ padding: 0, display: 'flex' }}>
+            <Switch checked={!row.enabled} onChange={this.toggle} value={row.enabled} color="primary" />
+            <IconButton
+              buttonRef={node => {
+                this.anchorEl = node;
+              }}
+              onClick={this.toggleProfileMenu}
+            >
+              <Settings />
+            </IconButton>
+          </TableCell>
+        </TableRow>
+        <DropDown open={this.state.open} anchorEl={this.state.anchorEl} handleClose={() => this.setState({ open: false })}>
+          <MenuItem onClick={this.openDetails(row.id)}>
+            <ListItemIcon style={{ padding: 5 }}>
+              <Person color="secondary" />
+            </ListItemIcon>
+            <Typography>Consulter</Typography>
+          </MenuItem>
+          <MenuItem onClick={this.edit}>
+            <ListItemIcon style={{ padding: 5 }}>
+              <EditIcon color="primary" />
+            </ListItemIcon>
+            <Typography>Modifier</Typography>
+          </MenuItem>
+
+          {/* <Tooltip placement="top" title="Rénitialiser mot de passe">
               <IconButton onClick={this.reset} style={{ padding: 5 }}>
                 <ResetIcon color="primary" />
               </IconButton>
             </Tooltip> */}
-            <Switch checked={row.enabled} onChange={this.toggle} value={row.enabled} color="primary" />
-            <Tooltip placement="top" title="Supprimer">
-              <IconButton onClick={this.delete} style={{ padding: 5 }}>
-                <DeleteIcon color="primary" />
-              </IconButton>
-            </Tooltip>
-          </TableCell>
-        </TableRow>
+          <MenuItem onClick={this.delete}>
+            <ListItemIcon style={{ padding: 5 }}>
+              <DeleteIcon color="primary" />
+            </ListItemIcon>
+            <Typography>Supprimer</Typography>
+          </MenuItem>
+        </DropDown>
         {detailsOpen && (
           <Dialog maxWidth="lg" onClose={this.handleClose} open>
             <MuiDialogTitle style={{ display: 'flex', justifyContent: 'space-between' }} disableTypography>

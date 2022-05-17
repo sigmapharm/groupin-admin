@@ -27,3 +27,4 @@ export const DOWNLOAD_COMMAND_FORM = '[Commands] : download command form pdf ';
 
 export const GET_DOWNLOAD_FACTURE_FORM = 'app/command/getfacture';
 export const PUT_DOWNLOAD_FACTURE_FORM = 'app/command/putfacture';
+export const GET_DOWNLOAD_BL_FORM = 'app/command/BL';

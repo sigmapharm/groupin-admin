@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import _ from 'lodash';
 import TableRow from '@material-ui/core/TableRow/TableRow';
 import TableCell from '@material-ui/core/TableCell/TableCell';
@@ -10,7 +10,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import PrintIcon from '@material-ui/icons/Print';
 import Tooltip from '@material-ui/core/Tooltip';
 import ListIcon from '@material-ui/icons/List';
-import { Done, Receipt } from '@material-ui/icons';
+import { Done, Receipt, Settings } from '@material-ui/icons';
+import { DropDown } from '../../../../../components/DropDown';
+import { ListItemIcon, MenuItem, Typography } from '@material-ui/core';
 
 export default ({
   list = [],
@@ -29,7 +31,15 @@ export default ({
   isMember,
   canGroup,
   printFacture,
+  printBL,
 }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const toggleProfileMenu = e => {
+    setAnchorEl(e.currentTarget);
+    setOpen(!open);
+  };
   return (
     <>
       {list.map(row => (
@@ -39,73 +49,104 @@ export default ({
           <TableCell>{row.pharmacyName}</TableCell>
           <TableCell>{moment(row.creationDate).format('DD/MM/YYYY')}</TableCell>
           <TableCell>{row.totalAmountDiscount.toFixed(2)}</TableCell>
-          {isMember ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null}
-          {!isMember && row.isLinked && !canGroup ? (
-            <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell>
-          ) : null}
-          {withOptions && (
-            <TableCell>
-              <Tooltip placement="top" title="Imprimer la commande">
-                <a onClick={printCommand(row)}>
-                  <PrintIcon color="primary" />
-                </a>
-              </Tooltip>
-              {isMember && (
-                <Tooltip placement="top" title="Imprimer la commande">
-                  <IconButton onClick={printFacture(row)} disabled={row.deliveredAt ? false : true}>
-                    <Receipt color={row.deliveredAt ? 'primary' : ''} />
-                  </IconButton>
-                </Tooltip>
-              )}
-              <Tooltip placement="top" title="Modifier la commande">
-                <IconButton
-                  disabled={(!isAdmin && !row.canDelete) || disableClientEditCommand}
-                  onClick={updateCommand(row)}
-                  style={{ padding: 5 }}
-                >
-                  <EditIcon color={(!isAdmin && !row.canDelete) || disableClientEditCommand ? 'disabled' : 'primary'} />
-                </IconButton>
-              </Tooltip>
-              <Tooltip placement="top" title="Afficher le detail">
-                <IconButton onClick={selectCommand(row)} style={{ padding: 5 }}>
-                  <Search color="primary" />
-                </IconButton>
-              </Tooltip>
-              {canDelete && (
-                <Tooltip placement="top" title="Annuler">
-                  <IconButton
-                    disabled={!isAdmin && !row.canDelete}
-                    onClick={deleteCommand({
-                      ..._.pick(row, ['commandId', 'canDelete']),
-                    })}
-                    style={{ padding: 5 }}
-                  >
-                    <HighlightOff color={!isAdmin && !row.canDelete ? 'disabled' : 'error'} />
-                  </IconButton>
-                </Tooltip>
-              )}
-              {forAdmin && (
-                <>
-                  <Tooltip placement="top" title="Liste des sous-commands">
-                    <IconButton onClick={showSubCommands(row)} style={{ padding: 5 }}>
-                      <ListIcon color="primary" />
-                    </IconButton>
-                  </Tooltip>
+          {/* {isMember ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null} */}
+          {/* {row.isLinked ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null} */}
+          {!row.isAggregate ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null}
+          {/* start */}
 
-                  {/* <Tooltip placement="top" title="Dispatcher les quantités">
+          <DropDown open={open} anchorEl={anchorEl} handleClose={() => setOpen(false)}>
+            {printCommand && (
+              <MenuItem onClick={printCommand && printCommand(row)}>
+                <ListItemIcon>
+                  <PrintIcon color="primary" />
+                </ListItemIcon>
+                <Typography>Imprimer BC </Typography>
+              </MenuItem>
+            )}
+            {!row.isAggregate && (
+              <MenuItem onClick={printFacture && printFacture(row)} disabled={row.deliveredAt ? false : true}>
+                <ListItemIcon>
+                  {/* <Receipt color={row.deliveredAt ? 'primary' : ''} /> */}
+                  <PrintIcon color={row.deliveredAt ? 'primary' : ''} />
+                </ListItemIcon>
+                <Typography>Imprimer facture </Typography>
+              </MenuItem>
+            )}
+
+            {!row.isAggregate && (
+              <MenuItem onClick={printBL && printBL(row)} disabled={row.deliveredAt ? false : true}>
+                <ListItemIcon>
+                  {/* <Receipt color={row.deliveredAt ? 'primary' : ''} /> */}
+                  <PrintIcon color={row.deliveredAt ? 'primary' : ''} />
+                </ListItemIcon>
+                <Typography>Imprimer BL </Typography>
+              </MenuItem>
+            )}
+
+            {updateCommand && (
+              <MenuItem disabled={(!isAdmin && !row.canDelete) || disableClientEditCommand} onClick={updateCommand(row)}>
+                <ListItemIcon>
+                  <EditIcon color={(!isAdmin && !row.canDelete) || disableClientEditCommand ? 'disabled' : 'primary'} />
+                </ListItemIcon>
+                <Typography>Modifier</Typography>
+              </MenuItem>
+            )}
+
+            {selectCommand && (
+              <MenuItem onClick={selectCommand(row)}>
+                <ListItemIcon>
+                  <Search color="primary" />
+                </ListItemIcon>
+                <Typography>Consulter</Typography>
+              </MenuItem>
+            )}
+
+            {canDelete && (
+              <MenuItem
+                disabled={!isAdmin && !row.canDelete}
+                onClick={deleteCommand({
+                  ..._.pick(row, ['commandId', 'canDelete']),
+                })}
+              >
+                <ListItemIcon>
+                  <HighlightOff color={!isAdmin && !row.canDelete ? 'disabled' : 'error'} />
+                </ListItemIcon>
+                <Typography>Annuler</Typography>
+              </MenuItem>
+            )}
+
+            {forAdmin && (
+              <MenuItem onClick={showSubCommands(row)}>
+                <ListItemIcon>
+                  <ListIcon color="primary" />
+                </ListItemIcon>
+                <Typography>Sous-Commandes</Typography>
+              </MenuItem>
+            )}
+
+            {/* <Tooltip placement="top" title="Dispatcher les quantités">
                   <IconButton onClick={dispatchQuantity(row)} style={{ padding: 5 }}>
                     <CheckIcon color="primary" />
                   </IconButton>
                 </Tooltip> */}
-                </>
-              )}
-              {isMember && row.isLinked ? (
-                <Tooltip placement="top" title="commande livré avec succès">
-                  <IconButton onClick={dispatchQuantity(row)} style={{ padding: 5 }} disabled={row.deliveredAt ? true : false}>
-                    <Done color={row.deliveredAt ? '' : 'primary'} />
-                  </IconButton>
-                </Tooltip>
-              ) : null}
+
+            {isMember && row.isLinked ? (
+              <MenuItem onClick={dispatchQuantity(row)} disabled={row.deliveredAt ? true : false}>
+                <ListItemIcon>
+                  <Done color={row.deliveredAt ? '' : 'primary'} />
+                </ListItemIcon>
+                <Typography>commande livré</Typography>
+              </MenuItem>
+            ) : null}
+          </DropDown>
+
+          {/* end */}
+
+          {withOptions && (
+            <TableCell>
+              <IconButton buttonRef={anchorEl} onClick={toggleProfileMenu}>
+                <Settings />
+              </IconButton>
             </TableCell>
           )}
         </TableRow>

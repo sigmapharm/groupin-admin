@@ -19,21 +19,12 @@ import ArticlesAggregation from './components/articles';
 import ProviderChooser from './components/provider';
 
 import * as actionCreators from './store/actions.creators';
-import {
-  getAllArticlesByCommands,
-  getAllCommands,
-  getAllProviders,
-  getCheckAllValue,
-} from './store/selectors';
+import { getAllArticlesByCommands, getAllCommands, getAllProviders, getCheckAllValue } from './store/selectors';
 import Dialog from '../../components/Dialog/index';
 import ProviderForm from './components/provider/form';
 
 function getSteps() {
-  return [
-    'Choisir les commands',
-    'Modifier les quantité',
-    'Choisir un fourniseur',
-  ];
+  return ['Choisir les commandes', 'Modifier les quantités', 'Choisir un grossiste'];
 }
 
 class Grouping extends React.PureComponent {
@@ -46,12 +37,7 @@ class Grouping extends React.PureComponent {
   handleNext = () => {
     const { activeStep } = this.state;
     const { loadAggregatedArticles, commands } = this.props;
-    if (activeStep === 0)
-      loadAggregatedArticles(
-        commands
-          .filter(({ selected }) => !!selected)
-          .map(({ commandId }) => commandId),
-      );
+    if (activeStep === 0) loadAggregatedArticles(commands.filter(({ selected }) => !!selected).map(({ commandId }) => commandId));
     if (activeStep === 2) {
       this.submitCommandAggregate();
       return;
@@ -93,8 +79,7 @@ class Grouping extends React.PureComponent {
   get activeNextStep() {
     const { activeStep, selectedProvider } = this.state;
     const { articles, commands } = this.props;
-    if (activeStep === 0)
-      return commands.length && _.some(commands, ({ selected }) => !!selected);
+    if (activeStep === 0) return commands.length && _.some(commands, ({ selected }) => !!selected);
     if (activeStep === 1) return articles.length;
     if (activeStep === 2) {
       return !!selectedProvider;
@@ -116,9 +101,7 @@ class Grouping extends React.PureComponent {
       {
         providerId: selectedProvider.value,
         offerId,
-        commandsId: commands
-          .filter(({ selected }) => !!selected)
-          .map(({ commandId }) => commandId),
+        commandsId: commands.filter(({ selected }) => !!selected).map(({ commandId }) => commandId),
         commandArticleAggregates: articles,
       },
       () => {
@@ -145,17 +128,13 @@ class Grouping extends React.PureComponent {
   }
 
   render() {
-    const { classes, commands, articles, providers, checkAllValue,toggleCheckAll } = this.props;
+    const { classes, commands, articles, providers, checkAllValue, toggleCheckAll } = this.props;
     const steps = getSteps();
     const { activeStep, selectedProvider, showProviderForm } = this.state;
 
     return (
       <Paper className={classes.root}>
-        <Typography
-          className={classes.titleContainer}
-          component="h1"
-          variant="h4"
-        >
+        <Typography className={classes.titleContainer} component="h1" variant="h4">
           Grouping
         </Typography>
         <Divider />
@@ -179,12 +158,7 @@ class Grouping extends React.PureComponent {
               onChange={this.onCommandSelectionChange}
             />
           )}
-          {activeStep === 1 && (
-            <ArticlesAggregation
-              articles={articles || []}
-              onChange={this.onArticleQuantityChange}
-            />
-          )}
+          {activeStep === 1 && <ArticlesAggregation articles={articles || []} onChange={this.onArticleQuantityChange} />}
           {activeStep === 2 && (
             <ProviderChooser
               value={selectedProvider}
@@ -204,18 +178,11 @@ class Grouping extends React.PureComponent {
               onClick={this.handleNext}
               className={classes.button}
             >
-              {activeStep === steps.length - 1
-                ? 'Créer la command'
-                : 'Ėtape Suivante'}
+              {activeStep === steps.length - 1 ? 'Créer la command' : 'Ėtape Suivante'}
             </Button>
           </div>
         </div>
-        <Dialog
-          open={showProviderForm}
-          title="Ajouter un fourniseur"
-          showBtns={false}
-          onClose={this.closeProviderForm}
-        >
+        <Dialog open={showProviderForm} title="Ajouter un grossiste" showBtns={false} onClose={this.closeProviderForm}>
           <ProviderForm onClose={this.closeProviderForm} onAddSuccess={this.closeProviderForm} />
         </Dialog>
       </Paper>
@@ -223,8 +190,7 @@ class Grouping extends React.PureComponent {
   }
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(actionCreators, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(actionCreators, dispatch);
 
 const mapStateToProps = createStructuredSelector({
   commands: getAllCommands(),

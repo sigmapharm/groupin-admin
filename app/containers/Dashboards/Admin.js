@@ -62,13 +62,17 @@ const Admin = ({ classes, dispatch, statistics, userRole }) => {
             <div className={classes.container}>
               <Card title="Nbr Articles" items={[{ label: 'Total', value: statistics.totalArticle }]} backgroundColor="#FFCC3F" />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard title="Nbr fournisseurs" backgroundColor="#FF92A5" value={statistics.totalFournisseur} />
+              <SmallCard title="Nbr grossistes" backgroundColor="#FF92A5" value={statistics.totalFournisseur} />
               <div style={{ marginBottom: '10px' }} />
               <SmallCard title="Nbr commandes" backgroundColor="#4F51C0" value={statistics.totalCommande} />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard title="CA commandée" backgroundColor="#BAA2F8" value={formatNumber.format(statistics.totalCACommande)} />
+              <SmallCard
+                title="Total commandé"
+                backgroundColor="#BAA2F8"
+                value={formatNumber.format(statistics.totalCACommande)}
+              />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard title="CA Livré" backgroundColor="#50DFB3" value={formatNumber.format(statistics.totalCALivré)} />
+              <SmallCard title="Total Livré" backgroundColor="#50DFB3" value={formatNumber.format(statistics.totalCALivré)} />
               {/* <div style={{ marginBottom: '10px' }} />
               <SmallCard
                 title="CA livrée" statistics.totalCACommande

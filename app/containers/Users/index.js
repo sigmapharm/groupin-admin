@@ -105,7 +105,7 @@ export class UsersList extends React.PureComponent {
           label: 'dernière commande',
           colName: 'lastCommand',
           selected: false,
-          order: 'asc',
+          order: 'desc',
         },
       ],
     };

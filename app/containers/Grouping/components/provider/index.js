@@ -16,25 +16,18 @@ const styles = theme => ({
 
 // TODO  : will change it to be dynamique ;)
 
-export default withStyles(styles)(
-  ({ classes, value, onChange, onAdd, providers = [] }) => (
-    <div className={classes.btnsContainer}>
-      <SingleAutoCompleteSelect
-        name="provider"
-        value={value}
-        options={providers.map((e) => e && { label: e.fullName, value:e.id })}
-        onChange={onChange}
-        placeholder="Fourniseur"
-        isClearable
-      />
-      <Fab
-        className={classes.addBtn}
-        size="small"
-        color="primary"
-        onClick={onAdd}
-      >
-        <AddIcon />
-      </Fab>
-    </div>
-  ),
-);
+export default withStyles(styles)(({ classes, value, onChange, onAdd, providers = [] }) => (
+  <div className={classes.btnsContainer}>
+    <SingleAutoCompleteSelect
+      name="provider"
+      value={value}
+      options={providers.map(e => e && { label: e.fullName, value: e.id })}
+      onChange={onChange}
+      placeholder="Grossiste"
+      isClearable
+    />
+    <Fab className={classes.addBtn} size="small" color="primary" onClick={onAdd}>
+      <AddIcon />
+    </Fab>
+  </div>
+));
