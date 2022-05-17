@@ -328,7 +328,9 @@ class Command extends PureComponent {
   };
 
   printCommand = row => () => {
+    console.log(row);
     const { downloadCommandForm } = this.props;
+
     downloadCommandForm({
       commandId: row.commandId,
       callback: (err, blob) => {

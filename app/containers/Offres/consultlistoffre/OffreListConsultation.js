@@ -138,7 +138,7 @@ export class OffreListConsultation extends React.PureComponent {
     const isGreater = totalRemise > parseInt(row.minToOrder) ? true : false;
 
     if (!row.minToOrder) {
-      return this.allowCommandSubmit;
+      return !this.allowCommandSubmit;
     }
 
     if (this.allowCommandSubmit && (isEqual || isGreater)) {

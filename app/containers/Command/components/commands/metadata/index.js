@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import _ from 'lodash';
 import TableRow from '@material-ui/core/TableRow/TableRow';
 import TableCell from '@material-ui/core/TableCell/TableCell';
@@ -13,6 +13,21 @@ import ListIcon from '@material-ui/icons/List';
 import { Done, Receipt, Settings } from '@material-ui/icons';
 import { DropDown } from '../../../../../components/DropDown';
 import { ListItemIcon, MenuItem, Typography } from '@material-ui/core';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/light.css';
+
+const RowComponent = forwardRef((props, ref) => {
+  return (
+    // <WithRoles roles={[ADMIN, SUPER_ADMIN]}>
+    <TableCell>
+      <IconButton buttonRef={ref}>
+        <Settings />
+      </IconButton>
+    </TableCell>
+    // </WithRoles>
+  );
+});
 
 export default ({
   list = [],
@@ -33,13 +48,8 @@ export default ({
   printFacture,
   printBL,
 }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
 
-  const toggleProfileMenu = e => {
-    setAnchorEl(e.currentTarget);
-    setOpen(!open);
-  };
   return (
     <>
       {list.map(row => (
@@ -53,102 +63,106 @@ export default ({
           {/* {row.isLinked ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null} */}
           {!row.isAggregate ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null}
           {/* start */}
+          {withOptions && (
+            <Tippy
+              theme="light"
+              trigger="click"
+              interactive
+              content={
+                <>
+                  {printCommand && (
+                    <MenuItem onClick={printCommand && printCommand(row)}>
+                      <ListItemIcon>
+                        <PrintIcon color="primary" />
+                      </ListItemIcon>
+                      <Typography>Imprimer BC </Typography>
+                    </MenuItem>
+                  )}
+                  {!row.isAggregate && (
+                    <MenuItem onClick={printFacture && printFacture(row)} disabled={row.deliveredAt ? false : true}>
+                      <ListItemIcon>
+                        {/* <Receipt color={row.deliveredAt ? 'primary' : ''} /> */}
+                        <PrintIcon color={row.deliveredAt ? 'primary' : ''} />
+                      </ListItemIcon>
+                      <Typography>Imprimer facture </Typography>
+                    </MenuItem>
+                  )}
 
-          <DropDown open={open} anchorEl={anchorEl} handleClose={() => setOpen(false)}>
-            {printCommand && (
-              <MenuItem onClick={printCommand && printCommand(row)}>
-                <ListItemIcon>
-                  <PrintIcon color="primary" />
-                </ListItemIcon>
-                <Typography>Imprimer BC </Typography>
-              </MenuItem>
-            )}
-            {!row.isAggregate && (
-              <MenuItem onClick={printFacture && printFacture(row)} disabled={row.deliveredAt ? false : true}>
-                <ListItemIcon>
-                  {/* <Receipt color={row.deliveredAt ? 'primary' : ''} /> */}
-                  <PrintIcon color={row.deliveredAt ? 'primary' : ''} />
-                </ListItemIcon>
-                <Typography>Imprimer facture </Typography>
-              </MenuItem>
-            )}
+                  {!row.isAggregate && (
+                    <MenuItem onClick={printBL && printBL(row)} disabled={row.deliveredAt ? false : true}>
+                      <ListItemIcon>
+                        {/* <Receipt color={row.deliveredAt ? 'primary' : ''} /> */}
+                        <PrintIcon color={row.deliveredAt ? 'primary' : ''} />
+                      </ListItemIcon>
+                      <Typography>Imprimer BL </Typography>
+                    </MenuItem>
+                  )}
 
-            {!row.isAggregate && (
-              <MenuItem onClick={printBL && printBL(row)} disabled={row.deliveredAt ? false : true}>
-                <ListItemIcon>
-                  {/* <Receipt color={row.deliveredAt ? 'primary' : ''} /> */}
-                  <PrintIcon color={row.deliveredAt ? 'primary' : ''} />
-                </ListItemIcon>
-                <Typography>Imprimer BL </Typography>
-              </MenuItem>
-            )}
+                  {updateCommand && (
+                    <MenuItem disabled={(!isAdmin && !row.canDelete) || disableClientEditCommand} onClick={updateCommand(row)}>
+                      <ListItemIcon>
+                        <EditIcon color={(!isAdmin && !row.canDelete) || disableClientEditCommand ? 'disabled' : 'primary'} />
+                      </ListItemIcon>
+                      <Typography>Modifier</Typography>
+                    </MenuItem>
+                  )}
 
-            {updateCommand && (
-              <MenuItem disabled={(!isAdmin && !row.canDelete) || disableClientEditCommand} onClick={updateCommand(row)}>
-                <ListItemIcon>
-                  <EditIcon color={(!isAdmin && !row.canDelete) || disableClientEditCommand ? 'disabled' : 'primary'} />
-                </ListItemIcon>
-                <Typography>Modifier</Typography>
-              </MenuItem>
-            )}
+                  {selectCommand && (
+                    <MenuItem onClick={selectCommand(row)}>
+                      <ListItemIcon>
+                        <Search color="primary" />
+                      </ListItemIcon>
+                      <Typography>Consulter</Typography>
+                    </MenuItem>
+                  )}
 
-            {selectCommand && (
-              <MenuItem onClick={selectCommand(row)}>
-                <ListItemIcon>
-                  <Search color="primary" />
-                </ListItemIcon>
-                <Typography>Consulter</Typography>
-              </MenuItem>
-            )}
+                  {canDelete && (
+                    <MenuItem
+                      disabled={!isAdmin && !row.canDelete}
+                      onClick={deleteCommand({
+                        ..._.pick(row, ['commandId', 'canDelete']),
+                      })}
+                    >
+                      <ListItemIcon>
+                        <HighlightOff color={!isAdmin && !row.canDelete ? 'disabled' : 'error'} />
+                      </ListItemIcon>
+                      <Typography>Annuler</Typography>
+                    </MenuItem>
+                  )}
 
-            {canDelete && (
-              <MenuItem
-                disabled={!isAdmin && !row.canDelete}
-                onClick={deleteCommand({
-                  ..._.pick(row, ['commandId', 'canDelete']),
-                })}
-              >
-                <ListItemIcon>
-                  <HighlightOff color={!isAdmin && !row.canDelete ? 'disabled' : 'error'} />
-                </ListItemIcon>
-                <Typography>Annuler</Typography>
-              </MenuItem>
-            )}
+                  {forAdmin && (
+                    <MenuItem onClick={showSubCommands(row)}>
+                      <ListItemIcon>
+                        <ListIcon color="primary" />
+                      </ListItemIcon>
+                      <Typography>Sous-Commandes</Typography>
+                    </MenuItem>
+                  )}
 
-            {forAdmin && (
-              <MenuItem onClick={showSubCommands(row)}>
-                <ListItemIcon>
-                  <ListIcon color="primary" />
-                </ListItemIcon>
-                <Typography>Sous-Commandes</Typography>
-              </MenuItem>
-            )}
-
-            {/* <Tooltip placement="top" title="Dispatcher les quantités">
+                  {/* <Tooltip placement="top" title="Dispatcher les quantités">
                   <IconButton onClick={dispatchQuantity(row)} style={{ padding: 5 }}>
                     <CheckIcon color="primary" />
                   </IconButton>
                 </Tooltip> */}
 
-            {isMember && row.isLinked ? (
-              <MenuItem onClick={dispatchQuantity(row)} disabled={row.deliveredAt ? true : false}>
-                <ListItemIcon>
-                  <Done color={row.deliveredAt ? '' : 'primary'} />
-                </ListItemIcon>
-                <Typography>commande livré</Typography>
-              </MenuItem>
-            ) : null}
-          </DropDown>
+                  {isMember && row.isLinked ? (
+                    <MenuItem onClick={dispatchQuantity(row)} disabled={row.deliveredAt ? true : false}>
+                      <ListItemIcon>
+                        <Done color={row.deliveredAt ? '' : 'primary'} />
+                      </ListItemIcon>
+                      <Typography>commande livré</Typography>
+                    </MenuItem>
+                  ) : null}
+                </>
+              }
+              open={open}
+              handleClose={() => setOpen(false)}
+            >
+              <RowComponent />
+            </Tippy>
+          )}
 
           {/* end */}
-
-          {withOptions && (
-            <TableCell>
-              <IconButton buttonRef={anchorEl} onClick={toggleProfileMenu}>
-                <Settings />
-              </IconButton>
-            </TableCell>
-          )}
         </TableRow>
       ))}
     </>

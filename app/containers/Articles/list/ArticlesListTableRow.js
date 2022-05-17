@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import * as PropTypes from 'prop-types';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -23,6 +23,18 @@ import WithRoles from '../../WithRoles';
 import { SUPER_ADMIN } from '../../AppHeader/Roles';
 import { Button, ListItemIcon, MenuItem } from '@material-ui/core';
 import { DropDown } from '../../../components/DropDown';
+
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/light.css';
+
+const RowComponent = forwardRef((props, ref) => {
+  return (
+    <IconButton buttonRef={ref}>
+      <Settings />
+    </IconButton>
+  );
+});
 
 const closeStyle = {
   marginLeft: '59rem',
@@ -90,46 +102,44 @@ export class ArticlesListTableRow extends React.PureComponent {
             {'%'}
           </TableCell>
           <TableCell style={{ padding: 0 }}>
-            <IconButton
-              buttonRef={node => {
-                this.anchorEl = node;
-              }}
-              onClick={this.toggleProfileMenu}
+            <Tippy
+              theme="light"
+              trigger="click"
+              interactive
+              content={
+                <div>
+                  <MenuItem onClick={this.viewDetails}>
+                    <ListItemIcon style={{ padding: 5 }}>
+                      <Search color="secondary" />
+                    </ListItemIcon>
+                    <Typography>Consulter</Typography>
+                  </MenuItem>
+
+                  {/*  */}
+
+                  <WithRoles roles={[SUPER_ADMIN]}>
+                    <MenuItem onClick={() => this.edit(row)}>
+                      <ListItemIcon style={{ padding: 5 }}>
+                        <EditIcon color="primary" style={typo3syle} />
+                      </ListItemIcon>
+                      <Typography>Modifier</Typography>
+                    </MenuItem>
+
+                    <MenuItem onClick={this.delete}>
+                      <ListItemIcon style={{ padding: 5 }}>
+                        <DeleteIcon color="primary" />
+                      </ListItemIcon>
+                      <Typography>Supprimer</Typography>
+                    </MenuItem>
+                  </WithRoles>
+                </div>
+              }
             >
-              <Settings />
-            </IconButton>
+              <RowComponent />
+            </Tippy>
           </TableCell>
         </TableRow>
-        <DropDown
-          open={this.state.isPopperOpen}
-          anchorEl={this.state.anchorEl}
-          handleClose={() => this.setState({ isPopperOpen: false })}
-        >
-          <MenuItem onClick={this.viewDetails}>
-            <ListItemIcon style={{ padding: 5 }}>
-              <Search color="secondary" />
-            </ListItemIcon>
-            <Typography>Consulter</Typography>
-          </MenuItem>
 
-          {/*  */}
-
-          <WithRoles roles={[SUPER_ADMIN]}>
-            <MenuItem onClick={() => this.edit(row)}>
-              <ListItemIcon style={{ padding: 5 }}>
-                <EditIcon color="primary" style={typo3syle} />
-              </ListItemIcon>
-              <Typography>Modifier</Typography>
-            </MenuItem>
-
-            <MenuItem onClick={this.delete}>
-              <ListItemIcon style={{ padding: 5 }}>
-                <DeleteIcon color="primary" />
-              </ListItemIcon>
-              <Typography>Supprimer</Typography>
-            </MenuItem>
-          </WithRoles>
-        </DropDown>
         {this.state.open && (
           <Dialog maxWidth="lg" onClose={this.handleClose} aria-labelledby="customized-dialog-title" open>
             <MuiDialogTitle style={{ display: 'flex', justifyContent: 'space-between' }} disableTypography>

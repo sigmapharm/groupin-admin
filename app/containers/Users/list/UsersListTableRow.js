@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import * as PropTypes from 'prop-types';
 import Search from '@material-ui/icons/Search';
 import EditIcon from '@material-ui/icons/Edit';
@@ -27,6 +27,18 @@ import { getUserInfo } from '../actions';
 import { DropDown } from '../../../components/DropDown';
 import { Person, PersonOutline, Settings } from '@material-ui/icons';
 import { Button, ListItemIcon, MenuItem } from '@material-ui/core';
+
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/light.css';
+
+const RowComponent = forwardRef((props, ref) => {
+  return (
+    <IconButton buttonRef={ref}>
+      <Settings />
+    </IconButton>
+  );
+});
 
 const closeButton = { float: 'right' };
 
@@ -168,42 +180,45 @@ export class UsersListTableRow extends React.PureComponent {
           <TableCell>{row.lastCommad ? row.lastCommad.split('T')[0] : 'aucune commandes'}</TableCell>
           <TableCell style={{ padding: 0, display: 'flex' }}>
             <Switch checked={!row.enabled} onChange={this.toggle} value={row.enabled} color="primary" />
-            <IconButton
-              buttonRef={node => {
-                this.anchorEl = node;
-              }}
-              onClick={this.toggleProfileMenu}
+
+            <Tippy
+              theme="light"
+              trigger="click"
+              interactive
+              content={
+                <div>
+                  <MenuItem onClick={this.openDetails(row.id)}>
+                    <ListItemIcon style={{ padding: 5 }}>
+                      <Person color="secondary" />
+                    </ListItemIcon>
+                    <Typography>Consulter</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={this.edit}>
+                    <ListItemIcon style={{ padding: 5 }}>
+                      <EditIcon color="primary" />
+                    </ListItemIcon>
+                    <Typography>Modifier</Typography>
+                  </MenuItem>
+
+                  {/* <Tooltip placement="top" title="Rénitialiser mot de passe">
+                    <IconButton onClick={this.reset} style={{ padding: 5 }}>
+                      <ResetIcon color="primary" />
+                    </IconButton>
+                  </Tooltip> */}
+                  <MenuItem onClick={this.delete}>
+                    <ListItemIcon style={{ padding: 5 }}>
+                      <DeleteIcon color="primary" />
+                    </ListItemIcon>
+                    <Typography>Supprimer</Typography>
+                  </MenuItem>
+                </div>
+              }
             >
-              <Settings />
-            </IconButton>
+              <RowComponent />
+            </Tippy>
           </TableCell>
         </TableRow>
-        <DropDown open={this.state.open} anchorEl={this.state.anchorEl} handleClose={() => this.setState({ open: false })}>
-          <MenuItem onClick={this.openDetails(row.id)}>
-            <ListItemIcon style={{ padding: 5 }}>
-              <Person color="secondary" />
-            </ListItemIcon>
-            <Typography>Consulter</Typography>
-          </MenuItem>
-          <MenuItem onClick={this.edit}>
-            <ListItemIcon style={{ padding: 5 }}>
-              <EditIcon color="primary" />
-            </ListItemIcon>
-            <Typography>Modifier</Typography>
-          </MenuItem>
 
-          {/* <Tooltip placement="top" title="Rénitialiser mot de passe">
-              <IconButton onClick={this.reset} style={{ padding: 5 }}>
-                <ResetIcon color="primary" />
-              </IconButton>
-            </Tooltip> */}
-          <MenuItem onClick={this.delete}>
-            <ListItemIcon style={{ padding: 5 }}>
-              <DeleteIcon color="primary" />
-            </ListItemIcon>
-            <Typography>Supprimer</Typography>
-          </MenuItem>
-        </DropDown>
         {detailsOpen && (
           <Dialog maxWidth="lg" onClose={this.handleClose} open>
             <MuiDialogTitle style={{ display: 'flex', justifyContent: 'space-between' }} disableTypography>
