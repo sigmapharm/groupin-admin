@@ -58,8 +58,6 @@ const OffresListCards = ({
 
   let total = _.sumBy(offerArticles, ({ quantity, pph, tva }) => pph * quantity + pph * quantity * (tva / 100) || 0);
 
-  console.log(selectedOffre);
-
   const GLobalDiscount = parseFloat(totalRemise) * (parseFloat(selectedOffre ? selectedOffre.globalDiscount : 0) / 100);
 
   let totalWidthGlobalDiscount = totalRemise - GLobalDiscount;

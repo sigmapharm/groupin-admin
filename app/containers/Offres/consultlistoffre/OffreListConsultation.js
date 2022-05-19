@@ -133,12 +133,15 @@ export class OffreListConsultation extends React.PureComponent {
 
   get isCommandAllowed() {
     const { totalRemise, row } = this.props;
+
+    console.log(row);
+
     const isEqual = totalRemise === parseInt(row.minToOrder) ? true : false;
 
     const isGreater = totalRemise > parseInt(row.minToOrder) ? true : false;
 
     if (!row.minToOrder) {
-      return this.allowCommandSubmit;
+      return !this.allowCommandSubmit;
     }
 
     if (this.allowCommandSubmit && (isEqual || isGreater)) {
@@ -341,9 +344,10 @@ export class OffreListConsultation extends React.PureComponent {
             </TableRow>
           </TableHead>
           <TableBody>
-            {offerArticles.map(({ id, nom, ppv, pph, discount, computedPPH, quantity, minQuantity, hasError, selected }) => (
-              <TableRow {...(hasError ? { className: classes.hasError } : {})} key={id}>
-                {/* {commandMode && (
+            {offerArticles.map(
+              ({ id, nom, ppv, pph, discount, computedPPH, quantity, minQuantity, hasError, selected, quantityCmd }) => (
+                <TableRow {...(hasError ? { className: classes.hasError } : {})} key={id}>
+                  {/* {commandMode && (
                     <TableCell>
                       <Checkbox
                         onChange={this.handSelectArticleChange(id)}
@@ -351,30 +355,31 @@ export class OffreListConsultation extends React.PureComponent {
                       />
                     </TableCell>
                   )} */}
-                <TableCell>{nom}</TableCell>
-                <TableCell>{ppv.toFixed(2)}</TableCell>
-                <TableCell>{pph.toFixed(2)}</TableCell>
-                <TableCell>{discount}</TableCell>
-                <TableCell>{computedPPH.toFixed(2)}</TableCell>
-                <TableCell>{minQuantity}</TableCell>
-                {this.forAdmin && <TableCell>{quantity}</TableCell>}
-                {commandMode && (
-                  <TableCell>
-                    <TextField
-                      name="quantity"
-                      label="Quantité"
-                      type="number"
-                      value={quantity || ''}
-                      //disabled={!selected}
-                      autoComplete="off"
-                      inputProps={{ maxLength: 100 }}
-                      onChange={this.handleQuantityChange(id, minQuantity)}
-                      fullWidth
-                    />
-                  </TableCell>
-                )}
-              </TableRow>
-            ))}
+                  <TableCell>{nom}</TableCell>
+                  <TableCell>{ppv.toFixed(2)}</TableCell>
+                  <TableCell>{pph.toFixed(2)}</TableCell>
+                  <TableCell>{discount}</TableCell>
+                  <TableCell>{computedPPH.toFixed(2)}</TableCell>
+                  <TableCell>{minQuantity}</TableCell>
+                  {this.forAdmin && <TableCell>{quantityCmd}</TableCell>}
+                  {commandMode && (
+                    <TableCell>
+                      <TextField
+                        name="quantity"
+                        label="Quantité"
+                        type="number"
+                        // value={quantity || ''}
+                        //disabled={!selected}
+                        autoComplete="off"
+                        inputProps={{ maxLength: 100 }}
+                        onChange={this.handleQuantityChange(id, minQuantity)}
+                        fullWidth
+                      />
+                    </TableCell>
+                  )}
+                </TableRow>
+              ),
+            )}
             {/* {commandMode && (
               <TableRow>
                 <TableCell style={{ textAlign: 'right' }} colSpan={7}>
