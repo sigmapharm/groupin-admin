@@ -21,7 +21,7 @@ const RowComponent = forwardRef((props, ref) => {
   return (
     // <WithRoles roles={[ADMIN, SUPER_ADMIN]}>
     <TableCell>
-      <IconButton buttonRef={ref}>
+      <IconButton buttonRef={ref} onClick={props.onClick}>
         <Settings />
       </IconButton>
     </TableCell>
@@ -47,9 +47,9 @@ export default ({
   canGroup,
   printFacture,
   printBL,
+  isTippyOpen,
+  handleTippyToggle,
 }) => {
-  const [open, setOpen] = useState(false);
-
   return (
     <>
       {list.map(row => (
@@ -66,10 +66,11 @@ export default ({
           {withOptions && (
             <Tippy
               theme="light"
-              trigger="click"
+              // visible={isTippyOpen}
+              // onClickOutside={handleTippyToggle}
               interactive
               content={
-                <>
+                <div>
                   {printCommand && (
                     <MenuItem onClick={printCommand && printCommand(row)}>
                       <ListItemIcon>
@@ -153,12 +154,10 @@ export default ({
                       <Typography>commande livré</Typography>
                     </MenuItem>
                   ) : null}
-                </>
+                </div>
               }
-              open={open}
-              handleClose={() => setOpen(false)}
             >
-              <RowComponent />
+              <RowComponent onClick={handleTippyToggle} />
             </Tippy>
           )}
 

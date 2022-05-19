@@ -38,8 +38,8 @@ import 'tippy.js/themes/light.css';
 
 const RowComponent = forwardRef((props, ref) => {
   return (
-    <WithRoles roles={[ADMIN, SUPER_ADMIN]}>
-      <IconButton buttonRef={ref}>
+    <WithRoles roles={[ADMIN, SUPER_ADMIN, MEMBRE]}>
+      <IconButton buttonRef={ref} onClick={props.onClick}>
         <Settings />
       </IconButton>
     </WithRoles>
@@ -63,6 +63,7 @@ export class OffresListTableRow extends React.PureComponent {
       infoBarParams: {},
       montantObjectif: 0,
       open: false,
+      isTippyOpen: false,
     };
   }
   openPopConfirmation = ({ title, textContent, onClose, onSubmit }) => {
@@ -89,7 +90,7 @@ export class OffresListTableRow extends React.PureComponent {
   };
 
   showDetails = () => {
-    this.setState({ isShown: true, commandMode: false });
+    this.setState({ isShown: true, commandMode: false, isTippyOpen: false });
   };
 
   command = row => {
@@ -98,6 +99,7 @@ export class OffresListTableRow extends React.PureComponent {
         isShown: true,
         commandMode: true,
         montantObjectif: row.objectiveAmount,
+        isTippyOpen: false,
       });
   };
 
@@ -117,6 +119,7 @@ export class OffresListTableRow extends React.PureComponent {
     if (canEdit) {
       history.push(`/offres/edit/${row.id}`);
     }
+    this.setState({ isTippyOpen: false });
   };
 
   canDelete = row => {
@@ -137,7 +140,7 @@ export class OffresListTableRow extends React.PureComponent {
                 showPopConfirmation: false,
                 showInfoBar: true,
                 infoBarParams: {
-                  title: "La supression des offres à échoué merci de contacter l'administrateur ",
+                  title: "La supression des offres à échoué merci de contacter l'administrateur",
                 },
               });
             }
@@ -222,7 +225,7 @@ export class OffresListTableRow extends React.PureComponent {
       infoBarParams: {},
     });
   render() {
-    const { row, width, offerArticles } = this.props;
+    let { row, width, offerArticles } = this.props;
     const { isShown, showPopConfirmation, popConfirmationParams, commandMode, showInfoBar, infoBarParams } = this.state;
     const startDate = new Date(row.dateDebut);
     const endDate = new Date(row.dateFin);
@@ -233,12 +236,15 @@ export class OffresListTableRow extends React.PureComponent {
     const totalDays = moment(endDate).diff(startDate, 'days');
     const elapsedDays = moment(new Date()).diff(startDate, 'days');
     let progress = _.round((elapsedDays / totalDays) * 100, 2);
+
     progress = progress > 100 || totalDays == 0 ? 100 : progress;
+
     const remainingDays = totalDays - elapsedDays;
 
     // const status = Math.min(elapsedDuration / globalDuration, 1) * 100 || 0;
     // const remainingDays = Math.floor((startDate - now) / mSecondsPerDay) + 1;
     const dayLabel = remainingDays === 1 ? 'jour' : 'jours';
+
     const totalRemise = _.sumBy(offerArticles, ({ quantity, computedPPH, tva }) => {
       const RemiseCalc = computedPPH * quantity;
 
@@ -254,7 +260,7 @@ export class OffresListTableRow extends React.PureComponent {
     let totalWidthGlobalDiscount = totalRemise - GLobalDiscount;
     const totalGain = (total - totalWidthGlobalDiscount).toFixed(2);
 
-    //arrondir les valeurs
+    // arrondir les valeurs
     totalWidthGlobalDiscount = totalWidthGlobalDiscount.toFixed(2);
     total = total.toFixed(2);
 
@@ -282,20 +288,32 @@ export class OffresListTableRow extends React.PureComponent {
               : 'Offre clôturée !'}
           </TableCell>
           <TableCell style={{ ...tableCellsWidth, padding: 0, textAlign: 'center' }}>
-            <WithRoles roles={[MEMBRE]}>
-              <IconButton disabled={!this.allowOrderButton} onClick={() => this.command(row)} style={{ padding: 5 }}>
-                <ShoppingCart color={!this.allowOrderButton ? 'disabled' : 'secondary'} />
-              </IconButton>
-              <IconButton onClick={this.showDetails} style={{ padding: 5 }}>
-                <Search color="secondary" />
-              </IconButton>
-            </WithRoles>
             <Tippy
               theme="light"
-              trigger="click"
               interactive
+              visible={this.state.isTippyOpen}
+              onClickOutside={() => this.setState({ isTippyOpen: false })}
               content={
                 <>
+                  <WithRoles roles={[MEMBRE]}>
+                    <MenuItem disabled={!this.allowOrderButton} onClick={() => this.command(row)}>
+                      <ListItemIcon style={{ padding: 5 }}>
+                        <ShoppingCart color={!this.allowOrderButton ? 'disabled' : 'secondary'} />
+                      </ListItemIcon>
+                      <Typography>commander</Typography>
+                    </MenuItem>
+
+                    <MenuItem onClick={this.showDetails}>
+                      <ListItemIcon style={{ padding: 5 }}>
+                        <Search color="secondary" />
+                      </ListItemIcon>
+                      <Typography>Consulter</Typography>
+                    </MenuItem>
+
+                    {/* <IconButton onClick={this.showDetails} style={{ padding: 5 }}>
+                <Search color="secondary" />
+              </IconButton> */}
+                  </WithRoles>
                   <WithRoles roles={[ADMIN, SUPER_ADMIN]}>
                     <MenuItem onClick={this.showDetails}>
                       <ListItemIcon style={{ padding: 5 }}>
@@ -342,7 +360,11 @@ export class OffresListTableRow extends React.PureComponent {
                 </>
               }
             >
-              <RowComponent />
+              <RowComponent
+                onClick={() => {
+                  this.setState({ isTippyOpen: !this.state.isTippyOpen });
+                }}
+              />
             </Tippy>
           </TableCell>
         </TableRow>
@@ -424,6 +446,7 @@ export class OffresListTableRow extends React.PureComponent {
       onClose: this.closePopConfirmation,
       onSubmit: this.deleteRow,
     });
+    this.setState({ isTippyOpen: false });
   };
 
   performCloseOffer = () => {
@@ -433,6 +456,7 @@ export class OffresListTableRow extends React.PureComponent {
       onClose: this.closePopConfirmation,
       onSubmit: this.closeOffer,
     });
+    this.setState({ isTippyOpen: false });
   };
 
   performCloneOffer = () => {
@@ -442,12 +466,14 @@ export class OffresListTableRow extends React.PureComponent {
       onClose: this.closePopConfirmation,
       onSubmit: this.duplicateOffer,
     });
+    this.setState({ isTippyOpen: false });
   };
 
   goToSubCommands = row => () => {
     const { dispatch } = this.props;
     dispatch(selectOffer(row));
     history.push(`/offres/${row.id}/commands`);
+    this.setState({ isTippyOpen: false });
   };
 }
 

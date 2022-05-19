@@ -29,6 +29,7 @@ import { GET_LABO_ARTICLES_LIST_ACTION } from '../App/constants';
 import { putArticleslaboList } from '../App/actions';
 import requestWithAuth from '../../services/request/request-with-auth';
 import * as GlobalActions from '../App/actions';
+import { map } from 'lodash';
 
 function* cloneOfferWorker({ payload: { offerId, filters, callback } }) {
   const options = {
@@ -136,7 +137,12 @@ function* loadArticleOfferWorker({ payload: { id }, callback }) {
   };
   yield networking(function*() {
     try {
-      const res = yield requestWithAuth(`/offres/${id}/articles`, options);
+      let res = yield requestWithAuth(`/offres/${id}/articles`, options);
+
+      res = map(res, row => {
+        return { ...row, quantity: 0, quantityCmd: row.quantity };
+      });
+
       yield put(loadArticleOfferSuccess(res));
       yield callback && callback();
     } catch (e) {
