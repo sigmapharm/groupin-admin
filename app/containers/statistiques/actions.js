@@ -9,6 +9,8 @@ import {
   PUT_CITY_STATS,
   GET_PRINT_PHRAMA_STATS,
   PUT_PRINT_PHRAMA_STATS,
+  GET_REG_STATS,
+  PUT_REG_STATS,
 } from './constants';
 
 // articles
@@ -75,6 +77,20 @@ const putCity = payload => {
   };
 };
 
+const getReg = payload => {
+  return {
+    type: GET_REG_STATS,
+    payload,
+  };
+};
+
+const putReg = payload => {
+  return {
+    type: PUT_REG_STATS,
+    payload,
+  };
+};
+
 // print phrama
 
 const getPrintPharama = payload => {
@@ -102,4 +118,6 @@ export {
   putCity,
   getPrintPharama,
   putPrintPharama,
+  getReg,
+  putReg,
 };

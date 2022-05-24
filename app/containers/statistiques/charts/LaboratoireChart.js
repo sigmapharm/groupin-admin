@@ -45,7 +45,7 @@ const cols = [
     label: 'delai Livraison',
     colName: 'delaiLivraison',
     order: 'asc',
-    orderName: '',
+    orderName: 'delai',
   },
 ];
 

@@ -9,9 +9,9 @@ import { autoPlay } from 'react-swipeable-views-utils';
 
 // images
 
-import slideImg1 from '../../images/img_1.png';
-import slideImg2 from '../../images/img_2.png';
-import slideImg3 from '../../images/img_3.png';
+import slideImg1 from '../../images/groupinLogos/Picture1.png';
+import slideImg2 from '../../images/groupinLogos/Picture2.png';
+import slideImg3 from '../../images/groupinLogos/Picture3.png';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -19,20 +19,21 @@ const imgSteps = [slideImg1, slideImg2, slideImg3];
 
 const styles = theme => ({
   root: {
-    width: '100%',
-    padding: 10,
-    marginTop: 10,
+    width: '80%',
+    padding: 0,
+    margin: 'auto',
     height: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    // border: '1px solid black',
   },
 
   img: {
     display: 'block',
     overflow: 'hidden',
     width: '100%',
-    maxHeight: '380px',
+    // maxHeight: '380px',
     borderRadius: 10,
   },
 });
