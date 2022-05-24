@@ -30,7 +30,7 @@ import 'tippy.js/themes/light.css';
 
 const RowComponent = forwardRef((props, ref) => {
   return (
-    <IconButton buttonRef={ref}>
+    <IconButton buttonRef={ref} onClick={props.onClick}>
       <Settings />
     </IconButton>
   );
@@ -60,12 +60,14 @@ export class ArticlesListTableRow extends React.PureComponent {
     this.state = {
       open: false,
       isPopperOpen: false,
+      isTippyOpen: false,
     };
   }
 
   viewDetails = () => {
     this.setState({
       open: true,
+      isTippyOpen: false,
     });
   };
 
@@ -75,10 +77,16 @@ export class ArticlesListTableRow extends React.PureComponent {
     });
   };
 
-  edit = ({ id }) => history.push(`/articles/edit/${id}`);
+  edit = ({ id }) => {
+    history.push(`/articles/edit/${id}`);
+    this.setState({ isTippyOpen: false });
+  };
 
   // eslint-disable-next-line react/prop-types
-  delete = () => this.props.deleteArticle();
+  delete = () => {
+    this.props.deleteArticle();
+    this.setState({ isTippyOpen: false });
+  };
 
   toggleProfileMenu = e => {
     this.setState({
@@ -104,7 +112,8 @@ export class ArticlesListTableRow extends React.PureComponent {
           <TableCell style={{ padding: 0 }}>
             <Tippy
               theme="light"
-              trigger="click"
+              visible={this.state.isTippyOpen}
+              onClickOutside={() => this.setState({ isTippyOpen: false })}
               interactive
               content={
                 <div>
@@ -135,7 +144,13 @@ export class ArticlesListTableRow extends React.PureComponent {
                 </div>
               }
             >
-              <RowComponent />
+              <RowComponent
+                onClick={() =>
+                  this.setState({
+                    isTippyOpen: !this.state.isTippyOpen,
+                  })
+                }
+              />
             </Tippy>
           </TableCell>
         </TableRow>

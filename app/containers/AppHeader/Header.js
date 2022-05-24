@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import * as PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import logo from '../../images/logo-white.png';
+import logo from '../../images/groupinLogos/Logo_Blanc2.png';
 import MyMenu from './MyMenu';
 import { makeSelectUser } from '../App/selectors';
 import { logout } from '../App/actions';

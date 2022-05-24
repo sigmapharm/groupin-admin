@@ -54,7 +54,7 @@ const cols = [
     label: 'delai Livraison',
     colName: 'delaiLivraison',
     order: 'asc',
-    orderName: '',
+    orderName: 'delai',
   },
 ];
 
@@ -85,7 +85,7 @@ function LineChart(props) {
             return;
           }
           const pdfBlob = new Blob([blob], { type: blob.type });
-          saveAs(pdfBlob, 'pharama.pdf');
+          saveAs(pdfBlob, 'liste-pharmacies.pdf');
         },
       }),
     );

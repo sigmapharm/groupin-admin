@@ -9,6 +9,8 @@ const selectlabos = () => createSelector(reportingState, state => state.get('lab
 
 const selectCity = () => createSelector(reportingState, state => state.get('cityStats').toJS());
 
+const selectReg = () => createSelector(reportingState, state => state.get('regState').toJS());
+
 const selectPrintPharma = () => createSelector(reportingState, state => state.get('pharmaPrint'));
 
-export { selectArticles, selectPharmas, selectlabos, selectCity, selectPrintPharma };
+export { selectArticles, selectPharmas, selectlabos, selectCity, selectPrintPharma, selectReg };

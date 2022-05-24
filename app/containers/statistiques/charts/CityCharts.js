@@ -18,7 +18,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: "chiffre d' affaires par Regions (MAD)",
+      text: "chiffre d' affaires par Villes (MAD)",
     },
   },
 };
@@ -27,7 +27,7 @@ const labels = ['1', '2', '3', '4', '5', '6', '7'];
 
 const cols = [
   {
-    label: 'region',
+    label: 'City',
     colName: 'designation',
     order: 'asc',
     orderName: 'name',

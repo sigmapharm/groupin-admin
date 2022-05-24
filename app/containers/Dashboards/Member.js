@@ -10,6 +10,7 @@ import Card from './Card';
 import { selectStatistics } from './selectors';
 import PieChart from './charts/PieChart';
 import SmallCard from './SmallCard';
+import { formatNumber } from '../../utils/formatNumber';
 
 const Member = ({ classes, dispatch, statistics, userRole }) => {
   useEffect(() => {
@@ -32,9 +33,13 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
             <div className={classes.container}>
               <SmallCard title="Nbr commandes" backgroundColor="#FF92A5" value={statistics.totalCommande} />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard title="Total commandé" backgroundColor="#4F51C0" value={Number(statistics.totalCACommande).toFixed(2)} />
+              <SmallCard
+                title="Total commandé"
+                backgroundColor="#4F51C0"
+                value={formatNumber.format(statistics.totalCACommande)}
+              />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard title="Total gain" backgroundColor="#FED674" value={Number(statistics.totalRemise).toFixed(2)} />
+              <SmallCard title="Total gain" backgroundColor="#FED674" value={formatNumber.format(statistics.totalRemise)} />
               <div style={{ marginBottom: '10px' }} />
             </div>
           </Grid>

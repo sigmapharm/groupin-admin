@@ -125,8 +125,13 @@ class Command extends PureComponent {
       popConfirmationParams: {},
       cols: this.isMember ? memberCols : !this.isCommandsPage ? memberCols : adminCols,
       blobUrl: '',
+      isTippyOpen: false,
     };
   }
+
+  handleTippyToggle = () => {
+    this.setState({ isTippyOpen: !this.state.isTippyOpen });
+  };
 
   searchFields = searchFields(fieldData => {
     const { searchData } = this.state;
@@ -294,6 +299,7 @@ class Command extends PureComponent {
           });
         } else {
           this.setState({
+            isTippyOpen: false,
             update: false,
             showCommandDetail: true,
             selectedCommand: row,
@@ -321,6 +327,7 @@ class Command extends PureComponent {
             update: true,
             showCommandDetail: true,
             selectedCommand: row,
+            isTippyOpen: false,
           });
         }
       },
@@ -352,6 +359,8 @@ class Command extends PureComponent {
         }
       },
     });
+
+    this.setState({ isTippyOpen: false });
   };
 
   printFacture = row => () => {
@@ -377,6 +386,7 @@ class Command extends PureComponent {
         }
       },
     });
+    this.setState({ isTippyOpen: false });
   };
 
   printBL = row => () => {
@@ -402,6 +412,7 @@ class Command extends PureComponent {
         }
       },
     });
+    this.setState({ isTippyOpen: false });
   };
 
   closeCommandDetail = () => {
@@ -743,6 +754,8 @@ class Command extends PureComponent {
                   canGroup={this.canGroup}
                   printFacture={this.printFacture}
                   printBL={this.printBL}
+                  handleTippyToggle={this.handleTippyToggle}
+                  isTippyOpen={this.state.isTippyOpen}
                 />
               )}
             </Table>

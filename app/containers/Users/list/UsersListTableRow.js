@@ -34,7 +34,7 @@ import 'tippy.js/themes/light.css';
 
 const RowComponent = forwardRef((props, ref) => {
   return (
-    <IconButton buttonRef={ref}>
+    <IconButton buttonRef={ref} onClick={props.onClick}>
       <Settings />
     </IconButton>
   );
@@ -71,6 +71,7 @@ export class UsersListTableRow extends React.PureComponent {
       userRow: {},
       open: false,
       anchorEl: null,
+      isTippyOpen: false,
     };
   }
 
@@ -79,6 +80,7 @@ export class UsersListTableRow extends React.PureComponent {
     this.setState({
       formData: { ...row, ville: formatCityToLabelValue(row.ville) },
       editMode: true,
+      isTippyOpen: false,
     });
   };
 
@@ -92,7 +94,7 @@ export class UsersListTableRow extends React.PureComponent {
     });
   };
 
-  openDetails = id => () => {
+  openDetails = (id, closeDropDown) => () => {
     this.props.dispatch(
       getUserInfo({
         callback: (err, data) => {
@@ -108,6 +110,7 @@ export class UsersListTableRow extends React.PureComponent {
         id,
       }),
     );
+    closeDropDown();
   };
 
   handleSubmitEdit = e => {
@@ -150,6 +153,7 @@ export class UsersListTableRow extends React.PureComponent {
   delete = () => {
     // eslint-disable-next-line react/prop-types
     this.props.deleteUser();
+    this.setState({ isTippyOpen: false });
   };
 
   closeEditMode = () => {
@@ -183,11 +187,14 @@ export class UsersListTableRow extends React.PureComponent {
 
             <Tippy
               theme="light"
-              trigger="click"
               interactive
+              visible={this.state.isTippyOpen}
+              onClickOutside={() => {
+                this.setState({ isTippyOpen: false });
+              }}
               content={
                 <div>
-                  <MenuItem onClick={this.openDetails(row.id)}>
+                  <MenuItem onClick={this.openDetails(row.id, () => this.setState({ isTippyOpen: false }))}>
                     <ListItemIcon style={{ padding: 5 }}>
                       <Person color="secondary" />
                     </ListItemIcon>
@@ -214,7 +221,7 @@ export class UsersListTableRow extends React.PureComponent {
                 </div>
               }
             >
-              <RowComponent />
+              <RowComponent onClick={() => this.setState({ isTippyOpen: true })} />
             </Tippy>
           </TableCell>
         </TableRow>
