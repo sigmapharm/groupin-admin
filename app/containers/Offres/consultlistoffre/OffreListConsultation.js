@@ -420,6 +420,11 @@ export class OffreListConsultation extends React.PureComponent {
             </Button>
           </Grid>
         )}
+        {this.isCommandAllowed && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10, color: 'red' }}>
+            Votre commande n'a pas encore atteint le minimum à commander défini par le laboratoire
+          </div>
+        )}
         <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
       </React.Fragment>
     );

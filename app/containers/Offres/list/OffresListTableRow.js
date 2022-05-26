@@ -383,7 +383,7 @@ export class OffresListTableRow extends React.PureComponent {
             </MuiDialogTitle>
 
             <MuiDialogContent>
-              {totalGain > 0 && this.props.isMember ? (
+              {this.props.isMember ? (
                 <div
                   style={{
                     position: 'sticky',
