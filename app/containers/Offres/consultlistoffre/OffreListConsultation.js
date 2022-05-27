@@ -346,7 +346,11 @@ export class OffreListConsultation extends React.PureComponent {
           <TableBody>
             {offerArticles.map(
               ({ id, nom, ppv, pph, discount, computedPPH, quantity, minQuantity, hasError, selected, quantityCmd }) => (
-                <TableRow {...(hasError ? { className: classes.hasError } : {})} key={id}>
+                <TableRow
+                  {...(hasError ? { className: classes.hasError } : {})}
+                  key={id}
+                  style={{ backgroundColor: quantity > 0 ? '#4d609c70' : undefined }}
+                >
                   {/* {commandMode && (
                     <TableCell>
                       <Checkbox
