@@ -16,9 +16,8 @@ export class AticlesListTableRow extends React.PureComponent {
 
   render() {
     const { row, handleArticleRowChange, index } = this.props;
-    console.log('row', row);
     return (
-      <TableRow key={row.id}>
+      <TableRow key={row.id} style={row.discount || row.minQuantity ? { backgroundColor: '#4d609c70' } : {}}>
         {/*  <TableCell component="th" scope="row">
           <Checkbox
             onChange={({ target: { checked } }) =>

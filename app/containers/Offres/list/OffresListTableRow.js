@@ -326,7 +326,7 @@ export class OffresListTableRow extends React.PureComponent {
                       <ListItemIcon style={{ padding: 5 }}>
                         <EditIcon color={this.canEdit(row) ? 'primary' : 'disabled'} />
                       </ListItemIcon>
-                      <Typography>Edit</Typography>
+                      <Typography>Modifier</Typography>
                     </MenuItem>
 
                     <MenuItem disabled={!this.canDelete(row)} onClick={this.performDelete}>
@@ -340,7 +340,7 @@ export class OffresListTableRow extends React.PureComponent {
                       <ListItemIcon style={{ padding: 5 }}>
                         <DealOffIcon color={this.canCloseOffer ? 'primary' : 'disabled'} />
                       </ListItemIcon>
-                      <Typography>clôture</Typography>
+                      <Typography>clôturer</Typography>
                     </MenuItem>
 
                     <MenuItem onClick={this.goToSubCommands(row)}>
@@ -383,7 +383,7 @@ export class OffresListTableRow extends React.PureComponent {
             </MuiDialogTitle>
 
             <MuiDialogContent>
-              {totalGain > 0 && this.props.isMember ? (
+              {this.props.isMember ? (
                 <div
                   style={{
                     position: 'sticky',

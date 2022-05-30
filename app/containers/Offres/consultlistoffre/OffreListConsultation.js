@@ -346,7 +346,11 @@ export class OffreListConsultation extends React.PureComponent {
           <TableBody>
             {offerArticles.map(
               ({ id, nom, ppv, pph, discount, computedPPH, quantity, minQuantity, hasError, selected, quantityCmd }) => (
-                <TableRow {...(hasError ? { className: classes.hasError } : {})} key={id}>
+                <TableRow
+                  {...(hasError ? { className: classes.hasError } : {})}
+                  key={id}
+                  style={{ backgroundColor: quantity > 0 ? '#4d609c70' : undefined }}
+                >
                   {/* {commandMode && (
                     <TableCell>
                       <Checkbox
@@ -419,6 +423,11 @@ export class OffreListConsultation extends React.PureComponent {
               Commander
             </Button>
           </Grid>
+        )}
+        {this.isCommandAllowed && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10, color: 'red' }}>
+            Votre commande n'a pas encore atteint le minimum à commander défini par le laboratoire
+          </div>
         )}
         <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
       </React.Fragment>
