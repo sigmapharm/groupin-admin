@@ -12,6 +12,7 @@ import PieChart from './charts/PieChart';
 import BarChart from './charts/BarChart';
 import SmallCard from './SmallCard';
 import { formatNumber } from '../../utils/formatNumber';
+import _ from 'lodash';
 
 const Member = ({ classes, dispatch, statistics, userRole }) => {
   useEffect(() => {
