@@ -349,7 +349,7 @@ export class OffreListConsultation extends React.PureComponent {
                 <TableRow
                   {...(hasError ? { className: classes.hasError } : {})}
                   key={id}
-                  style={{ backgroundColor: quantity > 0 ? '#4d609c70' : undefined }}
+                  style={{ backgroundColor: quantity >= minQuantity ? '#4d609c70' : undefined }}
                 >
                   {/* {commandMode && (
                     <TableCell>
