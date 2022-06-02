@@ -178,6 +178,9 @@ export class OffreListConsultation extends React.PureComponent {
   render() {
     const { row, classes, remainingDays, hasStarted, progress, offerArticles, commandMode, dismiss } = this.props;
     const { showInfoBar, infoBarParams } = this.state;
+
+    console.log(row);
+
     const datefin = new Date(row.dateFin);
     const startDate = new Date(row.dateDebut);
     const joursLabel = remainingDays === 1 ? 'jour' : 'jours';
@@ -424,11 +427,11 @@ export class OffreListConsultation extends React.PureComponent {
             </Button>
           </Grid>
         )}
-        {this.isCommandAllowed && (
+        {this.isCommandAllowed && commandMode && this.props.totalRemise > 0 ? (
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10, color: 'red' }}>
             Votre commande n'a pas encore atteint le minimum à commander défini par le laboratoire
           </div>
-        )}
+        ) : null}
         <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
       </React.Fragment>
     );
