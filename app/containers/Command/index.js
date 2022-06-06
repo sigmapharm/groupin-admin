@@ -56,8 +56,8 @@ const adminCols = [
   {
     label: 'Date de commande',
     colName: 'createdAt',
-    selected: false,
-    order: 'asc',
+    selected: true,
+    order: 'desc',
   },
   {
     label: 'Montant Remisé',
@@ -89,8 +89,8 @@ const memberCols = [
   {
     label: 'Date de commande',
     colName: 'createdAt',
-    selected: false,
-    order: 'asc',
+    selected: true,
+    order: 'desc',
   },
   {
     label: 'Montant Remisé',
@@ -299,6 +299,7 @@ class Command extends PureComponent {
           });
         } else {
           this.setState({
+            isTippyOpen: false,
             update: false,
             showCommandDetail: true,
             selectedCommand: row,
@@ -326,6 +327,7 @@ class Command extends PureComponent {
             update: true,
             showCommandDetail: true,
             selectedCommand: row,
+            isTippyOpen: false,
           });
         }
       },
@@ -357,6 +359,8 @@ class Command extends PureComponent {
         }
       },
     });
+
+    this.setState({ isTippyOpen: false });
   };
 
   printFacture = row => () => {
@@ -382,6 +386,7 @@ class Command extends PureComponent {
         }
       },
     });
+    this.setState({ isTippyOpen: false });
   };
 
   printBL = row => () => {
@@ -407,6 +412,7 @@ class Command extends PureComponent {
         }
       },
     });
+    this.setState({ isTippyOpen: false });
   };
 
   closeCommandDetail = () => {

@@ -27,7 +27,7 @@ export class Progressbar extends React.PureComponent {
           success: {
             symbol: ' ',
             trailColor: '#F2F3F4',
-            color: 'green',
+            color: 'red',
           },
         }}
       />

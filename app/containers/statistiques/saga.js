@@ -1,6 +1,13 @@
 import { all, put, takeLatest } from 'redux-saga/effects';
-import { GET_ARTICLE_STATS, GET_PHARMA_STATS, GET_LABOS_STATS, GET_CITY_STATS, GET_PRINT_PHRAMA_STATS } from './constants';
-import { putArticles, putPharmas, putLabos, putCity, putPrintPharama } from './actions';
+import {
+  GET_ARTICLE_STATS,
+  GET_PHARMA_STATS,
+  GET_LABOS_STATS,
+  GET_CITY_STATS,
+  GET_PRINT_PHRAMA_STATS,
+  GET_REG_STATS,
+} from './constants';
+import { putArticles, putPharmas, putLabos, putCity, putPrintPharama, putReg } from './actions';
 import { callApi } from '../../services/saga';
 
 import requestWithAuth from '../../services/request/request-with-auth';
@@ -87,6 +94,25 @@ function* CityListWorker(action) {
   });
 }
 
+function* RegListWorker(action) {
+  const page = action.payload;
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(`/statistics/region${page || ''}`, options);
+      yield put(putReg(res));
+    } catch (e) {
+      console.log(e);
+    }
+  });
+}
+
 // print pharama
 
 function* printPharamaWorker({ payload: { callback } }) {
@@ -119,6 +145,7 @@ function* reportingSagas() {
     takeLatest(GET_LABOS_STATS, LabosListWorker),
     takeLatest(GET_CITY_STATS, CityListWorker),
     takeLatest(GET_PRINT_PHRAMA_STATS, printPharamaWorker),
+    takeLatest(GET_REG_STATS, RegListWorker),
   ]);
 }
 

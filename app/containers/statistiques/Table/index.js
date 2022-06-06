@@ -39,7 +39,7 @@ function ChartTable(props) {
     const order = sorting.order === 'desc' ? 'asc' : 'desc';
 
     setSorting({ order, desg });
-    dispatch(tableUpdate(`?direction=${order}&field=${colName || ''}&from=${fromDate}&to=${toDate}`));
+    dispatch(tableUpdate(`?direction=${order}&field=${desg || ''}&from=${fromDate}&to=${toDate}`));
   };
 
   return (

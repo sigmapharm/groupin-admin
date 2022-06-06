@@ -9,6 +9,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import logocolor from '../../images/logo-color.png';
+import logo from '../../images/groupinLogos/Logo.png';
 import ErrorBar from '../Snackbar/ErrorBar';
 import SwipeableTextMobileStepper from '../LoginSlide/slider';
 import Dialog from '@material-ui/core/Dialog';
@@ -41,7 +42,7 @@ const styles = theme => ({
     minHeight: 450,
 
     // maxHeight: 500,
-    flexDirection: 'column-reverse',
+    flexDirection: 'column',
     [theme.breakpoints.up('md')]: {
       flexDirection: 'row',
     },
@@ -99,7 +100,7 @@ export function LoginForm(props) {
       <Paper className={classes.paper} elevation={4}>
         <div className={classes.formContainer}>
           <div>
-            <img alt="logo" src={logocolor} style={{ width: '200px' }} />
+            <img alt="logo" src={logo} style={{ width: '200px' }} />
           </div>
           <Typography component="h1" variant="h5">
             <br />

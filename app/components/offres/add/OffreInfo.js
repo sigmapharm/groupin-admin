@@ -25,6 +25,7 @@ const styles = () => ({
 });
 export function OffreInfo(props) {
   const { formData, errors, classes, onChange, maxLength, children, disableAllWithoutDate, disableAll } = props;
+
   const disable = disableAllWithoutDate || disableAll;
 
   return (
@@ -42,9 +43,9 @@ export function OffreInfo(props) {
             disabled={disable}
             autoComplete="off"
             className={classes.offreInputs}
-            inputProps={{
-              maxLength,
-            }}
+            // inputProps={{
+            //   maxLength,
+            // }}
             fullWidth
           />
         </Grid>
@@ -98,7 +99,6 @@ export function OffreInfo(props) {
         </Grid>
         <Grid xs={12} md={6} item>
           <TextField
-            required
             name={fields.montant.name}
             label={fields.montant.label}
             value={formData[fields.montant.name]}
@@ -174,7 +174,6 @@ export function OffreInfo(props) {
         </Grid>
         <Grid xs={12} md={6} item>
           <TextField
-            required
             noValidate
             autoComplete="off"
             name={fields.minToOrder.name}

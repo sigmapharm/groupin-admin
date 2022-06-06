@@ -9,13 +9,19 @@ import { getStatistics } from './actions';
 import Card from './Card';
 import { selectStatistics } from './selectors';
 import PieChart from './charts/PieChart';
+import BarChart from './charts/BarChart';
 import SmallCard from './SmallCard';
+import { formatNumber } from '../../utils/formatNumber';
+import _ from 'lodash';
 
 const Member = ({ classes, dispatch, statistics, userRole }) => {
   useEffect(() => {
     dispatch(getStatistics(userRole));
   }, []);
   console.log('statistics', statistics);
+
+  const sortedChars = _.sortBy(statistics.caparArticle ? statistics.caparArticle : [], ['value'], ['desc']);
+
   return (
     <div className={classes.root}>
       <div>
@@ -32,9 +38,13 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
             <div className={classes.container}>
               <SmallCard title="Nbr commandes" backgroundColor="#FF92A5" value={statistics.totalCommande} />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard title="Total commandé" backgroundColor="#4F51C0" value={Number(statistics.totalCACommande).toFixed(2)} />
+              <SmallCard
+                title="Total commandé"
+                backgroundColor="#4F51C0"
+                value={formatNumber.format(statistics.totalCACommande)}
+              />
               <div style={{ marginBottom: '10px' }} />
-              <SmallCard title="Total gain" backgroundColor="#FED674" value={Number(statistics.totalRemise).toFixed(2)} />
+              <SmallCard title="Total gain" backgroundColor="#FED674" value={formatNumber.format(statistics.totalRemise)} />
               <div style={{ marginBottom: '10px' }} />
             </div>
           </Grid>
@@ -48,10 +58,16 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
             </div>
             <div style={{ marginBottom: '24px' }} />
             <div className={classes.container}>
-              <PieChart
-                data={statistics.caparArticle ? statistics.caparArticle.map(v => v.value) : []}
-                labels={statistics.caparArticle ? statistics.caparArticle.map(v => v.name) : []}
-                label="Chiffre d'affaire par article(%)"
+              <BarChart
+                data={sortedChars
+                  .map(v => v.value)
+                  .slice(0, 10)
+                  .reverse()}
+                labels={sortedChars
+                  .map(v => v.name.slice(0, 10))
+                  .slice(0, 10)
+                  .reverse()}
+                label="Top 10 articles commandés (MAD)"
               />
             </div>
           </Grid>

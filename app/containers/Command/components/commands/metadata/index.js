@@ -68,6 +68,7 @@ export default ({
               theme="light"
               // visible={isTippyOpen}
               // onClickOutside={handleTippyToggle}
+              trigger="click"
               interactive
               content={
                 <div>
@@ -79,6 +80,7 @@ export default ({
                       <Typography>Imprimer BC </Typography>
                     </MenuItem>
                   )}
+
                   {!row.isAggregate && (
                     <MenuItem onClick={printFacture && printFacture(row)} disabled={row.deliveredAt ? false : true}>
                       <ListItemIcon>

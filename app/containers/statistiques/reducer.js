@@ -11,11 +11,20 @@ import {
   PUT_CITY_STATS,
   GET_PRINT_PHRAMA_STATS,
   PUT_PRINT_PHRAMA_STATS,
+  GET_REG_STATS,
+  PUT_REG_STATS,
 } from './constants';
 
 export const formDataInitialState = fromJS({ stateReport: {} });
 
-export const initialState = fromJS({ articlesStats: {}, pharmaStats: {}, labosStats: {}, cityStats: {}, pharmaPrint: {} });
+export const initialState = fromJS({
+  articlesStats: {},
+  pharmaStats: {},
+  labosStats: {},
+  cityStats: {},
+  pharmaPrint: {},
+  regState: {},
+});
 
 function reducer(state = initialState, action) {
   if (!action) {
@@ -60,6 +69,14 @@ function reducer(state = initialState, action) {
 
     case PUT_PRINT_PHRAMA_STATS: {
       return state.merge({ pharmaPrint: action.payload });
+    }
+
+    case GET_REG_STATS: {
+      return state.merge({ ...action.payload });
+    }
+
+    case PUT_REG_STATS: {
+      return state.merge({ regState: action.payload });
     }
 
     default: {

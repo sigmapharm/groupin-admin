@@ -7,17 +7,18 @@ import { createStructuredSelector } from 'reselect';
 import authenticated from '../HOC/authenticated/authenticated';
 import DateInput from '../../components/DateInput';
 import ArticleChart from './charts/ArticlesChart';
+import CityChart from './charts/CityCharts';
 import RegionChart from './charts/RegionChart';
+
 import PharmaciesChart from './charts/PharmaciesChart';
 import LaboChart from './charts/LaboratoireChart';
 import moment from 'moment';
 import _ from 'lodash';
-import { selectArticles, selectPharmas, selectlabos, selectCity, selectPrintPharma } from './selectors';
-import { getArticles, getPharmas, getLabos, getCity, getPrintPharama } from './actions';
+import { selectArticles, selectPharmas, selectlabos, selectCity, selectPrintPharma, selectReg } from './selectors';
+import { getArticles, getPharmas, getLabos, getCity, getPrintPharama, getReg } from './actions';
 
-const Statistiques = ({ classes, articles, dispatch, pharmas, labos, city, printPharma }) => {
-  console.log('print', printPharma);
-
+const Statistiques = ({ classes, articles, dispatch, pharmas, labos, city, printPharma, region }) => {
+  console.log(region);
   //
   const day = moment().get('date');
   const year = moment().get('year');
@@ -41,6 +42,7 @@ const Statistiques = ({ classes, articles, dispatch, pharmas, labos, city, print
     dispatch(getPharmas(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
     dispatch(getLabos(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
     dispatch(getCity(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
+    dispatch(getReg(`?from=${isStartDateInValide}&to=${isENdDAteInValide}`));
   };
 
   return (
@@ -73,9 +75,16 @@ const Statistiques = ({ classes, articles, dispatch, pharmas, labos, city, print
             fromDate={isStartDateInValide}
             toDate={isENdDAteInValide}
           />
-          <RegionChart
+          <CityChart
             rows={city}
             tableUpdate={getCity}
+            dispatch={dispatch}
+            fromDate={isStartDateInValide}
+            toDate={isENdDAteInValide}
+          />
+          <RegionChart
+            rows={region}
+            tableUpdate={getReg}
             dispatch={dispatch}
             fromDate={isStartDateInValide}
             toDate={isENdDAteInValide}
@@ -141,6 +150,7 @@ const mapStateToProps = createStructuredSelector({
   pharmas: selectPharmas(),
   labos: selectlabos(),
   city: selectCity(),
+  region: selectReg(),
   printPharma: selectPrintPharma(),
 });
 
