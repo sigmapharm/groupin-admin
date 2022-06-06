@@ -20,7 +20,7 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
   }, []);
   console.log('statistics', statistics);
 
-  const sortedChars = _.sortBy(statistics.caparLabo ? statistics.caparLabo : [], ['value'], ['desc']);
+  const sortedChars = _.sortBy(statistics.caparArticle ? statistics.caparArticle : [], ['value'], ['desc']);
 
   return (
     <div className={classes.root}>

@@ -44,7 +44,7 @@ export const validateFormData = formData => {
   validationResult = validate(validationResult, fields.dateFin, formData.dateFin);
   fields.dateFin.validator = validators.isBeforeValidation(formData.dateDebut);
   validationResult = validate(validationResult, fields.dateFin, formData.dateFin);
-  validationResult = validate(validationResult, fields.montant, formData.montant);
+  // validationResult = validate(validationResult, fields.montant, formData.montant);
   validationResult = validate(validationResult, fields.globalDiscount, formData.globalDiscount);
 
   return validationResult;
