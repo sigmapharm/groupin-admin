@@ -56,8 +56,8 @@ const adminCols = [
   {
     label: 'Date de commande',
     colName: 'createdAt',
-    selected: false,
-    order: 'asc',
+    selected: true,
+    order: 'desc',
   },
   {
     label: 'Montant Remisé',
@@ -89,8 +89,8 @@ const memberCols = [
   {
     label: 'Date de commande',
     colName: 'createdAt',
-    selected: false,
-    order: 'asc',
+    selected: true,
+    order: 'desc',
   },
   {
     label: 'Montant Remisé',
