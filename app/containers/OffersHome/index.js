@@ -1,4 +1,5 @@
 import { Typography, withStyles } from '@material-ui/core';
+import { InfoOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import connect from 'react-redux/es/connect/connect';
@@ -9,6 +10,7 @@ import { getOffreList } from '../Offres/actions';
 import { makeSelectOffresList } from '../Offres/selectors';
 import image from '../../images/bayer.png';
 import Countdown from 'react-countdown';
+import Tooltip from '@tippyjs/react';
 
 // images
 
@@ -27,8 +29,11 @@ import POLYMEDIC from '../../images/labos/POLYMEDIC.png';
 import PROMOPHARM from '../../images/labos/PROMOPHARM.jpeg';
 import SANOFI from '../../images/labos/SANOFI.jpeg';
 import ZENITH from '../../images/labos/ZENITH.png';
+import 'tippy.js/dist/tippy.css';
 
 import GROUPIN from '../../images/logo-color.png';
+import { NumberFormat } from 'intl';
+import { formatNumber } from '../../utils/formatNumber';
 
 const LabosImg = {
   BAYER,
@@ -97,6 +102,16 @@ const OffersHome = ({ classes, dispatch, offresList, history }) => {
                 <h4 style={{ fontSize: '15px' }}>{offre.laboratoryName}</h4>
                 <span style={{ margin: '0 5px', fontSize: '15px' }}>-</span>
                 <span className={classes.date}>{moment(offre.dateDebut).format('YYYY MMMM')}</span>
+              </div>
+
+              <Tooltip content={offre.designation} placement="top" arrow>
+                <div style={{ fontSize: 13, display: 'flex' }}>
+                  <InfoOutlined style={{ marginRight: 5 }} />
+                  <span style={{ paddingTop: 3 }}>{offre.designation ? offre.designation.slice(0, 20) + ' ...' : null}</span>{' '}
+                </div>
+              </Tooltip>
+              <div style={{ marginTop: 10, fontSize: 13, color: 'green' }}>
+                Min à commander : {offre.minToOrder ? formatNumber.format(offre.minToOrder) : '-'}
               </div>
               <Countdown
                 date={Date.now() + moment(offre.dateFin).diff(new Date())}

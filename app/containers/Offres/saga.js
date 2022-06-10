@@ -164,7 +164,7 @@ function* offresListWorker(action) {
   yield networking(function*() {
     try {
       const params = `?size=${action.payload.rowsPerPage}&page=${action.payload.page}&designation=${
-        action.payload.designation
+        action.payload.designation ? action.payload.designation : ''
       }&laboratory=${action.payload.laboratoire}&status=${action.payload.status}${sortQuery}`;
       const res = yield requestWithAuth(`/offres${params}`, options);
       yield put(putOffresList(res));
