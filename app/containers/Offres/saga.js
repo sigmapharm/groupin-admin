@@ -137,7 +137,7 @@ function* loadArticleOfferWorker({ payload: { id }, callback }) {
   };
   yield networking(function*() {
     try {
-      let res = yield requestWithAuth(`/offres/${id}/articles`, options);
+      let res = yield requestWithAuth(`/offres/${id}/articles?size=99999`, options);
 
       res = map(res, row => {
         return { ...row, quantity: 0, quantityCmd: row.quantity };
