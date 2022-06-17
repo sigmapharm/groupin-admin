@@ -274,6 +274,7 @@ export class OffresListTableRow extends React.PureComponent {
         <TableRow key={row.id}>
           <TableCell style={tableCellsWidth}>{row.designation}</TableCell>
           <TableCell style={tableCellsWidth}>{row.laboratoryName}</TableCell>
+          <TableCell style={tableCellsWidth}>{formatNumber.format(row.minToOrder)}</TableCell>
           <TableCell style={tableCellsWidth}>{moment(startDate).format('DD/MM/YYYY')}</TableCell>
           <TableCell style={tableCellsWidth}>
             <Progressbar progress={hasStarted ? progress : 0} />

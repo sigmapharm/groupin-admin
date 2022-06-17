@@ -18,7 +18,8 @@ function* addPharmacieWorker(action) {
   };
   try {
     yield callApi(
-      ApiRoutes.PHARMACIES,
+      // ApiRoutes.PHARMACIES,
+      '/pharmacies',
       manageAddPharmacieResponse,
       options,
       null,

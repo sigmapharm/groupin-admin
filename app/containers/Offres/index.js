@@ -104,6 +104,7 @@ const styles = theme => ({
   },
 });
 
+const params = new URLSearchParams(history.location.search);
 export class OffresList extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -124,6 +125,7 @@ export class OffresList extends React.PureComponent {
       articledtos: '',
       showInfoBar: false,
       infoBarParams: {},
+      designation: params.get('designation'),
       cols: [
         {
           label: 'Titre',
@@ -135,6 +137,12 @@ export class OffresList extends React.PureComponent {
           label: 'Laboratoire',
           selected: false,
           colName: 'laboratory.nom',
+          order: 'asc',
+        },
+        {
+          label: 'Min à commander',
+          selected: false,
+          colName: 'minToOrder',
           order: 'asc',
         },
         {
@@ -156,7 +164,7 @@ export class OffresList extends React.PureComponent {
   componentDidMount() {
     const params = new URLSearchParams(this.props.location.search);
     const designation = params.get('designation');
-    console.log('designation', designation);
+
     if (designation) this.setState({ ...this.state, designation }, this.loadOffers);
     else this.loadOffers();
   }
@@ -260,6 +268,7 @@ export class OffresList extends React.PureComponent {
           handleChange={this.handleChange}
           handleSelctChange={this.handleSelctChange}
           handleSearchOffres={this.handleSearchOffres}
+          designation={this.state.designation}
         />
         {/* <Divider variant="middle" className={classes.root} /> */}
 

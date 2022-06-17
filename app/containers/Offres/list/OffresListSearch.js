@@ -85,6 +85,7 @@ export class OffresListSearch extends React.PureComponent {
             className={classes.textField}
             margin="normal"
             onChange={handleChange}
+            value={this.props.designation ? this.props.designation : undefined}
           />
           <TextField
             name="laboratoire"

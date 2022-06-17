@@ -80,7 +80,6 @@ export default ({
                       <Typography>Imprimer BC </Typography>
                     </MenuItem>
                   )}
-
                   {!row.isAggregate && (
                     <MenuItem onClick={printFacture && printFacture(row)} disabled={row.deliveredAt ? false : true}>
                       <ListItemIcon>
@@ -90,7 +89,6 @@ export default ({
                       <Typography>Imprimer facture </Typography>
                     </MenuItem>
                   )}
-
                   {!row.isAggregate && (
                     <MenuItem onClick={printBL && printBL(row)} disabled={row.deliveredAt ? false : true}>
                       <ListItemIcon>
@@ -100,7 +98,6 @@ export default ({
                       <Typography>Imprimer BL </Typography>
                     </MenuItem>
                   )}
-
                   {updateCommand && (
                     <MenuItem disabled={(!isAdmin && !row.canDelete) || disableClientEditCommand} onClick={updateCommand(row)}>
                       <ListItemIcon>
@@ -109,7 +106,6 @@ export default ({
                       <Typography>Modifier</Typography>
                     </MenuItem>
                   )}
-
                   {selectCommand && (
                     <MenuItem onClick={selectCommand(row)}>
                       <ListItemIcon>
@@ -118,21 +114,19 @@ export default ({
                       <Typography>Consulter</Typography>
                     </MenuItem>
                   )}
-
-                  {canDelete && (
-                    <MenuItem
-                      disabled={!isAdmin && !row.canDelete}
-                      onClick={deleteCommand({
-                        ..._.pick(row, ['commandId', 'canDelete']),
-                      })}
-                    >
-                      <ListItemIcon>
-                        <HighlightOff color={!isAdmin && !row.canDelete ? 'disabled' : 'error'} />
-                      </ListItemIcon>
-                      <Typography>Annuler</Typography>
-                    </MenuItem>
-                  )}
-
+                  {/* {canDelete && ( */}
+                  <MenuItem
+                    disabled={!isAdmin && !row.canDelete}
+                    onClick={deleteCommand({
+                      ..._.pick(row, ['commandId', 'canDelete']),
+                    })}
+                  >
+                    <ListItemIcon>
+                      <HighlightOff color={!isAdmin && !row.canDelete ? 'disabled' : 'error'} />
+                    </ListItemIcon>
+                    <Typography>Annuler</Typography>
+                  </MenuItem>
+                  {/* )} */}
                   {forAdmin && (
                     <MenuItem onClick={showSubCommands(row)}>
                       <ListItemIcon>
@@ -141,14 +135,12 @@ export default ({
                       <Typography>Sous-Commandes</Typography>
                     </MenuItem>
                   )}
-
                   {/* <Tooltip placement="top" title="Dispatcher les quantités">
                   <IconButton onClick={dispatchQuantity(row)} style={{ padding: 5 }}>
                     <CheckIcon color="primary" />
                   </IconButton>
                 </Tooltip> */}
-
-                  {isMember && row.isLinked ? (
+                  {isMember ? (
                     <MenuItem onClick={dispatchQuantity(row)} disabled={row.deliveredAt ? true : false}>
                       <ListItemIcon>
                         <Done color={row.deliveredAt ? '' : 'primary'} />

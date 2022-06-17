@@ -183,7 +183,7 @@ export class UsersListTableRow extends React.PureComponent {
           <TableCell>{row.role}</TableCell>
           <TableCell>{row.lastCommad ? row.lastCommad.split('T')[0] : 'aucune commandes'}</TableCell>
           <TableCell style={{ padding: 0, display: 'flex' }}>
-            <Switch checked={!row.enabled} onChange={this.toggle} value={row.enabled} color="primary" />
+            <Switch checked={row.enabled} onChange={this.toggle} value={row.enabled} color="primary" />
 
             <Tippy
               theme="light"

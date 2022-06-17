@@ -246,24 +246,27 @@ class Command extends PureComponent {
 
   deleteCommand = ({ commandId, canDelete, callback }) => () => {
     const { deleteCommand } = this.props;
-    if (canDelete || this.forAdminCommands)
-      deleteCommand({
-        commandId,
-        callback: err => {
-          if (err) {
-            this.setState({
-              showPopConfirmation: false,
-              showInfoBar: true,
-              infoBarParams: {
-                title: "Suppresion de commande  à échoué merci de contacter l'administrateur",
-              },
-            });
-          } else {
-            this.onDeleteSuccess();
-          }
-        },
-        isAggregate: this.forAdminCommands,
-      });
+    // if (canDelete || this.forAdminCommands) {
+    deleteCommand({
+      commandId,
+      callback: err => {
+        if (err) {
+          this.setState({
+            showPopConfirmation: false,
+            showInfoBar: true,
+            infoBarParams: {
+              title: "Suppresion de commande  à échoué merci de contacter l'administrateur",
+            },
+          });
+        } else {
+          this.onDeleteSuccess();
+        }
+      },
+      isAggregate: this.forAdminCommands,
+    });
+    // } else {
+    //   console.log('oppes something went wrong');
+    // }
   };
 
   performDeleteCommand = ({ commandId, canDelete, callback }) => () => {
