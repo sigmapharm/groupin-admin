@@ -60,14 +60,8 @@ const styles = theme => ({
 });
 
 export function UpdateUserForm(props) {
-  const {
-    classes,
-    errors,
-    formData,
-    handleFormDataChange,
-    handleSubmit,
-    cities,
-  } = props;
+  const { classes, errors, formData, handleFormDataChange, handleSubmit, cities } = props;
+  console.log(formData);
   return (
     <div>
       <Grid className={classes.headerGridContainer} container>
@@ -77,12 +71,7 @@ export function UpdateUserForm(props) {
           </Typography>
         </Grid>
         <Grid xs={12} item>
-          {errors.messages && (
-            <ErrorsArea
-              prefix="Vous avez les erreurs suivantes"
-              errors={errors.messages}
-            />
-          )}
+          {errors.messages && <ErrorsArea prefix="Vous avez les erreurs suivantes" errors={errors.messages} />}
         </Grid>
       </Grid>
       <Grid className={classes.gridContainer} spacing={8} container>
@@ -99,13 +88,7 @@ export function UpdateUserForm(props) {
         <Grid xs={12} md={6} item />
         <Grid xs={12} item />
         <Grid justify="center" container>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.buttonajout}
-            onClick={handleSubmit}
-          >
+          <Button type="submit" variant="contained" color="primary" className={classes.buttonajout} onClick={handleSubmit}>
             Modifier
           </Button>
         </Grid>
