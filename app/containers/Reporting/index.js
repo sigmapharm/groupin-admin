@@ -29,7 +29,7 @@ const Reporting = props => {
   return (
     <div className={classes.root}>
       <Typography component="h1" variant="h4" className={classes.typography}>
-        GroupIn Reporting
+        Reporting
       </Typography>
       <Divider variant="fullWidth" className={classes.divider} />
       <FilterInputsList
