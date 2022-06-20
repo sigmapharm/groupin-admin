@@ -4,9 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { fields } from '../../../containers/Users/add/validation';
-import SingleAutoCompleteSelect from "../../AutoCompleteSelect";
+import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
 
-const styles = (theme) => ({
+const styles = theme => ({
   userInputs: {},
   select: {
     marginTop: theme.spacing.unit,
@@ -15,7 +15,8 @@ const styles = (theme) => ({
 });
 
 export function PersonalInfo(props) {
-  const {formData,cities, errors, classes, onChange, maxLength } = props;
+  const { formData, cities, errors, classes, onChange, maxLength } = props;
+
   return (
     <>
       <Grid xs={12} md={6} item>
