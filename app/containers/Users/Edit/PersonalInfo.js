@@ -137,6 +137,20 @@ export function PersonalInfo(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <TextField
+          name={fields.address.name}
+          label="Address"
+          defaultValue={formData[fields.address.name]}
+          error={!!errors[fields.address.name]}
+          onChange={onChange}
+          className={classes.userInputs}
+          inputProps={{
+            maxLength,
+          }}
+          fullWidth
+        />
+      </Grid>
+      <Grid xs={12} md={6} item>
+        <TextField
           name={fields.codePostal.name}
           label="Code Postale"
           defaultValue={formData[fields.codePostal.name]}

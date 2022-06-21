@@ -53,6 +53,7 @@ const initialState = {
     ville: '',
     codePostal: '',
     pharmacie: '',
+    address: '',
   },
   errors: {
     fields: {},

@@ -7,7 +7,13 @@ import { MetaMenu } from './MetaMenu';
 import WithRoles from '../WithRoles';
 
 const onMenuItemClick = href => () => {
-  history.push(href);
+  if (href === '/offres' && history.location.search) {
+    window.history.pushState({}, document.title, '/offres');
+    window.history.go();
+    return;
+  }
+
+  history.replace(href);
 };
 
 const MenuByRole = props => {
