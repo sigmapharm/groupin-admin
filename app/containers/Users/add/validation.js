@@ -19,31 +19,15 @@ const validate = (result, field, value) => {
 
 export const validateFormData = formData => {
   let validationResult = {};
-  validationResult = validate(
-    validationResult,
-    fields.lastName,
-    formData.lastName,
-  );
-  validationResult = validate(
-    validationResult,
-    fields.firstName,
-    formData.firstName,
-  );
+  validationResult = validate(validationResult, fields.lastName, formData.lastName);
+  validationResult = validate(validationResult, fields.firstName, formData.firstName);
   validationResult = validate(validationResult, fields.cin, formData.cin);
   validationResult = validate(validationResult, fields.email, formData.email);
   validationResult = validate(validationResult, fields.tel, formData.tel);
   validationResult = validate(validationResult, fields.gsm, formData.gsm);
   validationResult = validate(validationResult, fields.ville, formData.ville);
-  validationResult = validate(
-    validationResult,
-    fields.codePostal,
-    formData.codePostal,
-  );
-  validationResult = validate(
-    validationResult,
-    fields.pharmacie,
-    formData.pharmacie,
-  );
+  validationResult = validate(validationResult, fields.codePostal, formData.codePostal);
+  validationResult = validate(validationResult, fields.pharmacie, formData.pharmacie);
   validationResult = validate(validationResult, fields.role, formData.role);
 
   return validationResult;
@@ -99,5 +83,9 @@ export const fields = {
     name: 'role',
     label: 'Role',
     validator: validators.selectNotBlank,
+  },
+  address: {
+    name: 'adresse',
+    label: 'adresse',
   },
 };
