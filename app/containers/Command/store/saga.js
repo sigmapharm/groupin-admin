@@ -127,7 +127,10 @@ function* loadCommandArticleWorker({ payload: { id, isAggregate, callback } }) {
   };
   yield networking(function*() {
     try {
-      const res = yield requestWithAuth(`/commands/${isAggregate ? 'aggregate/' : ''}${id}/articles`, options);
+      const res = yield requestWithAuth(
+        `/commands/${isAggregate ? 'aggregate/' : ''}${id}/articles?size=9999&sort=label,desc`,
+        options,
+      );
       yield put(loadCommandArticlesSuccess(res));
       yield callback && callback();
     } catch (e) {

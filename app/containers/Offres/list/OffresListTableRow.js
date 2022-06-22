@@ -115,10 +115,10 @@ export class OffresListTableRow extends React.PureComponent {
 
   edit = () => {
     const { row } = this.props;
-    const canEdit = this.canEdit(row);
-    if (canEdit) {
-      history.push(`/offres/edit/${row.id}`);
-    }
+    // const canEdit = this.canEdit(row);
+    // if (canEdit) {
+    history.push(`/offres/edit/${row.id}`);
+    // }
     this.setState({ isTippyOpen: false });
   };
 
@@ -323,9 +323,11 @@ export class OffresListTableRow extends React.PureComponent {
                       <Typography>Consulter</Typography>
                     </MenuItem>
 
-                    <MenuItem disabled={!this.canEdit(row)} onClick={this.edit}>
+                    {/* disabled={!this.canEdit(row)} */}
+                    {/* color={this.canEdit(row) ? 'primary' : 'disabled'} */}
+                    <MenuItem onClick={this.edit}>
                       <ListItemIcon style={{ padding: 5 }}>
-                        <EditIcon color={this.canEdit(row) ? 'primary' : 'disabled'} />
+                        <EditIcon />
                       </ListItemIcon>
                       <Typography>Modifier</Typography>
                     </MenuItem>

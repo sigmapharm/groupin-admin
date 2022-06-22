@@ -78,7 +78,7 @@ export function OffreInfo(props) {
             name={fields.dateFin.name}
             // fields.dateDebut.label
             label={fields.dateFin.label}
-            disabled={disableAll}
+            // disabled={disableAll}
             dateFormat={date => moment(date).format('DD/MM/YYYY')}
             min={moment()
               .add(2, 'day')
@@ -161,7 +161,7 @@ export function OffreInfo(props) {
             type={fields.globalDiscount.type}
             error={!!errors[fields.globalDiscount.name]}
             onChange={onChange}
-            disabled={disable}
+            // disabled={disable}
             className={classes.offreInputs}
             inputProps={{
               maxLength,
@@ -182,7 +182,7 @@ export function OffreInfo(props) {
             type={fields.minToOrder.type}
             error={!!errors[fields.minToOrder.name]}
             onChange={onChange}
-            disabled={disable}
+            // disabled={disable}
             className={classes.offreInputs}
             inputProps={{
               maxLength,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles, Paper, IconButton } from '@material-ui/core';
+import { withStyles, Paper, IconButton, Button } from '@material-ui/core';
 import ChartTable from '../Table/index';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
@@ -123,9 +123,10 @@ function LineChart(props) {
 
   return (
     <Paper className={classes.chartContainer}>
-      <IconButton onClick={handlePharamaPrint}>
+      <Button onClick={handlePharamaPrint}>
         <Print />
-      </IconButton>
+        <div style={{ marginLeft: 10 }}> imprimer les pharmarcies par ordre de CA</div>
+      </Button>
       <div className={classes.chart}>
         <Doughnut options={options} data={data} height="100%" />
       </div>

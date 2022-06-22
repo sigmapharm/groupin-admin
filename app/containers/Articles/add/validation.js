@@ -19,41 +19,17 @@ const validate = (result, field, value) => {
 
 export const validateFormData = formData => {
   let validationResult = {};
-  validationResult = validate(
-    validationResult,
-    fields.reference,
-    formData.reference,
-  );
+  validationResult = validate(validationResult, fields.reference, formData.reference);
   validationResult = validate(validationResult, fields.nom, formData.nom);
-  validationResult = validate(validationResult, fields.gamme, formData.gamme);
-  validationResult = validate(
-    validationResult,
-    fields.codebare,
-    formData.codebare,
-  );
-  validationResult = validate(
-    validationResult,
-    fields.categorie,
-    formData.categorie,
-  );
-  validationResult = validate(
-    validationResult,
-    fields.classe_therapeutique,
-    formData.classe_therapeutique,
-  );
-  validationResult = validate(
-    validationResult,
-    fields.forme_galenique,
-    formData.forme_galenique,
-  );
-  validationResult = validate(validationResult, fields.dci, formData.dci);
+  // validationResult = validate(validationResult, fields.gamme, formData.gamme);
+  // validationResult = validate(validationResult, fields.codebare, formData.codebare);
+  validationResult = validate(validationResult, fields.categorie, formData.categorie);
+  // validationResult = validate(validationResult, fields.classe_therapeutique, formData.classe_therapeutique);
+  validationResult = validate(validationResult, fields.forme_galenique, formData.forme_galenique);
+  // validationResult = validate(validationResult, fields.dci, formData.dci);
   validationResult = validate(validationResult, fields.pph, formData.pph);
   validationResult = validate(validationResult, fields.tva, formData.tva);
-  validationResult = validate(
-    validationResult,
-    fields.laboratoire,
-    formData.laboratoire,
-  );
+  validationResult = validate(validationResult, fields.laboratoire, formData.laboratoire);
   return validationResult;
 };
 
@@ -71,12 +47,12 @@ export const fields = {
   gamme: {
     name: 'gamme',
     label: `gamme d'article`,
-    validator: validators.stringNotBlank,
+    // validator: validators.stringNotBlank,
   },
   codebare: {
     name: 'codebare',
     label: 'Code Barre',
-    validator: validators.stringNotBlank,
+    // validator: validators.stringNotBlank,
   },
   categorie: {
     name: 'categorie',
@@ -86,7 +62,7 @@ export const fields = {
   classe_therapeutique: {
     name: 'classe_therapeutique',
     label: 'Classe thèrapeutique',
-    validator: validators.stringNotBlank,
+    // validator: validators.stringNotBlank,
   },
 
   forme_galenique: {
@@ -112,7 +88,7 @@ export const fields = {
   dci: {
     name: 'dci',
     label: 'DCI',
-    validator: validators.stringNotBlank,
+    // validator: validators.stringNotBlank,
   },
   laboratoire: {
     name: 'laboratoire',

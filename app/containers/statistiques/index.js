@@ -18,7 +18,6 @@ import { selectArticles, selectPharmas, selectlabos, selectCity, selectPrintPhar
 import { getArticles, getPharmas, getLabos, getCity, getPrintPharama, getReg } from './actions';
 
 const Statistiques = ({ classes, articles, dispatch, pharmas, labos, city, printPharma, region }) => {
-  console.log(region);
   //
   const day = moment().get('date');
   const year = moment().get('year');

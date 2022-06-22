@@ -272,7 +272,7 @@ export function AddOffreForm(props) {
             color="primary"
             className={classes.buttonajout}
             onClick={handleSubmit(disableAllFieldsExceptDate)}
-            disabled={disableAllFields}
+            // disabled={disableAllFields}
           >
             {editMode ? 'Mettre à jour ' : 'Valider'}
           </Button>

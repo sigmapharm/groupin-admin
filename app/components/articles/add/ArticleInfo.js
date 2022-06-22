@@ -52,7 +52,6 @@ export function ArticleInfo(props) {
           value={formData[fields.gamme.name] || ''}
           error={!!errors[fields.gamme.name]}
           onChange={onChange}
-          noValidate
           autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
@@ -69,7 +68,6 @@ export function ArticleInfo(props) {
           value={formData[fields.codebare.name] || ''}
           error={!!errors[fields.codebare.name]}
           onChange={onChange}
-          noValidate
           autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
@@ -101,7 +99,6 @@ export function ArticleInfo(props) {
           value={formData[fields.classe_therapeutique.name] || ''}
           error={!!errors[fields.classe_therapeutique.name]}
           onChange={onChange}
-          noValidate
           autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
@@ -133,7 +130,6 @@ export function ArticleInfo(props) {
           value={formData[fields.dci.name] || ''}
           error={!!errors[fields.dci.name]}
           onChange={onChange}
-          noValidate
           autoComplete="off"
           className={classes.articleInputs}
           inputProps={{
