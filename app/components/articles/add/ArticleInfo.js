@@ -23,9 +23,9 @@ export function ArticleInfo(props) {
           noValidate
           autoComplete="off"
           className={classes.articleInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>
@@ -39,9 +39,9 @@ export function ArticleInfo(props) {
           noValidate
           autoComplete="off"
           className={classes.articleInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>
@@ -54,9 +54,9 @@ export function ArticleInfo(props) {
           onChange={onChange}
           autoComplete="off"
           className={classes.articleInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>
@@ -68,11 +68,11 @@ export function ArticleInfo(props) {
           value={formData[fields.codebare.name] || ''}
           error={!!errors[fields.codebare.name]}
           onChange={onChange}
-          autoComplete="off"
+          // autoComplete="off"
           className={classes.articleInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>
@@ -86,9 +86,9 @@ export function ArticleInfo(props) {
           noValidate
           autoComplete="off"
           className={classes.articleInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>
@@ -101,9 +101,9 @@ export function ArticleInfo(props) {
           onChange={onChange}
           autoComplete="off"
           className={classes.articleInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>
@@ -117,9 +117,9 @@ export function ArticleInfo(props) {
           noValidate
           autoComplete="off"
           className={classes.articleInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>
@@ -132,9 +132,9 @@ export function ArticleInfo(props) {
           onChange={onChange}
           autoComplete="off"
           className={classes.articleInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>
@@ -148,9 +148,9 @@ export function ArticleInfo(props) {
           noValidate
           autoComplete="off"
           className={classes.articleInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>
@@ -164,9 +164,9 @@ export function ArticleInfo(props) {
           noValidate
           autoComplete="off"
           className={classes.articleInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>
@@ -180,9 +180,9 @@ export function ArticleInfo(props) {
           noValidate
           autoComplete="off"
           className={classes.articleInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>

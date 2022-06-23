@@ -38,6 +38,19 @@ export const laboratoiresFields = [
     label: 'Adresse',
     validator: validators.stringNotBlank,
   },
+  // {
+  //   id: 'region',
+  //   name: 'region',
+  //   label: 'region',
+  //   validator: validators.stringNotBlank,
+  //   select: true,
+  // },
+  // {
+  //   id: 'city',
+  //   name: 'city',
+  //   label: 'city',
+  //   validator: validators.stringNotBlank,
+  // },
 ];
 
 const validateField = (result, fieldName, allData) => {

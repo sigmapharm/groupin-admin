@@ -2,7 +2,7 @@ import { withStyles } from '@material-ui/core';
 import React from 'react';
 import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
 
-const SelectInput = ({ classes, options, onChange, value, placeholder }) => {
+const SelectInput = ({ classes, options, onChange, value = '', placeholder }) => {
   return (
     <div className={classes.inputContainer}>
       <SingleAutoCompleteSelect
