@@ -19,8 +19,8 @@ const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDi
     dispatch(
       changeOfferArticle({
         id: article.id,
-        quantity: +quantity,
-        hasError: quantity && +quantity < article.minQuantity,
+        quantity: Number(quantity),
+        hasError: quantity && Number(quantity) < article.minQuantity,
       }),
     );
   };
@@ -39,32 +39,24 @@ const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDi
   const handleSubmit = () => {
     dispatch(submitClientCommand({ offerId: offer.id, offerArticles }, handleSubmitResponse));
   };
-  // const allowCommandSubmit = () => {
-  //   return offerArticles.filter(({ quantity, minQuantity }) => quantity >= minQuantity).length > 0 &&
-  //     offerArticles.filter(({ quantity }) => quantity > 0).every(({ hasError }) => hasError === false)
-  //     ? true
-  //     : false;
-  // };
-
   const allowCommandSubmit = () => {
-    const { totalRemise, row } = props;
-    const isAllowed =
-      offerArticles.filter(({ quantity, minQuantity }) => quantity >= minQuantity).length > 0 &&
+    return offerArticles.filter(({ quantity, minQuantity }) => quantity >= minQuantity).length > 0 &&
       offerArticles.filter(({ quantity }) => quantity > 0).every(({ hasError }) => hasError === false)
-        ? true
-        : false;
+      ? true
+      : false;
+  };
 
-    console.log('row.minToOrder', row.minToOrder);
-
+  const isCommandAllowed = () => {
+    const { totalRemise, row } = props;
     const isEqual = totalRemise === parseInt(row.minToOrder) ? true : false;
-
     const isGreater = totalRemise > parseInt(row.minToOrder) ? true : false;
 
+    console.log('typof totalRemise', typeof totalRemise);
     if (!row.minToOrder) {
-      return isAllowed;
+      return allowCommandSubmit();
     }
 
-    if (isAllowed && (isEqual || isGreater)) {
+    if (allowCommandSubmit() && (isEqual || isGreater)) {
       return false;
     }
 
@@ -75,6 +67,7 @@ const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDi
     offerArticles,
     ({ quantity, computedPPH, pph }) => (quantity ? quantity * pph - quantity * computedPPH : 0),
   ).toFixed(2);
+
   return (
     <div>
       <div style={styles.conatiner}>
@@ -147,7 +140,7 @@ const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDi
                   Min à commander:
                 </Typography>
                 <Typography variant="h6" style={{ color: 'inherit' }}>
-                  {offerArticles.minToOrder ? formatNumber.format(offerArticles.minToOrder) : '-'}
+                  {offer.minToOrder ? formatNumber.format(offer.minToOrder) : '-'}
                 </Typography>
               </div>
             </>
@@ -224,7 +217,7 @@ const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDi
             </div>
           ))}
 
-        {allowCommandSubmit() && (
+        {!isCommandAllowed() && (
           <div style={styles.button}>
             <Button variant="contained" color="primary" fullWidth onClick={handleSubmit}>
               Commander
