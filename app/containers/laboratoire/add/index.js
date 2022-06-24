@@ -19,6 +19,7 @@ import ErrorsArea from '../../../components/ErrorsArea';
 import { selectRegions } from '../../App/selectors';
 import { getRegions } from '../../App/actions';
 import Select from '../../Reporting/inputsList/select';
+import * as _ from 'lodash';
 
 /* istanbul ignore next */
 const styles = theme => ({
