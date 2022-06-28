@@ -36,11 +36,22 @@ import { translationMessages } from './i18n';
 import GlobalLoadingDialog from './containers/GlobalLoadingDialog';
 import theme from './themes/theme';
 import { CircularProgress } from '@material-ui/core';
-
+import * as Sentry from '@sentry/react';
+import { BrowserTracing } from '@sentry/tracing';
 // Create redux store with history
 const initialState = {};
 const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
+
+Sentry.init({
+  dsn: 'https://8ffc99b2b4fb46ec86917e6acf527d14@o1299865.ingest.sentry.io/6536275',
+  integrations: [new BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
 
 const render = messages => {
   ReactDOM.render(
