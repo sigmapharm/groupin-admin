@@ -46,20 +46,12 @@ const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDi
       : false;
   };
 
-  const isCommandAllowed = () => {
+  const isCommandNotAllowed = () => {
     const { totalRemise, row } = props;
     const isEqual = totalRemise === parseInt(row.minToOrder) ? true : false;
     const isGreater = totalRemise > parseInt(row.minToOrder) ? true : false;
-
-    console.log('typof totalRemise', typeof totalRemise);
-    if (!row.minToOrder) {
-      return allowCommandSubmit();
-    }
-
-    if (allowCommandSubmit() && (isEqual || isGreater)) {
-      return false;
-    }
-
+    if (!row.minToOrder) return !allowCommandSubmit();
+    if (allowCommandSubmit() && (isEqual || isGreater)) return false;
     return true;
   };
   const total = _.sumBy(offerArticles, ({ quantity, pph }) => pph * quantity || 0).toFixed(2);
@@ -217,7 +209,7 @@ const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDi
             </div>
           ))}
 
-        {!isCommandAllowed() && (
+        {!isCommandNotAllowed() && (
           <div style={styles.button}>
             <Button variant="contained" color="primary" fullWidth onClick={handleSubmit}>
               Commander
