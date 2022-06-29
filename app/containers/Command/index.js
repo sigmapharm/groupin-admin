@@ -715,6 +715,10 @@ class Command extends PureComponent {
                 canDelete={!this.canGroup}
                 disableClientEditCommand={this.disableGroupingBtn}
                 clearCommandArticles={this.props.clearCommandArticles}
+                isMember={this.isMember}
+                dispatchQuantity={this.dispatchQuantity}
+                printFacture={this.printFacture}
+                printBL={this.printBL}
               />
             )}
             <GeneriqueDialog open={showPopConfirmation} {...popConfirmationParams} />

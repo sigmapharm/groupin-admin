@@ -140,7 +140,7 @@ function* loadArticleOfferWorker({ payload: { id }, callback }) {
       let res = yield requestWithAuth(`/offres/${id}/articles?size=99999`, options);
 
       res = map(res, row => {
-        return { ...row, quantity: 0, quantityCmd: row.quantity };
+        return { ...row, quantity: '', quantityCmd: row.quantity };
       });
 
       yield put(loadArticleOfferSuccess(res));

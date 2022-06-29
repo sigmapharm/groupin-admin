@@ -1,5 +1,5 @@
-import { Typography } from '@material-ui/core';
-import React, { useState } from 'react';
+import { Button, Typography } from '@material-ui/core';
+import React, { forwardRef, useState } from 'react';
 import moment from 'moment';
 import _ from 'lodash';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,9 +14,19 @@ import HighlightOff from '@material-ui/icons/HighlightOff';
 import Update from './Update';
 import Pagination from './Pagination';
 import CommandArticlesList from './CommandArticlesList';
+import { Done, Receipt, Settings } from '@material-ui/icons';
+import Tippy from '@tippyjs/react';
 
 const DETAILS_MODEL = 'details';
 const ORDER_MODEL = 'commande';
+
+const RowComponent = forwardRef((props, ref) => {
+  return (
+    <IconButton buttonRef={ref}>
+      <PrintIcon color="primary" />
+    </IconButton>
+  );
+});
 
 const CommandListCards = ({
   commandsList,
@@ -33,6 +43,11 @@ const CommandListCards = ({
   updateCommand,
   onRowChange,
   clearCommandArticles,
+  isMember,
+  dispatchQuantity,
+
+  printFacture,
+  printBL,
 }) => {
   // console.log('commandsList', commandsList);
   const [modelsState, setModelsState] = useState({ name: '', data: null });
@@ -94,9 +109,23 @@ const CommandListCards = ({
                 <IconButton onClick={() => handleModel(DETAILS_MODEL, command)} style={{ padding: 5 }}>
                   <Search color="secondary" />
                 </IconButton>
-                <IconButton onClick={printCommand(command)} style={{ padding: 5 }}>
-                  <PrintIcon color="primary" />
-                </IconButton>
+                <Tippy
+                  theme="light"
+                  // visible={isTippyOpen}
+                  // onClickOutside={handleTippyToggle}
+                  trigger="click"
+                  interactive
+                  content={
+                    <div>
+                      <Button onClick={printCommand(command)}>Imprimer BC </Button> <br />
+                      <Button onClick={printFacture(command)}>Imprimer facture </Button> <br />
+                      <Button onClick={printBL(command)}>Imprimer BL </Button>
+                    </div>
+                  }
+                >
+                  <RowComponent />
+                </Tippy>
+
                 <IconButton
                   disabled={(!isAdmin && !command.canDelete) || disableClientEditCommand}
                   style={{ padding: 5 }}
@@ -116,6 +145,12 @@ const CommandListCards = ({
                     <HighlightOff color={!isAdmin && !command.canDelete ? 'disabled' : 'error'} />
                   </IconButton>
                 )}
+
+                {isMember ? (
+                  <IconButton onClick={dispatchQuantity(command)} disabled={command.deliveredAt ? true : false}>
+                    <Done color={command.deliveredAt ? '' : 'primary'} />
+                  </IconButton>
+                ) : null}
               </div>
             </div>
           );
