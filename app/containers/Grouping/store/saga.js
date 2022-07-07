@@ -17,7 +17,7 @@ import { submitClientCommandSuccess } from '../../Offres/actions';
 import requestWithAuth from '../../../services/request/request-with-auth';
 import { loadOfferMetaDataSuccess } from '../../Command/store/actions.creators';
 import { LOAD_OFFER_META_DATA } from '../../Command/store/actions';
-import * as GlobalActions from "../../App/actions";
+import * as GlobalActions from '../../App/actions';
 
 function* loadOfferMetaDataWorker({ payload: { offerId, callback } }) {
   const options = {
@@ -26,7 +26,7 @@ function* loadOfferMetaDataWorker({ payload: { offerId, callback } }) {
       'Content-Type': 'application/json',
     },
   };
-  yield networking(function *() {
+  yield networking(function*() {
     try {
       const res = yield requestWithAuth(`/offres/${offerId}`, options);
       yield put(loadOfferMetaDataSuccess(res));
@@ -34,7 +34,7 @@ function* loadOfferMetaDataWorker({ payload: { offerId, callback } }) {
     } catch (e) {
       yield callback && callback(e);
     }
-  })
+  });
 }
 
 function* createNewProviderWorker({ payload, callback }) {
@@ -45,7 +45,7 @@ function* createNewProviderWorker({ payload, callback }) {
     },
     body: JSON.stringify(payload),
   };
-  yield networking(function *() {
+  yield networking(function*() {
     try {
       const res = yield requestWithAuth(`/provider`, options);
       yield put(createNewProviderSuccess(res));
@@ -53,13 +53,10 @@ function* createNewProviderWorker({ payload, callback }) {
     } catch (e) {
       yield callback && callback(e);
     }
-  })
+  });
 }
 
-function* submitCommandAggregateWorker({
-  payload: { providerId, offerId, commandsId, commandArticleAggregates },
-  callback,
-}) {
+function* submitCommandAggregateWorker({ payload: { providerId, offerId, commandsId, commandArticleAggregates }, callback }) {
   const options = {
     method: 'POST',
     headers: {
@@ -71,23 +68,18 @@ function* submitCommandAggregateWorker({
       commandArticleAggregates,
     }),
   };
-  yield networking(function *() {
+  yield networking(function*() {
     try {
-      const res = yield requestWithAuth(
-        `/commands/aggregate/${offerId}`,
-        options,
-      );
+      const res = yield requestWithAuth(`/commands/aggregate/${offerId}`, options);
       yield put(submitClientCommandSuccess(res));
       yield callback && callback();
     } catch (e) {
       yield callback && callback(e);
     }
-  })
+  });
 }
 
-function* loadAggregatedArticlesByCommandWorker({
-  payload: { commandIds = [] },
-}) {
+function* loadAggregatedArticlesByCommandWorker({ payload: { commandIds = [] } }) {
   const options = {
     method: 'GET',
     headers: {
@@ -95,15 +87,12 @@ function* loadAggregatedArticlesByCommandWorker({
     },
   };
   const queryString = commandIds.map(value => `commandId=${value}`).join('&');
-  yield networking(function *() {
+  yield networking(function*() {
     try {
-      const res = yield requestWithAuth(
-        `/commands/articles/aggregate/?${queryString}`,
-        options,
-      );
+      const res = yield requestWithAuth(`/commands/articles/aggregate/?${queryString}`, options);
       yield put(loadAggregatedArticlesSuccess(res));
     } catch (e) {}
-  })
+  });
 }
 
 function* loadAllCommandByOfferWorker({ payload: { id } }) {
@@ -113,16 +102,12 @@ function* loadAllCommandByOfferWorker({ payload: { id } }) {
       'Content-Type': 'application/json',
     },
   };
-  yield networking(function *() {
+  yield networking(function*() {
     try {
-      const res = yield requestWithAuth(
-        `/commands/${id}?page=0&size=${Number.MAX_SAFE_INTEGER}&sort=id,desc`,
-        options,
-      );
+      const res = yield requestWithAuth(`/commands/${id}?size=999999&sort=id,desc`, options);
       yield put(loadAllCommandByOfferSuccess(res));
-
     } catch (e) {}
-  })
+  });
 }
 function* getAllProvidersWorker() {
   const options = {
@@ -131,15 +116,14 @@ function* getAllProvidersWorker() {
       'Content-Type': 'application/json',
     },
   };
-  yield networking(function *() {
+  yield networking(function*() {
     try {
       const res = yield requestWithAuth(`/provider`, options);
       yield put(loadAllProvidersSuccess(res));
       // yield callApi(`/provider`, loadAllProvidersSuccess, options, null);
     } catch (e) {}
-  })
+  });
 }
-
 
 function* networking(func) {
   yield put(GlobalActions.setNetworkingActive());
@@ -147,17 +131,13 @@ function* networking(func) {
   yield put(GlobalActions.setNetworkingInactive());
 }
 
-
 export default function* groupingListSagas() {
   yield all([
     takeLatest(LOAD_ALL_COMMAND_BY_OFFER, loadAllCommandByOfferWorker),
     takeLatest(LOAD_AGGREGATED_ARTICLES, loadAggregatedArticlesByCommandWorker),
     takeLatest(CREATE_COMMAND_AGGREGATE, submitCommandAggregateWorker),
     takeLatest(CREATE_NEW_PROVIDER, createNewProviderWorker),
-    takeLatest(
-      [GET_ALL_PROVIDERS, CREATE_NEW_PROVIDER_SUCCESS],
-      getAllProvidersWorker,
-    ),
+    takeLatest([GET_ALL_PROVIDERS, CREATE_NEW_PROVIDER_SUCCESS], getAllProvidersWorker),
     takeLatest(LOAD_OFFER_META_DATA, loadOfferMetaDataWorker),
     ,
   ]);
