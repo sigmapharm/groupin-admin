@@ -80,9 +80,10 @@ export function OffreInfo(props) {
             label={fields.dateFin.label}
             // disabled={disableAll}
             dateFormat={date => moment(date).format('DD/MM/YYYY')}
-            min={moment()
-              .add(2, 'day')
-              .toDate()}
+            // check to verify that start date < end date
+            // min={moment()
+            //   .add(2, 'day')
+            //   .toDate()}
             value={!!formData[fields.dateFin.name] ? new Date(formData[fields.dateFin.name]) : null}
             onChange={date => {
               console.log(date);
