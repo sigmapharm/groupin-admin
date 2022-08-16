@@ -18,12 +18,7 @@ import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
 import { validateFormData } from './validation';
 import { formatLaboratoireToLabelValue } from './utils';
-import {
-  changeArticleFormData,
-  clearArticleForm,
-  createArticle,
-  getArticleDetails,
-} from '../actions';
+import { changeArticleFormData, clearArticleForm, createArticle, getArticleDetails } from '../actions';
 import { makeSelectLaboratoires } from '../../App/selectors';
 import AddArticleForm from '../../../components/articles/add/AddAricleFrom';
 import InfoBar from '../../../components/Snackbar/InfoBar';
@@ -104,9 +99,7 @@ export class AddArticle extends React.PureComponent {
         editMode: !!articleId,
         articleId,
       },
-      () =>
-        !!articleId &&
-        this.props.dispatch(getArticleDetails({ id: articleId })),
+      () => !!articleId && this.props.dispatch(getArticleDetails({ id: articleId })),
     );
   }
 
@@ -121,6 +114,13 @@ export class AddArticle extends React.PureComponent {
         [name]: value,
       }),
     );
+
+    this.setState({
+      formData: {
+        ...this.state.formData,
+        [name]: value,
+      },
+    });
   };
 
   handleLaboratoireSelectChange = laboratoire => {
@@ -153,6 +153,7 @@ export class AddArticle extends React.PureComponent {
           id: _.get(articleFormData, 'laboratoire.value'),
         },
       };
+
       this.props.dispatch(
         createArticle(formattedData, err => res => {
           if (err) {
@@ -160,21 +161,20 @@ export class AddArticle extends React.PureComponent {
               this.setState({
                 showInfoBar: true,
                 infoBarParams: {
-                  title:
-                    "La modification a échoué merci de contacter l'administrateur ",
+                  title: "La modification a échoué merci de contacter l'administrateur ",
                 },
               });
             } else {
               this.setState({
                 showInfoBar: true,
                 infoBarParams: {
-                  title:
-                    "L'ajout d'un article  a échoué merci de contacter l'administrateur ",
+                  title: "L'ajout d'un article  a échoué merci de contacter l'administrateur ",
                 },
               });
             }
           } else {
             this.handleSubmitResponse(res);
+            console.log('res', res);
           }
         }),
       );
@@ -187,7 +187,21 @@ export class AddArticle extends React.PureComponent {
     }
     if (response.id) {
       this.setState({
-        ...initialState,
+        formData: {
+          reference: response.reference,
+          nom: response.nom,
+          gamme: response.gamme,
+          codebare: response.codebare,
+          categorie: response.categorie,
+          classe_therapeutique: response.classe_therapeutique,
+          dci: response.dci,
+          pph: response.PPH,
+          ppv: response.PPV,
+          tva: response.TVA,
+          neccissite_prescription: '',
+          produit_Marche: '',
+          forme_galenique: response.forme_galenique,
+        },
         isSuccess: true,
       });
     } else if (response.errors) {
@@ -237,17 +251,9 @@ export class AddArticle extends React.PureComponent {
 
   render() {
     const { classes, laboratoires, articleFormData } = this.props;
-    const {
-      formData,
-      errors,
-      isSuccess,
-      editMode,
-      showInfoBar,
-      infoBarParams,
-    } = this.state;
-    const formattedLaboratoire = laboratoires.map(
-      formatLaboratoireToLabelValue,
-    );
+    const { formData, errors, isSuccess, editMode, showInfoBar, infoBarParams } = this.state;
+    const formattedLaboratoire = laboratoires.map(formatLaboratoireToLabelValue);
+    console.log('editMode', editMode);
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
@@ -256,7 +262,7 @@ export class AddArticle extends React.PureComponent {
             errors={errors}
             editMode={editMode}
             laboratoires={formattedLaboratoire}
-            formData={articleFormData}
+            formData={editMode ? articleFormData : this.state.formData}
             handleFormDataChange={this.handleFormDataChange}
             handleLaboratoireSelectChange={this.handleLaboratoireSelectChange}
             handleSubmit={this.handleSubmit}
@@ -264,62 +270,35 @@ export class AddArticle extends React.PureComponent {
             handleAnuler={this.handleGoToArticlesList}
           />
         </form>
-        <Dialog
-          onClose={this.handleClose}
-          aria-labelledby="customized-dialog-title"
-          open={this.state.isAddLaboratoire}
-        >
+        <Dialog onClose={this.handleClose} aria-labelledby="customized-dialog-title" open={this.state.isAddLaboratoire}>
           <MuiDialogTitle disableTypography className={classes.root}>
             <Typography variant="h5" color="primary">
               {`Ajouter un nouveau laboratoire`}
             </Typography>
-            <IconButton
-              aria-label="Close"
-              className={classes.closeButton}
-              onClick={this.handleAddLaboratoireClose}
-            >
+            <IconButton aria-label="Close" className={classes.closeButton} onClick={this.handleAddLaboratoireClose}>
               <CloseIcon />
             </IconButton>
           </MuiDialogTitle>
           <MuiDialogContent>
-            <AddLaboratoireContainer
-              successCallback={this.handleAddLaboratoireSuccess}
-            />
+            <AddLaboratoireContainer successCallback={this.handleAddLaboratoireSuccess} />
           </MuiDialogContent>
         </Dialog>
         {isSuccess && (
           <Snackbar
             open
             TransitionComponent={Fade}
-            message={
-              <span id="message-id">
-                L'article a été {editMode ? 'mis à jour ' : 'créé'} avec succès.
-              </span>
-            }
+            message={<span id="message-id">L'article a été {editMode ? 'mis à jour ' : 'créé'} avec succès.</span>}
             action={[
-              <Button
-                key="undo"
-                color="secondary"
-                size="small"
-                onClick={this.handleGoToArticlesList}
-              >
+              <Button key="undo" color="secondary" size="small" onClick={this.handleGoToArticlesList}>
                 Liste des Articles
               </Button>,
-              <IconButton
-                key="close"
-                color="inherit"
-                onClick={this.handleCloseSuccessMessage}
-              >
+              <IconButton key="close" color="inherit" onClick={this.handleCloseSuccessMessage}>
                 <CloseIcon />
               </IconButton>,
             ]}
           />
         )}
-        <InfoBar
-          open={showInfoBar}
-          onClose={this.closeInfoBar}
-          {...infoBarParams}
-        />
+        <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
       </div>
     );
   }

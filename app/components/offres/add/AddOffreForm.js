@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -20,6 +20,9 @@ import OffreInfo from './OffreInfo';
 import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
 import ArticlesListTableHeader from './ArticlesHeader';
 import AticlesListTableRow from './ArticlesRow';
+import { useEffect } from 'react';
+import fuzzy from 'fuzzy';
+import { Input } from '@material-ui/core';
 
 const styles = theme => ({
   root: {
@@ -123,6 +126,28 @@ export function AddOffreForm(props) {
     handleGlobalVarsChange,
     applyGlobalVars,
   } = props;
+
+  const [articlesRow, setArticlesRows] = useState(rows);
+  const [search, setSearch] = useState('');
+
+  useEffect(
+    () => {
+      setArticlesRows(rows);
+    },
+    [rows],
+  );
+
+  const handleSearch = e => {
+    setSearch(e.target.value);
+    const list = fuzzy.filter(e.target.value, rows, {
+      extract: function(el) {
+        return el.nom;
+      },
+    });
+    console.log(list.map(item => item.original));
+    setArticlesRows(list.map(item => item.original));
+  };
+
   const disableAllFields = disableAll(editMode, originalFormData);
   const disableAllFieldsExceptDate = editOnlyDateField(editMode, originalFormData);
   const onGlobalVarsChange = _.debounce(handleGlobalVarsChange, 500);
@@ -235,6 +260,16 @@ export function AddOffreForm(props) {
             {`Articles de l'offre`}
           </Typography>
         </Grid>
+        <div
+          style={{
+            padding: 3,
+            display: 'flex',
+            justifyContent: 'center',
+            width: '100%',
+          }}
+        >
+          <Input placeholder="search for articles" value={search} onChange={handleSearch} />
+        </div>
         <Grid className={classes.gridContainer} spacing={8} container>
           <Table className={classes.table} style={{ marginLeft: '1%' }}>
             <TableHead>
@@ -244,8 +279,8 @@ export function AddOffreForm(props) {
               />
             </TableHead>
             <TableBody>
-              {rows.length != 0 ? (
-                rows.map((row, index) => (
+              {articlesRow.length != 0 ? (
+                articlesRow.map((row, index) => (
                   <AticlesListTableRow
                     index={index}
                     handleArticleRowChange={disableAllFields || disableAllFieldsExceptDate ? () => {} : handleArticleRowChange}

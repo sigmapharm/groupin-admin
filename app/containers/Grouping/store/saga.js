@@ -79,6 +79,8 @@ function* submitCommandAggregateWorker({ payload: { providerId, offerId, command
   });
 }
 
+// !! bug in this endpoint
+// !! dont forget to change to
 function* loadAggregatedArticlesByCommandWorker({ payload: { commandIds = [] } }) {
   const options = {
     method: 'GET',
@@ -94,6 +96,26 @@ function* loadAggregatedArticlesByCommandWorker({ payload: { commandIds = [] } }
     } catch (e) {}
   });
 }
+
+// function* loadAggregatedArticlesByCommandWorker({ payload: { commandIds = [] } }) {
+//   const arrayCommands = commandIds.map(value => ({ commandId: value }));
+//   const options = {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: {
+//       commandsList: JSON.stringify(arrayCommands),
+//     },
+//   };
+
+//   yield networking(function*() {
+//     try {
+//       const res = yield requestWithAuth(`/commands/articles/aggregate`, options);
+//       yield put(loadAggregatedArticlesSuccess(res));
+//     } catch (e) {}
+//   });
+// }
 
 function* loadAllCommandByOfferWorker({ payload: { id } }) {
   const options = {
