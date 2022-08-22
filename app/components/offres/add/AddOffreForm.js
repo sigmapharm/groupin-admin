@@ -176,8 +176,7 @@ export function AddOffreForm(props) {
           </Typography>
         </Grid>
         <OffreInfo
-          disableAllWithoutDate={disableAllFieldsExceptDate}
-          disableAll={disableAllFields}
+          editMode={editMode}
           formData={formData}
           originalFormData={originalFormData}
           errors={errors.fields}
@@ -209,6 +208,7 @@ export function AddOffreForm(props) {
             <Grid className={classes.globalVarsContainer} item xs={6}>
               <TextField
                 noValidate
+                disabled={editMode}
                 autoComplete="off"
                 name="globalDiscountPerArticle"
                 label="Global remise"
@@ -231,6 +231,7 @@ export function AddOffreForm(props) {
             <Grid className={classes.globalVarsContainer} item xs={6}>
               <TextField
                 noValidate
+                disabled={editMode}
                 autoComplete="off"
                 name="globalMinQuantity"
                 label="Global min quantite"

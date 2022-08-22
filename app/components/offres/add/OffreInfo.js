@@ -24,8 +24,7 @@ const styles = () => ({
   },
 });
 export function OffreInfo(props) {
-  const { formData, errors, classes, onChange, maxLength, children, disableAllWithoutDate, disableAll } = props;
-
+  const { formData, errors, classes, onChange, maxLength, children, disableAllWithoutDate, disableAll, editMode } = props;
   const disable = disableAllWithoutDate || disableAll;
 
   return (
@@ -154,6 +153,7 @@ export function OffreInfo(props) {
         </Grid>
         <Grid xs={12} md={6} item>
           <TextField
+            disabled={editMode}
             noValidate
             autoComplete="off"
             name={fields.globalDiscount.name}
@@ -162,7 +162,6 @@ export function OffreInfo(props) {
             type={fields.globalDiscount.type}
             error={!!errors[fields.globalDiscount.name]}
             onChange={onChange}
-            // disabled={disable}
             className={classes.offreInputs}
             inputProps={{
               maxLength,
@@ -183,7 +182,6 @@ export function OffreInfo(props) {
             type={fields.minToOrder.type}
             error={!!errors[fields.minToOrder.name]}
             onChange={onChange}
-            // disabled={disable}
             className={classes.offreInputs}
             inputProps={{
               maxLength,

@@ -203,10 +203,7 @@ function* addNewOffreWorker(action) {
   };
   yield networking(function*() {
     try {
-      const res = yield requestWithAuth(
-        updateOnlyDate ? `/offres/${offerId}/extend-end-date` : `/offres/${laboratoryId}${offerId ? `/${offerId}` : ''}`,
-        options,
-      );
+      const res = yield requestWithAuth(`/offres/${laboratoryId}${offerId ? `/${offerId}/update` : '/create'}`, options);
       yield put(manageCreateOffreResponse(res, callback && callback()));
     } catch (e) {
       yield put(manageCreateOffreResponse(e.response, callback && callback(e)));
