@@ -158,7 +158,7 @@ export function OffreInfo(props) {
             autoComplete="off"
             name={fields.globalDiscount.name}
             label={fields.globalDiscount.label}
-            value={formData[fields.globalDiscount.name] || ''}
+            value={formData[fields.globalDiscount.name] || 0}
             type={fields.globalDiscount.type}
             error={!!errors[fields.globalDiscount.name]}
             onChange={onChange}
