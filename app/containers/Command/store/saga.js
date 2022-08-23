@@ -2,6 +2,7 @@ import { all, put, takeLatest } from 'redux-saga/effects';
 import {
   DELETE_COMMAND,
   DISPATCH_QUANTITY_TO_SUB_COMMANDS,
+  DISPATCH_QUANTITY_TO_SUB_COMMANDS_CANCEL,
   DOWNLOAD_COMMAND_FORM,
   LOAD_AGGREGATE_SUB_COMMANDS,
   LOAD_COMMAND_ARTICLES,
@@ -73,6 +74,24 @@ function* dispatchQuantityWorker({ payload: { id, callback } }) {
   yield networking(function*() {
     try {
       const req = yield requestWithAuth(`/commands/aggregate/${id}/status`, options);
+      yield put(loadCommandsSuccess(req));
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
+}
+
+function* dispatchQuantityWorkerCancel({ payload: { id, callback } }) {
+  const options = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  yield networking(function*() {
+    try {
+      const req = yield requestWithAuth(`/commands/aggregate/${id}/statuscancel`, options);
       yield put(loadCommandsSuccess(req));
       yield callback && callback();
     } catch (e) {
@@ -198,6 +217,7 @@ export default function* commandListSagas() {
     takeLatest(UPDATE_COMMAND_DETAIL, updateClientCommandWorker),
     takeLatest(LOAD_AGGREGATE_SUB_COMMANDS, loadAggregateSubCommandsWorker),
     takeLatest(DISPATCH_QUANTITY_TO_SUB_COMMANDS, dispatchQuantityWorker),
+    takeLatest(DISPATCH_QUANTITY_TO_SUB_COMMANDS_CANCEL, dispatchQuantityWorkerCancel),
     takeLatest(GET_DOWNLOAD_FACTURE_FORM, downloadFactureWorker),
     takeLatest(GET_DOWNLOAD_BL_FORM, downloadBLWorker),
   ]);

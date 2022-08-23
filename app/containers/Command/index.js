@@ -277,6 +277,14 @@ class Command extends PureComponent {
       onSubmit: this.deleteCommand({ commandId, canDelete, callback }),
     });
   };
+  performDispatchingCancel = ({ commandId, offerId }) => () => {
+    this.openPopConfirmation({
+      title: 'livraison',
+      textContent: 'Annuler La Livraison ',
+      onClose: this.closePopConfirmation,
+      onSubmit: this.dispatchQuantityCancel({ commandId, offerId }),
+    });
+  };
 
   performDispatching = ({ commandId, offerId }) => () => {
     this.openPopConfirmation({
@@ -576,6 +584,14 @@ class Command extends PureComponent {
     });
   };
 
+  dispatchQuantityCancel = ({ commandId, offerId }) => () => {
+    const { dispatchQuantityCancel } = this.props;
+    dispatchQuantityCancel({
+      commandId,
+      callback: this.onDispatchSuccess(offerId),
+    });
+  };
+
   onDispatchSuccess = offerId => error => {
     this.closePopConfirmation();
     // this.setState({
@@ -749,6 +765,7 @@ class Command extends PureComponent {
                   forAdmin={this.forAdminCommands}
                   isAdmin={this.isAdmin}
                   dispatchQuantity={this.performDispatching}
+                  dispatchQuantityCancel={this.performDispatchingCancel}
                   updateCommand={this.updateCommandDetail}
                   selectCommand={this.showCommandDetail}
                   deleteCommand={this.performDeleteCommand}

@@ -36,7 +36,9 @@ export default ({
   updateCommand,
   printCommand,
   dispatchQuantity,
+  dispatchQuantityCancel,
   showSubCommands,
+
   forAdmin,
   canDelete,
   isAdmin,
@@ -126,6 +128,19 @@ export default ({
                     </ListItemIcon>
                     <Typography>Annuler</Typography>
                   </MenuItem>
+
+                  <MenuItem
+                    disabled={!isAdmin && !row.canDelete}
+                    onClick={dispatchQuantityCancel({
+                      ..._.pick(row, ['commandId', 'canDelete']),
+                    })}
+                  >
+                    <ListItemIcon>
+                      <HighlightOff color={!isAdmin && !row.canDelete ? 'disabled' : 'error'} />
+                    </ListItemIcon>
+                    <Typography>Annuler livraison</Typography>
+                  </MenuItem>
+
                   {/* )} */}
                   {forAdmin && (
                     <MenuItem onClick={showSubCommands(row)}>
