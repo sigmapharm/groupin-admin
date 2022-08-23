@@ -57,12 +57,13 @@ const deleteOffer = ({ id, filters, callback }) => ({
 
 const deleteOfferSuccess = payload => ({ type: DELETE_OFFER_SUCCESS, payload });
 
-const changeArticleOffer = ({ index, id, selected, minQuantity, discount }) => ({
+const changeArticleOffer = ({ index, id, selected, required, minQuantity, discount }) => ({
   type: CHANGE_ARTICLE_OFFER,
   payload: {
     index,
     id,
-    selected: discount || minQuantity ? true : false,
+    selected,
+    required,
     discount,
     minQuantity,
   },

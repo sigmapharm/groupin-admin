@@ -193,16 +193,18 @@ function* addNewOffreWorker(action) {
       ...payload,
       offerArticledtos: updateOnlyDate
         ? []
-        : offerArticledtos.map(({ selected, id, discount, minQuantity }) => ({
+        : offerArticledtos.map(({ selected, id, discount, minQuantity, required }) => ({
             articleId: id,
             discount,
-            selected,
+            selected: Boolean(selected),
+            required: Boolean(required),
             minQuantity,
           })),
     }),
   };
   yield networking(function*() {
     try {
+      console.log(options.body.required);
       const res = yield requestWithAuth(`/offres/${laboratoryId}${offerId ? `/${offerId}/update` : '/create'}`, options);
       yield put(manageCreateOffreResponse(res, callback && callback()));
     } catch (e) {

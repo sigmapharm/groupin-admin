@@ -16,21 +16,27 @@ export class AticlesListTableRow extends React.PureComponent {
 
   render() {
     const { row, handleArticleRowChange, index } = this.props;
+
+    console.log(row);
     return (
       <TableRow key={row.id} style={row.discount || row.minQuantity ? { backgroundColor: '#4d609c70' } : {}}>
-        {/*  <TableCell component="th" scope="row">
-          <Checkbox
-            onChange={({ target: { checked } }) =>
-              handleArticleRowChange({
-                discount: row.discount,
-                minQuantity: row.minQuantity,
-                index,
-                selected: checked,
-              })
-            }
-            checked={!!row.selected}
-          /> 
-        </TableCell>*/}
+        {
+          <TableCell component="th" scope="row">
+            <Checkbox
+              checked={row.required}
+              onChange={({ target: { checked } }) => {
+                console.log(checked);
+                handleArticleRowChange({
+                  discount: row.discount,
+                  minQuantity: row.minQuantity,
+                  selected: checked,
+                  required: checked,
+                  index,
+                });
+              }}
+            />
+          </TableCell>
+        }
         <TableCell>{row.nom}</TableCell>
         <TableCell>{row.pph.toFixed(2)}</TableCell>
         <TableCell>{row.ppv.toFixed(2)}</TableCell>
@@ -44,8 +50,9 @@ export class AticlesListTableRow extends React.PureComponent {
             onChange={({ target: { value } }) =>
               handleArticleRowChange({
                 discount: +value,
+                selected: row.selected,
+                required: row.selected,
                 minQuantity: row.minQuantity,
-                selected: !!value,
                 index,
               })
             }
@@ -66,7 +73,8 @@ export class AticlesListTableRow extends React.PureComponent {
               handleArticleRowChange({
                 minQuantity: +value,
                 discount: row.discount,
-                //selected: row.selected,
+                selected: row.selected,
+                required: row.selected,
                 index,
               })
             }

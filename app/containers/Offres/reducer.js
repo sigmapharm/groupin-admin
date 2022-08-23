@@ -65,9 +65,10 @@ function reducer(state = initialState, action) {
       const payload = action.payload;
       console.log('reducer', payload);
       return state.merge({
-        articlesListlabo: articlesListlabo.map(({ selected, ...article }) => ({
+        articlesListlabo: articlesListlabo.map(({ selected, required, ...article }) => ({
           ...article,
-          selected: true,
+          selected: selected,
+          required: required,
           ...payload,
         })),
       });
@@ -168,14 +169,15 @@ function reducer(state = initialState, action) {
       });
     }
     case CHANGE_ARTICLE_OFFER: {
-      const { index, selected, discount, minQuantity } = action.payload;
+      const { index, selected, discount, minQuantity, required } = action.payload;
       const articlesListlabo = state.get('articlesListlabo').toJS();
       const item = articlesListlabo[index];
 
       return state.merge({
         articlesListlabo: _.merge(articlesListlabo, {
           [index]: {
-            selected: discount || minQuantity ? true : false,
+            required,
+            selected,
             discount: discount ? discount : 0,
             minQuantity: minQuantity ? minQuantity : 0,
           },

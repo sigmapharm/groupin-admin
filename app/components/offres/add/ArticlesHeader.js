@@ -10,6 +10,7 @@ export default ({ onCheckAllChange, checkAllValue }) => (
     {/* <TableCell>
       <Checkbox onChange={onCheckAllChange} checked={checkAllValue} />
     </TableCell> */}
+    <TableCell>Article Requis</TableCell>
     <TableCell>Désignation</TableCell>
     <TableCell>
       <span style={{ textDecoration: 'line-through' }}>PPH</span>

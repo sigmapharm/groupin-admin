@@ -118,7 +118,7 @@ export class OffreListConsultation extends React.PureComponent {
   get allowCommandSubmit() {
     const { offerArticles } = this.props;
 
-    return offerArticles.filter(({ quantity, minQuantity }) => quantity >= minQuantity).length > 0 &&
+    return offerArticles.filter(({ quantity, minQuantity, required }) => quantity >= minQuantity).length > 0 &&
       offerArticles.filter(({ quantity }) => quantity > 0).every(({ hasError }) => hasError === false)
       ? true
       : false;
@@ -134,8 +134,7 @@ export class OffreListConsultation extends React.PureComponent {
   get isCommandAllowed() {
     const { totalRemise, row } = this.props;
 
-    console.log(row);
-
+    //console.log(offerArticles);
     const isEqual = totalRemise === parseInt(row.minToOrder) ? true : false;
 
     const isGreater = totalRemise > parseInt(row.minToOrder) ? true : false;
@@ -179,7 +178,7 @@ export class OffreListConsultation extends React.PureComponent {
     const { row, classes, remainingDays, hasStarted, progress, offerArticles, commandMode, dismiss } = this.props;
     const { showInfoBar, infoBarParams } = this.state;
 
-    console.log(row);
+    console.log('Test render:' + offerArticles);
 
     const datefin = new Date(row.dateFin);
     const startDate = new Date(row.dateDebut);
@@ -348,7 +347,20 @@ export class OffreListConsultation extends React.PureComponent {
           </TableHead>
           <TableBody>
             {offerArticles.map(
-              ({ id, nom, ppv, pph, discount, computedPPH, quantity, minQuantity, hasError, selected, quantityCmd }) => (
+              ({
+                id,
+                nom,
+                ppv,
+                pph,
+                discount,
+                computedPPH,
+                quantity,
+                minQuantity,
+                hasError,
+                selected,
+                quantityCmd,
+                required,
+              }) => (
                 <TableRow
                   {...(hasError ? { className: classes.hasError } : {})}
                   key={id}
