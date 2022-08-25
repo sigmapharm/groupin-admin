@@ -20,24 +20,6 @@ export class AticlesListTableRow extends React.PureComponent {
     console.log(row);
     return (
       <TableRow key={row.id} style={row.discount && row.minQuantity ? { backgroundColor: '#4d609c70' } : {}}>
-        {
-          <TableCell component="th" scope="row">
-            <Checkbox
-              checked={row.required}
-              disabled={editMode}
-              onChange={({ target: { checked } }) => {
-                console.log(checked);
-                handleArticleRowChange({
-                  discount: row.discount,
-                  minQuantity: row.minQuantity,
-                  selected: row.discount && row.minQuantity,
-                  required: checked,
-                  index,
-                });
-              }}
-            />
-          </TableCell>
-        }
         <TableCell>{row.nom}</TableCell>
         <TableCell>{row.pph.toFixed(2)}</TableCell>
         <TableCell>{row.ppv.toFixed(2)}</TableCell>
@@ -88,6 +70,25 @@ export class AticlesListTableRow extends React.PureComponent {
           />
         </TableCell>
         <TableCell>{(row.discount ? row.pph * (1 - (row.discount || 0) / 100) : 0).toFixed(2)}</TableCell>
+
+        {
+          <TableCell component="th" scope="row">
+            <Checkbox
+              checked={row.required}
+              disabled={editMode}
+              onChange={({ target: { checked } }) => {
+                console.log(checked);
+                handleArticleRowChange({
+                  discount: row.discount,
+                  minQuantity: row.minQuantity,
+                  selected: row.discount && row.minQuantity,
+                  required: checked,
+                  index,
+                });
+              }}
+            />
+          </TableCell>
+        }
       </TableRow>
     );
   }
