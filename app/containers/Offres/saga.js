@@ -196,8 +196,8 @@ function* addNewOffreWorker(action) {
         : offerArticledtos.map(({ selected, id, discount, minQuantity, required }) => ({
             articleId: id,
             discount,
-            selected: Boolean(selected),
-            required: Boolean(required),
+            selected: Boolean(discount > 0 && minQuantity > 0),
+            required: Boolean(discount > 0 && minQuantity > 0 && required),
             minQuantity,
           })),
     }),

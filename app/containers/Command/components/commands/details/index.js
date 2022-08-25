@@ -123,7 +123,7 @@ export default withStyles(styles)(({ list, metadata, classes, readMode = true, o
       >
         {!!list.length && (
           <>
-            {list.filter(({ selected }) => (readMode || (isAdmin && !forAdmin) ? selected : true)).map((article, index) => (
+            {list.filter(({ quantity }) => (readMode || (isAdmin && !forAdmin) ? quantity > 0 : true)).map((article, index) => (
               <TableRow key={article.offerArticleId}>
                 {/* {!isAdmin &&
                       !readMode && (
@@ -136,7 +136,10 @@ export default withStyles(styles)(({ list, metadata, classes, readMode = true, o
                         />
                       </TableCell>
                     )} */}
-                <TableCell>{article.label}</TableCell>
+                <TableCell>
+                  {article.label}
+                  test
+                </TableCell>
                 <TableCell>{article.pph.toFixed(2)}</TableCell>
                 <TableCell>{article.ppv.toFixed(2)}</TableCell>
                 <TableCell>{article.tva.toFixed(2)}</TableCell>
@@ -150,7 +153,7 @@ export default withStyles(styles)(({ list, metadata, classes, readMode = true, o
                       value={article.quantity || ''}
                       type="number"
                       onChange={({ target: { value } }) => onChange({ index, quantity: +value })}
-                      disabled={!article.selected}
+                      disabled={article.quantity <= 0}
                       autoComplete="off"
                       inputProps={{ maxLength: 100 }}
                       fullWidth

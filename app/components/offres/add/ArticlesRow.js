@@ -15,21 +15,22 @@ export class AticlesListTableRow extends React.PureComponent {
   }
 
   render() {
-    const { row, handleArticleRowChange, index } = this.props;
+    const { row, handleArticleRowChange, index, editMode } = this.props;
 
     console.log(row);
     return (
-      <TableRow key={row.id} style={row.discount || row.minQuantity ? { backgroundColor: '#4d609c70' } : {}}>
+      <TableRow key={row.id} style={row.discount && row.minQuantity ? { backgroundColor: '#4d609c70' } : {}}>
         {
           <TableCell component="th" scope="row">
             <Checkbox
               checked={row.required}
+              disabled={editMode}
               onChange={({ target: { checked } }) => {
                 console.log(checked);
                 handleArticleRowChange({
                   discount: row.discount,
                   minQuantity: row.minQuantity,
-                  selected: checked,
+                  selected: row.discount && row.minQuantity,
                   required: checked,
                   index,
                 });
@@ -47,15 +48,16 @@ export class AticlesListTableRow extends React.PureComponent {
             label={fields.discount.label}
             value={row.discount || ''}
             type={fields.discount.type}
-            onChange={({ target: { value } }) =>
+            onChange={({ target: { value } }) => {
+              console.log(value);
               handleArticleRowChange({
                 discount: +value,
-                selected: row.selected,
-                required: row.selected,
                 minQuantity: row.minQuantity,
+                selected: row.discount && row.minQuantity,
+                required: row.required,
                 index,
-              })
-            }
+              });
+            }}
             autoComplete="off"
             inputProps={
               { maxLength: 100 } // disabled={!row.selected}
@@ -71,10 +73,10 @@ export class AticlesListTableRow extends React.PureComponent {
             type={fields.quantiteMin.type}
             onChange={({ target: { value } }) =>
               handleArticleRowChange({
-                minQuantity: +value,
                 discount: row.discount,
-                selected: row.selected,
-                required: row.selected,
+                minQuantity: +value,
+                selected: row.discount && row.minQuantity,
+                required: row.required,
                 index,
               })
             }

@@ -118,7 +118,7 @@ export class OffreListConsultation extends React.PureComponent {
   get allowCommandSubmit() {
     const { offerArticles } = this.props;
 
-    return offerArticles.filter(({ quantity, minQuantity, required }) => quantity >= minQuantity).length > 0 &&
+    return offerArticles.filter(({ quantity, minQuantity }) => quantity >= minQuantity).length > 0 &&
       offerArticles.filter(({ quantity }) => quantity > 0).every(({ hasError }) => hasError === false)
       ? true
       : false;
@@ -177,8 +177,6 @@ export class OffreListConsultation extends React.PureComponent {
   render() {
     const { row, classes, remainingDays, hasStarted, progress, offerArticles, commandMode, dismiss } = this.props;
     const { showInfoBar, infoBarParams } = this.state;
-
-    console.log('Test render:' + offerArticles);
 
     const datefin = new Date(row.dateFin);
     const startDate = new Date(row.dateDebut);
@@ -347,20 +345,7 @@ export class OffreListConsultation extends React.PureComponent {
           </TableHead>
           <TableBody>
             {offerArticles.map(
-              ({
-                id,
-                nom,
-                ppv,
-                pph,
-                discount,
-                computedPPH,
-                quantity,
-                minQuantity,
-                hasError,
-                selected,
-                quantityCmd,
-                required,
-              }) => (
+              ({ id, nom, ppv, pph, discount, computedPPH, quantity, minQuantity, hasError, selected, quantityCmd }) => (
                 <TableRow
                   {...(hasError ? { className: classes.hasError } : {})}
                   key={id}

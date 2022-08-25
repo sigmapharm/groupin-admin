@@ -287,6 +287,8 @@ export function AddOffreForm(props) {
                     handleArticleRowChange={disableAllFields || disableAllFieldsExceptDate ? () => {} : handleArticleRowChange}
                     key={row.id}
                     row={row}
+                    editMode={editMode}
+                    editModec={true}
                   />
                 ))
               ) : (
