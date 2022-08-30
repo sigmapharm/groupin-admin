@@ -60,7 +60,6 @@ export function OffreInfo(props) {
               .toDate()}
             value={!!formData[fields.dateDebut.name] ? new Date(formData[fields.dateDebut.name]) : null}
             onChange={date => {
-              console.log(date);
               onChange({
                 target: { name: fields.dateDebut.name, value: date },
               });
@@ -85,7 +84,6 @@ export function OffreInfo(props) {
             //   .toDate()}
             value={!!formData[fields.dateFin.name] ? new Date(formData[fields.dateFin.name]) : null}
             onChange={date => {
-              console.log(date);
               onChange({
                 target: { name: fields.dateFin.name, value: date },
               });

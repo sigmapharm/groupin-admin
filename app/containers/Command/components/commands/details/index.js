@@ -74,6 +74,7 @@ export default withStyles(styles)(({ list, metadata, classes, readMode = true, o
               {(metadata.totalAmount || 1).toFixed(2)}
             </Typography>
           </div> */}
+
         <div className={classes.metaItems}>
           <Typography color="textSecondary"> Total Remisé </Typography>
           <Typography variant="h6" component="h2">

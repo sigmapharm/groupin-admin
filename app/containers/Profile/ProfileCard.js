@@ -2,7 +2,6 @@ import { Typography, withStyles } from '@material-ui/core';
 import React from 'react';
 
 const ProfileCard = ({ user, classes }) => {
-  console.log('user profile', user);
   return (
     <div className={classes.container}>
       <div className={classes.header}>

@@ -63,7 +63,6 @@ function reducer(state = initialState, action) {
     case APPLY_GLOBAL_REMISE_OR_MIN_QT: {
       const articlesListlabo = state.get('articlesListlabo').toJS();
       const payload = action.payload;
-      console.log('reducer', payload);
       return state.merge({
         articlesListlabo: articlesListlabo.map(({ selected, required, ...article }) => ({
           ...article,
@@ -109,7 +108,6 @@ function reducer(state = initialState, action) {
       const { id, ...payload } = action.payload;
       const offerArticles = state.get('offerArticles').toJS();
       const articleIndex = _.findIndex(offerArticles, { id });
-      console.log('offerArticles', offerArticles);
       return state.merge({
         offerArticles: _.merge(offerArticles, { [articleIndex]: payload }),
       });

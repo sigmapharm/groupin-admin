@@ -152,6 +152,7 @@ class Command extends PureComponent {
       commandPageable: { number, size },
       loadCommands,
     } = this.props;
+
     loadCommands({
       ...searchData,
       cols,
@@ -231,7 +232,6 @@ class Command extends PureComponent {
       cols,
       callback: err => {
         if (err) {
-          console.log('err', err);
           this.setState({
             showPopConfirmation: false,
             showInfoBar: true,
@@ -283,6 +283,14 @@ class Command extends PureComponent {
       textContent: 'Annuler La Livraison ',
       onClose: this.closePopConfirmation,
       onSubmit: this.dispatchQuantityCancel({ commandId, offerId }),
+    });
+  };
+  performDispatchingVerifierCommand = ({ commandId, offerId, isAggregate, cols }) => () => {
+    this.openPopConfirmation({
+      title: 'Verifier',
+      textContent: "Êtes-vous sûr d'avoir vérifié cette commande",
+      onClose: this.closePopConfirmation,
+      onSubmit: this.VerifyCommand({ commandId, offerId, isAggregate, cols }),
     });
   };
 
@@ -346,7 +354,6 @@ class Command extends PureComponent {
   };
 
   printCommand = row => () => {
-    console.log(row);
     const { downloadCommandForm } = this.props;
 
     downloadCommandForm({
@@ -588,6 +595,17 @@ class Command extends PureComponent {
     const { dispatchQuantityCancel } = this.props;
     dispatchQuantityCancel({
       commandId,
+      offerId,
+      callback: this.onDispatchSuccess(offerId),
+    });
+  };
+
+  VerifyCommand = ({ commandId, offerId, isAggregate }) => () => {
+    const { VerifyCommand } = this.props;
+    VerifyCommand({
+      commandId,
+      offerId,
+      isAggregate,
       callback: this.onDispatchSuccess(offerId),
     });
   };
@@ -766,6 +784,7 @@ class Command extends PureComponent {
                   isAdmin={this.isAdmin}
                   dispatchQuantity={this.performDispatching}
                   dispatchQuantityCancel={this.performDispatchingCancel}
+                  VerifyCommand={this.performDispatchingVerifierCommand}
                   updateCommand={this.updateCommandDetail}
                   selectCommand={this.showCommandDetail}
                   deleteCommand={this.performDeleteCommand}

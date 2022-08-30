@@ -174,7 +174,6 @@ export class AddArticle extends React.PureComponent {
             }
           } else {
             this.handleSubmitResponse(res);
-            console.log('res', res);
           }
         }),
       );
@@ -253,7 +252,6 @@ export class AddArticle extends React.PureComponent {
     const { classes, laboratoires, articleFormData } = this.props;
     const { formData, errors, isSuccess, editMode, showInfoBar, infoBarParams } = this.state;
     const formattedLaboratoire = laboratoires.map(formatLaboratoireToLabelValue);
-    console.log('editMode', editMode);
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>

@@ -111,7 +111,6 @@ function* loadAggregatedArticlesByCommandWorker({ payload: { commandIds = [] } }
 
   yield networking(function*() {
     try {
-      console.log(options.body.commandsList);
       const res = yield requestWithAuth(`/commands/articles/aggregate`, options);
       yield put(loadAggregatedArticlesSuccess(res));
     } catch (e) {}

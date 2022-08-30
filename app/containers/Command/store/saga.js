@@ -3,6 +3,7 @@ import {
   DELETE_COMMAND,
   DISPATCH_QUANTITY_TO_SUB_COMMANDS,
   DISPATCH_QUANTITY_TO_SUB_COMMANDS_CANCEL,
+  VERIFY_COMMAND,
   DOWNLOAD_COMMAND_FORM,
   LOAD_AGGREGATE_SUB_COMMANDS,
   LOAD_COMMAND_ARTICLES,
@@ -82,16 +83,43 @@ function* dispatchQuantityWorker({ payload: { id, callback } }) {
   });
 }
 
-function* dispatchQuantityWorkerCancel({ payload: { id, callback } }) {
+function* dispatchQuantityWorkerCancel({ payload: { offerId, id, callback } }) {
   const options = {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({
+      offerId,
+    }),
   };
   yield networking(function*() {
     try {
       const req = yield requestWithAuth(`/commands/aggregate/${id}/statuscancel`, options);
+      yield put(loadCommandsSuccess(req));
+      yield callback && callback();
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
+}
+
+function* dispatchWorkerVerifyCommand({ payload: { offerId, id, callback, isAggregate } }) {
+  //Is Aggregate is for Display After Verifing a commands
+  const options = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      offerId: offerId,
+      isAggregate: isAggregate,
+    }),
+  };
+
+  yield networking(function*() {
+    try {
+      const req = yield requestWithAuth(`/commands/aggregate/${id}/VerifyCommand`, options);
       yield put(loadCommandsSuccess(req));
       yield callback && callback();
     } catch (e) {
@@ -184,6 +212,7 @@ function* loadCommandsWorker({ payload: { offerId, cols, isAggregate, callback, 
       'Content-Type': 'application/json',
     },
   };
+
   const sortQuery = cols.filter(({ selected }) => selected).reduce((acc, n) => acc.concat(`&sort=${n.colName},${n.order}`), '');
   const queryString = Object.keys(payload)
     .map(key => `${key}=${payload[key]}`)
@@ -218,6 +247,7 @@ export default function* commandListSagas() {
     takeLatest(LOAD_AGGREGATE_SUB_COMMANDS, loadAggregateSubCommandsWorker),
     takeLatest(DISPATCH_QUANTITY_TO_SUB_COMMANDS, dispatchQuantityWorker),
     takeLatest(DISPATCH_QUANTITY_TO_SUB_COMMANDS_CANCEL, dispatchQuantityWorkerCancel),
+    takeLatest(VERIFY_COMMAND, dispatchWorkerVerifyCommand),
     takeLatest(GET_DOWNLOAD_FACTURE_FORM, downloadFactureWorker),
     takeLatest(GET_DOWNLOAD_BL_FORM, downloadBLWorker),
   ]);

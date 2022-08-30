@@ -144,7 +144,7 @@ export function AddOffreForm(props) {
         return el.nom;
       },
     });
-    console.log(list.map(item => item.original));
+
     setArticlesRows(list.map(item => item.original));
   };
 
@@ -288,7 +288,7 @@ export function AddOffreForm(props) {
                     key={row.id}
                     row={row}
                     editMode={editMode}
-                    editModec={true}
+                    //Deleted Variable editModec={true}
                   />
                 ))
               ) : (

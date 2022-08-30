@@ -7,6 +7,7 @@ import Delete from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField/TextField';
 import Grid from '@material-ui/core/Grid/Grid';
 import { fields } from '../../../containers/Offres/add/validation';
+import { RowCheckBox } from '../../RowCheckBox';
 
 export class AticlesListTableRow extends React.PureComponent {
   constructor(props) {
@@ -17,7 +18,6 @@ export class AticlesListTableRow extends React.PureComponent {
   render() {
     const { row, handleArticleRowChange, index, editMode } = this.props;
 
-    console.log(row);
     return (
       <TableRow key={row.id} style={row.discount && row.minQuantity ? { backgroundColor: '#4d609c70' } : {}}>
         <TableCell>{row.nom}</TableCell>
@@ -31,7 +31,6 @@ export class AticlesListTableRow extends React.PureComponent {
             value={row.discount || ''}
             type={fields.discount.type}
             onChange={({ target: { value } }) => {
-              console.log(value);
               handleArticleRowChange({
                 discount: +value,
                 minQuantity: row.minQuantity,
@@ -73,10 +72,11 @@ export class AticlesListTableRow extends React.PureComponent {
 
         {
           <TableCell component="th" scope="row">
-            <Checkbox
-              checked={row.required}
-              disabled={editMode}
+            {/* <Checkbox
+              helperText="Veuillez remplir les champs vides"
+              disabled={editMode || !(row.discount && row.minQuantity)}            
               onChange={({ target: { checked } }) => {
+                
                 console.log(checked);
                 handleArticleRowChange({
                   discount: row.discount,
@@ -84,9 +84,11 @@ export class AticlesListTableRow extends React.PureComponent {
                   selected: row.discount && row.minQuantity,
                   required: checked,
                   index,
+
                 });
               }}
-            />
+            /> */}
+            <RowCheckBox row={row} editMode={editMode} handleArticleRowChange={handleArticleRowChange} index={index} />
           </TableCell>
         }
       </TableRow>
