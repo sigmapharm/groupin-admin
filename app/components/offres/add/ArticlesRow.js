@@ -7,6 +7,7 @@ import Delete from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField/TextField';
 import Grid from '@material-ui/core/Grid/Grid';
 import { fields } from '../../../containers/Offres/add/validation';
+import { RowCheckBox } from '../../RowCheckBox';
 
 export class AticlesListTableRow extends React.PureComponent {
   constructor(props) {
@@ -15,22 +16,10 @@ export class AticlesListTableRow extends React.PureComponent {
   }
 
   render() {
-    const { row, handleArticleRowChange, index } = this.props;
+    const { row, handleArticleRowChange, index, editMode } = this.props;
+
     return (
-      <TableRow key={row.id} style={row.discount || row.minQuantity ? { backgroundColor: '#4d609c70' } : {}}>
-        {/*  <TableCell component="th" scope="row">
-          <Checkbox
-            onChange={({ target: { checked } }) =>
-              handleArticleRowChange({
-                discount: row.discount,
-                minQuantity: row.minQuantity,
-                index,
-                selected: checked,
-              })
-            }
-            checked={!!row.selected}
-          /> 
-        </TableCell>*/}
+      <TableRow key={row.id} style={row.discount && row.minQuantity ? { backgroundColor: '#4d609c70' } : {}}>
         <TableCell>{row.nom}</TableCell>
         <TableCell>{row.pph.toFixed(2)}</TableCell>
         <TableCell>{row.ppv.toFixed(2)}</TableCell>
@@ -41,14 +30,15 @@ export class AticlesListTableRow extends React.PureComponent {
             label={fields.discount.label}
             value={row.discount || ''}
             type={fields.discount.type}
-            onChange={({ target: { value } }) =>
+            onChange={({ target: { value } }) => {
               handleArticleRowChange({
                 discount: +value,
                 minQuantity: row.minQuantity,
-                selected: !!value,
+                selected: row.discount && row.minQuantity,
+                required: row.required,
                 index,
-              })
-            }
+              });
+            }}
             autoComplete="off"
             inputProps={
               { maxLength: 100 } // disabled={!row.selected}
@@ -64,9 +54,10 @@ export class AticlesListTableRow extends React.PureComponent {
             type={fields.quantiteMin.type}
             onChange={({ target: { value } }) =>
               handleArticleRowChange({
-                minQuantity: +value,
                 discount: row.discount,
-                //selected: row.selected,
+                minQuantity: +value,
+                selected: row.discount && row.minQuantity,
+                required: row.required,
                 index,
               })
             }
@@ -78,6 +69,28 @@ export class AticlesListTableRow extends React.PureComponent {
           />
         </TableCell>
         <TableCell>{(row.discount ? row.pph * (1 - (row.discount || 0) / 100) : 0).toFixed(2)}</TableCell>
+
+        {
+          <TableCell component="th" scope="row">
+            {/* <Checkbox
+              helperText="Veuillez remplir les champs vides"
+              disabled={editMode || !(row.discount && row.minQuantity)}            
+              onChange={({ target: { checked } }) => {
+                
+                console.log(checked);
+                handleArticleRowChange({
+                  discount: row.discount,
+                  minQuantity: row.minQuantity,
+                  selected: row.discount && row.minQuantity,
+                  required: checked,
+                  index,
+
+                });
+              }}
+            /> */}
+            <RowCheckBox row={row} editMode={editMode} handleArticleRowChange={handleArticleRowChange} index={index} />
+          </TableCell>
+        }
       </TableRow>
     );
   }

@@ -24,8 +24,7 @@ const styles = () => ({
   },
 });
 export function OffreInfo(props) {
-  const { formData, errors, classes, onChange, maxLength, children, disableAllWithoutDate, disableAll } = props;
-
+  const { formData, errors, classes, onChange, maxLength, children, disableAllWithoutDate, disableAll, editMode } = props;
   const disable = disableAllWithoutDate || disableAll;
 
   return (
@@ -61,7 +60,6 @@ export function OffreInfo(props) {
               .toDate()}
             value={!!formData[fields.dateDebut.name] ? new Date(formData[fields.dateDebut.name]) : null}
             onChange={date => {
-              console.log(date);
               onChange({
                 target: { name: fields.dateDebut.name, value: date },
               });
@@ -86,7 +84,6 @@ export function OffreInfo(props) {
             //   .toDate()}
             value={!!formData[fields.dateFin.name] ? new Date(formData[fields.dateFin.name]) : null}
             onChange={date => {
-              console.log(date);
               onChange({
                 target: { name: fields.dateFin.name, value: date },
               });
@@ -154,15 +151,15 @@ export function OffreInfo(props) {
         </Grid>
         <Grid xs={12} md={6} item>
           <TextField
+            disabled={editMode}
             noValidate
             autoComplete="off"
             name={fields.globalDiscount.name}
             label={fields.globalDiscount.label}
-            value={formData[fields.globalDiscount.name] || ''}
+            value={formData[fields.globalDiscount.name] || 0}
             type={fields.globalDiscount.type}
             error={!!errors[fields.globalDiscount.name]}
             onChange={onChange}
-            // disabled={disable}
             className={classes.offreInputs}
             inputProps={{
               maxLength,
@@ -183,7 +180,6 @@ export function OffreInfo(props) {
             type={fields.minToOrder.type}
             error={!!errors[fields.minToOrder.name]}
             onChange={onChange}
-            // disabled={disable}
             className={classes.offreInputs}
             inputProps={{
               maxLength,

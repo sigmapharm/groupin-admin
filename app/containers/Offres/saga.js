@@ -179,7 +179,6 @@ function* offresListWorker(action) {
 }
 
 function* addNewOffreWorker(action) {
-  console.log('request body', action.payload);
   const {
     payload: { offerArticledtos, offerId, laboratoryId, laboratoire, updateOnlyDate, ...payload },
     callback,
@@ -194,20 +193,18 @@ function* addNewOffreWorker(action) {
       ...payload,
       offerArticledtos: updateOnlyDate
         ? []
-        : offerArticledtos.map(({ selected, id, discount, minQuantity }) => ({
+        : offerArticledtos.map(({ selected, id, discount, minQuantity, required }) => ({
             articleId: id,
             discount,
-            selected,
+            selected: Boolean(discount > 0 && minQuantity),
+            required: Boolean(required),
             minQuantity,
           })),
     }),
   };
   yield networking(function*() {
     try {
-      const res = yield requestWithAuth(
-        updateOnlyDate ? `/offres/${offerId}/extend-end-date` : `/offres/${laboratoryId}${offerId ? `/${offerId}` : ''}`,
-        options,
-      );
+      const res = yield requestWithAuth(`/offres/${laboratoryId}${offerId ? `/${offerId}/update` : '/create'}`, options);
       yield put(manageCreateOffreResponse(res, callback && callback()));
     } catch (e) {
       yield put(manageCreateOffreResponse(e.response, callback && callback(e)));

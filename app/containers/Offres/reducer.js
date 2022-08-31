@@ -63,11 +63,11 @@ function reducer(state = initialState, action) {
     case APPLY_GLOBAL_REMISE_OR_MIN_QT: {
       const articlesListlabo = state.get('articlesListlabo').toJS();
       const payload = action.payload;
-      console.log('reducer', payload);
       return state.merge({
-        articlesListlabo: articlesListlabo.map(({ selected, ...article }) => ({
+        articlesListlabo: articlesListlabo.map(({ selected, required, ...article }) => ({
           ...article,
-          selected: true,
+          selected: selected,
+          required: required,
           ...payload,
         })),
       });
@@ -108,7 +108,6 @@ function reducer(state = initialState, action) {
       const { id, ...payload } = action.payload;
       const offerArticles = state.get('offerArticles').toJS();
       const articleIndex = _.findIndex(offerArticles, { id });
-      console.log('offerArticles', offerArticles);
       return state.merge({
         offerArticles: _.merge(offerArticles, { [articleIndex]: payload }),
       });
@@ -168,14 +167,15 @@ function reducer(state = initialState, action) {
       });
     }
     case CHANGE_ARTICLE_OFFER: {
-      const { index, selected, discount, minQuantity } = action.payload;
+      const { index, selected, discount, minQuantity, required } = action.payload;
       const articlesListlabo = state.get('articlesListlabo').toJS();
       const item = articlesListlabo[index];
 
       return state.merge({
         articlesListlabo: _.merge(articlesListlabo, {
           [index]: {
-            selected: discount || minQuantity ? true : false,
+            required,
+            selected,
             discount: discount ? discount : 0,
             minQuantity: minQuantity ? minQuantity : 0,
           },

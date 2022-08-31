@@ -10,6 +10,7 @@ export default ({ onCheckAllChange, checkAllValue }) => (
     {/* <TableCell>
       <Checkbox onChange={onCheckAllChange} checked={checkAllValue} />
     </TableCell> */}
+
     <TableCell>Désignation</TableCell>
     <TableCell>
       <span style={{ textDecoration: 'line-through' }}>PPH</span>
@@ -19,5 +20,6 @@ export default ({ onCheckAllChange, checkAllValue }) => (
     <TableCell>Remise(%)</TableCell>
     <TableCell>Quantité minimal</TableCell>
     <TableCell>PPH Remisè</TableCell>
+    <TableCell>Article Requis</TableCell>
   </TableRow>
 );

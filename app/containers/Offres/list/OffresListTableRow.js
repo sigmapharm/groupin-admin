@@ -240,7 +240,7 @@ export class OffresListTableRow extends React.PureComponent {
     progress = progress > 100 || totalDays == 0 ? 100 : progress;
 
     const remainingDays = totalDays - elapsedDays;
-
+    //const Requiredcount =offerArticles.reduce((n, e) => e.required == true ? n+1 : n, 0);
     // const status = Math.min(elapsedDuration / globalDuration, 1) * 100 || 0;
     // const remainingDays = Math.floor((startDate - now) / mSecondsPerDay) + 1;
     const dayLabel = remainingDays === 1 ? 'jour' : 'jours';

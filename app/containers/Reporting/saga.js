@@ -16,9 +16,7 @@ function* reportingListWorker(action) {
     try {
       const res = yield requestWithAuth(`/statistics/reporting${action.payload || ''}`, options);
       yield put(putReporting(res));
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   });
 }
 

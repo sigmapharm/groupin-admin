@@ -78,7 +78,6 @@ export class AddLaboratoireContainer extends React.PureComponent {
   };
 
   handleSelectChange = name => value => {
-    console.log('value', value, 'name', name);
     const { formData } = this.state;
     this.setState({
       formData: {
@@ -129,7 +128,6 @@ export class AddLaboratoireContainer extends React.PureComponent {
       };
     }
     if (field.select) {
-      console.log('field.option', field.option());
       props = {
         ...props,
         options: [],
@@ -186,7 +184,6 @@ export class AddLaboratoireContainer extends React.PureComponent {
   };
 
   handleSubmitResponse = response => {
-    console.log(response);
     if (!response) {
       return;
     }

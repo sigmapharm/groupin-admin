@@ -144,7 +144,7 @@ export function AddOffreForm(props) {
         return el.nom;
       },
     });
-    console.log(list.map(item => item.original));
+
     setArticlesRows(list.map(item => item.original));
   };
 
@@ -172,12 +172,11 @@ export function AddOffreForm(props) {
                 - Date début doit être supérieur à J + 1
               </span>
             )} */}
-            {!disableAllFields && <span style={{ display: 'block' }}>- Date Fin doit être supérieur à J + 2</span>}
+            {/*!disableAllFields && <span style={{ display: 'block' }}>- Date Fin doit être supérieur à J + 2</span>*/}
           </Typography>
         </Grid>
         <OffreInfo
-          disableAllWithoutDate={disableAllFieldsExceptDate}
-          disableAll={disableAllFields}
+          editMode={editMode}
           formData={formData}
           originalFormData={originalFormData}
           errors={errors.fields}
@@ -209,6 +208,7 @@ export function AddOffreForm(props) {
             <Grid className={classes.globalVarsContainer} item xs={6}>
               <TextField
                 noValidate
+                disabled={editMode}
                 autoComplete="off"
                 name="globalDiscountPerArticle"
                 label="Global remise"
@@ -231,6 +231,7 @@ export function AddOffreForm(props) {
             <Grid className={classes.globalVarsContainer} item xs={6}>
               <TextField
                 noValidate
+                disabled={editMode}
                 autoComplete="off"
                 name="globalMinQuantity"
                 label="Global min quantite"
@@ -286,6 +287,8 @@ export function AddOffreForm(props) {
                     handleArticleRowChange={disableAllFields || disableAllFieldsExceptDate ? () => {} : handleArticleRowChange}
                     key={row.id}
                     row={row}
+                    editMode={editMode}
+                    //Deleted Variable editModec={true}
                   />
                 ))
               ) : (

@@ -3,25 +3,12 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import {
-  loadCommandArticles,
-  changeCommandArticle,
-  updateCommandDetail,
-} from '../../store/actions.creators';
+import { loadCommandArticles, changeCommandArticle, updateCommandDetail } from '../../store/actions.creators';
 import { getCommandArticles } from '../../store/selectors';
 import _ from 'lodash';
 import history from 'utils/history';
 
-const Demande = ({
-  command,
-  commandArticles,
-  dispatch,
-  clearCommandArticles,
-  onRowChange,
-  toggleModal,
-}) => {
-  console.log('commandArticles', commandArticles);
-  console.log('command', command);
+const Demande = ({ command, commandArticles, dispatch, clearCommandArticles, onRowChange, toggleModal }) => {
   const [error, setError] = useState('');
   useEffect(() => {
     dispatch(loadCommandArticles({ commandId: command.commandId }));
@@ -42,18 +29,10 @@ const Demande = ({
     );
   };
 
-  const total =
-    _.sumBy(
-      commandArticles,
-      ({ quantity, computedPPH }) => (quantity || 0) * computedPPH || 0,
-    ).toFixed(2) || 0;
+  const total = _.sumBy(commandArticles, ({ quantity, computedPPH }) => (quantity || 0) * computedPPH || 0).toFixed(2) || 0;
 
   const discount =
-    _.sumBy(
-      commandArticles,
-      ({ quantity, computedPPH, pph }) =>
-        quantity * pph - quantity * computedPPH,
-    ).toFixed(2) || 0;
+    _.sumBy(commandArticles, ({ quantity, computedPPH, pph }) => quantity * pph - quantity * computedPPH).toFixed(2) || 0;
   return (
     <div>
       <div style={styles.conatiner}>
@@ -103,21 +82,13 @@ const Demande = ({
           {total > 0 && (
             <div style={{ ...styles.row }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Typography
-                  color="textSecondary"
-                  variant="h6"
-                  style={{ marginRight: '10px' }}
-                >
+                <Typography color="textSecondary" variant="h6" style={{ marginRight: '10px' }}>
                   Total:
                 </Typography>
                 <Typography variant="h6">{total}</Typography>
               </div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Typography
-                  color="textSecondary"
-                  variant="h6"
-                  style={{ marginRight: '10px' }}
-                >
+                <Typography color="textSecondary" variant="h6" style={{ marginRight: '10px' }}>
                   Total remise:
                 </Typography>
                 <Typography variant="h6">{discount}</Typography>
@@ -131,11 +102,7 @@ const Demande = ({
               key={article.id}
               style={{
                 ...styles.card,
-                backgroundColor: article.hasError
-                  ? '#ff000042'
-                  : i % 2 === 0
-                    ? 'white'
-                    : '#f7f7f7',
+                backgroundColor: article.hasError ? '#ff000042' : i % 2 === 0 ? 'white' : '#f7f7f7',
               }}
             >
               {/* <div style={{ display: 'flex', marginBottom: '15px' }}>
@@ -148,49 +115,27 @@ const Demande = ({
               {/* </div> */}
               <div style={styles.row}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     PPV:
                   </Typography>
-                  <Typography variant="h6">
-                    {Number(article.ppv).toFixed(2)}
-                  </Typography>
+                  <Typography variant="h6">{Number(article.ppv).toFixed(2)}</Typography>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     PPH:
                   </Typography>
-                  <Typography variant="h6">
-                    {Number(article.pph).toFixed(2)}
-                  </Typography>
+                  <Typography variant="h6">{Number(article.pph).toFixed(2)}</Typography>
                 </div>
               </div>
               <div style={styles.row}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     PPH Remise:
                   </Typography>
-                  <Typography variant="h6">
-                    {Number(article.computedPPH).toFixed(2)}
-                  </Typography>
+                  <Typography variant="h6">{Number(article.computedPPH).toFixed(2)}</Typography>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     Remise(%):
                   </Typography>
                   <Typography variant="h6">{article.discount}</Typography>
@@ -198,11 +143,7 @@ const Demande = ({
               </div>
               <div style={styles.row}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography
-                    variant="body1"
-                    color="textSecondary"
-                    style={{ marginRight: '10px' }}
-                  >
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>
                     Quantité Minimal:
                   </Typography>
                   <Typography variant="h6">{article.minQuantity}</Typography>
@@ -212,9 +153,7 @@ const Demande = ({
               <div style={{ marginTop: 10 }}>
                 <TextField
                   type="number"
-                  onChange={e =>
-                    onRowChange({ index: i, quantity: +e.target.value })
-                  }
+                  onChange={e => onRowChange({ index: i, quantity: +e.target.value })}
                   placeholder="Entrer quantity"
                   fullWidth
                   defaultValue={article.quantity}
@@ -224,12 +163,7 @@ const Demande = ({
           ))}
 
         <div style={styles.button}>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={handleSubmit}
-          >
+          <Button variant="contained" color="primary" fullWidth onClick={handleSubmit}>
             Modifier
           </Button>
         </div>
