@@ -7,19 +7,12 @@ import DialogActions from '@material-ui/core/DialogActions/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent/DialogContent';
 
 export default React.memo(
-  ({ open, title, textContent, onClose, onSubmit }) =>
+  ({ open, title, textContent, onClose, onSubmit, Component }) =>
     open && (
-      <Dialog
-        open={open}
-        onClose={onClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
+      <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {textContent}
-          </DialogContentText>
+          <DialogContentText id="alert-dialog-description">{Component ? Component : textContent}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="primary">

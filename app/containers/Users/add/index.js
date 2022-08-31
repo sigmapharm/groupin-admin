@@ -17,8 +17,8 @@ import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
 import { validateFormData } from './validation';
 import { createUser } from '../actions';
-import {makeSelectPharmacies, selectCities} from '../../App/selectors';
-import {formatCityToLabelValue, formatPharmacieToLabelValue} from './utils';
+import { makeSelectPharmacies, selectCities } from '../../App/selectors';
+import { formatCityToLabelValue, formatPharmacieToLabelValue } from './utils';
 import AddUserForm from '../../../components/Users/add/AddUserForm';
 import AddPharmacieContainer from '../../Pharmacie/add';
 import _ from 'lodash';
@@ -184,10 +184,10 @@ export class AddUser extends React.PureComponent {
   };
 
   render() {
-    const { classes, pharmacies,cities } = this.props;
+    const { classes, pharmacies, cities } = this.props;
     const { formData, errors, isSuccess } = this.state;
     const formattedPharmacies = pharmacies.map(formatPharmacieToLabelValue);
-    const formattedCities = cities.map(formatCityToLabelValue)
+    const formattedCities = cities.map(formatCityToLabelValue);
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
@@ -213,41 +213,24 @@ export class AddUser extends React.PureComponent {
             <Typography variant="h5" color="primary">
               {`Ajouter une nouvelle pharmacie`}
             </Typography>
-            <IconButton
-              aria-label="Close"
-              className={classes.closeButton}
-              onClick={this.handleAddPharmacieClose}
-            >
+            <IconButton aria-label="Close" className={classes.closeButton} onClick={this.handleAddPharmacieClose}>
               <CloseIcon />
             </IconButton>
           </MuiDialogTitle>
           <MuiDialogContent>
-            <AddPharmacieContainer
-              successCallback={this.handleAddPharmacieSuccess}
-            />
+            <AddPharmacieContainer successCallback={this.handleAddPharmacieSuccess} />
           </MuiDialogContent>
         </Dialog>
         {isSuccess && (
           <Snackbar
             open
             TransitionComponent={Fade}
-            message={
-              <span id="message-id">utilisateur a été créé avec succès.</span>
-            }
+            message={<span id="message-id">utilisateur a été créé avec succès.</span>}
             action={[
-              <Button
-                key="undo"
-                color="secondary"
-                size="small"
-                onClick={this.handleGoToUsersList}
-              >
+              <Button key="undo" color="secondary" size="small" onClick={this.handleGoToUsersList}>
                 Liste des utilisateurs
               </Button>,
-              <IconButton
-                key="close"
-                color="inherit"
-                onClick={this.handleCloseSuccessMessage}
-              >
+              <IconButton key="close" color="inherit" onClick={this.handleCloseSuccessMessage}>
                 <CloseIcon />
               </IconButton>,
             ]}

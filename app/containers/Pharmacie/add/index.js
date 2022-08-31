@@ -13,16 +13,12 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Fade from '@material-ui/core/Fade';
 
 import { createStructuredSelector } from 'reselect';
-import {
-  defaultOptionsFormatter,
-  pharmacieFields,
-  validateFormData,
-} from './fields';
+import { defaultOptionsFormatter, pharmacieFields, validateFormData } from './fields';
 
 import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
 import { addPharmacie } from './actions';
 import ErrorsArea from '../../../components/ErrorsArea';
-import {  selectRegions } from '../../App/selectors';
+import { selectRegions } from '../../App/selectors';
 
 /* istanbul ignore next */
 const styles = theme => ({
@@ -54,7 +50,7 @@ const initialState = {
     banque: '',
     dateDemarrage: '',
     dateCreation: '',
-    ice:''
+    ice: '',
   },
   errors: {
     messages: {},
@@ -98,24 +94,15 @@ export class AddPharmacieContainer extends React.PureComponent {
 
     const options = {
       region: regions,
-      ville: _.get(
-        _.find(regions, { id: _.get(formData, 'region.value') }),
-        'cities',
-        [],
-      ),
+      ville: _.get(_.find(regions, { id: _.get(formData, 'region.value') }), 'cities', []),
     };
     let props = {
       name: field.name,
       label: field.label,
-      value:
-        (field.valueFormatter && field.valueFormatter(formData[field.name])) ||
-        formData[field.name],
+      value: (field.valueFormatter && field.valueFormatter(formData[field.name])) || formData[field.name],
       fullWidth: true,
       onChange: this.handleInputChange,
-      error:
-        this.state.errors &&
-        this.state.errors.fields &&
-        this.state.errors.fields[field.name],
+      error: this.state.errors && this.state.errors.fields && this.state.errors.fields[field.name],
     };
     if (field.specialProps) {
       props = {
@@ -126,10 +113,7 @@ export class AddPharmacieContainer extends React.PureComponent {
     if (field.select) {
       props = {
         ...props,
-        options: (
-          options[field.name] ||
-          (field.options || this.props[field.fromProps])
-        ).map(field.optionFormatter),
+        options: (options[field.name] || (field.options || this.props[field.fromProps])).map(field.optionFormatter),
         onChange: this.handleSelectChange(field.name),
         placeholder: field.placeholder,
       };
@@ -151,13 +135,7 @@ export class AddPharmacieContainer extends React.PureComponent {
     const Component = field.select ? SingleAutoCompleteSelect : TextField;
     const fieldProps = this.getRenderedProps(field);
     return (
-      <Grid
-        key={field.id}
-        className={classes.fieldContainer}
-        xs={8}
-        md={4}
-        item
-      >
+      <Grid key={field.id} className={classes.fieldContainer} xs={8} md={4} item>
         <Component {...fieldProps} />
       </Grid>
     );
@@ -191,9 +169,8 @@ export class AddPharmacieContainer extends React.PureComponent {
             region: {
               id: _.get(formData, 'region.value'),
             },
-            formeJuridique:_.get(formData,'formeJuridique.value'),
-            banque:_.get(formData,'banque.value'),
-
+            formeJuridique: _.get(formData, 'formeJuridique.value'),
+            banque: _.get(formData, 'banque.value'),
           },
           this.handleSubmitResponse,
         ),
@@ -236,34 +213,16 @@ export class AddPharmacieContainer extends React.PureComponent {
     return (
       <div>
         <form onSubmit={this.handleFormSubmit}>
-          <Grid
-            alignContent="center"
-            justify="center"
-            alignItems="center"
-            container
-          >
+          <Grid alignContent="center" justify="center" alignItems="center" container>
             <Grid xs={12} item />
             <Grid xs={10} item>
-              <ErrorsArea
-                prefix="Vous avez les erreurs suivantes"
-                errors={errors.messages}
-              />
+              <ErrorsArea prefix="Vous avez les erreurs suivantes" errors={errors.messages} />
             </Grid>
           </Grid>
-          <Grid
-            alignContent="center"
-            justify="center"
-            alignItems="center"
-            container
-          >
+          <Grid alignContent="center" justify="center" alignItems="center" container>
             {pharmacieFields.map(field => this.renderField(field, classes))}
           </Grid>
-          <Grid
-            alignContent="center"
-            justify="center"
-            alignItems="center"
-            container
-          >
+          <Grid alignContent="center" justify="center" alignItems="center" container>
             <Button
               type="submit"
               variant="contained"
@@ -279,17 +238,9 @@ export class AddPharmacieContainer extends React.PureComponent {
           <Snackbar
             open
             TransitionComponent={Fade}
-            message={
-              <span id="message-id">
-                La pharmacie a été crééee avec succès.
-              </span>
-            }
+            message={<span id="message-id">La pharmacie a été crééee avec succès.</span>}
             action={[
-              <IconButton
-                key="close"
-                color="inherit"
-                onClick={this.handleCloseSuccessMessage}
-              >
+              <IconButton key="close" color="inherit" onClick={this.handleCloseSuccessMessage}>
                 <CloseIcon />
               </IconButton>,
             ]}

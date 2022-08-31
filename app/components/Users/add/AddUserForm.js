@@ -86,11 +86,7 @@ export function AddUserForm(props) {
           </Typography>
         </Grid>
         <Grid xs={12} item>
-          <ErrorsArea
-            variant="success"
-            prefix="Vous avez les erreurs suivantes"
-            errors={errors.messages}
-          />
+          <ErrorsArea variant="success" prefix="Vous avez les erreurs suivantes" errors={errors.messages} />
         </Grid>
       </Grid>
       <Grid className={classes.gridContainer} spacing={8} container>
@@ -108,10 +104,7 @@ export function AddUserForm(props) {
           <SingleAutoCompleteSelect
             className={classes.select}
             name="role"
-            options={[
-              { label: 'SUPER ADMIN', value: 'SUPER_ADMIN' },
-              { label: 'UTILISATEUR', value: 'MEMBRE' },
-            ]}
+            options={[{ label: 'SUPER ADMIN', value: 'SUPER_ADMIN' }, { label: 'UTILISATEUR', value: 'MEMBRE' }]}
             onChange={value => {
               handleFormDataChange({
                 target: { name: 'role', value },
@@ -138,22 +131,10 @@ export function AddUserForm(props) {
         </Grid>
         <Grid xs={12} item />
         <Grid justify="center" container>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.buttonajout}
-            onClick={handleSubmit}
-          >
+          <Button type="submit" variant="contained" color="primary" className={classes.buttonajout} onClick={handleSubmit}>
             Valider
           </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            onClick={handleAnuler}
-            className={classes.buttons}
-          >
+          <Button type="submit" variant="contained" color="primary" onClick={handleAnuler} className={classes.buttons}>
             ANNULER
           </Button>
         </Grid>
