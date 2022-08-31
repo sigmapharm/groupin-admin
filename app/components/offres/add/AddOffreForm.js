@@ -172,7 +172,7 @@ export function AddOffreForm(props) {
                 - Date début doit être supérieur à J + 1
               </span>
             )} */}
-            {!disableAllFields && <span style={{ display: 'block' }}>- Date Fin doit être supérieur à J + 2</span>}
+            {/*!disableAllFields && <span style={{ display: 'block' }}>- Date Fin doit être supérieur à J + 2</span>*/}
           </Typography>
         </Grid>
         <OffreInfo

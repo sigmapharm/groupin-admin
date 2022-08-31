@@ -67,9 +67,14 @@ export const dispatchQuantity = ({ commandId, callback }) => ({
   payload: { id: commandId, callback },
 });
 
-export const dispatchQuantityCancel = ({ commandId, callback }) => ({
+export const dispatchQuantityCancel = ({ commandId, callback, offerId }) => ({
   type: actionsType.DISPATCH_QUANTITY_TO_SUB_COMMANDS_CANCEL,
-  payload: { id: commandId, callback },
+  payload: { id: commandId, callback, offerId },
+});
+
+export const VerifyCommand = ({ commandId, callback, offerId, isAggregate }) => ({
+  type: actionsType.VERIFY_COMMAND,
+  payload: { id: commandId, callback, offerId, isAggregate },
 });
 
 export const dispatchQuantitySuccess = () => ({

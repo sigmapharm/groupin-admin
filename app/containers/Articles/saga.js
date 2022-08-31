@@ -1,10 +1,6 @@
 import { takeLatest, all, put } from 'redux-saga/effects';
 import { callApi } from '../../services/saga';
-import {
-  getArticleDetailsSuccess,
-  manageCreateArticleResponse,
-  putArticlesList,
-} from './actions';
+import { getArticleDetailsSuccess, manageCreateArticleResponse, putArticlesList } from './actions';
 import ApiRoutes from '../../core/ApiRoutes';
 import {
   GET_ARTICLE_DETAILS,
@@ -44,11 +40,9 @@ function* articlesListWorker(action) {
     try {
       const { cols } = action.payload;
       const sortQuery = cols
-        .filter(({ selected }) => selected)
+        .filter(({ selected }) => selected == true)
         .reduce((acc, n) => acc.concat(`&sort=${n.colName},${n.order}`), '');
-      const params = `?size=${action.payload.rowsPerPage}&page=${
-        action.payload.page
-      }&categorie=${action.payload.categorie}&nom=${
+      const params = `?size=${action.payload.rowsPerPage}&page=${action.payload.page}&categorie=${action.payload.categorie}&nom=${
         action.payload.nom
       }&laboratory=${action.payload.laboratoire}${sortQuery}`;
       // yield callApi(`/articles${params}`, putArticlesList, options, null);
@@ -74,10 +68,7 @@ function* deleteArticleworker(action) {
   };
   yield networking(function*() {
     try {
-      yield requestWithAuth(
-        `${ApiRoutes.ARTICLES}/${payload.articleId}`,
-        options,
-      );
+      yield requestWithAuth(`${ApiRoutes.ARTICLES}/${payload.articleId}`, options);
       yield callback && callback();
     } catch (e) {
       yield callback && callback(e);
@@ -137,10 +128,7 @@ function* articlesListSagas() {
     takeLatest(GET_ARTICLES_LIST_ACTION, articlesListWorker),
     takeLatest(SUBMIT_CREATE_ARTICLE, addOrUpdateArticleWorker),
     takeLatest(SUBMIT_DELETE_ARTICLE, deleteArticleworker),
-    takeLatest(
-      MANAGE_CREATE_ARTICLE_RESPONSE,
-      manageCreateArticleResponseWorker,
-    ),
+    takeLatest(MANAGE_CREATE_ARTICLE_RESPONSE, manageCreateArticleResponseWorker),
   ]);
 }
 

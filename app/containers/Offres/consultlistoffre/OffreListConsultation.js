@@ -177,6 +177,24 @@ export class OffreListConsultation extends React.PureComponent {
     return true;
   }
 
+  get isCommandAllowedRequired() {
+    const { offerArticles } = this.props;
+    const checkRequried = offerArticles
+      .map(({ required, quantity, minQuantity, hasError }) => {
+        if (required) {
+          return quantity < minQuantity;
+        }
+
+        if (!required && quantity > 0) {
+          return quantity < minQuantity;
+        }
+
+        return false;
+      })
+      .includes(true);
+    return checkRequried;
+  }
+
   componentWillMount() {
     const {
       dispatch,
@@ -467,9 +485,14 @@ export class OffreListConsultation extends React.PureComponent {
             </Button>
           </Grid>
         )}
-        {this.isCommandAllowed && commandMode && this.props.totalRemise > 0 ? (
+        {commandMode && this.props.totalRemise < this.props.row.minToOrder ? (
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10, color: 'red' }}>
-            Votre commande n'a pas encore atteint le minimum à commander défini par le laboratoire
+            Votre commande n'a pas encore atteint le minimum à commander défini par le laboratoire.
+          </div>
+        ) : null}
+        {commandMode && this.isCommandAllowedRequired ? (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10, color: 'red' }}>
+            Veuillez vérifier Que tout les articles marqués comme obligatoires sont inclus dans la commande.
           </div>
         ) : null}
         <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />
