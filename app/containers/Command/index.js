@@ -294,6 +294,7 @@ class Command extends PureComponent {
             dateFormat={date => moment(date).format('DD/MM/YYYY hh:mm:ss.s')}
             // check to verify that start date < end date
             // min={moment().fromNow()}
+            max={moment().fromNow()}
             value={this.state.livraisonDate}
             onChange={date => this.setState({ livraisonDate: date })}
             // type={fields.dateFin.type}
