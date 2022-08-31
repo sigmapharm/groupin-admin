@@ -38,6 +38,7 @@ function* cloneOfferWorker({ payload: { offerId, filters, callback } }) {
       'Content-Type': 'application/json',
     },
   };
+
   yield networking(function*() {
     try {
       yield requestWithAuth(`/offres/${offerId}/clone`, options);

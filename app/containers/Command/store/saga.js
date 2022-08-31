@@ -20,6 +20,7 @@ import {
 } from './actions.creators';
 import requestWithAuth from '../../../services/request/request-with-auth';
 import * as GlobalActions from '../../App/actions';
+import moment from 'moment';
 
 function* downloadCommandFormWorker({ payload: { commandId, callback } }) {
   const options = {
@@ -63,12 +64,13 @@ function* downloadBLWorker({ payload: { commandId, callback } }) {
   });
 }
 
-function* dispatchQuantityWorker({ payload: { id, callback } }) {
+function* dispatchQuantityWorker({ payload: { id, callback, date } }) {
   const options = {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ datelivraison: date }),
   };
   yield networking(function*() {
     try {

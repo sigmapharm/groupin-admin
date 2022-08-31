@@ -62,9 +62,9 @@ export const loadAggregateSubCommandsSuccess = payload => ({
   payload,
 });
 
-export const dispatchQuantity = ({ commandId, callback }) => ({
+export const dispatchQuantity = ({ commandId, callback, date }) => ({
   type: actionsType.DISPATCH_QUANTITY_TO_SUB_COMMANDS,
-  payload: { id: commandId, callback },
+  payload: { id: commandId, callback, date },
 });
 
 export const dispatchQuantitySuccess = () => ({

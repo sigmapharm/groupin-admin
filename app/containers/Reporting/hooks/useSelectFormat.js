@@ -25,19 +25,15 @@ export function useSelectFormat(__array, __criteria) {
           label: item[__criteria.label],
           id: item.id,
         };
-
         // check if there is any allowed keys
-
         if (__criteria && __criteria.allow) {
           _.map(__criteria.allow, key => {
             // map allowed key and set them with matched values
-
             _.merge(obj, {
               [key]: item[key],
             });
           });
         }
-
         return obj;
       });
     },
