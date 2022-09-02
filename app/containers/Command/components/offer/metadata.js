@@ -2,7 +2,7 @@ import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography/Typography';
 import moment from 'moment';
-import _ from "lodash";
+import _ from 'lodash';
 
 const style = () => ({
   metaContainer: {
@@ -70,11 +70,7 @@ export default withStyles(style)(({ classes, offer }) => (
       <div className={classes.metaItems}>
         <Typography color="textSecondary">Objectif atteint %</Typography>
         <Typography variant="h6" component="h2">
-          {(
-            ((_.get(offer, 'commandsTotalAmount') || 0).toFixed(2) /
-              offer.objectiveAmount) *
-              100 || 0
-          ).toFixed(2)}
+          {(((_.get(offer, 'commandsTotalAmount') || 0).toFixed(2) / offer.objectiveAmount) * 100 || 0).toFixed(2)}
         </Typography>
       </div>
     </div>

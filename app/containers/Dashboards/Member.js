@@ -18,7 +18,6 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
   useEffect(() => {
     dispatch(getStatistics(userRole));
   }, []);
-  console.log('statistics', statistics);
 
   const sortedChars = _.sortBy(statistics.caparArticle ? statistics.caparArticle : [], ['value'], ['desc']);
 

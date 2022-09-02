@@ -91,6 +91,7 @@ export class AddPharmacieContainer extends React.PureComponent {
       value: (field.valueFormatter && field.valueFormatter(formData.pharmacie[field.name])) || formData.pharmacie[field.name],
       fullWidth: true,
       onChange: this.props.handleInputChange,
+
       error: this.state.errors && this.state.errors.fields && this.state.errors.fields[field.name],
     };
     if (field.specialProps) {
@@ -104,6 +105,7 @@ export class AddPharmacieContainer extends React.PureComponent {
         ...props,
         options: (options[field.name] || (field.options || this.props[field.fromProps])).map(field.optionFormatter),
         onChange: this.props.handleSelectChange(field.name),
+
         placeholder: field.placeholder,
       };
     }
@@ -220,6 +222,7 @@ export class AddPharmacieContainer extends React.PureComponent {
             {pharmacieFields.map(field => this.renderField(field, classes))}
           </Grid>
           {/* <Grid alignContent="center" justify="center" alignItems="center" container>
+
             <Button
               type="submit"
               variant="contained"

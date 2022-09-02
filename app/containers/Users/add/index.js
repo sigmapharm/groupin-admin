@@ -18,6 +18,7 @@ import authenticated from '../../HOC/authenticated/authenticated';
 import { validateFormData } from './validation';
 import { createUser } from '../actions';
 import { makeSelectPharmacies, selectCities } from '../../App/selectors';
+
 import { selectRegions } from '../../App/selectors';
 
 import { formatCityToLabelValue, formatPharmacieToLabelValue } from './utils';
@@ -238,7 +239,9 @@ export class AddUser extends React.PureComponent {
     const { formData, errors, isSuccess } = this.state;
     const formattedPharmacies = pharmacies.map(formatPharmacieToLabelValue);
     const formattedCities = cities.map(formatCityToLabelValue);
+
     console.log('form', this.state.formData);
+
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>

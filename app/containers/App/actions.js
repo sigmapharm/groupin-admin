@@ -75,7 +75,6 @@ export const setPharmacies = values => ({
 });
 
 export const setRegions = values => {
-  console.log('reg', values);
   return {
     type: SET_REGIONS,
     payload: values,

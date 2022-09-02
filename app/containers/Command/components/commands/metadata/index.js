@@ -5,6 +5,8 @@ import TableCell from '@material-ui/core/TableCell/TableCell';
 import moment from 'moment';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import HighlightOff from '@material-ui/icons/HighlightOff';
+import WarningSharp from '@material-ui/icons/WarningSharp';
+import Check from '@material-ui/icons/PlaylistAddCheckOutlined';
 import Search from '@material-ui/icons/Search';
 import EditIcon from '@material-ui/icons/Edit';
 import PrintIcon from '@material-ui/icons/Print';
@@ -36,7 +38,9 @@ export default ({
   updateCommand,
   printCommand,
   dispatchQuantity,
+  dispatchQuantityCancel,
   showSubCommands,
+  VerifyCommand,
   forAdmin,
   canDelete,
   isAdmin,
@@ -53,15 +57,23 @@ export default ({
   return (
     <>
       {list.map(row => (
-        <TableRow key={row.commandId}>
+        <TableRow key={row.commandId} style={isAdmin && row.verified ? { backgroundColor: '#32CD3250' } : {}}>
           <TableCell>{row.offerName}</TableCell>
           <TableCell>{row.laboratoryName}</TableCell>
           <TableCell>{row.pharmacyName}</TableCell>
           <TableCell>{moment(row.creationDate).format('DD/MM/YYYY')}</TableCell>
           <TableCell>{row.totalAmountDiscount.toFixed(2)}</TableCell>
+
           {/* {isMember ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null} */}
           {/* {row.isLinked ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null} */}
           {!row.isAggregate ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null}
+
+          {/* isAdmin ?
+          <TableCell>
+
+{ row.verified ?  <Check color={!isAdmin && !row.canDelete ? 'secondary' : 'secondary'} /> : <WarningSharp color={!isAdmin && !row.canDelete ? 'warning' : 'warning'} />}
+
+</TableCell>:''*/}
           {/* start */}
           {withOptions && (
             <Tippy
@@ -126,6 +138,39 @@ export default ({
                     </ListItemIcon>
                     <Typography>Annuler</Typography>
                   </MenuItem>
+
+                  {isAdmin ? (
+                    <MenuItem
+                      disabled={(!isAdmin && !row.canDelete) || !row.deliveredAt}
+                      onClick={dispatchQuantityCancel({
+                        ..._.pick(row, ['commandId', 'canDelete', 'offerId']),
+                      })}
+                    >
+                      <ListItemIcon>
+                        <HighlightOff color={!isAdmin && !row.canDelete ? 'disabled' : 'error'} />
+                      </ListItemIcon>
+                      <Typography>Annuler livraison</Typography>
+                    </MenuItem>
+                  ) : (
+                    ''
+                  )}
+
+                  {isAdmin ? (
+                    <MenuItem
+                      disabled={(!isAdmin && !row.canDelete) || row.verified}
+                      onClick={VerifyCommand({
+                        ..._.pick(row, ['commandId', 'canDelete', 'offerId', 'isAggregate']),
+                      })}
+                    >
+                      <ListItemIcon>
+                        <Check color={!isAdmin && !row.canDelete ? 'secondary' : 'secondary'} />
+                      </ListItemIcon>
+                      <Typography>Commande vérifiée</Typography>
+                    </MenuItem>
+                  ) : (
+                    ''
+                  )}
+
                   {/* )} */}
                   {forAdmin && (
                     <MenuItem onClick={showSubCommands(row)}>

@@ -17,6 +17,10 @@ export const CLEAR_AGGREGATE_SUB_COMMANDS = '[Commands] : clear aggregate sub co
 
 export const DISPATCH_QUANTITY_TO_SUB_COMMANDS = '[Commands] : dispatch quantity to sub commands';
 
+export const DISPATCH_QUANTITY_TO_SUB_COMMANDS_CANCEL = '[Commands] :Cancel Delivery';
+
+export const VERIFY_COMMAND = '[Commands] :Verify command';
+
 export const DISPATCH_QUANTITY_TO_SUB_COMMANDS_SUCCESS = '[Commands] : dispatch quantity to sub commands Success';
 export const LOAD_OFFER_META_DATA = '[Commands] : Load offer meta data';
 export const LOAD_OFFER_META_DATA_SUCCESS = '[Commands] : Load offer meta data success';

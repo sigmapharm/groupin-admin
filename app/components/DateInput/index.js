@@ -18,6 +18,7 @@ const DateInput = props => {
     className,
     disableContainerStyle,
     format,
+    max,
   } = props;
 
   const [selectedDate, handleDateChange] = useState(value);
@@ -50,6 +51,7 @@ const DateInput = props => {
             style: btnStyle,
           }}
           minDate={min}
+          maxDate={max}
           fullWidth={fullWidth}
           disabled={disabled}
         />

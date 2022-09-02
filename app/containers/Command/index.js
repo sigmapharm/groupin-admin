@@ -33,6 +33,7 @@ import GeneriqueDialog from '../../components/Alert';
 import { isWidthDown } from '@material-ui/core/withWidth';
 import CommandListCards from './components/responsive/CommandListCards';
 import { saveAs } from 'file-saver';
+import DateInput from '../../components/DateInput';
 
 const adminCols = [
   // {
@@ -129,6 +130,7 @@ class Command extends PureComponent {
       cols: this.isMember ? memberCols : !this.isCommandsPage ? memberCols : adminCols,
       blobUrl: '',
       isTippyOpen: false,
+      livraisonDate: new Date(),
     };
   }
 
@@ -155,6 +157,7 @@ class Command extends PureComponent {
       commandPageable: { number, size },
       loadCommands,
     } = this.props;
+
     loadCommands({
       ...searchData,
       cols,
@@ -234,7 +237,6 @@ class Command extends PureComponent {
       cols,
       callback: err => {
         if (err) {
-          console.log('err', err);
           this.setState({
             showPopConfirmation: false,
             showInfoBar: true,
@@ -280,13 +282,50 @@ class Command extends PureComponent {
       onSubmit: this.deleteCommand({ commandId, canDelete, callback }),
     });
   };
+  performDispatchingCancel = ({ commandId, offerId }) => () => {
+    this.openPopConfirmation({
+      title: 'livraison',
+      textContent: 'Annuler La Livraison ',
+      onClose: this.closePopConfirmation,
+      onSubmit: this.dispatchQuantityCancel({ commandId, offerId }),
+    });
+  };
+  performDispatchingVerifierCommand = ({ commandId, offerId, isAggregate, cols }) => () => {
+    this.openPopConfirmation({
+      title: 'Verifier',
+      textContent: "Êtes-vous sûr d'avoir vérifié cette commande",
+      onClose: this.closePopConfirmation,
+      onSubmit: this.VerifyCommand({ commandId, offerId, isAggregate, cols }),
+    });
+  };
 
   performDispatching = ({ commandId, offerId }) => () => {
     this.openPopConfirmation({
       title: 'livraison',
-      textContent: 'marquer cette commande comme livrée ',
+      // textContent: 'marquer cette commande comme livrée ',
+      Component: (
+        <div style={{ width: 300 }}>
+          <DateInput
+            name={'date'}
+            // fields.dateDebut.label
+            label={'select date'}
+            // disabled={disableAll}
+            dateFormat={date => moment(date).format('DD/MM/YYYY hh:mm:ss.s')}
+            // check to verify that start date < end date
+            // min={moment().fromNow()}
+            max={moment().fromNow()}
+            value={this.state.livraisonDate}
+            onChange={date => this.setState({ livraisonDate: date })}
+            // type={fields.dateFin.type}
+            // className={[classes.dateInputs, classes.offreInputs]}
+            fullWidth
+            disableContainerStyle
+            format="DD/MM/YYYY"
+          />
+        </div>
+      ),
       onClose: this.closePopConfirmation,
-      onSubmit: this.dispatchQuantity({ commandId, offerId }),
+      onSubmit: this.dispatchQuantity({ commandId, offerId, date: this.state.livraisonDate }),
     });
   };
 
@@ -341,7 +380,6 @@ class Command extends PureComponent {
   };
 
   printCommand = row => () => {
-    console.log(row);
     const { downloadCommandForm } = this.props;
 
     downloadCommandForm({
@@ -571,10 +609,30 @@ class Command extends PureComponent {
     history.push(`/grouping/${offerId}`);
   };
 
-  dispatchQuantity = ({ commandId, offerId }) => () => {
+  dispatchQuantity = ({ commandId, offerId, date }) => () => {
     const { dispatchQuantity } = this.props;
     dispatchQuantity({
       commandId,
+      callback: this.onDispatchSuccess(offerId),
+      date: this.state.livraisonDate,
+    });
+  };
+
+  dispatchQuantityCancel = ({ commandId, offerId }) => () => {
+    const { dispatchQuantityCancel } = this.props;
+    dispatchQuantityCancel({
+      commandId,
+      offerId,
+      callback: this.onDispatchSuccess(offerId),
+    });
+  };
+
+  VerifyCommand = ({ commandId, offerId, isAggregate }) => () => {
+    const { VerifyCommand } = this.props;
+    VerifyCommand({
+      commandId,
+      offerId,
+      isAggregate,
       callback: this.onDispatchSuccess(offerId),
     });
   };
@@ -633,12 +691,12 @@ class Command extends PureComponent {
     clearSelectedOffer();
   }
 
-  openPopConfirmation = ({ title, textContent, onClose, onSubmit }) => {
+  openPopConfirmation = ({ title, textContent, onClose, onSubmit, Component }) => {
     this.setState({
       showPopConfirmation: true,
       popConfirmationParams: {
         title,
-        textContent,
+        textContent: Component ? Component : textContent,
         onClose,
         onSubmit,
       },
@@ -653,6 +711,7 @@ class Command extends PureComponent {
   };
 
   render() {
+    console.log('date update', this.state.livraisonDate);
     const {
       classes,
       commandPageable: { totalElements, size, number, content: commands = [] },
@@ -752,6 +811,8 @@ class Command extends PureComponent {
                   forAdmin={this.forAdminCommands}
                   isAdmin={this.isAdmin}
                   dispatchQuantity={this.performDispatching}
+                  dispatchQuantityCancel={this.performDispatchingCancel}
+                  VerifyCommand={this.performDispatchingVerifierCommand}
                   updateCommand={this.updateCommandDetail}
                   selectCommand={this.showCommandDetail}
                   deleteCommand={this.performDeleteCommand}

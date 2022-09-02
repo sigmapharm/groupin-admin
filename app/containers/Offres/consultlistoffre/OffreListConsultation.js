@@ -16,13 +16,15 @@ import Button from '@material-ui/core/Button/Button';
 import Grid from '@material-ui/core/Grid/Grid';
 import Checkbox from '@material-ui/core/Checkbox/Checkbox';
 import history from 'utils/history';
-import _ from 'lodash';
+import _, { size } from 'lodash';
 import InfoBar from '../../../components/Snackbar/InfoBar';
 import { selectOfferArticleList } from '../selectors';
 // import { makeSelectoffreArticledtos } from '../../App/selectors';
 import { changeOfferArticle, loadArticleOffer, submitClientCommand } from '../actions';
 import { makeSelectUser } from '../../App/selectors';
 import { SUPER_ADMIN } from '../../AppHeader/Roles';
+import { List } from 'immutable';
+import { red } from '@material-ui/core/colors';
 
 const styles = theme => ({
   container: {
@@ -67,10 +69,14 @@ const styles = theme => ({
   hasError: {
     backgroundColor: '#ff000042',
   },
+  MuiFormLabel: {
+    backgroundColor: '#ff000042',
+  },
 });
 
 export class OffreListConsultation extends React.PureComponent {
-  handleQuantityChange = (id, minQuantity) => ({ target: { value } }) => {
+  //On
+  handleQuantityChange = (id, minQuantity, required) => ({ target: { value } }) => {
     this.props.dispatch(
       changeOfferArticle({
         id,
@@ -109,33 +115,53 @@ export class OffreListConsultation extends React.PureComponent {
 
   constructor(props) {
     super(props);
+
+    const { offerArticles } = this.props;
+
     this.state = {
       showInfoBar: false,
       infoBarParams: {},
     };
   }
 
+  //Test Func
   get allowCommandSubmit() {
     const { offerArticles } = this.props;
 
-    return offerArticles.filter(({ quantity, minQuantity }) => quantity >= minQuantity).length > 0 &&
-      offerArticles.filter(({ quantity }) => quantity > 0).every(({ hasError }) => hasError === false)
-      ? true
-      : false;
+    const checkRequried = offerArticles
+      .map(({ required, quantity, minQuantity, hasError }) => {
+        if (required) {
+          return quantity < minQuantity;
+        }
+
+        if (!required && quantity > 0) {
+          return quantity < minQuantity;
+        }
+
+        return false;
+      })
+      .includes(true);
+
+    const checkQuantity = offerArticles.filter(({ quantity }) => quantity > 0).every(({ hasError }) => hasError === true)
+      ? false
+      : true;
+
+    // console.log(checkQuantity+"test"+checkRequried);
+    return !checkRequried;
   }
 
   get forAdmin() {
     const {
       user: { role },
     } = this.props;
+
     return role === SUPER_ADMIN;
   }
 
   get isCommandAllowed() {
     const { totalRemise, row } = this.props;
 
-    console.log(row);
-
+    //console.log(offerArticles);
     const isEqual = totalRemise === parseInt(row.minToOrder) ? true : false;
 
     const isGreater = totalRemise > parseInt(row.minToOrder) ? true : false;
@@ -149,6 +175,24 @@ export class OffreListConsultation extends React.PureComponent {
     }
 
     return true;
+  }
+
+  get isCommandAllowedRequired() {
+    const { offerArticles } = this.props;
+    const checkRequried = offerArticles
+      .map(({ required, quantity, minQuantity, hasError }) => {
+        if (required) {
+          return quantity < minQuantity;
+        }
+
+        if (!required && quantity > 0) {
+          return quantity < minQuantity;
+        }
+
+        return false;
+      })
+      .includes(true);
+    return checkRequried;
   }
 
   componentWillMount() {
@@ -178,12 +222,10 @@ export class OffreListConsultation extends React.PureComponent {
   render() {
     const { row, classes, remainingDays, hasStarted, progress, offerArticles, commandMode, dismiss } = this.props;
     const { showInfoBar, infoBarParams } = this.state;
-
-    console.log(row);
-
     const datefin = new Date(row.dateFin);
     const startDate = new Date(row.dateDebut);
     const joursLabel = remainingDays === 1 ? 'jour' : 'jours';
+
     // const avancementMontant = Math.min(row.montant / 100000, 1) * 100;
 
     const dateformat = new Intl.DateTimeFormat('fr-FR').format(datefin);
@@ -354,7 +396,20 @@ export class OffreListConsultation extends React.PureComponent {
           </TableHead>
           <TableBody>
             {offerArticles.map(
-              ({ id, nom, ppv, pph, discount, computedPPH, quantity, minQuantity, hasError, selected, quantityCmd }) => (
+              ({
+                id,
+                nom,
+                ppv,
+                pph,
+                discount,
+                computedPPH,
+                quantity,
+                minQuantity,
+                hasError,
+                selected,
+                quantityCmd,
+                required,
+              }) => (
                 <TableRow
                   {...(hasError ? { className: classes.hasError } : {})}
                   key={id}
@@ -381,13 +436,16 @@ export class OffreListConsultation extends React.PureComponent {
                         name="quantity"
                         label="Quantité"
                         type="number"
+                        id="outlined-error-helper-text"
                         // value={quantity || ''}
                         //disabled={!selected}
                         autoComplete="off"
                         inputProps={{ maxLength: 100 }}
-                        onChange={this.handleQuantityChange(id, minQuantity)}
+                        onChange={this.handleQuantityChange(id, minQuantity, required)}
                         fullWidth
                       />
+
+                      {required ? <p style={{ color: 'red', fontSize: '12px' }}> * élément obligatoire </p> : ''}
                     </TableCell>
                   )}
                 </TableRow>
@@ -433,9 +491,14 @@ export class OffreListConsultation extends React.PureComponent {
             </Button>
           </Grid>
         )}
-        {this.isCommandAllowed && commandMode && this.props.totalRemise > 0 ? (
+        {commandMode && this.props.totalRemise < this.props.row.minToOrder ? (
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10, color: 'red' }}>
-            Votre commande n'a pas encore atteint le minimum à commander défini par le laboratoire
+            Votre commande n'a pas encore atteint le minimum à commander défini par le laboratoire.
+          </div>
+        ) : null}
+        {commandMode && this.isCommandAllowedRequired ? (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10, color: 'red' }}>
+            Veuillez vérifier Que tout les articles marqués comme obligatoires sont inclus dans la commande.
           </div>
         ) : null}
         <InfoBar open={showInfoBar} onClose={this.closeInfoBar} {...infoBarParams} />

@@ -17,7 +17,6 @@ const Admin = ({ classes, dispatch, statistics, userRole }) => {
     dispatch(getStatistics(userRole));
   }, []);
 
-  console.log('statistics', statistics);
   return (
     <div className={classes.root}>
       <div>
