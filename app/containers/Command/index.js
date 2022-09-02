@@ -35,18 +35,18 @@ import CommandListCards from './components/responsive/CommandListCards';
 import { saveAs } from 'file-saver';
 
 const adminCols = [
-  {
-    label: 'Offre désignation',
-    colName: 'offer.designation',
-    selected: false,
-    order: 'asc',
-  },
-  {
-    label: 'Laboratoire',
-    colName: 'offer.laboratory.nom',
-    selected: false,
-    order: 'asc',
-  },
+  // {
+  //   label: 'Offre désignation',
+  //   colName: 'offer.designation',
+  //   selected: false,
+  //   order: 'asc',
+  // },
+  // {
+  //   label: 'Laboratoire',
+  //   colName: 'offer.laboratory.nom',
+  //   selected: false,
+  //   order: 'asc',
+  // },
   {
     label: 'Pharmacie',
     colName: 'user.pharmacy.denomination',
@@ -116,8 +116,11 @@ class Command extends PureComponent {
       showSubCommands: false,
       selectedCommand: {},
       searchData: {
-        laboratoryName: '',
-        offerName: '',
+        // laboratoryName: '',
+        // offerName: '',
+        ville: '',
+        // region :'',
+        denomination: '',
       },
       showInfoBar: false,
       infoBarParams: {},

@@ -46,6 +46,7 @@ export const validateFormData = formData => {
   validationResult = validate(validationResult, fields.dateFin, formData.dateFin);
   // validationResult = validate(validationResult, fields.montant, formData.montant);
   validationResult = validate(validationResult, fields.globalDiscount, formData.globalDiscount);
+  validationResult = validate(validationResult, fields.comment, formData.comment);
 
   return validationResult;
 };
@@ -106,10 +107,11 @@ export const fields = {
     type: 'number',
     validator: validators.stringNotBlank,
   },
-  offerComment: {
+  comment: {
     name: 'comment',
     label: 'Comment',
     type: 'text',
+    validator: validators.stringNotBlank,
   },
   minToOrder: {
     name: 'minToOrder',

@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import * as PropTypes from 'prop-types';
-import _ from 'lodash';
+import _, { sumBy } from 'lodash';
 import EditIcon from '@material-ui/icons/Edit';
 import { Settings } from '@material-ui/icons';
 import HighlightOff from '@material-ui/icons/HighlightOff';
@@ -420,6 +420,14 @@ export class OffresListTableRow extends React.PureComponent {
                     </Typography>
                     <Typography variant="h6" style={{ color: 'inherit' }}>
                       {row.minToOrder ? formatNumber.format(row.minToOrder) : '-'}
+                    </Typography>
+                  </div>
+                  <div style={{ display: 'flex', marginLeft: '30px', color: 'black' }}>
+                    <Typography variant="h6" color="textSecondary" style={{ marginRight: 10, color: 'black' }}>
+                      Total Article(s) Selectionné(s):
+                    </Typography>
+                    <Typography variant="h6" style={{ color: 'black' }}>
+                      {offerArticles.filter(item => item.quantity > 0).length}
                     </Typography>
                   </div>
                   <div />

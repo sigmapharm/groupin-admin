@@ -20,6 +20,12 @@ export const MetaMenu = [
     allowedRoles: [ADMIN, SUPER_ADMIN],
   },
   {
+    key: 8,
+    label: 'Pharmacies',
+    link: '/pharmacies',
+    allowedRoles: [ADMIN, SUPER_ADMIN],
+  },
+  {
     key: 3,
     label: 'Offres',
     link: '/offres',
@@ -41,6 +47,18 @@ export const MetaMenu = [
     key: 7,
     label: 'Reporting',
     link: '/reporting',
+    allowedRoles: [ADMIN, SUPER_ADMIN],
+  },
+  {
+    key: 9,
+    label: 'Grossistes',
+    link: '/provider',
+    allowedRoles: [ADMIN, SUPER_ADMIN],
+  },
+  {
+    key: 10,
+    label: 'Laboratoires',
+    link: '/laboratoires',
     allowedRoles: [ADMIN, SUPER_ADMIN],
   },
 

@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import PersonalInfo from './PersonalInfo';
 import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
 import ErrorsArea from '../../ErrorsArea';
+import { AddPharmacieContainer } from '../../../containers/Pharmacie/add';
 
 const styles = theme => ({
   root: {
@@ -50,11 +51,11 @@ const styles = theme => ({
   inputs: {
     maxWidth: '350px',
   },
-  selectPharmacieContainer: {
-    maxWidth: '360px',
-    display: 'inline-flex',
-    textAlign: 'center',
-  },
+  // selectPharmacieContainer: {
+  //   maxWidth: '360px',
+  //   display: 'inline-flex',
+  //   textAlign: 'center',
+  // },
 
   buttons: {
     marginLeft: '1%',
@@ -76,6 +77,7 @@ export function AddUserForm(props) {
     handleAddPharmacieClick,
     handleSubmit,
     handleAnuler,
+    disbaleButton,
   } = props;
   return (
     <Paper className={classes.paper}>
@@ -86,11 +88,7 @@ export function AddUserForm(props) {
           </Typography>
         </Grid>
         <Grid xs={12} item>
-          <ErrorsArea
-            variant="success"
-            prefix="Vous avez les erreurs suivantes"
-            errors={errors.messages}
-          />
+          <ErrorsArea variant="success" prefix="Vous avez les erreurs suivantes" errors={errors.messages} />
         </Grid>
       </Grid>
       <Grid className={classes.gridContainer} spacing={8} container>
@@ -108,10 +106,7 @@ export function AddUserForm(props) {
           <SingleAutoCompleteSelect
             className={classes.select}
             name="role"
-            options={[
-              { label: 'SUPER ADMIN', value: 'SUPER_ADMIN' },
-              { label: 'UTILISATEUR', value: 'MEMBRE' },
-            ]}
+            options={[{ label: 'SUPER ADMIN', value: 'SUPER_ADMIN' }, { label: 'UTILISATEUR', value: 'MEMBRE' }]}
             onChange={value => {
               handleFormDataChange({
                 target: { name: 'role', value },
@@ -122,7 +117,7 @@ export function AddUserForm(props) {
             isClearable
           />
         </Grid>
-        <Grid className={classes.selectPharmacieContainer} xs={12} md={6} item>
+        {/* <Grid className={classes.selectPharmacieContainer} xs={12} md={6} item>
           <SingleAutoCompleteSelect
             className={classes.select}
             name="pharmacie"
@@ -135,28 +130,21 @@ export function AddUserForm(props) {
           <Fab size="small" color="primary" onClick={handleAddPharmacieClick}>
             <AddIcon />
           </Fab>
-        </Grid>
+        </Grid> */}
         <Grid xs={12} item />
-        <Grid justify="center" container>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.buttonajout}
-            onClick={handleSubmit}
-          >
-            Valider
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            onClick={handleAnuler}
-            className={classes.buttons}
-          >
-            ANNULER
-          </Button>
-        </Grid>
+        {!disbaleButton && (
+          <Grid justify="center" container>
+            <Button type="submit" variant="contained" color="primary" className={classes.buttonajout} onClick={handleSubmit}>
+              Valider
+            </Button>
+            <Button type="submit" variant="contained" color="primary" onClick={handleAnuler} className={classes.buttons}>
+              ANNULER
+            </Button>
+          </Grid>
+        )}
+        {/* <AddPharmacieContainer
+        // successCallback={this.handleAddPharmacieSuccess}
+        /> */}
       </Grid>
     </Paper>
   );

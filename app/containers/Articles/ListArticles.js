@@ -229,6 +229,7 @@ class ListeArticles extends React.Component {
   render() {
     const { rowsPerPage, page, showInfoBar, infoBarParams, showPopConfirmation, popConfirmationParams, cols } = this.state;
     // eslint-disable-next-line react/prop-types
+    console.log(this.props);
     const { classes, articlesList } = this.props;
     const totalElements = articlesList.totalElements ? articlesList.totalElements : 0;
     const rows = articlesList.content;

@@ -17,11 +17,14 @@ import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
 import { validateFormData } from './validation';
 import { createUser } from '../actions';
-import {makeSelectPharmacies, selectCities} from '../../App/selectors';
-import {formatCityToLabelValue, formatPharmacieToLabelValue} from './utils';
+import { makeSelectPharmacies, selectCities } from '../../App/selectors';
+import { selectRegions } from '../../App/selectors';
+
+import { formatCityToLabelValue, formatPharmacieToLabelValue } from './utils';
 import AddUserForm from '../../../components/Users/add/AddUserForm';
 import AddPharmacieContainer from '../../Pharmacie/add';
 import _ from 'lodash';
+import { Paper } from '@material-ui/core';
 
 const styles = theme => ({
   root: {
@@ -53,6 +56,10 @@ const styles = theme => ({
     top: theme.spacing.unit,
     color: theme.palette.grey[500],
   },
+  gridContainer2: {
+    paddingLeft: theme.spacing.unit * 9,
+    paddingRight: theme.spacing.unit * 15,
+  },
 });
 
 const initialState = {
@@ -65,7 +72,21 @@ const initialState = {
     gsm: '',
     ville: '',
     codePostal: '',
-    pharmacie: '',
+    pharmacie: {
+      denomination: '',
+      adresse: '',
+      tel: '',
+      gsm: '',
+      patente: '',
+      numRC: '',
+      interlocuteur: '',
+      fonction: '',
+      formeJuridique: '',
+      banque: '',
+      dateDemarrage: '',
+      dateCreation: '',
+      ice: '',
+    },
     role: '',
   },
   errors: {
@@ -119,14 +140,14 @@ export class AddUser extends React.PureComponent {
       });
       const formattedData = {
         ...formData,
-        pharmacie: {
-          id: formData.pharmacie && formData.pharmacie.value,
-        },
+
         ville: {
           id: formData.ville && formData.ville.value,
         },
+        formeJuridique: formData.formeJuridique ? formData.formeJuridique.label : '',
         role: _.get(formData, 'role.value', ''),
       };
+
       this.props.dispatch(createUser(formattedData, this.handleSubmitResponse));
     }
   };
@@ -183,11 +204,41 @@ export class AddUser extends React.PureComponent {
     });
   };
 
+  handleInputChange = e => {
+    const { formData } = this.state;
+
+    this.setState({
+      formData: {
+        ...formData,
+        pharmacie: {
+          ...formData.pharmacie,
+          [e.target.name]: e.target.value,
+        },
+      },
+    });
+  };
+
+  handleSelectChange = name => value => {
+    const { formData } = this.state;
+
+    this.setState({
+      formData: {
+        ...formData,
+        pharmacie: {
+          ...formData.pharmacie,
+          ville: name === 'region' ? null : formData.ville,
+          [name]: value,
+        },
+      },
+    });
+  };
+
   render() {
-    const { classes, pharmacies,cities } = this.props;
+    const { classes, pharmacies, cities } = this.props;
     const { formData, errors, isSuccess } = this.state;
     const formattedPharmacies = pharmacies.map(formatPharmacieToLabelValue);
-    const formattedCities = cities.map(formatCityToLabelValue)
+    const formattedCities = cities.map(formatCityToLabelValue);
+    console.log('form', this.state.formData);
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
@@ -201,7 +252,19 @@ export class AddUser extends React.PureComponent {
             handleSubmit={this.handleSubmit}
             handleAddPharmacieClick={this.handleAddPharmacieOpen}
             handleAnuler={this.handleGoToUsersList}
+            disbaleButton
           />
+          <Paper className={classes.gridContainer2}>
+            <AddPharmacieContainer
+              successCallback={this.handleAddPharmacieSuccess}
+              handleFormDataChange={this.handleFormDataChange}
+              handleState={this.setState}
+              formData={formData}
+              handleInputChange={this.handleInputChange}
+              handleSelectChange={this.handleSelectChange}
+              handleSubmit={this.handleSubmit}
+            />
+          </Paper>
         </form>
         <Dialog
           maxWidth="lg"
@@ -213,41 +276,24 @@ export class AddUser extends React.PureComponent {
             <Typography variant="h5" color="primary">
               {`Ajouter une nouvelle pharmacie`}
             </Typography>
-            <IconButton
-              aria-label="Close"
-              className={classes.closeButton}
-              onClick={this.handleAddPharmacieClose}
-            >
+            <IconButton aria-label="Close" className={classes.closeButton} onClick={this.handleAddPharmacieClose}>
               <CloseIcon />
             </IconButton>
           </MuiDialogTitle>
           <MuiDialogContent>
-            <AddPharmacieContainer
-              successCallback={this.handleAddPharmacieSuccess}
-            />
+            <AddPharmacieContainer successCallback={this.handleAddPharmacieSuccess} />
           </MuiDialogContent>
         </Dialog>
         {isSuccess && (
           <Snackbar
             open
             TransitionComponent={Fade}
-            message={
-              <span id="message-id">utilisateur a été créé avec succès.</span>
-            }
+            message={<span id="message-id">utilisateur a été créé avec succès.</span>}
             action={[
-              <Button
-                key="undo"
-                color="secondary"
-                size="small"
-                onClick={this.handleGoToUsersList}
-              >
+              <Button key="undo" color="secondary" size="small" onClick={this.handleGoToUsersList}>
                 Liste des utilisateurs
               </Button>,
-              <IconButton
-                key="close"
-                color="inherit"
-                onClick={this.handleCloseSuccessMessage}
-              >
+              <IconButton key="close" color="inherit" onClick={this.handleCloseSuccessMessage}>
                 <CloseIcon />
               </IconButton>,
             ]}
@@ -266,6 +312,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = createStructuredSelector({
   pharmacies: makeSelectPharmacies(),
   cities: selectCities(),
+  regions: selectRegions(),
 });
 
 const withConnect = connect(

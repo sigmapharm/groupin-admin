@@ -69,6 +69,7 @@ function* dispatchQuantityWorker({ payload: { id, callback } }) {
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ datelivraison: new Date() }),
   };
   yield networking(function*() {
     try {

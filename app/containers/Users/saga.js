@@ -91,9 +91,16 @@ function* addNewUserWorker(action) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      ...payload,
-      // ville: null,
-      // region: null,
+      ...{
+        ...payload,
+        pharmacie: {
+          ...payload.pharmacie,
+          formeJuridique: payload.pharmacie.formeJuridique.value,
+          banque: payload.pharmacie.banque.value,
+          ville: { id: payload.pharmacie.ville.value },
+          region: { id: payload.pharmacie.region.value },
+        },
+      },
     }),
   };
   yield networking(function*() {

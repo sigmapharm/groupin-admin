@@ -88,21 +88,21 @@ const OffresListCards = ({
               </Typography>
 
               <div>
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'fixed' }}>
                   <Typography variant="h6" color="textSecondary" style={{ marginRight: '13px' }}>
                     laboratoire :
                   </Typography>
                   <Typography variant="h6">{offre.laboratoryName}</Typography>
                 </div>
 
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'fixed' }}>
                   <Typography variant="h6" color="textSecondary" style={{ marginRight: '13px' }}>
                     Date de debut :
                   </Typography>
                   <Typography variant="h6">{moment(offre.dateDebut).format('DD/MM/YYYY')}</Typography>
                 </div>
 
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'fixed' }}>
                   <Typography variant="h6" color="textSecondary" style={{ marginRight: '13px' }}>
                     Date de fin :
                   </Typography>
@@ -151,7 +151,7 @@ const OffresListCards = ({
       {modelsState.name === DETAILS_MODEL && (
         <Dialog maxWidth="lg" onClose={handleModel} open fullWidth fullScreen>
           <MuiDialogTitle disableTypography>
-            <Typography variant="h5" color="primary" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="h5" color="primary" style={{ display: 'fixed', justifyContent: 'space-between' }}>
               Détails offre
               <IconButton onClick={handleModel}>
                 <CloseIcon />
@@ -166,7 +166,7 @@ const OffresListCards = ({
       {modelsState.name === ORDER_MODEL && (
         <Dialog maxWidth="lg" onClose={handleModel} open fullWidth fullScreen>
           <MuiDialogTitle disableTypography>
-            <Typography variant="h5" color="primary" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="h5" color="primary" style={{ display: 'fixed', justifyContent: 'space-between' }}>
               Demande offre
               <IconButton onClick={handleModel}>
                 <CloseIcon />
@@ -204,8 +204,8 @@ const styles = {
     boxShadow: '0 10px 18px 0  rgba(0,0,0,.0.3)',
   },
   actions: {
-    display: 'flex',
-    justifyContent: 'flex-end',
+    display: 'fixed',
+    justifyContent: 'fixed',
     marginTop: '6px',
   },
 };
