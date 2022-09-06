@@ -144,7 +144,7 @@ export function AddOffreForm(props) {
         return el.nom;
       },
     });
-
+    console.log(list.map(item => item.original));
     setArticlesRows(list.map(item => item.original));
   };
 
@@ -172,12 +172,14 @@ export function AddOffreForm(props) {
                 - Date début doit être supérieur à J + 1
               </span>
             )} */}
-            {/*!disableAllFields && <span style={{ display: 'block' }}>- Date Fin doit être supérieur à J + 2</span>*/}
+            {!disableAllFields && <span style={{ display: 'block' }}>- Date Fin doit être supérieur à J + 2</span>}
           </Typography>
         </Grid>
         <OffreInfo
           editMode={editMode}
           formData={formData}
+          dateD={formData.dateDebut}
+          dateF={formData.dateFin}
           originalFormData={originalFormData}
           errors={errors.fields}
           onChange={handleFormDataChange}
@@ -288,7 +290,7 @@ export function AddOffreForm(props) {
                     key={row.id}
                     row={row}
                     editMode={editMode}
-                    //Deleted Variable editModec={true}
+                    editModec={true}
                   />
                 ))
               ) : (

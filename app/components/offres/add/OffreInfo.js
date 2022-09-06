@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -24,8 +24,32 @@ const styles = () => ({
   },
 });
 export function OffreInfo(props) {
-  const { formData, errors, classes, onChange, maxLength, children, disableAllWithoutDate, disableAll, editMode } = props;
+  const {
+    formData,
+    errors,
+    classes,
+    onChange,
+    maxLength,
+    dateD,
+    dateF,
+    children,
+    disableAllWithoutDate,
+    disableAll,
+    editMode,
+  } = props;
   const disable = disableAllWithoutDate || disableAll;
+  const [dateFin, setDateFin] = useState(formData);
+  const [dateDebut, setDateDebut] = useState(formData);
+
+  useEffect(
+    () => {
+      setDateDebut(formData[fields.dateDebut.name]);
+      console.log('Use effect 1' + dateD);
+      setDateFin(formData[fields.dateFin.name]);
+      console.log('Use effect 2' + dateF);
+    },
+    [formData],
+  );
 
   return (
     <>
@@ -39,7 +63,6 @@ export function OffreInfo(props) {
             error={!!errors[fields.designation.name]}
             onChange={onChange}
             noValidate
-            disabled={disable}
             autoComplete="off"
             className={classes.offreInputs}
             // inputProps={{
@@ -48,17 +71,17 @@ export function OffreInfo(props) {
             fullWidth
           />
         </Grid>
-        <Grid container xs={12} md={6} item>
+
+        <Grid container xs={12} md={6} item spacing={0.5}>
           <DateInput
             name={fields.dateDebut.name}
             // fields.dateDebut.label
-            label={fields.dateDebut.label}
-            disabled={disable}
-            dateFormat={date => moment(date).format('DD/MM/YYYY')}
+            label={editMode ? dateD : fields.dateDebut.label}
+            disabled={editMode}
             min={moment()
               .add(0, 'day')
               .toDate()}
-            value={!!formData[fields.dateDebut.name] ? new Date(formData[fields.dateDebut.name]) : null}
+            value={!!dateD ? new Date(dateD).toDateString : null}
             onChange={date => {
               onChange({
                 target: { name: fields.dateDebut.name, value: date },
@@ -68,21 +91,24 @@ export function OffreInfo(props) {
             className={[classes.dateInputs, classes.offreInputs]}
             fullWidth
             disableContainerStyle
-            format="DD/MM/YYYY"
           />
         </Grid>
+
+        {/* <div style={{color: "red"}}>{dateD}</div> */}
+
         <Grid xs={12} md={6} item>
           <DateInput
             name={fields.dateFin.name}
             // fields.dateDebut.label
-            label={fields.dateFin.label}
+            label={editMode ? dateF : fields.dateFin.label}
             // disabled={disableAll}
-            dateFormat={date => moment(date).format('DD/MM/YYYY')}
             // check to verify that start date < end date
             // min={moment()
             //   .add(2, 'day')
-            //   .toDate()}
-            value={!!formData[fields.dateFin.name] ? new Date(formData[fields.dateFin.name]) : null}
+            min={moment()
+              .add(0, 'day')
+              .toDate()}
+            value={!!dateF ? new Date(dateF).toDateString : null}
             onChange={date => {
               onChange({
                 target: { name: fields.dateFin.name, value: date },
@@ -92,7 +118,6 @@ export function OffreInfo(props) {
             className={[classes.dateInputs, classes.offreInputs]}
             fullWidth
             disableContainerStyle
-            format="DD/MM/YYYY"
           />
         </Grid>
         <Grid xs={12} md={6} item>
