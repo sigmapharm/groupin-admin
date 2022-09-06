@@ -19,7 +19,7 @@ import Divider from '@material-ui/core/Divider';
 import history from 'utils/history';
 import _ from 'lodash';
 import Typography from '@material-ui/core/Typography';
-import { deleteUser, getUsersList, resetUser, toggleUser, updateUser } from './actions';
+import { deleteUser, getUsersList, resetUser, toggleUser, updateUser, exportUsersCsv } from './actions';
 import UsersListTableRow from './list/UsersListTableRow';
 import UsersListSearch from './list/UsersListSearch';
 import {
@@ -36,7 +36,8 @@ import { selectCities } from '../App/selectors';
 import { formatCityToLabelValue } from './add/utils';
 import InfoBar from '../../components/Snackbar/InfoBar';
 import GeneriqueDialog from '../../components/Alert';
-
+import { saveAs } from 'file-saver';
+import moment from 'moment';
 /* istanbul ignore next */
 const styles = theme => ({
   root: {
@@ -173,6 +174,27 @@ export class UsersList extends React.PureComponent {
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+  handleExportCsv = users => {
+    this.props.dispatch(
+      exportUsersCsv({
+        callback: (err, blob) => {
+          if (err) {
+            console.log('print err', err);
+            return;
+          }
+          const csvBlob = new Blob([blob], { type: blob.type });
+          saveAs(
+            csvBlob,
+            `users-${
+              moment(new Date(), 'YYYY-MM-DD')
+                .format()
+                .split('T')[0]
+            }.csv`,
+          );
+        },
+      }),
+    );
+  };
 
   handleUserAddClick = () => {
     history.push('/users/add');
@@ -287,7 +309,11 @@ export class UsersList extends React.PureComponent {
         </Typography>
         <Divider variant="middle" className={classes.root} />
 
-        <UsersListSearch handleChange={this.handleChange} handleSearchUsers={this.handleSearchUsers} />
+        <UsersListSearch
+          handleChange={this.handleChange}
+          handleSearchUsers={this.handleSearchUsers}
+          handleExportCsv={this.handleExportCsv}
+        />
 
         <Divider variant="middle" className={classes.root} />
 

@@ -14,6 +14,7 @@ import {
   RESET_PASSWORD_SUCCESS,
   GET_USER_INFO,
   PUT_USER_INFO,
+  EXPORT_USERS_CSV,
 } from './constants';
 
 const getUsersList = (values, callback) => ({
@@ -97,8 +98,13 @@ export const putUserProfile = values => ({
   payload: { ...values },
 });
 
-export const getUserInfo = payload => ({
+export const getUserInfo = callback => ({
   type: GET_USER_INFO,
+  callback,
+});
+
+export const exportUsersCsv = payload => ({
+  type: EXPORT_USERS_CSV,
   payload,
 });
 

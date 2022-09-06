@@ -12,6 +12,7 @@ import {
   SUBMIT_UPDATE_USER,
   TOGGLE_USER,
   GET_USER_INFO,
+  EXPORT_USERS_CSV,
 } from './constants';
 import { manageCreateUserResponse, putUsersList, putUserProfile } from './actions';
 import requestWithAuth from '../../services/request/request-with-auth';
@@ -230,6 +231,29 @@ function* restePasswordWorker(action) {
   });
 }
 
+function* exportUsersCsvWorker(action) {
+  const { callback } = action.payload;
+  console.log('Saga reached');
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'text/csv',
+      // 'Content-Disposition': 'attachment; filename=' + 'filename.csv',
+    },
+  };
+
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(`/users/export`, options, true);
+
+      yield callback && callback(false, res);
+    } catch (e) {
+      console.log(e); // eslint-disable-line
+      yield callback && callback(true, null);
+    }
+  });
+}
+
 function* usersListSagas() {
   yield all([
     takeLatest(TOGGLE_USER, toggleUserWorker),
@@ -243,6 +267,7 @@ function* usersListSagas() {
     takeLatest(RESET_PASSWORD, restePasswordWorker),
     takeLatest(GET_PROFILE, getProfileWorker),
     takeLatest(GET_USER_INFO, getUserInfo),
+    takeLatest(EXPORT_USERS_CSV, exportUsersCsvWorker),
   ]);
 }
 

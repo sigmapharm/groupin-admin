@@ -67,11 +67,7 @@ export class ArticlesListSearch extends React.PureComponent {
           margin="normal"
           onChange={handleChange}
         />
-        <Fab
-          color="primary"
-          className={classes.button}
-          onClick={handleSearchArticle}
-        >
+        <Fab color="primary" className={classes.button} onClick={handleSearchArticle}>
           <SearchIcon />
         </Fab>
       </form>
