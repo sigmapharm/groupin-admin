@@ -4,6 +4,7 @@ import {
   PUT_ARTICLES_LIST_ACTION,
   SUBMIT_CREATE_ARTICLE,
   SUBMIT_DELETE_ARTICLE,
+  SUBMIT_IMPORTED_ARTICLES,
   GET_ARTICLESLABO_LIST_ACTION,
   PUT_ARTICLESLABO_LIST_ACTION,
   CHANGE_ARTICLE_FORM_DATA,
@@ -43,6 +44,14 @@ export const createArticle = (formData, callback) => ({
   payload: { ...formData },
   callback,
 });
+export const ImportArticles = (LabId, ArticleList, callback) => ({
+  type: SUBMIT_IMPORTED_ARTICLES,
+  payload: {
+    LabId: LabId,
+    ArticleList: ArticleList,
+  },
+  callback,
+});
 export const deleteArticle = (articleId, callback) => ({
   type: SUBMIT_DELETE_ARTICLE,
   payload: { articleId },
@@ -66,8 +75,6 @@ const getArticleDetailsSuccess = payload => ({
 const clearArticleForm = () => ({
   type: CLEAR_ARTICLE_FORM,
 });
-
-
 
 export {
   clearArticleForm,

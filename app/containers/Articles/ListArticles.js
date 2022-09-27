@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -16,7 +16,7 @@ import AddIcon from '@material-ui/icons/Add';
 import _ from 'lodash';
 
 import { makeSelectArticlesList } from './selectors';
-import { deleteArticle, getArticlesList } from './actions';
+import { deleteArticle, getArticlesList, ImportArticles } from './actions';
 import authenticated from '../HOC/authenticated/authenticated';
 import ArticlesListTableRow from './list/ArticlesListTableRow';
 import ArticlesListTableFooter from './list/ArticlesListTableFooter';
@@ -24,7 +24,7 @@ import ArticlesListSearch from './list/ArticlesListSearch';
 import ArticlesListTableHeader from './list/ArticlesListTableHeader';
 import InfoBar from '../../components/Snackbar/InfoBar';
 import GeneriqueDialog from '../../components/Alert';
-
+import UploadArticle from './Upload/UploadArticle';
 const styles = theme => ({
   root: {
     marginTop: theme.spacing.unit * 3,
@@ -65,6 +65,8 @@ class ListeArticles extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      uploadError: null,
+      open: false,
       page: 0,
       rowsPerPage: 10,
       categorie: '',
@@ -176,11 +178,36 @@ class ListeArticles extends React.Component {
       }),
     );
   };
-
+  handleOpenDialog = () => {
+    this.setState({
+      open: !this.state.open,
+    });
+  };
+  handleCloseDialog = () => {
+    this.setState({
+      open: false,
+    });
+  };
   handleSearchArticles = () => {
     this.loadArticles();
   };
 
+  //Handle Import Articles
+  handleImportArticles = LabId => ArticleList => {
+    this.props.dispatch(
+      ImportArticles(LabId, ArticleList, (err, res) => {
+        this.setState({
+          uploadError: res.Message + ' Article(s) : ' + res.errList,
+        });
+      }),
+    );
+  };
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
   loadArticles() {
     this.props.dispatch(
       getArticlesList(this.state, err => {
@@ -235,11 +262,21 @@ class ListeArticles extends React.Component {
     const deletearticle = articlesList.content;
     return (
       <div>
+        <UploadArticle
+          open={this.state.open}
+          handleImportArticles={this.handleImportArticles}
+          handleCloseDialog={this.handleCloseDialog}
+          uploadError={this.state.uploadError}
+        />
         <Typography component="h1" variant="h4" className={classes.root} style={{ overflow: 'hidden' }}>
           Liste des articles
         </Typography>
         <Divider variant="middle" className={classes.root} />
-        <ArticlesListSearch handleChange={this.handleChange} handleSearchArticle={this.handleSearchArticles} />
+        <ArticlesListSearch
+          handleChange={this.handleChange}
+          handleSearchArticle={this.handleSearchArticles}
+          handleOpenDialog={this.handleOpenDialog}
+        />
 
         <Divider variant="middle" className={classes.root} />
 

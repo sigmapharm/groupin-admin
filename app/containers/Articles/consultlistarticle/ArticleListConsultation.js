@@ -2,7 +2,7 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import _ from "lodash"
+import _ from 'lodash';
 
 import TextField from '@material-ui/core/TextField';
 
@@ -134,7 +134,7 @@ export class ArticleListConsultation extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="PPH"
-            value={(_.get(row,'pph') || 0).toFixed(2)}
+            value={(_.get(row, 'pph') || 0).toFixed(2)}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -145,7 +145,7 @@ export class ArticleListConsultation extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="PPV"
-            value={(_.get(row,'ppv') || 0).toFixed(2)}
+            value={(_.get(row, 'ppv') || 0).toFixed(2)}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -219,7 +219,7 @@ export class ArticleListConsultation extends React.PureComponent {
             id="standard-disabled"
             label="Adresse"
             value={row.laboratoire.adresse}
-            style={{width:'500px'}}
+            style={{ width: '500px' }}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -231,7 +231,7 @@ export class ArticleListConsultation extends React.PureComponent {
             id="standard-disabled"
             label="Website"
             value={row.laboratoire.website}
-            style={{width:'300px'}}
+            style={{ width: '300px' }}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -243,7 +243,7 @@ export class ArticleListConsultation extends React.PureComponent {
             id="standard-disabled"
             label="Email"
             value={row.laboratoire.email}
-            style={{width:'300px'}}
+            style={{ width: '300px' }}
             className={classes.textField}
             inputProps={{
               className: classes.input,
@@ -254,7 +254,7 @@ export class ArticleListConsultation extends React.PureComponent {
             disabled
             id="standard-disabled"
             label="Déscription"
-            style={{width:'500px'}}
+            style={{ width: '500px' }}
             value={row.laboratoire.description}
             className={classes.textField}
             inputProps={{
