@@ -121,6 +121,7 @@ export class OffresList extends React.PureComponent {
       montant: '',
       quantiteMin: '',
       status: role === MEMBRE ? 'En cours' : '',
+      comment: '',
       laboratoire: '',
       articledtos: '',
       showInfoBar: false,
@@ -157,6 +158,12 @@ export class OffresList extends React.PureComponent {
           selected: false,
           order: 'asc',
         },
+        // {
+        //     label: 'Commentaire',
+        //     colName: 'offerComment',
+        //     selected: false,
+        //     order: 'asc',
+        //   },
       ],
     };
   }

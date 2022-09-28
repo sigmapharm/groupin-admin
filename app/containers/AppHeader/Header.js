@@ -165,12 +165,12 @@ const styles = () => ({
   toolbar: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    maxWidth: '1200px',
+    maxWidth: '1400px',
     width: '100%',
     padding: '0 17px',
   },
   menuButton: {
-    marginRight: 20,
+    marginRight: 10,
   },
   textMenu: {
     fontSize: '14px',

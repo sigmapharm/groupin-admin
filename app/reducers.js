@@ -17,6 +17,9 @@ import groupingReducer from 'containers/Grouping/store/reducer';
 import statisticsReducer from 'containers/Dashboards/reducer';
 import reportingReducer from 'containers/Reporting/reducer';
 import stateReport from 'containers/statistiques/reducer';
+import pharmaciesesReducer from 'containers/Pharmacies/reducer';
+import providersReducer from 'containers/Providers/reducer';
+import laboratoiresReducer from 'containers/Laboratoires/reducer';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
@@ -35,6 +38,9 @@ export default function createReducer(injectedReducers = {}) {
     statistics: statisticsReducer,
     reporting: reportingReducer,
     articlesStats: stateReport,
+    pharmacies: pharmaciesesReducer,
+    provider: providersReducer,
+    laboratoires: laboratoiresReducer,
   });
 
   // Wrap the root reducer and return a new root reducer with router state

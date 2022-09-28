@@ -36,18 +36,18 @@ import { saveAs } from 'file-saver';
 import DateInput from '../../components/DateInput';
 
 const adminCols = [
-  {
-    label: 'Offre désignation',
-    colName: 'offer.designation',
-    selected: false,
-    order: 'asc',
-  },
-  {
-    label: 'Laboratoire',
-    colName: 'offer.laboratory.nom',
-    selected: false,
-    order: 'asc',
-  },
+  // {
+  //   label: 'Offre désignation',
+  //   colName: 'offer.designation',
+  //   selected: false,
+  //   order: 'asc',
+  // },
+  // {
+  //   label: 'Laboratoire',
+  //   colName: 'offer.laboratory.nom',
+  //   selected: false,
+  //   order: 'asc',
+  // },
   {
     label: 'Pharmacie',
     colName: 'user.pharmacy.denomination',
@@ -117,8 +117,11 @@ class Command extends PureComponent {
       showSubCommands: false,
       selectedCommand: {},
       searchData: {
-        laboratoryName: '',
-        offerName: '',
+        // laboratoryName: '',
+        // offerName: '',
+        ville: '',
+        // region :'',
+        denomination: '',
       },
       showInfoBar: false,
       infoBarParams: {},
@@ -310,6 +313,7 @@ class Command extends PureComponent {
             dateFormat={date => moment(date).format('DD/MM/YYYY hh:mm:ss.s')}
             // check to verify that start date < end date
             // min={moment().fromNow()}
+            max={moment().fromNow()}
             value={this.state.livraisonDate}
             onChange={date => this.setState({ livraisonDate: date })}
             // type={fields.dateFin.type}

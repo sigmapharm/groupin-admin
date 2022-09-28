@@ -19,6 +19,18 @@ import {
   ADD_NEW_LABORATOIRE_TO_STORE,
   GET_LABO_ARTICLES_LIST_ACTION,
   PUT_ARTICLESLABO_LIST_ACTION,
+  GET_PROVIDER_DETAILS_SUCCESS,
+  GET_PROVIDERS_LIST_ACTION,
+  PUT_PROVIDERS_LIST_ACTION,
+  GET_PROVIDER_DETAILS,
+  GET_LABORATOIRE_DETAILS_SUCCESS,
+  GET_LABORATOIRES_LIST_ACTION,
+  PUT_LABORATOIRES_LIST_ACTION,
+  GET_LABORATOIRE_DETAILS,
+  GET_PHARMACIE_DETAILS_SUCCESS,
+  GET_PHARMACIE_DETAILS,
+  PUT_PHARMACIES_LIST_ACTION,
+  GET_PHARMACIES_LIST_ACTION,
 } from './constants';
 
 export const logout = () => ({
@@ -107,4 +119,59 @@ export const getLaboArticlesList = laboratoire => ({
 export const putArticleslaboList = values => ({
   type: PUT_ARTICLESLABO_LIST_ACTION,
   payload: values,
+});
+
+export const getProvidersList = (values, callback) => ({
+  type: GET_PROVIDERS_LIST_ACTION,
+  payload: { ...values, callback },
+});
+
+export const putProvidersList = values => ({
+  type: PUT_PROVIDERS_LIST_ACTION,
+  payload: { ...values },
+});
+
+export const getProviderDetails = ({ id }) => ({
+  type: GET_PROVIDER_DETAILS,
+  payload: { id },
+});
+export const getProviderDetailsSuccess = payload => ({
+  type: GET_PROVIDER_DETAILS_SUCCESS,
+  payload,
+});
+
+export const getLaboratoiresList = (values, callback) => ({
+  type: GET_LABORATOIRES_LIST_ACTION,
+  payload: { ...values, callback },
+});
+
+export const putLaboratoiresList = values => ({
+  type: PUT_LABORATOIRES_LIST_ACTION,
+  payload: { ...values },
+});
+
+export const getLaboratoireDetails = ({ id }) => ({
+  type: GET_LABORATOIRE_DETAILS,
+  payload: { id },
+});
+export const getLaboratoireDetailsSuccess = payload => ({
+  type: GET_LABORATOIRE_DETAILS_SUCCESS,
+  payload,
+});
+export const getPharnacieDetails = ({ id }) => ({
+  type: GET_PHARMACIE_DETAILS,
+  payload: { id },
+});
+export const getPharnacieDetailsSuccess = payload => ({
+  type: GET_PHARMACIE_DETAILS_SUCCESS,
+  payload,
+});
+export const getPharmaciesList = (values, callback) => ({
+  type: GET_PHARMACIES_LIST_ACTION,
+  payload: { ...values, callback },
+});
+
+export const putPharmaciesList = values => ({
+  type: PUT_PHARMACIES_LIST_ACTION,
+  payload: { ...values },
 });

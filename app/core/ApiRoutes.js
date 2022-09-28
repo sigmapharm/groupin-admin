@@ -1,12 +1,13 @@
 const LOGIN = '/login';
 const USERS = '/users';
 const ARTICLES = '/articles';
-const PHARMACIES = '/pharmacies/all';
+const PHARMACIES = '/pharmacies';
 const LABORATOIRES = '/laboratoires';
 const REGIONS = '/regions';
 const VILLES = '/villes';
 const OFFRES = '/offres';
 const REGISTER = '/register';
+const PROVIDER = '/provider';
 
 export default {
   LOGIN,
@@ -18,4 +19,5 @@ export default {
   LABORATOIRES,
   ARTICLES,
   OFFRES,
+  PROVIDER,
 };

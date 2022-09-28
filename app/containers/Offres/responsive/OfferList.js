@@ -56,6 +56,12 @@ const OfferList = ({ offer, offerArticles, dispatch }) => {
               </Typography>
             </div>
           </div>
+          <div>
+            <Typography color="textSecondary">Commentaire</Typography>
+            <Typography variant="h6" component="h2">
+              {offer.comment}
+            </Typography>
+          </div>
         </div>
         {offerArticles &&
           offerArticles.map((article, i) => (

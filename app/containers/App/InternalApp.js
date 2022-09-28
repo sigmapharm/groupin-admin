@@ -23,6 +23,12 @@ const Reporting = React.lazy(() => import('../Reporting'));
 const OffersHome = React.lazy(() => import('../OffersHome'));
 const Profile = React.lazy(() => import('../Profile'));
 const Dashboard = React.lazy(() => import('../Dashboards'));
+const AddPharmacie = React.lazy(() => import('../Pharmacies/add/index'));
+const ListPharmacies = React.lazy(() => import('../Pharmacies/ListPharmacies'));
+const ListProviders = React.lazy(() => import('../Providers/ListProviders'));
+const AddProvider = React.lazy(() => import('../Providers/add/index'));
+const ListLaboratoires = React.lazy(() => import('../Laboratoires/ListLaboratoires'));
+const AddLaboratoire = React.lazy(() => import('../Laboratoires/add/index'));
 
 class InternalApp extends React.PureComponent {
   componentWillMount() {
@@ -52,6 +58,16 @@ class InternalApp extends React.PureComponent {
           <Route exact path="/commands" component={Commands} />
           <Route exact path="/statistiques" component={statistiques} />
           <Route exact path="/reporting" component={Reporting} />
+          {/* <Route exact path="/pharmacies/add" component={AddPharmacie} /> */}
+          <Route exact path="/pharmacies/edit/:pharmacyId" component={AddPharmacie} />
+          <Route exact path="/pharmacies" component={ListPharmacies} />
+          <Route exact path="/provider" component={ListProviders} />
+          <Route exact path="/providers/add" component={AddProvider} />
+          <Route exact path="/providers/edit/:providerId" component={AddProvider} />
+          <Route exact path="/laboratoires" component={ListLaboratoires} />
+          <Route exact path="/laboratoires/add" component={AddLaboratoire} />
+          <Route exact path="/laboratoires/edit/:laboratoryId" component={AddLaboratoire} />
+
           <Route
             exact
             path="/offres/:offerId/commands"

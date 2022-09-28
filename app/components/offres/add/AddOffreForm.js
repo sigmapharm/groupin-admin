@@ -260,7 +260,7 @@ export function AddOffreForm(props) {
 
         <Grid className={classes.gridContainer} spacing={8} container>
           <Typography variant="h5" color="primary" className={classes.infoArticle}>
-            {`Articles de l'offre`}
+            {rows.filter(item => item.minQuantity > 0).length} {` Articles de l'offre `}
           </Typography>
         </Grid>
         <div

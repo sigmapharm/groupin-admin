@@ -19,6 +19,7 @@ import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
 import { addPharmacie } from './actions';
 import ErrorsArea from '../../../components/ErrorsArea';
 import { selectRegions } from '../../App/selectors';
+import { Typography } from '@material-ui/core';
 
 /* istanbul ignore next */
 const styles = theme => ({
@@ -33,6 +34,15 @@ const styles = theme => ({
   },
   submitButton: {
     marginTop: theme.spacing.unit * 3,
+  },
+  inputs: {
+    maxWidth: '350px',
+    paddingLeft: '50px',
+    // paddingRight: '50px',
+    marginTop: 10,
+    '& > *': {
+      height: '48px',
+    },
   },
 });
 
@@ -67,41 +77,21 @@ export class AddPharmacieContainer extends React.PureComponent {
     };
   }
 
-  handleInputChange = e => {
-    const { formData } = this.state;
-    this.setState({
-      formData: {
-        ...formData,
-        [e.target.name]: e.target.value,
-      },
-    });
-  };
-
-  handleSelectChange = name => value => {
-    const { formData } = this.state;
-    this.setState({
-      formData: {
-        ...formData,
-        ville: name === 'region' ? null : formData.ville,
-        [name]: value,
-      },
-    });
-  };
-
   getRenderedProps = field => {
-    const { formData } = this.state;
+    const { formData } = this.props;
     const { regions } = this.props;
 
     const options = {
       region: regions,
-      ville: _.get(_.find(regions, { id: _.get(formData, 'region.value') }), 'cities', []),
+      ville: _.get(_.find(regions, { id: _.get(formData.pharmacie, 'region.value') }), 'cities', []),
     };
     let props = {
       name: field.name,
       label: field.label,
-      value: (field.valueFormatter && field.valueFormatter(formData[field.name])) || formData[field.name],
+      value: (field.valueFormatter && field.valueFormatter(formData.pharmacie[field.name])) || formData.pharmacie[field.name],
       fullWidth: true,
-      onChange: this.handleInputChange,
+      onChange: this.props.handleInputChange,
+
       error: this.state.errors && this.state.errors.fields && this.state.errors.fields[field.name],
     };
     if (field.specialProps) {
@@ -114,7 +104,8 @@ export class AddPharmacieContainer extends React.PureComponent {
       props = {
         ...props,
         options: (options[field.name] || (field.options || this.props[field.fromProps])).map(field.optionFormatter),
-        onChange: this.handleSelectChange(field.name),
+        onChange: this.props.handleSelectChange(field.name),
+
         placeholder: field.placeholder,
       };
     }
@@ -135,7 +126,7 @@ export class AddPharmacieContainer extends React.PureComponent {
     const Component = field.select ? SingleAutoCompleteSelect : TextField;
     const fieldProps = this.getRenderedProps(field);
     return (
-      <Grid key={field.id} className={classes.fieldContainer} xs={8} md={4} item>
+      <Grid key={field.id} className={classes.inputs} xs={8} md={4} item>
         <Component {...fieldProps} />
       </Grid>
     );
@@ -143,8 +134,8 @@ export class AddPharmacieContainer extends React.PureComponent {
 
   handleFormSubmit = e => {
     e.preventDefault();
-    const { formData } = this.state;
-    const validation = validateFormData(formData);
+    const { formData } = this.props;
+    const validation = validateFormData(formData.pharmacie);
     if (validation && validation.messages && validation.fields) {
       this.setState({
         errors: {
@@ -159,18 +150,22 @@ export class AddPharmacieContainer extends React.PureComponent {
           messages: {},
         },
       });
+      console.log('formData.pharmacie.pharmacie.formeJuridique.value', formData.pharmacie.pharmacie.formeJuridique.value);
       this.props.dispatch(
         addPharmacie(
           {
-            ...formData,
+            ...formData.pharmacie,
+            // pharmacie: {
+            //   ...formData.pharmacie.pharmacie,
+            //   formeJuridique: formData.pharmacie.pharmacie.formeJuridique.value,
+            // },
             ville: {
-              id: _.get(formData, 'ville.value'),
+              id: _.get(formData.pharmacie, 'ville.value'),
             },
             region: {
-              id: _.get(formData, 'region.value'),
+              id: _.get(formData.pharmacie, 'region.value'),
             },
-            formeJuridique: _.get(formData, 'formeJuridique.value'),
-            banque: _.get(formData, 'banque.value'),
+            formeJuridique: _.get(formData.pharmacie, 'formeJuridique.value', ''),
           },
           this.handleSubmitResponse,
         ),
@@ -208,12 +203,16 @@ export class AddPharmacieContainer extends React.PureComponent {
   };
 
   render() {
-    const { classes } = this.props; // eslint-disable-line
+    const { classes, handleFormDataChange } = this.props;
     const { errors, isSuccess } = this.state;
+    console.log('classes', this.props);
     return (
       <div>
+        <Typography variant="h5" color="primary" className={classes.inputs} style={{ width: '700px', maxWidth: '100%' }}>
+          Informations pharmacie
+        </Typography>
         <form onSubmit={this.handleFormSubmit}>
-          <Grid alignContent="center" justify="center" alignItems="center" container>
+          <Grid alignContent="center" justify="flex-start" alignItems="center" container>
             <Grid xs={12} item />
             <Grid xs={10} item>
               <ErrorsArea prefix="Vous avez les erreurs suivantes" errors={errors.messages} />
@@ -222,7 +221,8 @@ export class AddPharmacieContainer extends React.PureComponent {
           <Grid alignContent="center" justify="center" alignItems="center" container>
             {pharmacieFields.map(field => this.renderField(field, classes))}
           </Grid>
-          <Grid alignContent="center" justify="center" alignItems="center" container>
+          {/* <Grid alignContent="center" justify="center" alignItems="center" container>
+
             <Button
               type="submit"
               variant="contained"
@@ -231,6 +231,20 @@ export class AddPharmacieContainer extends React.PureComponent {
               onClick={this.handleFormSubmit}
             >
               Valider
+            </Button>
+          </Grid> */}
+          <Grid justify="center" container style={{ marginTop: 10, marginBottom: 20 }}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              onClick={this.props.handleSubmit}
+              className={classes.buttonajout}
+            >
+              Valider
+            </Button>
+            <Button type="submit" variant="contained" color="primary" className={classes.buttons} style={{ marginLeft: 10 }}>
+              ANNULER
             </Button>
           </Grid>
         </form>
@@ -256,6 +270,7 @@ AddPharmacieContainer.defaultProps = {};
 AddPharmacieContainer.propTypes = {
   classes: PropTypes.object.isRequired,
   successCallback: PropTypes.func,
+  id: PropTypes.number.isRequired,
 };
 /* istanbul ignore next */
 const mapDispatchToProps = dispatch => ({

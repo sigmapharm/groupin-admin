@@ -265,6 +265,12 @@ export class OffreListConsultation extends React.PureComponent {
             </Typography>
           </div>
           <div className={classes.metaItems}>
+            <Typography color="textSecondary">Commentaire</Typography>
+            <Typography variant="h6" component="h2">
+              {row.comment}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
             <Typography color="textSecondary">Escompte</Typography>
             <Typography variant="h6" component="h2">
               {row.globalDiscount} %
