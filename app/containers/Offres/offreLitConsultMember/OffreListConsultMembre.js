@@ -30,7 +30,7 @@ export class OffreListConsultMembre extends React.PureComponent {
             <TableRow>
               <TableCell>Désignation</TableCell>
               <TableCell>Laboratoire</TableCell>
-              <TableCell>quantité minimal ( par article)</TableCell>
+              <TableCell>quantité minimal (par article)</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>

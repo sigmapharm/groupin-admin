@@ -238,6 +238,13 @@ export class UsersListTableRow extends React.PureComponent {
               </IconButton>
             </MuiDialogTitle>
             <MuiDialogContent>
+              <FilterInputsList
+                laboratoires={laboratoires}
+                regions={regions}
+                pharmacies={pharmacies}
+                rows={reporting}
+                getReporting={getReporting}
+              />
               <UserListConsult row={this.state.userRow} />
             </MuiDialogContent>
           </Dialog>

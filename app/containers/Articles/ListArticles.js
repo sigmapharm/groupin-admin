@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -16,7 +16,7 @@ import AddIcon from '@material-ui/icons/Add';
 import _ from 'lodash';
 
 import { makeSelectArticlesList } from './selectors';
-import { deleteArticle, getArticlesList } from './actions';
+import { deleteArticle, getArticlesList, ImportArticles } from './actions';
 import authenticated from '../HOC/authenticated/authenticated';
 import ArticlesListTableRow from './list/ArticlesListTableRow';
 import ArticlesListTableFooter from './list/ArticlesListTableFooter';
@@ -24,7 +24,7 @@ import ArticlesListSearch from './list/ArticlesListSearch';
 import ArticlesListTableHeader from './list/ArticlesListTableHeader';
 import InfoBar from '../../components/Snackbar/InfoBar';
 import GeneriqueDialog from '../../components/Alert';
-
+import UploadArticle from './Upload/UploadArticle';
 const styles = theme => ({
   root: {
     marginTop: theme.spacing.unit * 3,
@@ -65,6 +65,10 @@ class ListeArticles extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      uploadError: null,
+      wait: false,
+      open: false,
+      pos: 0,
       page: 0,
       rowsPerPage: 10,
       categorie: '',
@@ -165,7 +169,7 @@ class ListeArticles extends React.Component {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title: "La suppression de l'article a echoue  ",
+              title: "La suppression de l'article a echoue",
             },
           });
         } else {
@@ -176,11 +180,39 @@ class ListeArticles extends React.Component {
       }),
     );
   };
+  handleOpenDialog = () => {
+    this.setState({
+      open: !this.state.open,
+    });
+  };
 
   handleSearchArticles = () => {
     this.loadArticles();
   };
 
+  //Handle Import Articles
+  handleImportArticles = LabId => ArticleList => {
+    console.log('Handle import Executed');
+    this.setState({
+      wait: true,
+    });
+    this.props.dispatch(
+      ImportArticles(LabId, ArticleList, (err, res) => {
+        this.setState({
+          pos: 0,
+          open: false,
+          wait: false,
+          uploadError: res.Message + ' Article(s) : ' + res.errList,
+        });
+      }),
+    );
+  };
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
   loadArticles() {
     this.props.dispatch(
       getArticlesList(this.state, err => {
@@ -219,7 +251,17 @@ class ListeArticles extends React.Component {
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+  handleNext = () => {
+    this.setState(prevState => ({
+      pos: prevState.pos + 1,
+    }));
+  };
 
+  handleBack = () => {
+    this.setState(prevState => ({
+      pos: prevState.pos - 1,
+    }));
+  };
   handleArticlesAddClick = () => {
     history.push('/articles/add');
   };
@@ -229,18 +271,30 @@ class ListeArticles extends React.Component {
   render() {
     const { rowsPerPage, page, showInfoBar, infoBarParams, showPopConfirmation, popConfirmationParams, cols } = this.state;
     // eslint-disable-next-line react/prop-types
-    console.log(this.props);
     const { classes, articlesList } = this.props;
     const totalElements = articlesList.totalElements ? articlesList.totalElements : 0;
     const rows = articlesList.content;
     const deletearticle = articlesList.content;
     return (
       <div>
+        <UploadArticle
+          open={this.state.open}
+          handleImportArticles={this.handleImportArticles}
+          wait={this.state.wait}
+          pos={this.state.pos}
+          handleNext={this.handleNext}
+          handleBack={this.handleBack}
+          uploadError={this.state.uploadError}
+        />
         <Typography component="h1" variant="h4" className={classes.root} style={{ overflow: 'hidden' }}>
           Liste des articles
         </Typography>
         <Divider variant="middle" className={classes.root} />
-        <ArticlesListSearch handleChange={this.handleChange} handleSearchArticle={this.handleSearchArticles} />
+        <ArticlesListSearch
+          handleChange={this.handleChange}
+          handleSearchArticle={this.handleSearchArticles}
+          handleOpenDialog={this.handleOpenDialog}
+        />
 
         <Divider variant="middle" className={classes.root} />
 

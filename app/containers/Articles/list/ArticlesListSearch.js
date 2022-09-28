@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import BackupOutlined from '@material-ui/icons/BackupOutlined';
 
 const styles = theme => ({
   root: {
@@ -32,7 +33,7 @@ export class ArticlesListSearch extends React.PureComponent {
   }
 
   render() {
-    const { classes, handleChange, handleSearchArticle } = this.props;
+    const { classes, handleChange, handleSearchArticle, handleOpenDialog } = this.props;
     // eslint-disable-line
     return (
       <form className={classes.root}>
@@ -67,12 +68,11 @@ export class ArticlesListSearch extends React.PureComponent {
           margin="normal"
           onChange={handleChange}
         />
-        <Fab
-          color="primary"
-          className={classes.button}
-          onClick={handleSearchArticle}
-        >
+        <Fab color="primary" className={classes.button} onClick={handleSearchArticle}>
           <SearchIcon />
+        </Fab>
+        <Fab color="primary" className={classes.button} onClick={handleOpenDialog}>
+          <BackupOutlined />
         </Fab>
       </form>
     );

@@ -8,6 +8,7 @@ import {
   MANAGE_CREATE_ARTICLE_RESPONSE,
   SUBMIT_CREATE_ARTICLE,
   SUBMIT_DELETE_ARTICLE,
+  SUBMIT_IMPORTED_ARTICLES,
 } from './constants';
 import requestWithAuth from '../../services/request/request-with-auth';
 import * as GlobalActions from '../App/actions';
@@ -109,6 +110,38 @@ function* addOrUpdateArticleWorker(action) {
   }
 }
 
+//Save Imported
+function* importArticlesWorker(action) {
+  const {
+    payload: { LabId, ArticleList },
+    callback,
+  } = action;
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: LabId,
+      list: ArticleList.map(item => ({
+        ...item,
+        neccissite_prescription: item.neccissite_prescription === '1' ? true : false,
+        produit_marche: item.produit_marche === '1' ? true : false,
+      })),
+    }),
+  };
+
+  try {
+    const res = yield requestWithAuth(`/laboratoires/${LabId}/importcsv`, options);
+    callback && callback(null, res);
+    console.log('Callback result :' + res);
+  } catch (e) {
+    callback && callback(e, null);
+    console.log('Callback result :' + JSON.stringify(e.errList));
+  }
+}
+
 function* manageCreateArticleResponseWorker(action) {
   const { payload, callback } = action;
   if (callback) {
@@ -128,6 +161,7 @@ function* articlesListSagas() {
     takeLatest(GET_ARTICLES_LIST_ACTION, articlesListWorker),
     takeLatest(SUBMIT_CREATE_ARTICLE, addOrUpdateArticleWorker),
     takeLatest(SUBMIT_DELETE_ARTICLE, deleteArticleworker),
+    takeLatest(SUBMIT_IMPORTED_ARTICLES, importArticlesWorker),
     takeLatest(MANAGE_CREATE_ARTICLE_RESPONSE, manageCreateArticleResponseWorker),
   ]);
 }

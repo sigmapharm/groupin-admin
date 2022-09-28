@@ -24,6 +24,7 @@ export class ArticlesListTableHeader extends React.PureComponent {
             </Tooltip>
           </TableCell>
         ))}
+
         <TableCell style={{ color: '#fff' }}>Actions</TableCell>
       </TableRow>
     );

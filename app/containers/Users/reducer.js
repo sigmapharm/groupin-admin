@@ -7,6 +7,7 @@ import {
   PUT_USER_PROFILE,
   GET_USER_INFO,
   PUT_USER_INFO,
+  EXPORT_USERS_CSV,
 } from './constants';
 
 import AccessTokenStorage from '../../services/security/AccessTokenStorage';
@@ -52,6 +53,9 @@ function reducer(state = initialState, action) {
       return state.merge({ userInfo: action.payload });
     }
 
+    case EXPORT_USERS_CSV: {
+      return state;
+    }
     default: {
       return state;
     }
