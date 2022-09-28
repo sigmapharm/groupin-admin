@@ -220,7 +220,8 @@ function* manageCreateArticleResponseWorker(action) {
 }
 
 function* laboArticlesListWorker(action) {
-  const { payload } = action;
+  console.log('action', action.payload);
+  const { payload, callback } = action;
   const options = {
     method: 'GET',
     headers: {
@@ -229,6 +230,7 @@ function* laboArticlesListWorker(action) {
   };
   try {
     yield callApi(`/laboratoires/${payload.value}/articles`, putArticleslaboList, options, null);
+    callback && callback();
   } catch (e) {
     alert(e); // eslint-disable-line
   }

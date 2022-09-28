@@ -80,6 +80,7 @@ const initialState = {
     messages: {},
   },
   isSuccess: false,
+  labName: '',
 };
 
 // Change component name later
@@ -159,10 +160,16 @@ export class AddOffre extends React.PureComponent {
 
   handleLaboratoireSelectChange = laboratory => {
     const { formData } = this.state;
+    this.setState({
+      labName: laboratory.value,
+    });
     this.props.dispatch(
       changeOfferFormData({
         laboratoryId: laboratory.value,
         laboratoire: laboratory,
+        callback: () => {
+          console.log('called');
+        },
       }),
     );
     if (laboratory && laboratory.value && !!laboratory.label.trim()) {
@@ -251,6 +258,7 @@ export class AddOffre extends React.PureComponent {
             handleSubmit={this.handleSubmit}
             handleLaboratoireSelectChange={this.handleLaboratoireSelectChange}
             onCancel={this.handleGoToOffresList}
+            labName={this.state.labName}
           />
         </form>
         {isSuccess && (

@@ -82,6 +82,7 @@ const getOfferWithDetailsSuccess = payload => ({
 const changeOfferFormData = payload => ({
   type: CHANGE_OFFER_FORM_DATA,
   payload,
+  callback: payload.callback,
 });
 
 const changeOfferArticle = payload => ({

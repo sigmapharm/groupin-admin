@@ -96,6 +96,7 @@ export function AddPharmacieFrom(props) {
           }}
         />
       </Grid>
+      <div style={{ marginTop: 10 }} />
       <Grid xs={12} md={6} item />
       <Grid xs={12} item />
       <Grid justify="center" container>

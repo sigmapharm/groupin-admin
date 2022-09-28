@@ -139,6 +139,22 @@ export default ({
                     <Typography>Annuler</Typography>
                   </MenuItem>
 
+                  {row.deliveredAt ? (
+                    <MenuItem
+                      // disabled={(!isAdmin && !row.canDelete) || !row.deliveredAt}
+                      onClick={dispatchQuantityCancel({
+                        ..._.pick(row, ['commandId', 'canDelete', 'offerId']),
+                      })}
+                    >
+                      <ListItemIcon>
+                        <HighlightOff color={'error'} />
+                      </ListItemIcon>
+                      <Typography>Annuler livraison</Typography>
+                    </MenuItem>
+                  ) : (
+                    ''
+                  )}
+
                   {isAdmin ? (
                     <MenuItem
                       disabled={(!isAdmin && !row.canDelete) || !row.deliveredAt}
@@ -185,7 +201,7 @@ export default ({
                     <CheckIcon color="primary" />
                   </IconButton>
                 </Tooltip> */}
-                  {isMember ? (
+                  {isMember && !row.deliveredAt ? (
                     <MenuItem onClick={dispatchQuantity(row)} disabled={row.deliveredAt ? true : false}>
                       <ListItemIcon>
                         <Done color={row.deliveredAt ? '' : 'primary'} />

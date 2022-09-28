@@ -35,21 +35,13 @@ export class UserListConsult extends React.PureComponent {
   render() {
     // eslint-disable-next-line react/prop-types
     const { row, classes } = this.props;
-    const dateCreation =
-      row.pharmacie.dateCreation && new Date(row.pharmacie.dateCreation);
+    const dateCreation = row.pharmacie.dateCreation && new Date(row.pharmacie.dateCreation);
     const dateCreationarticlee = row.dateCreation && new Date(row.dateCreation);
-    const dateformatdemaragee =
-      row.pharmacie.dateDemarrage && new Date(row.pharmacie.dateDemarrage);
-    const dateformatcreationarticle =
-      dateCreationarticlee &&
-      new Intl.DateTimeFormat('fr-FR').format(dateCreationarticlee);
+    const dateformatdemaragee = row.pharmacie.dateDemarrage && new Date(row.pharmacie.dateDemarrage);
+    const dateformatcreationarticle = dateCreationarticlee && new Intl.DateTimeFormat('fr-FR').format(dateCreationarticlee);
 
-    const dateformatcreation = new Intl.DateTimeFormat('fr-FR').format(
-      dateCreation,
-    );
-    const dateformatdemarage = new Intl.DateTimeFormat('fr-FR').format(
-      dateformatdemaragee,
-    );
+    const dateformatcreation = new Intl.DateTimeFormat('fr-FR').format(dateCreation);
+    const dateformatdemarage = new Intl.DateTimeFormat('fr-FR').format(dateformatdemaragee);
 
     return (
       <React.Fragment>
@@ -271,7 +263,7 @@ export class UserListConsult extends React.PureComponent {
             }}
             margin="normal"
           />
-          <TextField
+          {/* <TextField
             disabled
             id="standard-disabled"
             label="Rib"
@@ -281,7 +273,7 @@ export class UserListConsult extends React.PureComponent {
               className: classes.input,
             }}
             margin="normal"
-          />
+          /> */}
           <TextField
             disabled
             id="standard-disabled"

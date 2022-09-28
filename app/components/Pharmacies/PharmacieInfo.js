@@ -273,6 +273,7 @@ export function PharmacieInfo(props) {
           //   maxLength,
           // }}
           fullWidth
+          type="date"
         />
       </Grid>
       <Grid xs={12} md={6} item>
@@ -289,6 +290,7 @@ export function PharmacieInfo(props) {
           //   maxLength,
           // }}
           fullWidth
+          type="date"
         />
       </Grid>
     </>

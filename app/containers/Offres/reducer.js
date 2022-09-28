@@ -148,6 +148,7 @@ function reducer(state = initialState, action) {
     }
     case CHANGE_OFFER_FORM_DATA: {
       const offerFormData = state.get('offerFormData').toJS();
+      console.log('action.payload', offerFormData);
       return state.merge({
         offerFormData: _.merge(offerFormData, action.payload),
       });
