@@ -13,6 +13,7 @@ import Dialog from '@material-ui/core/Dialog/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle';
 import Button from '@material-ui/core/Button/Button';
 import DialogContent from '@material-ui/core/DialogContent/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions/DialogActions';
 import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
 import Papa from 'papaparse';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -22,12 +23,11 @@ class UploadArticle extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      pos: 0,
       selectedLaboratoryName: '',
-      selectedLaboratory: '',
+      selectedLaboratory: null,
       selectedLaboratoryValue: '',
       allowedExtensions: ['csv'],
-      data: [],
+      data: null,
     };
   }
   LaboratoireSelectChange = event => {
@@ -54,7 +54,7 @@ class UploadArticle extends React.PureComponent {
   }
 
   _renderStepContent(laboratoire) {
-    switch (this.state.pos) {
+    switch (this.props.pos) {
       case 0:
         return (
           <React.Fragment>
@@ -128,26 +128,24 @@ class UploadArticle extends React.PureComponent {
     }
   }
 
-  handleNext = () => {
-    this.setState(prevState => ({
-      pos: prevState.pos + 1,
-    }));
-  };
-
-  handleBack = () => {
-    this.setState(prevState => ({
-      pos: prevState.pos - 1,
-    }));
-  };
+  handleCloseDialog() {
+    console.log('Close Handled');
+    this.setState({
+      open: false,
+      pos: 0,
+      selectedLaboratory: null,
+      selectedLaboratoryValue: '',
+      data: null,
+    });
+  }
   render() {
-    const { laboratoires, open, handleCloseDialog, handleImportArticles, uploadError } = this.props;
+    const { laboratoires, open, handleImportArticles, uploadError, wait } = this.props;
     const steps = ['Veuillez choisir un laboratoire', 'Importer des articles', 'Enregistrer les articles importés'];
     const formattedLaboratoire = laboratoires.map(formatLaboratoireToLabelValue);
 
     return (
       <div>
         <Dialog
-          onClose={handleCloseDialog}
           open={open}
           PaperProps={{
             style: {
@@ -159,7 +157,7 @@ class UploadArticle extends React.PureComponent {
           <DialogTitle id="alert-dialog-title">Importer des articles </DialogTitle>
           <DialogContent>
             <React.Fragment>
-              <Stepper activeStep={this.state.pos}>
+              <Stepper activeStep={this.props.pos}>
                 {steps.map((label, index) => {
                   return (
                     <Step key={label}>
@@ -169,25 +167,31 @@ class UploadArticle extends React.PureComponent {
                 })}
               </Stepper>
               <React.Fragment>{this._renderStepContent(formattedLaboratoire)}</React.Fragment>
-              <React.Fragment>
-                <Button color="primary" disabled={this.state.pos === 0} onClick={this.handleBack} sx={{ mr: 1 }}>
-                  Back
-                </Button>
-              </React.Fragment>
-              <Button
-                disabled={!this.state.selectedLaboratory || (this.state.pos == 1 && !this.state.data)}
-                color="primary"
-                onClick={
-                  this.state.pos === steps.length - 1
-                    ? handleImportArticles(this.state.selectedLaboratoryValue)(this.state.data)
-                    : this.handleNext
-                }
-              >
-                {this.state.pos === steps.length - 1 ? 'Importer' : 'Next'}
-              </Button>
             </React.Fragment>
           </DialogContent>
+          <DialogActions>
+            <React.Fragment>
+              <Button color="primary" disabled={this.props.pos === 0} onClick={this.props.handleBack} sx={{ mr: 1 }}>
+                Back
+              </Button>
+            </React.Fragment>
+            <Button
+              disabled={!this.state.selectedLaboratory || (this.props.pos == 1 && !this.state.data)}
+              hidden={this.props.pos === steps.length - 1}
+              color="primary"
+              onClick={this.props.handleNext}
+            >
+              Next
+            </Button>
+            <Button
+              disabled={!this.state.selectedLaboratory || !this.state.data || this.props.pos < 2}
+              onClick={() => handleImportArticles(this.state.selectedLaboratoryValue)(this.state.data)}
+            >
+              Importer
+            </Button>
+          </DialogActions>
         </Dialog>
+        <Snackbar open={wait} TransitionComponent={Fade} message={<span>veuillez patienter s'il vous plait</span>} />
         <Snackbar open={uploadError} TransitionComponent={Fade} message={<span>{uploadError}</span>} />
       </div>
     );

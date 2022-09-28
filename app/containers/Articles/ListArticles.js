@@ -66,7 +66,9 @@ class ListeArticles extends React.Component {
     super(props);
     this.state = {
       uploadError: null,
+      wait: false,
       open: false,
+      pos: 0,
       page: 0,
       rowsPerPage: 10,
       categorie: '',
@@ -167,7 +169,7 @@ class ListeArticles extends React.Component {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title: "La suppression de l'article a echoue  ",
+              title: "La suppression de l'article a echoue",
             },
           });
         } else {
@@ -183,20 +185,23 @@ class ListeArticles extends React.Component {
       open: !this.state.open,
     });
   };
-  handleCloseDialog = () => {
-    this.setState({
-      open: false,
-    });
-  };
+
   handleSearchArticles = () => {
     this.loadArticles();
   };
 
   //Handle Import Articles
   handleImportArticles = LabId => ArticleList => {
+    console.log('Handle import Executed');
+    this.setState({
+      wait: true,
+    });
     this.props.dispatch(
       ImportArticles(LabId, ArticleList, (err, res) => {
         this.setState({
+          pos: 0,
+          open: false,
+          wait: false,
           uploadError: res.Message + ' Article(s) : ' + res.errList,
         });
       }),
@@ -246,7 +251,17 @@ class ListeArticles extends React.Component {
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+  handleNext = () => {
+    this.setState(prevState => ({
+      pos: prevState.pos + 1,
+    }));
+  };
 
+  handleBack = () => {
+    this.setState(prevState => ({
+      pos: prevState.pos - 1,
+    }));
+  };
   handleArticlesAddClick = () => {
     history.push('/articles/add');
   };
@@ -256,7 +271,6 @@ class ListeArticles extends React.Component {
   render() {
     const { rowsPerPage, page, showInfoBar, infoBarParams, showPopConfirmation, popConfirmationParams, cols } = this.state;
     // eslint-disable-next-line react/prop-types
-    console.log(this.props);
     const { classes, articlesList } = this.props;
     const totalElements = articlesList.totalElements ? articlesList.totalElements : 0;
     const rows = articlesList.content;
@@ -266,7 +280,10 @@ class ListeArticles extends React.Component {
         <UploadArticle
           open={this.state.open}
           handleImportArticles={this.handleImportArticles}
-          handleCloseDialog={this.handleCloseDialog}
+          wait={this.state.wait}
+          pos={this.state.pos}
+          handleNext={this.handleNext}
+          handleBack={this.handleBack}
           uploadError={this.state.uploadError}
         />
         <Typography component="h1" variant="h4" className={classes.root} style={{ overflow: 'hidden' }}>
