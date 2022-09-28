@@ -24,6 +24,7 @@ export const formDataInitialState = fromJS({
   dateDebut: null,
   dateFin: null,
   montant: '',
+  comment: '',
   quantiteMin: '',
   status: '',
   montantMax: '',

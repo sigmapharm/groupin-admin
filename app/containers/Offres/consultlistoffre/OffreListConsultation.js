@@ -265,6 +265,12 @@ export class OffreListConsultation extends React.PureComponent {
             </Typography>
           </div>
           <div className={classes.metaItems}>
+            <Typography color="textSecondary">Commentaire</Typography>
+            <Typography variant="h6" component="h2">
+              {row.comment}
+            </Typography>
+          </div>
+          <div className={classes.metaItems}>
             <Typography color="textSecondary">Escompte</Typography>
             <Typography variant="h6" component="h2">
               {row.globalDiscount} %
@@ -439,7 +445,7 @@ export class OffreListConsultation extends React.PureComponent {
                         fullWidth
                       />
 
-                      {required ? <p style={{ color: 'red', fontSize: '12px' }}> * élément obligatoire </p> : ''}
+                      {required ? <p style={{ color: 'red', fontSize: '12px' }}> * Produit obligatoire </p> : ''}
                     </TableCell>
                   )}
                 </TableRow>

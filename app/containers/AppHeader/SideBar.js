@@ -7,7 +7,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import history from 'utils/history';
 import WithRoles from '../WithRoles';
-import { MetaMenu } from './MetaMenu';
+import { MetaMenu, mobileMenu } from './MetaMenu';
 
 const styles = {
   list: {
@@ -32,21 +32,10 @@ class SideBar extends React.Component {
           <div tabIndex={0} role="button">
             <div className={classes.fullList}>
               <List>
-                {MetaMenu.map(menu => (
+                {mobileMenu.map(menu => (
                   <WithRoles key={menu.key} roles={menu.allowedRoles}>
-                    {/* <Button
-                      key={menu.key}
-                      className={classes.button}
-                      classes={{ label: classes.label }}
-                      onClick={onMenuItemClick(menu.link)}
-                    >
-                      {menu.label}
-                    </Button> */}
                     <ListItem button>
-                      <ListItemText
-                        primary={menu.label}
-                        onClick={this.onMenuItemClick(menu.link)}
-                      />
+                      <ListItemText primary={menu.label} onClick={this.onMenuItemClick(menu.link)} />
                     </ListItem>
                   </WithRoles>
                 ))}

@@ -117,8 +117,11 @@ class Command extends PureComponent {
       showSubCommands: false,
       selectedCommand: {},
       searchData: {
-        laboratoryName: '',
-        offerName: '',
+        // laboratoryName: '',
+        // offerName: '',
+        ville: '',
+        // region :'',
+        denomination: '',
       },
       showInfoBar: false,
       infoBarParams: {},

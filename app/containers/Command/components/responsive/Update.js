@@ -105,14 +105,14 @@ const Demande = ({ command, commandArticles, dispatch, clearCommandArticles, onR
                 backgroundColor: article.hasError ? '#ff000042' : i % 2 === 0 ? 'white' : '#f7f7f7',
               }}
             >
-              {/* <div style={{ display: 'flex', marginBottom: '15px' }}>
+              <div style={{ display: 'flex', marginBottom: '15px' }}>
                 <Typography variant="h6" color="textSecondary">
                   Designation:
-                </Typography> */}
-              <Typography variant="h5" style={{ marginBottom: '11px' }}>
-                {article.nom}
-              </Typography>
-              {/* </div> */}
+                </Typography>
+                <Typography variant="h6" style={{ marginBottom: '11px' }}>
+                  {article.label}
+                </Typography>
+              </div>
               <div style={styles.row}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="body1" color="textSecondary" style={{ marginRight: '10px' }}>

@@ -134,9 +134,9 @@ export function OffreInfo(props) {
           <TextField
             noValidate
             autoComplete="off"
-            name={fields.offerComment.name}
-            label={fields.offerComment.label}
-            value={formData[fields.offerComment.name]}
+            name={fields.comment.name}
+            label={fields.comment.label}
+            value={formData[fields.comment.name]}
             onChange={onChange}
             className={classes.offreInputs}
             disabled={disable}

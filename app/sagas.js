@@ -11,6 +11,9 @@ import groupingSagas from 'containers/Grouping/store/saga';
 import statisticsSagas from 'containers/Dashboards/saga';
 import reportingSagas from 'containers/Reporting/saga';
 import StateSaga from 'containers/statistiques/saga';
+import pharmacieSaga from 'containers/Pharmacies/saga';
+import providerSagas from 'containers/Providers/saga';
+import laboratoireSaga from 'containers/laboratoires/saga';
 
 export default [
   loginSagas,
@@ -26,4 +29,7 @@ export default [
   statisticsSagas,
   reportingSagas,
   StateSaga,
+  pharmacieSaga,
+  providerSagas,
+  laboratoireSaga,
 ];

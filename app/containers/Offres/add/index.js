@@ -92,47 +92,46 @@ export class AddOffre extends React.PureComponent {
     e.preventDefault();
     const { formData, offerId, editMode } = this.state;
     const { articlesListlabo, offerFormData } = this.props;
-    let validation = validateFormData(offerFormData);
-    validation = validateArticleList(validation, articlesListlabo);
-    if (validation && validation.messages && validation.fields) {
-      this.setState({
-        errors: {
-          ...validation,
-        },
-        isSuccess: false,
-      });
-    } else {
-      this.setState({
-        errors: {
-          fields: {},
-          messages: {},
-        },
-      });
-      const formattedData = {
-        offerId,
-        ...offerFormData,
-        laboratoire: {
-          id: offerFormData.laboratoryId,
-        },
-      };
-      this.props.dispatch(
-        createOrUpdateOffre(formattedData, articlesListlabo, updateOnlyDate, err => response => {
-          if (err) {
-            this.setState({
-              showInfoBar: true,
-              infoBarParams: {
-                title: `  ${
-                  editMode ? 'La Modification' : "L'ajoute"
-                }  des commands a échoué merci de contacter l'administrateur `,
-              },
-            });
-            this.handleSubmitResponse(response);
-          } else {
-            this.handleSubmitResponse(response);
-          }
-        }),
-      );
-    }
+    // let validation = validateFormData(offerFormData);
+    // validation = validateArticleList(validation, articlesListlabo);
+    // if (validation && validation.messages && validation.fields) {
+    //   this.setState({
+    //     errors: {
+    //       ...validation,
+    //     },
+    //     isSuccess: false,
+    //   });
+    // } else {
+    //   this.setState({
+    //     errors: {
+    //       fields: {},
+    //       messages: {},
+    //     },
+    //   });
+    // }
+    const formattedData = {
+      offerId,
+      ...offerFormData,
+      laboratoire: {
+        id: offerFormData.laboratoryId,
+      },
+    };
+
+    this.props.dispatch(
+      createOrUpdateOffre(formattedData, articlesListlabo, updateOnlyDate, err => response => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title: `  ${editMode ? 'La Modification' : "L'ajoute"}  des commands a échoué merci de contacter l'administrateur `,
+            },
+          });
+          this.handleSubmitResponse(response);
+        } else {
+          this.handleSubmitResponse(response);
+        }
+      }),
+    );
   };
 
   handleSubmitResponse = response => {
