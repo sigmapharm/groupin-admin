@@ -67,6 +67,7 @@ export function AddPharmacieFrom(props) {
     handleFormDataChange,
     handleSubmit,
     handleAnuler,
+    regions,
   } = props;
 
   // const formattedCities = cities.map(formatCityToLabelValue)
@@ -94,6 +95,7 @@ export function AddPharmacieFrom(props) {
           classes={{
             pharmacieInputs: classes.inputs,
           }}
+          regions={regions}
         />
       </Grid>
       <div style={{ marginTop: 10 }} />

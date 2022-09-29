@@ -17,6 +17,8 @@ import { changePharmacieFormData, clearPharmacieForm, createPharmacie, getPharma
 import AddPharmacieForm from '../../../components/Pharmacies/AddPharmacieForm';
 import InfoBar from '../../../components/Snackbar/InfoBar';
 import { selectePharmacieFormData } from '../selectors';
+import { selectRegions } from '../../App/selectors';
+import { getRegions } from '../../App/actions';
 // import { selectCities } from '../../App/selectors';
 // import { formatCityToLabelValue } from './utils';
 
@@ -83,6 +85,7 @@ export class AddPharmacie extends React.PureComponent {
   state = { ...initialState };
 
   componentWillMount() {
+    this.props.dispatch(getRegions());
     const {
       match: {
         params: { pharmacyId },
@@ -206,7 +209,7 @@ export class AddPharmacie extends React.PureComponent {
             classes={classes}
             errors={errors}
             editMode={editMode}
-            //   cities={formattedCities}
+            regions={this.props.regions}
             formData={pharmacieFormData}
             handleFormDataChange={this.handleFormDataChange}
             handleSubmit={this.handleSubmit}
@@ -242,7 +245,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = createStructuredSelector({
   pharmacieFormData: selectePharmacieFormData(),
-  //   cities: selectCities()
+  regions: selectRegions(),
 });
 
 const withConnect = connect(

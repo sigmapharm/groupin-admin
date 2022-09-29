@@ -220,8 +220,9 @@ function* manageCreateArticleResponseWorker(action) {
 }
 
 function* laboArticlesListWorker(action) {
+  const { payload } = action;
+  const { callback } = action.payload;
   console.log('action', action.payload);
-  const { payload, callback } = action;
   const options = {
     method: 'GET',
     headers: {

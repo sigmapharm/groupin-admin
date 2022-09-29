@@ -197,6 +197,16 @@ const Demande = ({ offer, offerArticles, dispatch, totalGain, totalWidthGlobalDi
                 </div>
               </div>
 
+              {article.required && (
+                <div style={styles.row}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography variant="body1" color="red" style={{ marginRight: '10px', color: 'red' }}>
+                      * Produit obligatoire
+                    </Typography>
+                  </div>
+                </div>
+              )}
+
               <div style={{ marginTop: 10 }}>
                 <TextField
                   type="number"

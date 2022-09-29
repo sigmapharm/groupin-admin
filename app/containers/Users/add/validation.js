@@ -88,4 +88,8 @@ export const fields = {
     name: 'adresse',
     label: 'adresse',
   },
+  region: {
+    name: 'region',
+    label: 'region',
+  },
 };

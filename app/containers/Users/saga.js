@@ -47,6 +47,7 @@ function* usersListWorker(action) {
 }
 function* getProfileWorker(action) {
   const { callback } = action;
+
   const options = {
     method: 'GET',
     headers: {
@@ -66,7 +67,8 @@ function* getProfileWorker(action) {
 }
 
 function* getUserInfo(action) {
-  const { callback, id } = action.payload;
+  const { callback, id } = action.callback;
+
   const options = {
     method: 'GET',
     headers: {

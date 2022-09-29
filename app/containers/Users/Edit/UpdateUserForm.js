@@ -60,7 +60,7 @@ const styles = theme => ({
 });
 
 export function UpdateUserForm(props) {
-  const { classes, errors, formData, handleFormDataChange, handleSubmit, cities } = props;
+  const { classes, errors, formData, handleFormDataChange, handleSubmit, cities, regions } = props;
   console.log(formData);
   return (
     <div>
@@ -77,6 +77,7 @@ export function UpdateUserForm(props) {
       <Grid className={classes.gridContainer} spacing={8} container>
         <PersonalInfo
           cities={cities}
+          regions={regions}
           formData={formData}
           errors={errors.fields}
           onChange={handleFormDataChange}

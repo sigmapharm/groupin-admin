@@ -32,7 +32,7 @@ import {
 } from './selectors';
 import authenticated from '../HOC/authenticated/authenticated';
 import UsersListTableFooter from './list/UsersListTableFooter';
-import { selectCities } from '../App/selectors';
+import { selectCities, selectRegions } from '../App/selectors';
 import { formatCityToLabelValue } from './add/utils';
 import InfoBar from '../../components/Snackbar/InfoBar';
 import GeneriqueDialog from '../../components/Alert';
@@ -298,10 +298,11 @@ export class UsersList extends React.PureComponent {
 
   render() {
     const { rowsPerPage, page, showInfoBar, infoBarParams, showPopConfirmation, popConfirmationParams, cols } = this.state;
-    const { classes, usersList, cities } = this.props;
+    const { classes, usersList, cities, regions } = this.props;
     const totalElements = usersList.totalElements ? usersList.totalElements : 0;
     const rows = usersList.content;
     const formatedCities = cities.map(formatCityToLabelValue);
+    const formatedRegions = regions.map(formatCityToLabelValue);
     return (
       <div>
         <Typography component="h1" variant="h4" className={classes.root} style={{ overflow: 'hidden' }}>
@@ -342,6 +343,7 @@ export class UsersList extends React.PureComponent {
                 rows.map(row => (
                   <UsersListTableRow
                     cities={formatedCities}
+                    regions={regions}
                     row={row}
                     key={row.id}
                     toggleUser={this.toggleUser(row)}
@@ -383,6 +385,7 @@ const mapStateToProps = createStructuredSelector({
   nom: makeSelectNom(),
   pharmacies: makeSelectPharmacie(),
   cities: selectCities(),
+  regions: selectRegions(),
 });
 
 const withConnect = connect(

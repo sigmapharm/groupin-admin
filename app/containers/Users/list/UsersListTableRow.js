@@ -21,6 +21,7 @@ import UpdateUserForm from '../Edit/UpdateUserForm';
 import { formatCityToLabelValue } from '../add/utils';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
+import FilterInputsList from '../../Reporting/inputsList/FilterInputsList';
 
 import { withStyles } from '@material-ui/core/styles';
 import { getUserInfo } from '../actions';
@@ -171,7 +172,7 @@ export class UsersListTableRow extends React.PureComponent {
   };
 
   render() {
-    const { row, cities } = this.props;
+    const { row, cities, regions } = this.props;
     const { editMode, detailsOpen } = this.state;
     return (
       <React.Fragment>
@@ -238,13 +239,13 @@ export class UsersListTableRow extends React.PureComponent {
               </IconButton>
             </MuiDialogTitle>
             <MuiDialogContent>
-              <FilterInputsList
+              {/* <FilterInputsList
                 laboratoires={laboratoires}
                 regions={regions}
                 pharmacies={pharmacies}
                 rows={reporting}
                 getReporting={getReporting}
-              />
+              /> */}
               <UserListConsult row={this.state.userRow} />
             </MuiDialogContent>
           </Dialog>
@@ -265,6 +266,7 @@ export class UsersListTableRow extends React.PureComponent {
                 cities={cities}
                 handleFormDataChange={this.handleFormDataChange}
                 handleSubmit={this.handleSubmitEdit}
+                regions={regions}
               />
             </MuiDialogContent>
           </Dialog>

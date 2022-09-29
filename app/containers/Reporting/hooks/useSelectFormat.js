@@ -15,12 +15,23 @@ import _ from 'lodash';
  *
  */
 
-export function useSelectFormat(__array, __criteria) {
+export function useSelectFormat(__array, __criteria, passValues) {
   // prevent re-calculation every time the component re-render
   return useMemo(
     () => {
       return _.map(__array, item => {
-        const obj = {
+        let obj = {};
+
+        if (passValues) {
+          obj = {
+            value: item[__criteria.value],
+            label: item[__criteria.label],
+            id: item.id,
+            ...item,
+          };
+        }
+
+        obj = {
           value: item[__criteria.value],
           label: item[__criteria.label],
           id: item.id,

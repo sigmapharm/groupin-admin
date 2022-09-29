@@ -96,4 +96,14 @@ export const fields = {
     label: 'fonction',
     validator: validators.stringNotBlank,
   },
+  ville: {
+    name: 'ville',
+    label: 'ville',
+    validator: validators.stringNotBlank,
+  },
+  region: {
+    name: 'region',
+    label: 'region',
+    validator: validators.stringNotBlank,
+  },
 };

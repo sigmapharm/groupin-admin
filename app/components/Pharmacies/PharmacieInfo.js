@@ -6,6 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import { fields } from '../../containers/Pharmacies/add/validation';
 import SingleAutoCompleteSelect from '../../components/AutoCompleteSelect';
 import moment from 'moment';
+import { useSelectFormat } from '../../containers/Reporting/hooks/useSelectFormat';
+import { useState } from 'react';
 const styles = () => ({
   pharmacieInputs: {},
 });
@@ -18,8 +20,21 @@ export function PharmacieInfo(props) {
     onChange,
     maxLength,
     // cities
+    regions,
   } = props;
   console.log(formData);
+  console.log('formated value', formData[fields.region.name]);
+  const regionsOptions = useSelectFormat(regions, { label: 'name', value: 'code', allow: ['cities'] }, true);
+  const [selectedRegion, setSelectedRegion] = useState();
+  const [selectedVille, setSelectedVille] = useState();
+  const villeOptions = useSelectFormat(
+    selectedRegion ? selectedRegion.cities : [],
+    {
+      label: 'name',
+      value: 'code',
+    },
+    true,
+  );
   return (
     <>
       <Grid xs={12} md={6} item>
@@ -32,9 +47,6 @@ export function PharmacieInfo(props) {
           noValidate
           autoComplete="off"
           className={classes.pharmacieInputs}
-          // inputProps={{
-          //   maxLength,
-          // }}
           fullWidth
         />
       </Grid>
@@ -48,9 +60,6 @@ export function PharmacieInfo(props) {
           noValidate
           autoComplete="off"
           className={classes.pharmacieInputs}
-          // inputProps={{
-          //   maxLength,
-          // }}
           fullWidth
         />
       </Grid>
@@ -61,15 +70,28 @@ export function PharmacieInfo(props) {
           name={fields.banque.name}
           options={[
             { label: 'BMCI', value: 'BMCI' },
+            { label: 'Attijari Wafa Bank', value: 'AWB' },
             { label: 'BMCE', value: 'BMCE' },
-            { label: 'GFI', value: 'GFI' },
+            { label: 'GFG', value: 'GFG' },
             { label: 'BP', value: 'BP' },
             { label: 'AWB', value: 'AWB' },
+            { label: 'GFG', value: 'GFG' },
+            { label: 'Banque populaire', value: 'BP' },
+            { label: 'CIH', value: 'CIH' },
+            { label: 'Crédit du Maroc', value: 'CDM' },
+            { label: 'Crédit Agricole du Maroc', value: 'CAM' },
+            { label: 'Al Barid Bank', value: 'ABB' },
+            { label: 'Bank Assafa', value: 'BA' },
+            { label: 'Bank Al Yousr', value: 'BAY' },
+            { label: 'Arab Bank', value: 'AB' },
+            { label: 'Dar Al Amane', value: 'DAA' },
+            { label: 'Umnia Bank', value: 'UB' },
+            { label: 'Societe Generale', value: 'SG' },
           ]}
           error={!!errors[fields.banque.name]}
           onChange={value => {
             onChange({
-              target: { name: fields.banque.name, value: value.label },
+              target: { name: fields.banque.name, value: value.value },
             });
           }}
           value={formData[fields.banque]}
@@ -250,6 +272,49 @@ export function PharmacieInfo(props) {
           value={formData[fields.fonction.name] || ''}
           error={!!errors[fields.fonction.name]}
           onChange={onChange}
+          noValidate
+          autoComplete="off"
+          className={classes.pharmacieInputs}
+          // inputProps={{
+          //   maxLength,
+          // }}
+          fullWidth
+        />
+      </Grid>
+      <Grid xs={12} md={6} item>
+        <SingleAutoCompleteSelect
+          name={fields.region.name}
+          label={fields.region.label}
+          value={selectedRegion}
+          error={!!errors[fields.region.name]}
+          onChange={value => {
+            setSelectedRegion(value);
+            onChange({
+              target: { name: fields.region.name, value: { name: value.value, code: value.value, id: value.id } },
+            });
+          }}
+          options={regionsOptions}
+          noValidate
+          autoComplete="off"
+          className={classes.pharmacieInputs}
+          // inputProps={{
+          //   maxLength,
+          // }}
+          fullWidth
+        />
+      </Grid>
+      <Grid xs={12} md={6} item>
+        <SingleAutoCompleteSelect
+          name={fields.ville.name}
+          label={fields.ville.label}
+          value={selectedVille}
+          error={!!errors[fields.ville.name]}
+          onChange={value => {
+            onChange({
+              target: { name: fields.ville.name, value: { code: value.value, name: value.value, id: value.id } },
+            });
+          }}
+          options={villeOptions}
           noValidate
           autoComplete="off"
           className={classes.pharmacieInputs}

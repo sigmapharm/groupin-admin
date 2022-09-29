@@ -4,5 +4,4 @@ export const formatPharmacieToLabelValue = pharmacie =>
     value: pharmacie.id,
   };
 
-export const formatCityToLabelValue = city =>
-  city && { label: city.name, value: city.id };
+export const formatCityToLabelValue = city => city && { label: city.name, value: city.id };

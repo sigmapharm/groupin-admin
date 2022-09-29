@@ -265,6 +265,9 @@ class ListeArticles extends React.Component {
   handleArticlesAddClick = () => {
     history.push('/articles/add');
   };
+  handleClose = () => {
+    this.setState({ open: false });
+  };
 
   closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
 
@@ -285,6 +288,7 @@ class ListeArticles extends React.Component {
           handleNext={this.handleNext}
           handleBack={this.handleBack}
           uploadError={this.state.uploadError}
+          handleClose={this.handleClose}
         />
         <Typography component="h1" variant="h4" className={classes.root} style={{ overflow: 'hidden' }}>
           Liste des articles

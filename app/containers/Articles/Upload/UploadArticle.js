@@ -139,13 +139,14 @@ class UploadArticle extends React.PureComponent {
     });
   }
   render() {
-    const { laboratoires, open, handleImportArticles, uploadError, wait } = this.props;
+    const { laboratoires, open, handleImportArticles, uploadError, wait, handleClose } = this.props;
     const steps = ['Veuillez choisir un laboratoire', 'Importer des articles', 'Enregistrer les articles importés'];
     const formattedLaboratoire = laboratoires.map(formatLaboratoireToLabelValue);
 
     return (
       <div>
         <Dialog
+          onClose={handleClose}
           open={open}
           PaperProps={{
             style: {
