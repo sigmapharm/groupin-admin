@@ -131,10 +131,18 @@ export function AddOffreForm(props) {
   const [articlesRow, setArticlesRows] = useState(rows);
   const [search, setSearch] = useState('');
   const [displayRows, setDisplayRows] = useState([]);
+  const [times, setTimes] = useState(0);
+
+  const isOffreStart = moment(formData.dateDebut).isAfter(new Date());
 
   useEffect(
     () => {
       setArticlesRows(_.map(rows, (item, index) => ({ ...item, writeIndex: index })));
+      setTimes(times + 1);
+      if (editMode && times < 3) {
+        console.log('update display');
+        setDisplayRows(_.map(rows, (item, index) => ({ ...item, writeIndex: index })));
+      }
     },
     [rows],
   );
@@ -187,6 +195,7 @@ export function AddOffreForm(props) {
         </Grid>
         <OffreInfo
           editMode={editMode}
+          isOffreStart={isOffreStart}
           formData={formData}
           dateD={formData.dateDebut}
           dateF={formData.dateFin}
@@ -220,7 +229,7 @@ export function AddOffreForm(props) {
             <Grid className={classes.globalVarsContainer} item xs={6}>
               <TextField
                 noValidate
-                // disabled={editMode}
+                disabled={isOffreStart ? false : editMode}
                 autoComplete="off"
                 name="globalDiscountPerArticle"
                 label="Global remise"
@@ -236,6 +245,7 @@ export function AddOffreForm(props) {
                 onClick={() => applyGlobalVars('globalDiscountPerArticle', 'discount')}
                 className={classes.globalVarsIcon}
                 aria-label="Delete"
+                disabled={isOffreStart ? false : editMode}
               >
                 <FillIcon fontSize="small" />
               </IconButton>
@@ -243,7 +253,7 @@ export function AddOffreForm(props) {
             <Grid className={classes.globalVarsContainer} item xs={6}>
               <TextField
                 noValidate
-                // disabled={editMode}
+                disabled={isOffreStart ? false : editMode}
                 autoComplete="off"
                 name="globalMinQuantity"
                 label="Global min quantite"
@@ -261,6 +271,7 @@ export function AddOffreForm(props) {
                 onClick={() => applyGlobalVars('globalMinQuantity', 'minQuantity')}
                 className={classes.globalVarsIcon}
                 aria-label="Delete"
+                disabled={isOffreStart ? false : editMode}
               >
                 <FillIcon fontSize="small" />
               </IconButton>
@@ -299,6 +310,7 @@ export function AddOffreForm(props) {
                     key={row.id}
                     row={row}
                     editMode={editMode}
+                    isOffreStart={isOffreStart}
                     editModec={true}
                     articles={articlesRow}
                   />

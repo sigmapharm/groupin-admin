@@ -8,9 +8,10 @@ import TextField from '@material-ui/core/TextField/TextField';
 import Grid from '@material-ui/core/Grid/Grid';
 import { fields } from '../../../containers/Offres/add/validation';
 import { RowCheckBox } from '../../RowCheckBox';
+import moment from 'moment';
 
 export const AticlesListTableRow = props => {
-  const { row, handleArticleRowChange, editMode } = props;
+  const { row, handleArticleRowChange, editMode, isOffreStart } = props;
 
   const [discount, setDiscount] = useState(row.discount);
   const [minQuantity, setMinQuantity] = useState(row.minQuantity);
@@ -37,6 +38,7 @@ export const AticlesListTableRow = props => {
       <TableCell>{row.tva}</TableCell>
       <TableCell>
         <TextField
+          disabled={isOffreStart ? false : editMode}
           name={fields.discount.name}
           label={fields.discount.label}
           value={discount}
@@ -45,14 +47,13 @@ export const AticlesListTableRow = props => {
             setDiscount(value);
           }}
           autoComplete="off"
-          inputProps={
-            { maxLength: 100 } // disabled={!row.selected}
-          }
+          inputProps={{ maxLength: 100 }}
           fullWidth
         />
       </TableCell>
       <TableCell>
         <TextField
+          disabled={isOffreStart ? false : editMode}
           name={fields.quantiteMin.name}
           label={fields.quantiteMin.label}
           value={minQuantity}

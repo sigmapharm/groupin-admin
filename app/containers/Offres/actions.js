@@ -153,6 +153,7 @@ const toggleCheckAll = () => ({
 });
 
 const applyGlobalRemiseOrMinQt = payload => {
+  console.log('payload', payload);
   return {
     type: APPLY_GLOBAL_REMISE_OR_MIN_QT,
     payload,

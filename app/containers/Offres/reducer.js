@@ -64,6 +64,7 @@ function reducer(state = initialState, action) {
     case APPLY_GLOBAL_REMISE_OR_MIN_QT: {
       const articlesListlabo = state.get('articlesListlabo').toJS();
       const payload = action.payload;
+
       return state.merge({
         articlesListlabo: articlesListlabo.map(({ selected, required, ...article }) => ({
           ...article,

@@ -99,6 +99,7 @@ export class AddOffre extends React.PureComponent {
     e.preventDefault();
     const { formData, offerId, editMode } = this.state;
     const { articlesListlabo, offerFormData } = this.props;
+    console.log('articlesListlabo', articlesListlabo);
     let validation = validateFormData(offerFormData);
     validation = validateArticleList(validation, articlesListlabo);
     if (validation && validation.messages && validation.fields) {
@@ -243,8 +244,10 @@ export class AddOffre extends React.PureComponent {
   };
 
   applyGlobalVars = (key, keyPerArticle) => {
+    console.log(key, keyPerArticle);
     const { dispatch } = this.props;
     const keyValue = _.get(this.state, key);
+    console.log(keyValue);
     dispatch(applyGlobalRemiseOrMinQt({ [keyPerArticle]: keyValue }));
   };
 
@@ -254,6 +257,7 @@ export class AddOffre extends React.PureComponent {
     const { classes, laboratoires, articlesListlabo, offerFormData, originalOfferFormData, checkAllValue } = this.props;
     const { editMode, errors, isSuccess, showInfoBar, infoBarParams } = this.state;
     const formattedLaboratoire = laboratoires.map(formatLaboratoireToLabelValue);
+
     return (
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
