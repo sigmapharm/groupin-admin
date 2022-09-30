@@ -125,32 +125,42 @@ export function AddOffreForm(props) {
     checkAllValue,
     handleGlobalVarsChange,
     applyGlobalVars,
+    labName,
   } = props;
 
   const [articlesRow, setArticlesRows] = useState(rows);
   const [search, setSearch] = useState('');
+  const [displayRows, setDisplayRows] = useState([]);
 
   useEffect(
     () => {
-      setArticlesRows(rows);
+      setArticlesRows(_.map(rows, (item, index) => ({ ...item, writeIndex: index })));
     },
     [rows],
   );
 
+  useEffect(
+    () => {
+      setDisplayRows(articlesRow);
+    },
+    [labName],
+  );
+
   const handleSearch = e => {
     setSearch(e.target.value);
-    const list = fuzzy.filter(e.target.value, rows, {
+    const list = fuzzy.filter(e.target.value, articlesRow, {
       extract: function(el) {
         return el.nom;
       },
     });
-    console.log(list.map(item => item.original));
-    setArticlesRows(list.map(item => item.original));
+
+    setDisplayRows(list.map(item => item.original));
   };
 
   const disableAllFields = disableAll(editMode, originalFormData);
   const disableAllFieldsExceptDate = editOnlyDateField(editMode, originalFormData);
   const onGlobalVarsChange = _.debounce(handleGlobalVarsChange, 500);
+
   return (
     <Paper className={classes.paper}>
       <Grid className={classes.headerGridContainer} container>
@@ -210,7 +220,7 @@ export function AddOffreForm(props) {
             <Grid className={classes.globalVarsContainer} item xs={6}>
               <TextField
                 noValidate
-                disabled={editMode}
+                // disabled={editMode}
                 autoComplete="off"
                 name="globalDiscountPerArticle"
                 label="Global remise"
@@ -233,7 +243,7 @@ export function AddOffreForm(props) {
             <Grid className={classes.globalVarsContainer} item xs={6}>
               <TextField
                 noValidate
-                disabled={editMode}
+                // disabled={editMode}
                 autoComplete="off"
                 name="globalMinQuantity"
                 label="Global min quantite"
@@ -282,15 +292,15 @@ export function AddOffreForm(props) {
               />
             </TableHead>
             <TableBody>
-              {articlesRow.length != 0 ? (
-                articlesRow.map((row, index) => (
+              {displayRows.length != 0 ? (
+                displayRows.map(row => (
                   <AticlesListTableRow
-                    index={index}
                     handleArticleRowChange={disableAllFields || disableAllFieldsExceptDate ? () => {} : handleArticleRowChange}
                     key={row.id}
                     row={row}
                     editMode={editMode}
                     editModec={true}
+                    articles={articlesRow}
                   />
                 ))
               ) : (

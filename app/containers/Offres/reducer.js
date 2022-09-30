@@ -172,7 +172,7 @@ function reducer(state = initialState, action) {
       const { index, selected, discount, minQuantity, required } = action.payload;
       const articlesListlabo = state.get('articlesListlabo').toJS();
       const item = articlesListlabo[index];
-
+      console.log('index', index);
       return state.merge({
         articlesListlabo: _.merge(articlesListlabo, {
           [index]: {

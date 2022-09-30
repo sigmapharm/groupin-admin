@@ -1,7 +1,7 @@
 import React from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 
-export const RowCheckBox = ({ editMode, row, handleArticleRowChange, index }) => {
+export const RowCheckBox = ({ editMode, row, handleArticleRowChange, index, minQuantity, discount }) => {
   const [isChecked, setIsChecked] = React.useState(false);
 
   React.useEffect(
@@ -19,7 +19,7 @@ export const RowCheckBox = ({ editMode, row, handleArticleRowChange, index }) =>
 
   React.useEffect(
     () => {
-      if (!row.discount || !row.minQuantity) {
+      if (!discount || !minQuantity) {
         handleArticleRowChange({
           discount: row.discount,
           minQuantity: row.minQuantity,
@@ -30,7 +30,7 @@ export const RowCheckBox = ({ editMode, row, handleArticleRowChange, index }) =>
         setIsChecked(false);
       }
     },
-    [row.discount, row.minQuantity],
+    [discount, minQuantity],
   );
 
   return (

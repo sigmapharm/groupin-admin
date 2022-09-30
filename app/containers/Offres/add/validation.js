@@ -2,7 +2,7 @@ import _ from 'lodash';
 import validators from '../../../core/validation';
 
 const validate = (result, field, value) => {
-  const validation = field.validator(value);
+  const validation = field.validator && field.validator(value);
   if (validation) {
     return {
       fields: {
@@ -17,6 +17,7 @@ const validate = (result, field, value) => {
   }
   return { ...result };
 };
+
 export const validateArticleList = (result, offerArticles) => {
   const validation = _.some(offerArticles, ({ selected, minQuantity }) => selected && (minQuantity || 0) <= 0);
   if (validation) {
@@ -42,12 +43,12 @@ export const validateFormData = formData => {
   //   formData.dateDebut,
   // );
   validationResult = validate(validationResult, fields.dateFin, formData.dateFin);
-  fields.dateFin.validator = validators.isBeforeValidation(formData.dateDebut);
+  // fields.dateFin.validator = validators.isBeforeValidation(formData.dateDebut);
   validationResult = validate(validationResult, fields.dateFin, formData.dateFin);
   // validationResult = validate(validationResult, fields.montant, formData.montant);
 
   validationResult = validate(validationResult, fields.globalDiscount, formData.globalDiscount);
-  validationResult = validate(validationResult, fields.comment, formData.comment);
+  // validationResult = validate(validationResult, fields.comment, formData.comment);
 
   // validationResult = validate(validationResult, fields.globalDiscount, formData.globalDiscount);
 

@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { fields } from '../add/validation';
 import SingleAutoCompleteSelect from '../../../components/AutoCompleteSelect';
-import { useSelectFormat } from '../../Reporting/hooks/useSelectFormat';
 
 const styles = theme => ({
   userInputs: {},
@@ -16,15 +15,8 @@ const styles = theme => ({
 });
 
 export function PersonalInfo(props) {
-  const { formData, cities, errors, classes, onChange, maxLength, regions } = props;
+  const { formData, cities, errors, classes, onChange, maxLength } = props;
   console.log('user', formData);
-  const regionsOptions = useSelectFormat(regions, { label: 'name', value: 'code', allow: ['cities'] }, true);
-  const [citiesRegion, setcitiesRegion] = useState();
-  const citiesOptions = useSelectFormat(citiesRegion, { label: 'name', value: 'code' }, true);
-  console.log('region logs', regions);
-  const [selectedRegion, setSelectedRegion] = useState();
-  const [selectedCity, setSelectedCity] = useState();
-
   return (
     <>
       <Grid xs={12} md={6} item>
@@ -129,42 +121,16 @@ export function PersonalInfo(props) {
         />
 
         */}
-
-        <SingleAutoCompleteSelect
-          className={classes.select}
-          name={fields.region.name}
-          options={regionsOptions}
-          onChange={value => {
-            onChange({
-              target: {
-                name: 'region',
-                value: {
-                  id: value.id,
-                  name: value.value,
-                  code: value.value,
-                  cities: value.cities,
-                },
-              },
-            });
-            setSelectedRegion(value);
-            setcitiesRegion(value.cities);
-          }}
-          value={selectedRegion}
-          placeholder={fields.region.label}
-          isClearable
-        />
         <SingleAutoCompleteSelect
           className={classes.select}
           name={fields.ville.name}
-          options={citiesOptions}
+          options={cities}
           onChange={value => {
-            console.log(value);
             onChange({
-              target: { name: 'ville', value: { id: value.id, name: value.value, code: value.value } },
+              target: { name: 'ville', value },
             });
-            setSelectedCity(value);
           }}
-          value={selectedCity}
+          value={formData[fields.ville.name]}
           placeholder={fields.ville.label}
           isClearable
         />

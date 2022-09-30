@@ -266,22 +266,6 @@ export function PharmacieInfo(props) {
         />
       </Grid>
       <Grid xs={12} md={6} item>
-        <TextField
-          name={fields.fonction.name}
-          label={fields.fonction.label}
-          value={formData[fields.fonction.name] || ''}
-          error={!!errors[fields.fonction.name]}
-          onChange={onChange}
-          noValidate
-          autoComplete="off"
-          className={classes.pharmacieInputs}
-          // inputProps={{
-          //   maxLength,
-          // }}
-          fullWidth
-        />
-      </Grid>
-      <Grid xs={12} md={6} item>
         <SingleAutoCompleteSelect
           name={fields.region.name}
           label={fields.region.label}
@@ -301,8 +285,26 @@ export function PharmacieInfo(props) {
           //   maxLength,
           // }}
           fullWidth
+          placeholder="region"
         />
       </Grid>
+      <Grid xs={12} md={6} item>
+        <TextField
+          name={fields.fonction.name}
+          label={fields.fonction.label}
+          value={formData[fields.fonction.name] || ''}
+          error={!!errors[fields.fonction.name]}
+          onChange={onChange}
+          noValidate
+          autoComplete="off"
+          className={classes.pharmacieInputs}
+          // inputProps={{
+          //   maxLength,
+          // }}
+          fullWidth
+        />
+      </Grid>
+
       <Grid xs={12} md={6} item>
         <SingleAutoCompleteSelect
           name={fields.ville.name}
@@ -322,6 +324,7 @@ export function PharmacieInfo(props) {
           //   maxLength,
           // }}
           fullWidth
+          placeholder="ville"
         />
       </Grid>
       <Grid xs={12} md={6} item>
