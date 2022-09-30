@@ -123,6 +123,7 @@ export class AddPharmacieContainer extends React.PureComponent {
     if (!field) {
       return null;
     }
+
     const Component = field.select ? SingleAutoCompleteSelect : TextField;
     const fieldProps = this.getRenderedProps(field);
     return (
