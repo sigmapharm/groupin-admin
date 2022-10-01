@@ -77,7 +77,7 @@ export function OffreInfo(props) {
             name={fields.dateDebut.name}
             // fields.dateDebut.label
             label={editMode ? dateD : fields.dateDebut.label}
-            disabled={editMode}
+            // disabled={editMode}
             min={moment()
               .add(0, 'day')
               .toDate()}
