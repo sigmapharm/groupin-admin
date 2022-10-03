@@ -48,17 +48,13 @@ const OffresListCards = ({
   const allowOrderButton = ({ dateFin, dateDebut }) =>
     moment(new Date()).isBetween(new Date(dateDebut), new Date(dateFin), null, 'day');
 
-  const totalRemise = _.sumBy(offerArticles, ({ quantity, computedPPH, tva }) => {
-    const RemiseCalc = computedPPH * quantity;
-
-    const calcTva = (tva / 100) * RemiseCalc;
-
-    return parseFloat(calcTva) + parseFloat(RemiseCalc) || 0;
+  const totalRemise = _.sumBy(offerArticles, ({ quantity, computedPPH }) => {
+    return computedPPH * quantity || 0;
   });
 
-  let total = _.sumBy(offerArticles, ({ quantity, pph, tva }) => pph * quantity + pph * quantity * (tva / 100) || 0);
+  let total = _.sumBy(offerArticles, ({ quantity, pph }) => pph * quantity || 0);
 
-  const GLobalDiscount = parseFloat(totalRemise) * (parseFloat(selectedOffre ? selectedOffre.globalDiscount : 0) / 100);
+  const GLobalDiscount = totalRemise * (parseFloat(selectedOffre ? selectedOffre.globalDiscount : 0) / 100);
 
   let totalWidthGlobalDiscount = totalRemise - GLobalDiscount;
   const totalGain = (total - totalWidthGlobalDiscount).toFixed(2);
