@@ -30,6 +30,8 @@ export const AticlesListTableRow = props => {
     [discount, minQuantity, isChecked],
   );
 
+  console.log('isOffreStart', isOffreStart);
+
   return (
     <TableRow key={row.id} style={discount && minQuantity ? { backgroundColor: '#4d609c70' } : {}}>
       <TableCell>{row.nom}</TableCell>
@@ -38,7 +40,7 @@ export const AticlesListTableRow = props => {
       <TableCell>{row.tva}</TableCell>
       <TableCell>
         <TextField
-          disabled={isOffreStart ? false : editMode}
+          disabled={isOffreStart ? true : editMode}
           name={fields.discount.name}
           label={fields.discount.label}
           value={discount}
@@ -53,7 +55,7 @@ export const AticlesListTableRow = props => {
       </TableCell>
       <TableCell>
         <TextField
-          disabled={isOffreStart ? false : editMode}
+          disabled={isOffreStart ? true : editMode}
           name={fields.quantiteMin.name}
           label={fields.quantiteMin.label}
           value={minQuantity}
@@ -63,7 +65,8 @@ export const AticlesListTableRow = props => {
           }}
           autoComplete="off"
           inputProps={
-            { maxLength: 100 } //disabled={!row.selected}
+            { maxLength: 100 }
+            //disabled={!row.selected}
           }
           fullWidth
         />
@@ -74,7 +77,7 @@ export const AticlesListTableRow = props => {
         <TableCell component="th" scope="row">
           <Checkbox
             helperText="Veuillez remplir les champs vides"
-            disabled={editMode || !(discount && minQuantity)}
+            disabled={isOffreStart ? true : !(discount && minQuantity)}
             onChange={({ target: { checked } }) => setIsChecked(checked)}
             checked={isChecked}
           />

@@ -154,7 +154,7 @@ export default withStyles(styles)(({ list, metadata, classes, readMode = true, o
                       value={article.quantity || ''}
                       type="number"
                       onChange={({ target: { value } }) => onChange({ index, quantity: +value })}
-                      disabled={article.quantity <= 0}
+                      // disabled={article.quantity <= 0}
                       autoComplete="off"
                       inputProps={{ maxLength: 100 }}
                       fullWidth

@@ -133,7 +133,7 @@ export function AddOffreForm(props) {
   const [displayRows, setDisplayRows] = useState([]);
   const [times, setTimes] = useState(0);
 
-  const isOffreStart = moment(formData.dateDebut).isAfter(new Date());
+  const isOffreStart = moment(formData.dateDebut).isBefore(new Date());
 
   useEffect(
     () => {
@@ -190,7 +190,7 @@ export function AddOffreForm(props) {
                 - Date début doit être supérieur à J + 1
               </span>
             )} */}
-            {!disableAllFields && <span style={{ display: 'block' }}>- Date Fin doit être supérieur à J + 2</span>}
+            {/* !disableAllFields && <span style={{ display: 'block' }}>- Date Fin doit être supérieur à J + 2</span>*/}
           </Typography>
         </Grid>
         <OffreInfo
@@ -229,7 +229,7 @@ export function AddOffreForm(props) {
             <Grid className={classes.globalVarsContainer} item xs={6}>
               <TextField
                 noValidate
-                disabled={isOffreStart ? false : editMode}
+                disabled={isOffreStart ? true : editMode}
                 autoComplete="off"
                 name="globalDiscountPerArticle"
                 label="Global remise"
@@ -245,7 +245,7 @@ export function AddOffreForm(props) {
                 onClick={() => applyGlobalVars('globalDiscountPerArticle', 'discount')}
                 className={classes.globalVarsIcon}
                 aria-label="Delete"
-                disabled={isOffreStart ? false : editMode}
+                disabled={isOffreStart ? true : editMode}
               >
                 <FillIcon fontSize="small" />
               </IconButton>
@@ -253,7 +253,7 @@ export function AddOffreForm(props) {
             <Grid className={classes.globalVarsContainer} item xs={6}>
               <TextField
                 noValidate
-                disabled={isOffreStart ? false : editMode}
+                disabled={isOffreStart ? true : editMode}
                 autoComplete="off"
                 name="globalMinQuantity"
                 label="Global min quantite"
@@ -271,7 +271,7 @@ export function AddOffreForm(props) {
                 onClick={() => applyGlobalVars('globalMinQuantity', 'minQuantity')}
                 className={classes.globalVarsIcon}
                 aria-label="Delete"
-                disabled={isOffreStart ? false : editMode}
+                disabled={isOffreStart ? true : editMode}
               >
                 <FillIcon fontSize="small" />
               </IconButton>

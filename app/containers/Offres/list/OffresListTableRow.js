@@ -251,7 +251,7 @@ export class OffresListTableRow extends React.PureComponent {
 
     let total = _.sumBy(offerArticles, ({ quantity, pph }) => pph * quantity || 0);
 
-    const GLobalDiscount = totalRemise * (parseFloat(row.globalDiscount) / 100);
+    const GLobalDiscount = totalRemise * (parseFloat(row.globalDiscount ? row.globalDiscount : 0) / 100);
 
     let totalWidthGlobalDiscount = totalRemise - GLobalDiscount;
     const totalGain = (total - totalWidthGlobalDiscount).toFixed(2);
@@ -259,6 +259,7 @@ export class OffresListTableRow extends React.PureComponent {
     // arrondir les valeurs
     totalWidthGlobalDiscount = totalWidthGlobalDiscount.toFixed(2);
     total = total.toFixed(2);
+    console.log(row.globalDiscount);
 
     // const discount = _.sumBy(
     //   offerArticles,
