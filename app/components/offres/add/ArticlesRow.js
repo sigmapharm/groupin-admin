@@ -11,7 +11,7 @@ import { RowCheckBox } from '../../RowCheckBox';
 import moment from 'moment';
 
 export const AticlesListTableRow = props => {
-  const { row, handleArticleRowChange, editMode, isOffreStart } = props;
+  const { row, handleArticleRowChange, editMode, isOffreNotStart } = props;
 
   const [discount, setDiscount] = useState(row.discount);
   const [minQuantity, setMinQuantity] = useState(row.minQuantity);
@@ -30,7 +30,7 @@ export const AticlesListTableRow = props => {
     [discount, minQuantity, isChecked],
   );
 
-  console.log('isOffreStart', isOffreStart);
+  console.log('isOffreNotStart', isOffreNotStart);
 
   return (
     <TableRow key={row.id} style={discount && minQuantity ? { backgroundColor: '#4d609c70' } : {}}>
@@ -40,7 +40,7 @@ export const AticlesListTableRow = props => {
       <TableCell>{row.tva}</TableCell>
       <TableCell>
         <TextField
-          disabled={isOffreStart ? true : editMode}
+          disabled={isOffreNotStart ? false : editMode}
           name={fields.discount.name}
           label={fields.discount.label}
           value={discount}
@@ -55,7 +55,7 @@ export const AticlesListTableRow = props => {
       </TableCell>
       <TableCell>
         <TextField
-          disabled={isOffreStart ? true : editMode}
+          disabled={isOffreNotStart ? false : editMode}
           name={fields.quantiteMin.name}
           label={fields.quantiteMin.label}
           value={minQuantity}
@@ -77,7 +77,7 @@ export const AticlesListTableRow = props => {
         <TableCell component="th" scope="row">
           <Checkbox
             helperText="Veuillez remplir les champs vides"
-            disabled={isOffreStart ? true : !(discount && minQuantity)}
+            disabled={!isOffreNotStart || !(discount > 0 && minQuantity > 0)}
             onChange={({ target: { checked } }) => setIsChecked(checked)}
             checked={isChecked}
           />

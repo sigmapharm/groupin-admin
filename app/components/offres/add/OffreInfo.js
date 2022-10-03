@@ -36,7 +36,7 @@ export function OffreInfo(props) {
     disableAllWithoutDate,
     disableAll,
     editMode,
-    isOffreStart,
+    isOffreNotStart,
   } = props;
   const disable = disableAllWithoutDate || disableAll;
   const [dateFin, setDateFin] = useState(formData);
@@ -177,7 +177,7 @@ export function OffreInfo(props) {
         </Grid>
         <Grid xs={12} md={6} item>
           <TextField
-            disabled={isOffreStart ? true : editMode}
+            disabled={isOffreNotStart ? false : editMode}
             noValidate
             autoComplete="off"
             name={fields.globalDiscount.name}
