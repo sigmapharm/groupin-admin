@@ -77,7 +77,7 @@ function* dispatchQuantityWorker({ payload: { id, callback, date } }) {
   };
   yield networking(function*() {
     try {
-      const req = yield requestWithAuth(`/commands/aggregate/${id}/status`, options);
+      const req = yield requestWithAuth(`/commands/aggregate/${id}/status?sort=createdAt,desc`, options);
       yield put(loadCommandsSuccess(req));
       yield callback && callback();
     } catch (e) {
@@ -98,7 +98,7 @@ function* dispatchQuantityWorkerCancel({ payload: { offerId, id, callback } }) {
   };
   yield networking(function*() {
     try {
-      const req = yield requestWithAuth(`/commands/aggregate/${id}/statuscancel`, options);
+      const req = yield requestWithAuth(`/commands/aggregate/${id}/statuscancel?sort=createdAt,desc`, options);
       yield put(loadCommandsSuccess(req));
       yield callback && callback();
     } catch (e) {
