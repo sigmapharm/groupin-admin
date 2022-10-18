@@ -145,6 +145,7 @@ export class UserListConsult extends React.PureComponent {
             }}
             margin="normal"
           />
+
           <TextField
             disabled
             id="standard-disabled"
@@ -166,6 +167,18 @@ export class UserListConsult extends React.PureComponent {
               className: classes.input,
             }}
             margin="normal"
+          />
+          <TextField
+            disabled
+            id="standard-disabled"
+            label="email"
+            value={row.email}
+            className={classes.textField}
+            inputProps={{
+              className: classes.input,
+            }}
+            margin="normal"
+            fullWidth
           />
         </form>
         <br />
@@ -230,6 +243,7 @@ export class UserListConsult extends React.PureComponent {
             }}
             margin="normal"
           />
+
           <TextField
             disabled
             id="standard-disabled"
@@ -367,6 +381,17 @@ export class UserListConsult extends React.PureComponent {
             id="standard-disabled"
             label="Région"
             value={row.pharmacie.region && row.pharmacie.region.name}
+            className={classes.textField}
+            inputProps={{
+              className: classes.input,
+            }}
+            margin="normal"
+          />
+          <TextField
+            disabled
+            id="standard-disabled"
+            label="ICE"
+            value={row.pharmacie.ice && row.pharmacie.ice}
             className={classes.textField}
             inputProps={{
               className: classes.input,
