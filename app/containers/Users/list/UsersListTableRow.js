@@ -145,6 +145,7 @@ export class UsersListTableRow extends React.PureComponent {
   };
 
   toggle = e => {
+    console.log(e.target.checked);
     this.props.toggleUser(e.target.checked);
   };
 

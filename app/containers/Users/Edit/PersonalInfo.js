@@ -143,9 +143,9 @@ export function PersonalInfo(props) {
           error={!!errors[fields.address.name]}
           onChange={onChange}
           className={classes.userInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>
@@ -157,9 +157,9 @@ export function PersonalInfo(props) {
           error={!!errors[fields.codePostal.name]}
           onChange={onChange}
           className={classes.userInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>

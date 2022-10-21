@@ -120,6 +120,7 @@ function* toggleUserWorker(action) {
   const { payload } = action;
   const { userId, value, callback } = payload;
   const nextState = value ? 'enable' : 'disable';
+  console.log(value);
   const options = {
     method: 'POST',
     headers: {
