@@ -21,7 +21,7 @@ import { makeSelectPharmacies, selectCities } from '../../App/selectors';
 
 import { selectRegions } from '../../App/selectors';
 
-import { formatCityToLabelValue, formatPharmacieToLabelValue } from './utils';
+import { formaRegionToLabelValue, formatCityToLabelValue, formatPharmacieToLabelValue } from './utils';
 import AddUserForm from '../../../components/Users/add/AddUserForm';
 import AddPharmacieContainer from '../../Pharmacie/add';
 import _ from 'lodash';
@@ -235,10 +235,11 @@ export class AddUser extends React.PureComponent {
   };
 
   render() {
-    const { classes, pharmacies, cities } = this.props;
+    const { classes, pharmacies, cities, regions } = this.props;
     const { formData, errors, isSuccess } = this.state;
     const formattedPharmacies = pharmacies.map(formatPharmacieToLabelValue);
     const formattedCities = cities.map(formatCityToLabelValue);
+    const formatedRegions = regions.map(formaRegionToLabelValue);
 
     console.log('form', this.state.formData);
 
@@ -249,6 +250,7 @@ export class AddUser extends React.PureComponent {
             errors={errors}
             pharmacies={formattedPharmacies}
             cities={formattedCities}
+            regions={formatedRegions}
             formData={formData}
             handleFormDataChange={this.handleFormDataChange}
             handlePharmacieSelectChange={this.handlePharmacieSelectChange}

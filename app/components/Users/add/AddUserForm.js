@@ -78,6 +78,7 @@ export function AddUserForm(props) {
     handleSubmit,
     handleAnuler,
     disbaleButton,
+    regions,
   } = props;
   return (
     <Paper className={classes.paper}>
@@ -93,6 +94,7 @@ export function AddUserForm(props) {
       </Grid>
       <Grid className={classes.gridContainer} spacing={8} container>
         <PersonalInfo
+          regions={regions}
           cities={cities}
           formData={formData}
           errors={errors.fields}

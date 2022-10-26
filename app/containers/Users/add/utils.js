@@ -5,3 +5,4 @@ export const formatPharmacieToLabelValue = pharmacie =>
   };
 
 export const formatCityToLabelValue = city => city && { label: city.name, value: city.id };
+export const formaRegionToLabelValue = city => city && { label: city.name, value: city.id, id: city.id };
