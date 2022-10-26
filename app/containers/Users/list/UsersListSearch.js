@@ -18,8 +18,8 @@ const styles = theme => ({
     marginLeft: '10%',
   },
   textField: {
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
+    marginLeft: theme.spacing.unit * 1,
+    marginRight: theme.spacing.unit * 1,
     width: 200,
   },
   button: {
@@ -43,6 +43,7 @@ export class UsersListSearch extends React.PureComponent {
         <TextField name="prenom" label="Prénom" className={classes.textField} margin="normal" onChange={handleChange} />
         <TextField name="nom" label="Nom" className={classes.textField} margin="normal" onChange={handleChange} />
         <TextField name="pharmacie" label="Pharmacie" className={classes.textField} margin="normal" onChange={handleChange} />
+        <TextField name="region" label="Region" className={classes.textField} margin="normal" onChange={handleChange} />
         <Fab color="primary" className={classes.button} onClick={handleSearchUsers}>
           <SearchIcon />
         </Fab>

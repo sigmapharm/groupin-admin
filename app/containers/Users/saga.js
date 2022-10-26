@@ -35,7 +35,7 @@ function* usersListWorker(action) {
         .reduce((acc, n) => acc.concat(`&sort=${n.colName},${n.order}`), '');
       const params = `?size=${action.payload.rowsPerPage}&page=${action.payload.page}&firstName=${
         action.payload.prenom
-      }&lastName=${action.payload.nom}&pharmacy=${action.payload.pharmacie}${sortQuery}`;
+      }&lastName=${action.payload.nom}&pharmacy=${action.payload.pharmacie}&region=${action.payload.region}${sortQuery}`;
       const res = yield requestWithAuth(`/users${params}`, options);
       yield put(putUsersList(res));
       yield callback && callback();

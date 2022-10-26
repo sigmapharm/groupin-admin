@@ -73,6 +73,7 @@ export class UsersList extends React.PureComponent {
       prenom: '',
       nom: '',
       pharmacie: '',
+      region: '',
       showInfoBar: false,
       infoBarParams: {},
       showPopConfirmation: false,
