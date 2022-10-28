@@ -33,7 +33,7 @@ import {
 import authenticated from '../HOC/authenticated/authenticated';
 import UsersListTableFooter from './list/UsersListTableFooter';
 import { selectCities, selectRegions } from '../App/selectors';
-import { formatCityToLabelValue } from './add/utils';
+import { formaRegionToLabelValue, formatCityToLabelValue } from './add/utils';
 import InfoBar from '../../components/Snackbar/InfoBar';
 import GeneriqueDialog from '../../components/Alert';
 import { saveAs } from 'file-saver';
@@ -303,7 +303,7 @@ export class UsersList extends React.PureComponent {
     const totalElements = usersList.totalElements ? usersList.totalElements : 0;
     const rows = usersList.content;
     const formatedCities = cities.map(formatCityToLabelValue);
-    const formatedRegions = regions.map(formatCityToLabelValue);
+    const formatedRegions = regions.map(formaRegionToLabelValue);
     return (
       <div>
         <Typography component="h1" variant="h4" className={classes.root} style={{ overflow: 'hidden' }}>
@@ -344,7 +344,7 @@ export class UsersList extends React.PureComponent {
                 rows.map(row => (
                   <UsersListTableRow
                     cities={formatedCities}
-                    regions={regions}
+                    regions={formatedRegions}
                     row={row}
                     key={row.id}
                     toggleUser={this.toggleUser(row)}

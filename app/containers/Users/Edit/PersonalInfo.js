@@ -15,7 +15,7 @@ const styles = theme => ({
 });
 
 export function PersonalInfo(props) {
-  const { formData, cities, errors, classes, onChange, maxLength } = props;
+  const { formData, cities, errors, classes, onChange, maxLength, regions } = props;
   console.log('user', formData);
   return (
     <>
@@ -106,21 +106,6 @@ export function PersonalInfo(props) {
         />
       </Grid>
       <Grid xs={12} md={6} item>
-        {/*
-          <TextField
-          name={fields.ville.name}
-          label="Ville"
-          defaultValue={formData[fields.ville.name]}
-          error={!!errors[fields.ville.name]}
-          onChange={onChange}
-          className={classes.userInputs}
-          inputProps={{
-            maxLength,
-          }}
-          fullWidth
-        />
-
-        */}
         <SingleAutoCompleteSelect
           className={classes.select}
           name={fields.ville.name}
@@ -132,6 +117,21 @@ export function PersonalInfo(props) {
           }}
           value={formData[fields.ville.name]}
           placeholder={fields.ville.label}
+          isClearable
+        />
+      </Grid>
+      <Grid xs={12} md={6} item>
+        <SingleAutoCompleteSelect
+          className={classes.select}
+          name={fields.region.name}
+          options={regions}
+          onChange={value => {
+            onChange({
+              target: { name: 'region', value },
+            });
+          }}
+          value={formData[fields.region.name]}
+          placeholder={fields.region.label}
           isClearable
         />
       </Grid>
