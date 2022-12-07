@@ -18,7 +18,6 @@ import {
   loadCommandArticlesSuccess,
   loadCommandsSuccess,
   updateCommandDetailSuccess,
-  dispatchQuantitySuccess,
 } from './actions.creators';
 import requestWithAuth from '../../../services/request/request-with-auth';
 import * as GlobalActions from '../../App/actions';
@@ -28,6 +27,9 @@ function* downloadCommandFormWorker({ payload: { commandId, callback } }) {
   const options = {
     method: 'GET',
   };
+
+  console.log('print Command Worker');
+
   yield networking(function*() {
     try {
       const blob = yield requestWithAuth(`/commands/${commandId}/print`, options, true);

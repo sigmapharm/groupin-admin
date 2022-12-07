@@ -80,10 +80,11 @@ export class PharmacieListTableRow extends React.PureComponent {
   };
 
   // eslint-disable-next-line react/prop-types
-  // delete = () => {
-  //   this.props.deletePharmacie();
-  //   this.setState({ isTippyOpen: false });
-  // };
+  delete = () => {
+    console.log(this.props);
+    this.props.deletePharmacie();
+    this.setState({ isTippyOpen: false });
+  };
 
   toggleProfileMenu = e => {
     this.setState({
@@ -129,12 +130,12 @@ export class PharmacieListTableRow extends React.PureComponent {
                       <Typography>Modifier</Typography>
                     </MenuItem>
 
-                    {/* <MenuItem onClick={this.delete}>
+                    <MenuItem onClick={this.delete}>
                       <ListItemIcon style={{ padding: 5 }}>
                         <DeleteIcon color="primary" />
                       </ListItemIcon>
                       <Typography>Supprimer</Typography>
-                    </MenuItem> */}
+                    </MenuItem>
                   </WithRoles>
                 </div>
               }

@@ -55,6 +55,7 @@ const initialState = {
     codePostal: '',
     pharmacie: '',
     address: '',
+    region: '',
   },
   errors: {
     fields: {},

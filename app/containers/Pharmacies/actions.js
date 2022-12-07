@@ -6,7 +6,7 @@ import {
   MANAGE_CREATE_PHARMACIE_RESPONSE,
   PUT_PHARMACIES_LIST_ACTION,
   SUBMIT_CREATE_PHARMACIE,
-  // SUBMIT_DELETE_PHARMACIE,
+  SUBMIT_DELETE_PHARMACIE,
   GET_PHARMACIE_DETAILS,
   GET_PHARMACIE_FORM_DATA,
   PUT_PHARMACIE_FORM_DATA,
@@ -33,11 +33,11 @@ export const createPharmacie = (formData, callback) => ({
   payload: { ...formData },
   callback,
 });
-// export const deletePharmacie = (pharmacyId, callback) => ({
-//   type: SUBMIT_DELETE_PHARMACIE,
-//   payload: { pharmacyId },
-//   callback,
-// });
+export const deletePharmacie = (pharmacyId, callback) => ({
+  type: SUBMIT_DELETE_PHARMACIE,
+  payload: { pharmacyId },
+  callback,
+});
 
 const changePharmacieFormData = payload => ({
   type: CHANGE_PHARMACIE_FORM_DATA,

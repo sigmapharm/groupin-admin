@@ -73,7 +73,7 @@ export function PersonalInfo(props) {
           inputProps={{
             maxLength,
           }}
-          disabled
+          // disabled
           fullWidth
         />
       </Grid>
