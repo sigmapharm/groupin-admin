@@ -639,19 +639,7 @@ class Command extends PureComponent {
 
   onDispatchSuccess = offerId => error => {
     this.closePopConfirmation();
-    // this.setState({
-    //   showInfoBar: true,
-    //   infoBarParams: error
-    //     ? { title: 'Merci remplir toutes les quantités livrées !' }
-    //     : {
-    //         title: 'votre commnde est enregistrée comme livrée',
-    //         onSuccessTitle: 'Consulter',
-    //         onSuccess: () => history.push(`offres/${offerId}/commands`),
-    //       },
-    // });
-    // this.forceUpdate();
-
-    // history.go(0);
+    console.log('offre id', offerId);
   };
 
   closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });
