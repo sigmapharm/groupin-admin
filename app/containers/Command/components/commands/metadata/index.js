@@ -62,7 +62,7 @@ export default ({
           <TableCell>{row.laboratoryName}</TableCell>
           <TableCell>{row.pharmacyName}</TableCell>
           <TableCell>{moment(row.creationDate).format('DD/MM/YYYY')}</TableCell>
-          <TableCell>{row.totalAmountDiscount.toFixed(2)}</TableCell>
+          <TableCell>{(row.totalAmountDiscount - row.totalAmountDiscount * (row.globalDiscount / 100)).toFixed(2)}</TableCell>
 
           {/* {isMember ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null} */}
           {/* {row.isLinked ? <TableCell>{row.deliveredAt ? row.deliveredAt.split('T')[0] : '-'}</TableCell> : null} */}
