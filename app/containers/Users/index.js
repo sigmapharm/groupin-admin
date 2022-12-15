@@ -304,6 +304,7 @@ export class UsersList extends React.PureComponent {
     const rows = usersList.content;
     const formatedCities = cities.map(formatCityToLabelValue);
     const formatedRegions = regions.map(formaRegionToLabelValue);
+
     return (
       <div>
         <Typography component="h1" variant="h4" className={classes.root} style={{ overflow: 'hidden' }}>
