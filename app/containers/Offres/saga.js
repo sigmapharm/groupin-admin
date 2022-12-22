@@ -155,7 +155,9 @@ function* loadArticleOfferWorker({ payload: { id }, callback }) {
 
 function* offresListWorker(action) {
   const { callback, cols } = action.payload;
-  const sortQuery = cols.filter(({ selected }) => selected).reduce((acc, n) => acc.concat(`&sort=${n.colName},${n.order}`), '');
+  const sortQuery = cols
+    .filter(({ selected }) => selected)
+    .reduce((acc, n) => acc.concat(`&sort=${n.colName},id,${n.order}`), '');
   const options = {
     method: 'GET',
     headers: {
