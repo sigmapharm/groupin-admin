@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import * as PropTypes from 'prop-types';
 import _, { sumBy } from 'lodash';
 import EditIcon from '@material-ui/icons/Edit';
-import { Settings } from '@material-ui/icons';
+import { Print, Settings } from '@material-ui/icons';
 import HighlightOff from '@material-ui/icons/HighlightOff';
 import ListIcon from '@material-ui/icons/List';
 import Search from '@material-ui/icons/Search';
@@ -224,6 +224,8 @@ export class OffresListTableRow extends React.PureComponent {
       showInfoBar: false,
       infoBarParams: {},
     });
+
+  hanldePrintOffresList = () => {};
   render() {
     let { row, width, offerArticles } = this.props;
     const { isShown, showPopConfirmation, popConfirmationParams, commandMode, showInfoBar, infoBarParams } = this.state;
@@ -306,6 +308,13 @@ export class OffresListTableRow extends React.PureComponent {
                         <Search color="secondary" />
                       </ListItemIcon>
                       <Typography>Consulter</Typography>
+                    </MenuItem>
+
+                    <MenuItem onClick={this.props.handleOffreListPrint(row.id, row.laboratoryName)}>
+                      <ListItemIcon style={{ padding: 5 }}>
+                        <Print color="secondary" />
+                      </ListItemIcon>
+                      <Typography>Imprimer</Typography>
                     </MenuItem>
 
                     {/* <IconButton onClick={this.showDetails} style={{ padding: 5 }}>

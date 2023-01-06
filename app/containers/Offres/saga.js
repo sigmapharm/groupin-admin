@@ -10,6 +10,7 @@ import {
   GET_OFFRES_LIST_ACTION,
   LOAD_ARTICLES_OFFER,
   MANAGE_CREATE_OFFRE_RESPONSE,
+  PRINT_OFFRE_LIST_PDF,
   SUBMIT_CLIENT_COMMAND,
   SUBMIT_CREATE_OFFRE,
 } from './constants';
@@ -254,6 +255,20 @@ function* networking(func) {
   yield put(GlobalActions.setNetworkingInactive());
 }
 
+function* downloadOffreListPdfWorker({ payload: { offerId, callback, laboratoryName } }) {
+  const options = {
+    method: 'GET',
+  };
+  yield networking(function*() {
+    try {
+      const blob = yield requestWithAuth(`/offres/printOffreData/${offerId}?laboratoryName=${laboratoryName}`, options, true);
+      yield callback && callback(null, blob);
+    } catch (e) {
+      yield callback && callback(e);
+    }
+  });
+}
+
 function* offersListSagas() {
   yield all([
     takeLatest([GET_OFFRES_LIST_ACTION, DELETE_OFFER_SUCCESS, CLOSE_OFFER_SUCCESS, CLONE_OFFER_SUCCESS], offresListWorker),
@@ -266,6 +281,7 @@ function* offersListSagas() {
     takeLatest(SUBMIT_CLIENT_COMMAND, submitClientCommandWorker),
     takeLatest(CLOSE_OFFER, closeOfferWorker),
     takeLatest(CLONE_OFFER, cloneOfferWorker),
+    takeLatest(PRINT_OFFRE_LIST_PDF, downloadOffreListPdfWorker),
   ]);
 }
 

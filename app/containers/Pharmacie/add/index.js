@@ -151,7 +151,6 @@ export class AddPharmacieContainer extends React.PureComponent {
           messages: {},
         },
       });
-      console.log('formData.pharmacie.pharmacie.formeJuridique.value', formData.pharmacie.pharmacie.formeJuridique.value);
       this.props.dispatch(
         addPharmacie(
           {

@@ -639,7 +639,6 @@ class Command extends PureComponent {
 
   onDispatchSuccess = offerId => error => {
     this.closePopConfirmation();
-    console.log('offre id', offerId);
   };
 
   closeInfoBar = () => this.setState({ showInfoBar: false, infoBarParams: {} });

@@ -19,6 +19,7 @@ import {
   LOAD_ARTICLES_OFFER,
   LOAD_ARTICLES_OFFER_SUCCESS,
   MANAGE_CREATE_OFFRE_RESPONSE,
+  PRINT_OFFRE_LIST_PDF,
   PUT_OFFRES_LIST_ACTION,
   SELECT_OFFER,
   SUBMIT_CLIENT_COMMAND,
@@ -160,6 +161,14 @@ const applyGlobalRemiseOrMinQt = payload => {
   };
 };
 
+const getDownloadOffresList = ({ offerId, callback, laboratoryName }) => {
+  console.log('offerId', offerId);
+  return {
+    type: PRINT_OFFRE_LIST_PDF,
+    payload: { offerId, callback, laboratoryName },
+  };
+};
+
 export {
   applyGlobalRemiseOrMinQt,
   toggleCheckAll,
@@ -187,4 +196,5 @@ export {
   loadArticleOfferSuccess,
   selectOffer,
   clearSelectedOffer,
+  getDownloadOffresList,
 };

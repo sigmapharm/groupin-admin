@@ -16,7 +16,7 @@ import history from 'utils/history';
 import _ from 'lodash';
 import TableCell from '@material-ui/core/TableCell/TableCell';
 import TableRow from '@material-ui/core/TableRow/TableRow';
-import { deleteOffer, getOffreList } from './actions';
+import { deleteOffer, getDownloadOffresList, getOffreList } from './actions';
 import {
   makeSelectPage,
   makeSelectRowsPerPage,
@@ -44,6 +44,8 @@ import OffresListCards from './responsive/OffresListCards';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/light.css';
+import { saveAs } from 'file-saver';
+import moment from 'moment';
 
 // import { makeSelectoffreArticledtos } from '../App/selectors';
 
@@ -256,6 +258,28 @@ export class OffresList extends React.PureComponent {
       infoBarParams: {},
     });
 
+  handleOffreListPrint = (offerId, laboratoryName) => () => {
+    this.props.dispatch(
+      getDownloadOffresList({
+        offerId,
+        laboratoryName,
+        callback: (err, blob) => {
+          if (err) {
+            this.setState({
+              showInfoBar: true,
+              infoBarParams: {
+                title: " La génération du pdf à échoué merci de contacter l'administrateur",
+              },
+            });
+          } else {
+            const pdfBlob = new Blob([blob], { type: blob.type });
+            saveAs(pdfBlob, `offreArticlesList-${offerId}`);
+          }
+        },
+      }),
+    );
+  };
+
   render() {
     const { rowsPerPage, page, showInfoBar, infoBarParams, cols } = this.state;
     // eslint-disable-next-line react/prop-types
@@ -269,7 +293,6 @@ export class OffresList extends React.PureComponent {
         <Typography component="h1" variant="h4" className={classes.root} style={{ overflow: 'hidden' }}>
           Liste des offres
         </Typography>
-        {/* <Divider variant="middle" className={classes.root} /> */}
 
         <OffresListSearch
           handleChange={this.handleChange}
@@ -277,7 +300,6 @@ export class OffresList extends React.PureComponent {
           handleSearchOffres={this.handleSearchOffres}
           designation={this.state.designation}
         />
-        {/* <Divider variant="middle" className={classes.root} /> */}
 
         <Typography component="h1" variant="h6" className={classes.root}>
           {totalElements} offres trouvés
@@ -313,6 +335,8 @@ export class OffresList extends React.PureComponent {
                       row={row}
                       offerArticles={this.props.offerArticles}
                       isMember={this.isMember}
+                      offresList={rows}
+                      handleOffreListPrint={this.handleOffreListPrint}
                     />
                   ))
                 ) : (
