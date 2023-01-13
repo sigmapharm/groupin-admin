@@ -4,6 +4,7 @@ import {
   ADD_ALERT,
   ALERT_LIST,
   CHANGE_ALERT_FORM_DATA,
+  FILL_INPUTS,
   GET_ACTIVE_ALERT,
   PUT_ACTIVE_ALERT,
   PUT_ALERT_LIST,
@@ -47,6 +48,12 @@ function reducer(state = initialState, action) {
     }
 
     case UPDATE_ALERT: {
+      return state.merge({
+        alertsList: action.payload || [],
+      });
+    }
+
+    case FILL_INPUTS: {
       return state.merge({
         alertsList: action.payload || [],
       });

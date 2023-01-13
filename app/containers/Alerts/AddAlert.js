@@ -16,7 +16,7 @@ import AddAlertForm from '../../components/addAlert/addAlertForm';
 import authenticated from '../HOC/authenticated/authenticated';
 import InfoBar from '../../components/Snackbar/InfoBar';
 import { makeSelectAlertsList, makeSelectgetActiveAlert } from './selectors';
-import { changeAlertdata, createAlert, updateALert } from './actions';
+import { changeAlertdata, createAlert, fillALertInputs, updateALert } from './actions';
 // import { formatCityToLabelValue } from './utils';
 
 const styles = theme => ({
@@ -83,7 +83,7 @@ export class AddLaboratoire extends React.PureComponent {
 
     this.setState({ alertId });
 
-    this.props.dispatch(createAlert(this.props.activeAlert));
+    this.props.dispatch(fillALertInputs(this.props.activeAlert));
   }
 
   // TODO : debounce event handler later
@@ -99,7 +99,7 @@ export class AddLaboratoire extends React.PureComponent {
       );
       return;
     }
-    console.log(v);
+
     this.props.dispatch(
       changeAlertdata({
         [v]: e.value,

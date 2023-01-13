@@ -5,6 +5,8 @@ export const PUT_ALERT_LIST = 'ALERT/PUT_LIST';
 export const GET_ACTIVE_ALERT = 'ALERT/GET_ACTIVE_ALERT';
 export const PUT_ACTIVE_ALERT = 'ALERT/PUT_ACTIVE_ALERT';
 export const UPDATE_ALERT = 'ALERT/UPDATE_ALERT';
+export const FILL_INPUTS = 'ALERT/FILL_INPUTS';
+
 export const createAlert = payload => ({
   type: ADD_ALERT,
   payload,
@@ -37,5 +39,10 @@ export const putActiveALert = payload => ({
 
 export const updateALert = payload => ({
   type: UPDATE_ALERT,
+  payload,
+});
+
+export const fillALertInputs = payload => ({
+  type: FILL_INPUTS,
   payload,
 });
