@@ -142,7 +142,7 @@ class AddAlert extends React.Component {
                   return (
                     <TableRow key={row.id}>
                       <TableCell>{row.alert_type}</TableCell>
-                      <TableCell>{row._active ? 'active' : 'inactive'}</TableCell>
+                      <TableCell>{row.is_active ? 'active' : 'inactive'}</TableCell>
                       <TableCell>{row.message}</TableCell>
                       <TableCell>{moment(row.date_start).format('DD-MM-YYYY')}</TableCell>
                       <TableCell>{moment(row.date_end).format('DD-MM-YYYY')}</TableCell>

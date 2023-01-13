@@ -160,7 +160,7 @@ class Header extends React.Component {
           >
             {AlertTheme[activeAlert.alert_type].svg}
 
-            <span style={{ marginLeft: 10 }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, doloribus.</span>
+            <span style={{ marginLeft: 10 }}> {activeAlert.message} </span>
           </div>
         ) : null}
 
