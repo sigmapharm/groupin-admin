@@ -144,7 +144,7 @@ class Header extends React.Component {
 
     return (
       <>
-        {activeAlert && activeAlert.message && role === 'MEMBRE' ? (
+        {activeAlert && activeAlert.is_active && role === 'MEMBRE' ? (
           <div
             style={{
               width: '100%',
