@@ -25,8 +25,68 @@ import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import history from 'utils/history';
+import { makeSelectgetActiveAlert } from '../Alerts/selectors';
+import { getActiveAlert } from '../Alerts/actions';
 
 //anchorEl: null,
+
+const InfoSvg = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.5"
+    stroke="#fff"
+    style={{ width: 30, height: 30 }}
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
+    />
+  </svg>
+);
+
+const WArnningSvg = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="#fff"
+    style={{ width: 30, height: 30 }}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+    />
+  </svg>
+);
+
+const DangerSvg = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="#fff"
+    style={{ width: 30, height: 30 }}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+    />
+  </svg>
+);
+
+const AlertTheme = {
+  WARNNING: { color: '#d97706', backgroundColor: '#fffbeb', svg: WArnningSvg },
+  INFO: { color: '#0369a1', backgroundColor: '#f0f9ff', svg: InfoSvg },
+  DANGER: { color: '#b91c1c', backgroundColor: '#fef2f2', svg: DangerSvg },
+};
+
 class Header extends React.Component {
   state = { darwerVisible: false, profileMenu: false, open: false };
 
@@ -72,78 +132,104 @@ class Header extends React.Component {
     this.setState({ open: false });
   };
 
+  componentDidMount() {
+    this.props.dispatch(getActiveAlert());
+  }
+
   render() {
-    const { user, classes, position, width } = this.props;
+    const { user, classes, position, width, activeAlert } = this.props;
     const { username, role, region } = user || {};
     const { open } = this.state;
     const isSmallDevice = isWidthDown('md', width);
 
     return (
-      <AppBar className={classes.container} position={position}>
-        <Toolbar className={classes.toolbar}>
-          <div>
-            {isSmallDevice && user.username ? (
-              <IconButton className={classes.menuButton} color="inherit" onClick={this.toggleDrawer}>
-                <MenuIcon />
-              </IconButton>
-            ) : null}
-            <img alt="logo" src={logo} style={{ width: '90px', cursor: 'pointer' }} onClick={() => history.push('/')} />
+      <>
+        {activeAlert && activeAlert.message && role === 'MEMBRE' ? (
+          <div
+            style={{
+              width: '100%',
+              height: '40px',
+              backgroundColor: AlertTheme[activeAlert.alert_type].backgroundColor,
+              color: AlertTheme[activeAlert.alert_type].color,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontSize: '19px',
+              borderBottom: '1.5px solid #0369a1',
+            }}
+          >
+            {AlertTheme[activeAlert.alert_type].svg}
+
+            <span style={{ marginLeft: 10 }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, doloribus.</span>
           </div>
+        ) : null}
 
-          {isSmallDevice ? <SideBar visibale={this.state.darwerVisible} toggle={this.toggleDrawer} /> : <MyMenu user={user} />}
+        <AppBar className={classes.container} position={position}>
+          <Toolbar className={classes.toolbar}>
+            <div>
+              {isSmallDevice && user.username ? (
+                <IconButton className={classes.menuButton} color="inherit" onClick={this.toggleDrawer}>
+                  <MenuIcon />
+                </IconButton>
+              ) : null}
+              <img alt="logo" src={logo} style={{ width: '90px', cursor: 'pointer' }} onClick={() => history.push('/')} />
+            </div>
 
-          {user.username && (
-            <>
-              <IconButton
-                aria-owns={open ? 'menu-appbar' : undefined}
-                aria-haspopup="true"
-                color="inherit"
-                style={{ marginLeft: 'auto' }}
-                buttonRef={node => {
-                  this.anchorEl = node;
-                }}
-                onClick={this.handleToggle}
-              >
-                <AccountCircle height={32} width={32} />
-              </IconButton>
-              <Popper open={open} anchorEl={this.anchorEl} transition placement="bottom-end">
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    id="menu-list-grow"
-                    style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                  >
-                    <Paper className={classes.menuContainer} style={{ zIndex: 100 }}>
-                      <ClickAwayListener onClickAway={this.handleClose}>
-                        <MenuList>
-                          <Typography className={classes.textMenu}>{username}</Typography>
-                          <Divider />
-                          <Typography className={classes.textMenu} style={{ textTransform: 'lowercase' }}>
-                            {role}
-                          </Typography>
-                          <Divider />
-                          <MenuItem onClick={this.handleProfileLinkClick}>
-                            <ListItemIcon>
-                              <Person />
-                            </ListItemIcon>
-                            <Typography>Profile</Typography>
-                          </MenuItem>
-                          <MenuItem onClick={this.handleLogout}>
-                            <ListItemIcon>
-                              <LogoutIcon />
-                            </ListItemIcon>
-                            <Typography> Deconnecter </Typography>
-                          </MenuItem>
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
-            </>
-          )}
-        </Toolbar>
-      </AppBar>
+            {isSmallDevice ? <SideBar visibale={this.state.darwerVisible} toggle={this.toggleDrawer} /> : <MyMenu user={user} />}
+
+            {user.username && (
+              <>
+                <IconButton
+                  aria-owns={open ? 'menu-appbar' : undefined}
+                  aria-haspopup="true"
+                  color="inherit"
+                  style={{ marginLeft: 'auto' }}
+                  buttonRef={node => {
+                    this.anchorEl = node;
+                  }}
+                  onClick={this.handleToggle}
+                >
+                  <AccountCircle height={32} width={32} />
+                </IconButton>
+                <Popper open={open} anchorEl={this.anchorEl} transition placement="bottom-end">
+                  {({ TransitionProps, placement }) => (
+                    <Grow
+                      {...TransitionProps}
+                      id="menu-list-grow"
+                      style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+                    >
+                      <Paper className={classes.menuContainer} style={{ zIndex: 100 }}>
+                        <ClickAwayListener onClickAway={this.handleClose}>
+                          <MenuList>
+                            <Typography className={classes.textMenu}>{username}</Typography>
+                            <Divider />
+                            <Typography className={classes.textMenu} style={{ textTransform: 'lowercase' }}>
+                              {role}
+                            </Typography>
+                            <Divider />
+                            <MenuItem onClick={this.handleProfileLinkClick}>
+                              <ListItemIcon>
+                                <Person />
+                              </ListItemIcon>
+                              <Typography>Profile</Typography>
+                            </MenuItem>
+                            <MenuItem onClick={this.handleLogout}>
+                              <ListItemIcon>
+                                <LogoutIcon />
+                              </ListItemIcon>
+                              <Typography> Deconnecter </Typography>
+                            </MenuItem>
+                          </MenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </Grow>
+                  )}
+                </Popper>
+              </>
+            )}
+          </Toolbar>
+        </AppBar>
+      </>
     );
   }
 }
@@ -190,6 +276,7 @@ const mapDispatchToProps = dispatch => ({
 });
 const mapStateToProps = createStructuredSelector({
   user: makeSelectUser(),
+  activeAlert: makeSelectgetActiveAlert(),
 });
 
 const withConnect = connect(

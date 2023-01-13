@@ -261,7 +261,11 @@ function* downloadOffreListPdfWorker({ payload: { offerId, callback, laboratoryN
   };
   yield networking(function*() {
     try {
-      const blob = yield requestWithAuth(`/offres/printOffreData/${offerId}?laboratoryName=${laboratoryName}`, options, true);
+      const blob = yield requestWithAuth(
+        `/offres/printOffreData/${offerId}?laboratoryName=${laboratoryName}&size=99999`,
+        options,
+        true,
+      );
       yield callback && callback(null, blob);
     } catch (e) {
       yield callback && callback(e);

@@ -34,6 +34,7 @@ import 'tippy.js/dist/tippy.css';
 import GROUPIN from '../../images/logo-color.png';
 import { NumberFormat } from 'intl';
 import { formatNumber } from '../../utils/formatNumber';
+import AdsCard from '../../components/AdsCard';
 
 const LabosImg = {
   BAYER,
@@ -81,65 +82,73 @@ const OffersHome = ({ classes, dispatch, offresList, history }) => {
       </Typography>
       <div className={classes.cards}>
         {offresList.content &&
-          offresList.content.map(offre => (
-            <div key={offre.id} className={classes.card} onClick={handleClick.bind(this, offre)}>
-              <img
-                src={
-                  LabosImg[offre.laboratoryName.split(' ').join('')]
-                    ? LabosImg[offre.laboratoryName.split(' ').join('')]
-                    : GROUPIN
-                }
-                className={classes.image}
-                alt={offre.laboratoryName}
-              />
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <h4 style={{ fontSize: '15px' }}>{offre.laboratoryName}</h4>
-                <span style={{ margin: '0 5px', fontSize: '15px' }}>-</span>
-                <span className={classes.date}>{moment(offre.dateDebut).format('YYYY MMMM')}</span>
-              </div>
+          offresList.content.map((offre, index) => {
+            // if (index === 3) {
+            //   return <AdsCard />;
+            // }
 
-              <Tooltip content={offre.designation} placement="top" arrow>
-                <div style={{ fontSize: 13, display: 'flex' }}>
-                  <InfoOutlined style={{ marginRight: 5 }} />
-                  <span style={{ paddingTop: 3 }}>{offre.designation ? offre.designation.slice(0, 20) + ' ...' : null}</span>{' '}
+            return (
+              <div key={offre.id} className={classes.card} onClick={handleClick.bind(this, offre)}>
+                <img
+                  src={
+                    LabosImg[offre.laboratoryName.split(' ').join('')]
+                      ? LabosImg[offre.laboratoryName.split(' ').join('')]
+                      : GROUPIN
+                  }
+                  className={classes.image}
+                  alt={offre.laboratoryName}
+                />
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <h4 style={{ fontSize: '15px' }}>{offre.laboratoryName}</h4>
+                  <span style={{ margin: '0 5px', fontSize: '15px' }}>-</span>
+                  <span className={classes.date}>{moment(offre.dateDebut).format('YYYY MMMM')}</span>
                 </div>
-              </Tooltip>
-              <div style={{ marginTop: 10, fontSize: 13, color: 'green' }}>
-                Min à commander : {offre.minToOrder ? formatNumber.format(offre.minToOrder) : '-'}
-              </div>
-              <Countdown
-                date={Date.now() + moment(offre.dateFin).diff(new Date())}
-                intervalDelay={0}
-                precision={3}
-                renderer={({ days, hours, seconds, minutes }) => (
-                  <div className={classes.timer_container}>
-                    <div className={classes.timer_item}>
-                      <h5 className={classes.timer_title}>Days</h5>
-                      <h5 className={classes.timer_value}>{days}</h5>
-                    </div>
-                    <div className={classes.timer_item}>
-                      <h5 className={classes.timer_title}>Hours</h5>
-                      <h5 className={classes.timer_value}> {hours}</h5>
-                    </div>
-                    <div className={classes.timer_item}>
-                      <h5 className={classes.timer_title}>Minutes</h5>
-                      <h5 className={classes.timer_value}>{minutes}</h5>
-                    </div>
-                    <div className={classes.timer_item}>
-                      <h5 className={classes.timer_title}>Seconds</h5>
-                      <h5 className={classes.timer_value}>{seconds}</h5>
-                    </div>
+
+                <Tooltip content={offre.designation} placement="top" arrow>
+                  <div style={{ fontSize: 13, display: 'flex' }}>
+                    <InfoOutlined style={{ marginRight: 5 }} />
+                    <span style={{ paddingTop: 3 }}>
+                      {offre.designation ? offre.designation.slice(0, 20) + ' ...' : null}
+                    </span>{' '}
                   </div>
-                )}
-              />
-            </div>
-          ))}
+                </Tooltip>
+                <div style={{ marginTop: 10, fontSize: 13, color: 'green' }}>
+                  Min à commander : {offre.minToOrder ? formatNumber.format(offre.minToOrder) : '-'}
+                </div>
+                <Countdown
+                  date={Date.now() + moment(offre.dateFin).diff(new Date())}
+                  intervalDelay={0}
+                  precision={3}
+                  renderer={({ days, hours, seconds, minutes }) => (
+                    <div className={classes.timer_container}>
+                      <div className={classes.timer_item}>
+                        <h5 className={classes.timer_title}>Days</h5>
+                        <h5 className={classes.timer_value}>{days}</h5>
+                      </div>
+                      <div className={classes.timer_item}>
+                        <h5 className={classes.timer_title}>Hours</h5>
+                        <h5 className={classes.timer_value}> {hours}</h5>
+                      </div>
+                      <div className={classes.timer_item}>
+                        <h5 className={classes.timer_title}>Minutes</h5>
+                        <h5 className={classes.timer_value}>{minutes}</h5>
+                      </div>
+                      <div className={classes.timer_item}>
+                        <h5 className={classes.timer_title}>Seconds</h5>
+                        <h5 className={classes.timer_value}>{seconds}</h5>
+                      </div>
+                    </div>
+                  )}
+                />
+              </div>
+            );
+          })}
       </div>
     </div>
   );

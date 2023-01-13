@@ -14,7 +14,7 @@ import StateSaga from 'containers/statistiques/saga';
 import pharmacieSaga from 'containers/Pharmacies/saga';
 import providerSagas from 'containers/Providers/saga';
 import laboratoireSaga from 'containers/laboratoires/saga';
-
+import alertSaga from 'containers/Alerts/saga';
 export default [
   loginSagas,
   appSagas,
@@ -32,4 +32,5 @@ export default [
   pharmacieSaga,
   providerSagas,
   laboratoireSaga,
+  alertSaga,
 ];

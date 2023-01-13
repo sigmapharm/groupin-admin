@@ -4,6 +4,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { withStyles } from '@material-ui/core';
+import history from 'utils/history';
 
 export class LaboratoireListTableHeader extends React.PureComponent {
   constructor(props) {

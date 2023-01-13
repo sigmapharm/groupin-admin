@@ -7,8 +7,6 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { getConfiguration, getRegions } from './actions';
-import { selectRegions } from './selectors';
-import { createStructuredSelector } from 'reselect';
 
 const ListArticles = React.lazy(() => import('../Articles/ListArticles'));
 const AddArticle = React.lazy(() => import('../Articles/add/index'));
@@ -29,7 +27,8 @@ const ListProviders = React.lazy(() => import('../Providers/ListProviders'));
 const AddProvider = React.lazy(() => import('../Providers/add/index'));
 const ListLaboratoires = React.lazy(() => import('../Laboratoires/ListLaboratoires'));
 const AddLaboratoire = React.lazy(() => import('../Laboratoires/add/index'));
-
+const Alert = React.lazy(() => import('../Alerts'));
+const AddAlert = React.lazy(() => import('../Alerts/AddAlert'));
 class InternalApp extends React.PureComponent {
   componentWillMount() {
     this.props.dispatch(getConfiguration());
@@ -58,7 +57,6 @@ class InternalApp extends React.PureComponent {
           <Route exact path="/commands" component={Commands} />
           <Route exact path="/statistiques" component={statistiques} />
           <Route exact path="/reporting" component={Reporting} />
-          {/* <Route exact path="/pharmacies/add" component={AddPharmacie} /> */}
           <Route exact path="/pharmacies/edit/:pharmacyId" component={AddPharmacie} />
           <Route exact path="/pharmacies" component={ListPharmacies} />
           <Route exact path="/provider" component={ListProviders} />
@@ -67,7 +65,8 @@ class InternalApp extends React.PureComponent {
           <Route exact path="/laboratoires" component={ListLaboratoires} />
           <Route exact path="/laboratoires/add" component={AddLaboratoire} />
           <Route exact path="/laboratoires/edit/:laboratoryId" component={AddLaboratoire} />
-
+          <Route exact path="/alerts" component={Alert} />
+          <Route exact path="/alerts/:alertId" component={AddAlert} />
           <Route
             exact
             path="/offres/:offerId/commands"

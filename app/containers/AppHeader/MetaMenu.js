@@ -67,6 +67,12 @@ export const dropDownMenuList = [
     link: '/provider',
     allowedRoles: [ADMIN, SUPER_ADMIN],
   },
+  {
+    key: 9,
+    label: 'Alert',
+    link: '/alerts',
+    allowedRoles: [ADMIN, SUPER_ADMIN],
+  },
 ];
 
 export const mobileMenu = [
