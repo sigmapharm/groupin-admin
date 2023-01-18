@@ -8,6 +8,7 @@ import { getProfile, resetPassword } from '../Users/actions';
 import { makeSelectUserProfile } from '../Users/selectors';
 import ProfileCard from './ProfileCard';
 import Raccoucis from './Raccoucis';
+import AdsCard from '../../components/AdsCard';
 
 const Profile = ({ classes, userProfil, dispatch }) => {
   const [restPasswordMessage, setRestPasswordMessage] = useState({
@@ -49,6 +50,9 @@ const Profile = ({ classes, userProfil, dispatch }) => {
           </Grid>
           <Grid lg={4} md={12} sm={12} xs={12} item>
             <Raccoucis handleRestPassword={handleRestPassword} />
+            <div style={{ marginTop: 10 }}>
+              <AdsCard />
+            </div>
           </Grid>
         </Grid>
       </div>

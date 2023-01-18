@@ -13,7 +13,7 @@ import Countdown from 'react-countdown';
 import Tooltip from '@tippyjs/react';
 
 // images
-
+import 'tippy.js/dist/tippy.css';
 import BAYER from '../../images/labos/BAYER.png';
 import BLEDINA from '../../images/labos/BLEDINA.png';
 import GALENICA from '../../images/labos/GALENICA.png';
@@ -29,7 +29,26 @@ import POLYMEDIC from '../../images/labos/POLYMEDIC.png';
 import PROMOPHARM from '../../images/labos/PROMOPHARM.jpeg';
 import SANOFI from '../../images/labos/SANOFI.jpeg';
 import ZENITH from '../../images/labos/ZENITH.png';
-import 'tippy.js/dist/tippy.css';
+import ABBOTT from '../../images/labos/ABBOTT.png';
+import BOTTU from '../../images/labos/BOTTU.png';
+import CANPOLBABIES from '../../images/labos/CANPOL BABIES.png';
+import GILBERT from '../../images/labos/GILBERT.png';
+import HEALTHINNOVATION from '../../images/labos/HEALTH INNOVATION.png';
+import LAPROPHAN from '../../images/labos/LAPROPHAN.png';
+import MAPHAR from '../../images/labos/MAPHAR.png';
+import MCPHARMA from '../../images/labos/MC PHARMA.png';
+import NUBY from '../../images/labos/NUBY.png';
+import ORALB from '../../images/labos/ORAL-B.png';
+import PFIZER from '../../images/labos/PFIZER.png';
+import PHARMADOUCE from '../../images/labos/PHARMA DOUCE.png';
+import PHARMAGLOBE from '../../images/labos/PHARMAGLOBE.png';
+import PHARMENA from '../../images/labos/PHARMENA.png';
+import RIMPHARMA from '../../images/labos/RIMPHARMA.png';
+import SOTHEMA from '../../images/labos/SOTHEMA.png';
+import SPIMACO from '../../images/labos/SPIMACO.png';
+import SUNPHARMA from '../../images/labos/SUNPHARMA.png';
+import ZAYTI from '../../images/labos/ZAYTI.png';
+import ZIAJA from '../../images/labos/ZIAJA.png';
 
 import GROUPIN from '../../images/logo-color.png';
 import { NumberFormat } from 'intl';
@@ -52,6 +71,26 @@ const LabosImg = {
   PROMOPHARM,
   SANOFI,
   ZENITH,
+  ABBOTT,
+  BOTTU,
+  CANPOLBABIES,
+  GILBERT,
+  HEALTHINNOVATION,
+  LAPROPHAN,
+  MAPHAR,
+  MCPHARMA,
+  NUBY,
+  ['ORAL-B']: ORALB,
+  PFIZER,
+  PHARMADOUCE,
+  PHARMAGLOBE,
+  PHARMENA,
+  RIMPHARMA,
+  SOTHEMA,
+  SPIMACO,
+  SUNPHARMA,
+  ZAYTI,
+  ZIAJA,
 };
 
 const params = {
@@ -83,9 +122,9 @@ const OffersHome = ({ classes, dispatch, offresList, history }) => {
       <div className={classes.cards}>
         {offresList.content &&
           offresList.content.map((offre, index) => {
-            // if (index === 3) {
-            //   return <AdsCard />;
-            // }
+            if (index === 3) {
+              return <AdsCard />;
+            }
 
             return (
               <div key={offre.id} className={classes.card} onClick={handleClick.bind(this, offre)}>

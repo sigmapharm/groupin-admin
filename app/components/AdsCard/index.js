@@ -1,11 +1,13 @@
 import { withStyles } from '@material-ui/core';
 import React from 'react';
 import { compose } from 'redux';
+import AdsImage from '../../images/groupin.png';
 
 const AdsCard = ({ classes }) => {
   return (
     <div className={classes.card}>
-      <div className={classes.ads}>ads</div>
+      <div className={classes.ads}>GroupIn ads</div>
+      <img src={AdsImage} className={classes.img} />
     </div>
   );
 };
@@ -50,7 +52,11 @@ const styles = theme => ({
     top: 0,
     left: 0,
     padding: 5,
-    border: '1px solid black',
+    fontSize: 12,
+    textDecoration: 'underline',
+  },
+  img: {
+    width: '100%',
   },
 });
 

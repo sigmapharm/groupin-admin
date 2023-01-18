@@ -13,6 +13,7 @@ import BarChart from './charts/BarChart';
 import SmallCard from './SmallCard';
 import { formatNumber } from '../../utils/formatNumber';
 import _ from 'lodash';
+import AdsCard from '../../components/AdsCard';
 
 const Member = ({ classes, dispatch, statistics, userRole }) => {
   useEffect(() => {
@@ -45,6 +46,9 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
               <div style={{ marginBottom: '10px' }} />
               <SmallCard title="Total gain" backgroundColor="#FED674" value={formatNumber.format(statistics.totalRemise)} />
               <div style={{ marginBottom: '10px' }} />
+              <div style={{ marginTop: 10 }}>
+                <AdsCard />
+              </div>
             </div>
           </Grid>
           <Grid item lg={6} md={12} sm={12} xs={12}>
@@ -104,6 +108,9 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
                   // },
                 ]}
               />
+              <div style={{ marginTop: 10 }}>
+                <AdsCard />
+              </div>
             </div>
           </Grid>
         </Grid>
