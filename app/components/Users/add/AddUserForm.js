@@ -11,7 +11,6 @@ import Button from '@material-ui/core/Button';
 import PersonalInfo from './PersonalInfo';
 import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
 import ErrorsArea from '../../ErrorsArea';
-import { AddPharmacieContainer } from '../../../containers/Pharmacie/add';
 
 const styles = theme => ({
   root: {
@@ -51,11 +50,6 @@ const styles = theme => ({
   inputs: {
     maxWidth: '350px',
   },
-  // selectPharmacieContainer: {
-  //   maxWidth: '360px',
-  //   display: 'inline-flex',
-  //   textAlign: 'center',
-  // },
 
   buttons: {
     marginLeft: '1%',
@@ -73,12 +67,13 @@ export function AddUserForm(props) {
     pharmacies,
     formData,
     handleFormDataChange,
-    handlePharmacieSelectChange,
-    handleAddPharmacieClick,
     handleSubmit,
     handleAnuler,
     disbaleButton,
     regions,
+    handleLaboModeChage,
+    labos,
+    isLaboAddMode,
   } = props;
   return (
     <Paper className={classes.paper}>
@@ -108,17 +103,39 @@ export function AddUserForm(props) {
           <SingleAutoCompleteSelect
             className={classes.select}
             name="role"
-            options={[{ label: 'SUPER ADMIN', value: 'SUPER_ADMIN' }, { label: 'UTILISATEUR', value: 'MEMBRE' }]}
+            options={[
+              { label: 'SUPER ADMIN', value: 'SUPER_ADMIN' },
+              { label: 'UTILISATEUR', value: 'MEMBRE' },
+              { label: 'LABORATOIRE', value: 'LABO_MEMBRE' },
+            ]}
             onChange={value => {
               handleFormDataChange({
                 target: { name: 'role', value },
               });
+              handleLaboModeChage(value.value);
             }}
             value={formData.value}
             placeholder="Role"
             isClearable
           />
         </Grid>
+        {isLaboAddMode && (
+          <Grid xs={12} md={6} item>
+            <SingleAutoCompleteSelect
+              className={classes.select}
+              name="laboratories"
+              options={labos}
+              onChange={value => {
+                handleFormDataChange({
+                  target: { name: 'laboId', value: value.value },
+                });
+              }}
+              value={formData.value}
+              placeholder="laboratories"
+              isClearable
+            />
+          </Grid>
+        )}
         {/* <Grid className={classes.selectPharmacieContainer} xs={12} md={6} item>
           <SingleAutoCompleteSelect
             className={classes.select}

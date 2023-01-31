@@ -46,9 +46,9 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
               <div style={{ marginBottom: '10px' }} />
               <SmallCard title="Total gain" backgroundColor="#FED674" value={formatNumber.format(statistics.totalRemise)} />
               <div style={{ marginBottom: '10px' }} />
-              <div style={{ marginTop: 10 }}>
+              {/* <div style={{ marginTop: 10 }}>
                 <AdsCard />
-              </div>
+              </div> */}
             </div>
           </Grid>
           <Grid item lg={6} md={12} sm={12} xs={12}>
@@ -108,9 +108,9 @@ const Member = ({ classes, dispatch, statistics, userRole }) => {
                   // },
                 ]}
               />
-              <div style={{ marginTop: 10 }}>
+              {/* <div style={{ marginTop: 10 }}>
                 <AdsCard />
-              </div>
+              </div> */}
             </div>
           </Grid>
         </Grid>

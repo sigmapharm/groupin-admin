@@ -122,9 +122,9 @@ const OffersHome = ({ classes, dispatch, offresList, history }) => {
       <div className={classes.cards}>
         {offresList.content &&
           offresList.content.map((offre, index) => {
-            if (index === 3) {
-              return <AdsCard />;
-            }
+            // if (index === 3) {
+            //   return <AdsCard />;
+            // }
 
             return (
               <div key={offre.id} className={classes.card} onClick={handleClick.bind(this, offre)}>

@@ -65,7 +65,7 @@ const CommandListCards = ({
         {commandsList.map(command => {
           const startDate = new Date(command.dateDebut);
           const endDate = new Date(command.dateFin);
-
+          console.log('command', command);
           const totalDays = moment(endDate).diff(startDate, 'days');
           const elapsedDays = moment(new Date()).diff(startDate, 'days');
           let progress = _.round((elapsedDays / totalDays) * 100, 2);
@@ -87,9 +87,11 @@ const CommandListCards = ({
 
                 <div style={{ display: 'flex' }}>
                   <Typography variant="h6" color="textSecondary" style={{ marginRight: '13px' }}>
-                    Date de debut :
+                    {command.dateDebut ? 'Date de debut' : 'Date Commande'}
                   </Typography>
-                  <Typography variant="h6">{moment(command.dateDebut).format('DD/MM/YYYY')}</Typography>
+                  <Typography variant="h6">
+                    {moment(command.dateDebut ? command.dateDebut : command.creationDate).format('DD/MM/YYYY')}
+                  </Typography>
                 </div>
 
                 <div style={{ display: 'flex' }}>

@@ -147,7 +147,7 @@ export class OffreListConsultation extends React.PureComponent {
       : true;
 
     // console.log(checkQuantity+"test"+checkRequried);
-    return !checkRequried;
+    return !checkRequried && checkQuantity;
   }
 
   get forAdmin() {

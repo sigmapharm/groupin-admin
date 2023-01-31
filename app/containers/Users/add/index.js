@@ -17,7 +17,7 @@ import history from 'utils/history';
 import authenticated from '../../HOC/authenticated/authenticated';
 import { validateFormData } from './validation';
 import { createUser } from '../actions';
-import { makeSelectPharmacies, selectCities } from '../../App/selectors';
+import { makeSelectLaboratoires, makeSelectPharmacies, selectCities } from '../../App/selectors';
 
 import { selectRegions } from '../../App/selectors';
 
@@ -73,6 +73,7 @@ const initialState = {
     gsm: '',
     ville: '',
     codePostal: '',
+    laboId: '',
     pharmacie: {
       denomination: '',
       adresse: '',
@@ -90,6 +91,7 @@ const initialState = {
     },
     role: '',
   },
+  isLaboAddMode: false,
   errors: {
     fields: {},
     messages: {},
@@ -141,7 +143,7 @@ export class AddUser extends React.PureComponent {
       });
       const formattedData = {
         ...formData,
-
+        isLaboAddMode: this.state.isLaboAddMode,
         ville: {
           id: formData.ville && formData.ville.value,
         },
@@ -234,14 +236,21 @@ export class AddUser extends React.PureComponent {
     });
   };
 
+  handleLaboModeChage = role => {
+    if (role === 'LABO_MEMBRE') {
+      this.setState({ isLaboAddMode: true });
+      return;
+    }
+    this.setState({ isLaboAddMode: false });
+  };
+
   render() {
     const { classes, pharmacies, cities, regions } = this.props;
     const { formData, errors, isSuccess } = this.state;
     const formattedPharmacies = pharmacies.map(formatPharmacieToLabelValue);
     const formattedCities = cities.map(formatCityToLabelValue);
     const formatedRegions = regions.map(formaRegionToLabelValue);
-
-    console.log('form', this.state.formData);
+    const formatedLabos = this.props.laboratoires.map(item => ({ label: item.nom, value: item.id }));
 
     return (
       <div className={classes.root}>
@@ -257,19 +266,24 @@ export class AddUser extends React.PureComponent {
             handleSubmit={this.handleSubmit}
             handleAddPharmacieClick={this.handleAddPharmacieOpen}
             handleAnuler={this.handleGoToUsersList}
-            disbaleButton
+            disbaleButton={!this.state.isLaboAddMode}
+            handleLaboModeChage={this.handleLaboModeChage}
+            labos={formatedLabos}
+            isLaboAddMode={this.state.isLaboAddMode}
           />
-          <Paper className={classes.gridContainer2}>
-            <AddPharmacieContainer
-              successCallback={this.handleAddPharmacieSuccess}
-              handleFormDataChange={this.handleFormDataChange}
-              handleState={this.setState}
-              formData={formData}
-              handleInputChange={this.handleInputChange}
-              handleSelectChange={this.handleSelectChange}
-              handleSubmit={this.handleSubmit}
-            />
-          </Paper>
+          {!this.state.isLaboAddMode && (
+            <Paper className={classes.gridContainer2}>
+              <AddPharmacieContainer
+                successCallback={this.handleAddPharmacieSuccess}
+                handleFormDataChange={this.handleFormDataChange}
+                handleState={this.setState}
+                formData={formData}
+                handleInputChange={this.handleInputChange}
+                handleSelectChange={this.handleSelectChange}
+                handleSubmit={this.handleSubmit}
+              />
+            </Paper>
+          )}
         </form>
         <Dialog
           maxWidth="lg"
@@ -318,6 +332,7 @@ const mapStateToProps = createStructuredSelector({
   pharmacies: makeSelectPharmacies(),
   cities: selectCities(),
   regions: selectRegions(),
+  laboratoires: makeSelectLaboratoires(),
 });
 
 const withConnect = connect(

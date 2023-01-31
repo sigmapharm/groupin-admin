@@ -15,6 +15,7 @@ const Profile = ({ classes, userProfil, dispatch }) => {
     title: '',
     visibale: false,
   });
+
   useEffect(() => {
     dispatch(getProfile(() => {}));
   }, []);
@@ -50,9 +51,9 @@ const Profile = ({ classes, userProfil, dispatch }) => {
           </Grid>
           <Grid lg={4} md={12} sm={12} xs={12} item>
             <Raccoucis handleRestPassword={handleRestPassword} />
-            <div style={{ marginTop: 10 }}>
+            {/* <div style={{ marginTop: 10 }}>
               <AdsCard />
-            </div>
+            </div> */}
           </Grid>
         </Grid>
       </div>

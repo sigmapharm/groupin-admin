@@ -88,6 +88,20 @@ function* getUserInfo(action) {
 
 function* addNewUserWorker(action) {
   const { payload, callback } = action;
+  const isLaboAddMode = payload.isLaboAddMode;
+  let pharma = {};
+  console.log('action', action, isLaboAddMode);
+
+  if (!isLaboAddMode) {
+    pharma = {
+      ...payload.pharmacie,
+      formeJuridique: payload.pharmacie.formeJuridique.value,
+      banque: payload.pharmacie.banque.value,
+      ville: { id: payload.pharmacie.ville.value },
+      region: { id: payload.pharmacie.region.value },
+    };
+  }
+
   const options = {
     method: 'POST',
     headers: {
@@ -96,19 +110,13 @@ function* addNewUserWorker(action) {
     body: JSON.stringify({
       ...{
         ...payload,
-        pharmacie: {
-          ...payload.pharmacie,
-          formeJuridique: payload.pharmacie.formeJuridique.value,
-          banque: payload.pharmacie.banque.value,
-          ville: { id: payload.pharmacie.ville.value },
-          region: { id: payload.pharmacie.region.value },
-        },
+        pharmacie: pharma,
       },
     }),
   };
   yield networking(function*() {
     try {
-      const res = yield requestWithAuth(ApiRoutes.USERS, options);
+      const res = yield requestWithAuth(isLaboAddMode ? '/users/add-laboUser' : ApiRoutes.USERS, options);
       yield put(manageCreateUserResponse(res, callback));
     } catch (e) {
       yield put(manageCreateUserResponse(e.response, callback));
