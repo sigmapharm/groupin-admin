@@ -4,8 +4,7 @@ import { put } from 'redux-saga/effects';
 import ApiPathService from '../api/ApiPathService';
 import AccessTokenStorage from '../security/AccessTokenStorage';
 import { resetUserInStore } from '../../containers/App/actions';
-export const post = (url, options) =>
-  request(url, { ...options, method: 'POST' });
+export const post = (url, options) => request(url, { ...options, method: 'POST' });
 
 export const checkStatus = async response => {
   if (response.status >= 200 && response.status < 300) {
@@ -19,7 +18,7 @@ export const checkStatus = async response => {
   return Promise.reject(error);
 };
 
-const request = function * (url, options) {
+const request = function*(url, options) {
   const baseApiPath = ApiPathService.getBasePath();
 
   try {
@@ -31,13 +30,16 @@ const request = function * (url, options) {
     if (e.status === 401) {
       AccessTokenStorage.clear();
       yield put(resetUserInStore());
-      yield history.push('/login');
+      if (!history.location.pathname.startsWith('/register')) {
+        history.push('/login');
+      }
+      // yield history.push('/login');
       return;
     }
     return yield Promise.reject(e);
   }
 };
-const requestBlob = function * (url, options) {
+const requestBlob = function*(url, options) {
   const baseApiPath = ApiPathService.getBasePath();
   try {
     return yield fetch(`${baseApiPath}${url}`, options)
@@ -47,7 +49,7 @@ const requestBlob = function * (url, options) {
     if (e.status === 401) {
       AccessTokenStorage.clear();
       yield put(resetUserInStore());
-      yield history.push('/login');
+      // yield history.push('/login');
       return;
     }
     return yield Promise.reject(e);

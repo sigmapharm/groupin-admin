@@ -5,7 +5,7 @@ import { createStructuredSelector } from 'reselect';
 import LoginForm from '../../components/LoginForm';
 import { submitLogin, getEmailAddress } from './actions';
 import { makeSelectLoginErrors, makeSelectLoginEmail } from './selectors';
-
+import history from 'utils/history';
 class SignIn extends React.PureComponent {
   constructor(props) {
     super(props);

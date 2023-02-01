@@ -97,12 +97,7 @@ export class RegisterPage extends React.PureComponent {
 
   render() {
     const { classes } = this.props;
-    const {
-      tokenValid,
-      tokenValidated,
-      password,
-      passwordConfirmation,
-    } = this.state;
+    const { tokenValid, tokenValidated, password, passwordConfirmation } = this.state;
     const isError = password !== passwordConfirmation;
     return (
       <div className={classes.container}>

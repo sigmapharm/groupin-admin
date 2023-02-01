@@ -10,7 +10,7 @@ const authenticated = WrappedComponent => {
     static WrappedComponent = WrappedComponent;
 
     componentWillMount = () => {
-      if (!AuthUtils.isAuthenticated()) {
+      if (!AuthUtils.isAuthenticated() && !history.location.pathname.startsWith('/register')) {
         history.push('/login');
       } else {
         this.props.dispatch(setUserInStore());
@@ -18,6 +18,7 @@ const authenticated = WrappedComponent => {
     };
 
     render() {
+      console.log(history);
       if (AuthUtils.isAuthenticated()) {
         return <WrappedComponent {...this.props} />;
       }

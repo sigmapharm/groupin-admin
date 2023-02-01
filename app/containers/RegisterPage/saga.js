@@ -19,7 +19,7 @@ function* verifyTokenWorker(action) {
     .then(res => res.json())
     .then(callback)
     .catch(e => {
-        alert(e); // eslint-disable-line
+      alert(e); // eslint-disable-line
       callback(false);
     });
 }
@@ -46,7 +46,7 @@ function* registerUserWorker(action) {
       callback();
     })
     .catch(e => {
-      callback(e)
+      callback(e);
     });
 }
 
@@ -58,10 +58,7 @@ function* manageVerifyTokenResponseWorker(action) {
 }
 
 function* registrationSaga() {
-  yield all([
-    takeLatest(VERIFY_TOKEN, verifyTokenWorker),
-    takeLatest(REGISTER_USER, registerUserWorker),
-  ]);
+  yield all([takeLatest(VERIFY_TOKEN, verifyTokenWorker), takeLatest(REGISTER_USER, registerUserWorker)]);
 }
 
 export default registrationSaga;
