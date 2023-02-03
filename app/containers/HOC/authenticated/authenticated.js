@@ -18,7 +18,6 @@ const authenticated = WrappedComponent => {
     };
 
     render() {
-      console.log(history);
       if (AuthUtils.isAuthenticated()) {
         return <WrappedComponent {...this.props} />;
       }

@@ -69,9 +69,9 @@ export function PersonalInfo(props) {
           error={!!errors[fields.email.name]}
           onChange={onChange}
           className={classes.userInputs}
-          inputProps={{
-            maxLength,
-          }}
+          // inputProps={{
+          //   maxLength,
+          // }}
           fullWidth
         />
       </Grid>
