@@ -7,7 +7,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import history from 'utils/history';
 import WithRoles from '../WithRoles';
-import { MetaMenu, mobileMenu } from './MetaMenu';
+import { mobileMenu } from './MetaMenu';
 
 const styles = {
   list: {

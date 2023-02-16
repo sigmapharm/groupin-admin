@@ -10,9 +10,6 @@ import { compose } from 'redux';
 import Divider from '@material-ui/core/Divider';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import Fab from '@material-ui/core/Fab';
-import history from 'utils/history';
-import AddIcon from '@material-ui/icons/Add';
 import _ from 'lodash';
 
 import { makeSelectPharmaciesList } from './selectors';

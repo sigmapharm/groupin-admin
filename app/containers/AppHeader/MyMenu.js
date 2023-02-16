@@ -12,6 +12,7 @@ import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/light.css';
 import { forwardRef } from 'react';
 import { ADMIN, SUPER_ADMIN } from './Roles';
+
 const onMenuItemClick = href => () => {
   if (href === '/offres' && history.location.search) {
     window.history.pushState({}, document.title, '/offres');

@@ -16,28 +16,23 @@ export const fields = {
     label: 'Link',
     validator: validators.stringNotBlank,
   },
-  is_active: {
-    name: 'is_active',
-    label: 'status',
+  content: {
+    name: 'content',
+    label: 'Content',
   },
-  message: {
-    name: 'message',
-    label: 'message',
+  start_from: {
+    name: 'startFrom',
+    label: 'Date début ',
     validator: validators.stringNotBlank,
   },
-  date_start: {
-    name: 'date_start',
-    label: 'date start',
+  end_at: {
+    name: 'endAt',
+    label: 'date fin',
     validator: validators.stringNotBlank,
   },
-  date_end: {
-    name: 'date_end',
-    label: 'date end',
-    validator: validators.stringNotBlank,
-  },
-  alert_type: {
-    name: 'alert_type',
-    label: 'alert type',
+  image: {
+    name: 'image',
+    label: 'Image',
     validator: validators.stringNotBlank,
   },
 };
@@ -46,7 +41,7 @@ const styles = () => ({
   laboInputs: {},
 });
 
-export function AddALert(props) {
+export function AddAdsData(props) {
   const { formData, errors, classes, onChange, maxLength } = props;
   const [alertType, setAlertType] = useState();
   const [status, setStatus] = useState();
@@ -62,14 +57,16 @@ export function AddALert(props) {
   //   [formData],
   // );
 
+  console.log(formData[fields.start_from.name]);
+
   return (
     <>
       <Grid xs={12} md={6} item>
         <TextField
-          name={fields.message.name}
-          label={fields.message.label}
-          value={formData[fields.message.name]}
-          error={!!errors[fields.message.name]}
+          name={fields.content.name}
+          label={fields.content.label}
+          value={formData[fields.content.name]}
+          error={!!errors[fields.content.name]}
           onChange={onChange}
           noValidate
           autoComplete="off"
@@ -79,10 +76,10 @@ export function AddALert(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <Input
-          name={fields.date_start.name}
-          label={fields.date_start.label}
-          value={moment(formData[fields.date_start.name]).format('YYYY-MM-DD') || ''}
-          error={!!errors[fields.date_start.name]}
+          name={fields.start_from.name}
+          label={fields.start_from.label}
+          value={moment(formData[fields.start_from.name]).format('YYYY-MM-DD') || ''}
+          error={!!errors[fields.start_from.name]}
           onChange={onChange}
           noValidate
           autoComplete="off"
@@ -93,36 +90,15 @@ export function AddALert(props) {
       </Grid>
       <Grid xs={12} md={6} item>
         <Input
-          name={fields.date_end.name}
-          label={fields.date_end.label}
-          value={moment(formData[fields.date_end.name]).format('YYYY-MM-DD') || ''}
-          error={!!errors[fields.date_end.name]}
+          name={fields.end_at.name}
+          label={fields.end_at.label}
+          value={moment(formData[fields.end_at.name]).format('YYYY-MM-DD') || ''}
+          error={!!errors[fields.end_at.name]}
           onChange={onChange}
           autoComplete="off"
           className={classes.laboInputs}
           fullWidth
           type="date"
-        />
-      </Grid>
-
-      <Grid xs={12} md={6} item>
-        <SingleAutoCompleteSelect
-          name={fields.alert_type.name}
-          label={fields.alert_type.label}
-          value={{ value: formData.alert_type, label: String(formData.alert_type).toLowerCase() }}
-          error={!!errors[fields.alert_type.name]}
-          onChange={value => {
-            onChange(value, fields.alert_type.name);
-            setAlertType(value);
-          }}
-          autoComplete="off"
-          className={classes.laboInputs}
-          fullWidth
-          options={[
-            { label: 'warnning', value: 'WARNNING' },
-            { label: 'info', value: 'INFO' },
-            { label: 'danger', value: 'DANGER' },
-          ]}
         />
       </Grid>
 
@@ -140,32 +116,31 @@ export function AddALert(props) {
         />
       </Grid>
       <Grid xs={12} md={6} item>
-        <SingleAutoCompleteSelect
-          name={fields.is_active.name}
-          label={fields.is_active.label}
-          value={status}
-          value={{ value: formData.is_active, label: formData.is_active ? 'active' : 'inactive' }}
-          error={!!errors[fields.is_active.name]}
-          onChange={value => {
-            onChange(value, fields.is_active.name);
-            setStatus(value);
+        <TextField
+          name={fields.image.name}
+          label={fields.image.label}
+          //   value={formData[fields.image.name] || ''}
+          error={!!errors[fields.image.name]}
+          onChange={e => {
+            onChange(e, null, true);
           }}
+          noValidate
           autoComplete="off"
           className={classes.laboInputs}
           fullWidth
-          options={[{ label: 'active', value: true }, { label: 'inactive', value: false }]}
+          type="file"
         />
       </Grid>
     </>
   );
 }
-AddALert.defaultProps = {};
+AddAdsData.defaultProps = {};
 
-AddALert.propTypes = {
+AddAdsData.propTypes = {
   formData: PropTypes.object.isRequired,
   errors: PropTypes.object,
   classes: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   maxLength: PropTypes.number.isRequired,
 };
-export default withStyles(styles)(AddALert);
+export default withStyles(styles)(AddAdsData);

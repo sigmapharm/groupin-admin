@@ -3,7 +3,7 @@ import { ADMIN, SUPER_ADMIN, MEMBRE } from './Roles';
 export const MetaMenu = [
   {
     key: 0,
-    label: 'Dashboard',
+    label: 'tableau de bord',
     link: '/dashboard',
     allowedRoles: [MEMBRE, ADMIN, SUPER_ADMIN],
   },
@@ -68,9 +68,15 @@ export const dropDownMenuList = [
     allowedRoles: [ADMIN, SUPER_ADMIN],
   },
   {
-    key: 9,
+    key: 11,
     label: 'Alert',
     link: '/alerts',
+    allowedRoles: [ADMIN, SUPER_ADMIN],
+  },
+  {
+    key: 12,
+    label: 'Ads',
+    link: '/ads',
     allowedRoles: [ADMIN, SUPER_ADMIN],
   },
 ];

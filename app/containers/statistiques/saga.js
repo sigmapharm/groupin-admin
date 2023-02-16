@@ -115,16 +115,14 @@ function* RegListWorker(action) {
 
 // print pharama
 
-function* printPharamaWorker({ payload: { callback } }) {
+function* printPharamaWorker({ payload: { callback, fromDate, toDate } }) {
   const options = {
     method: 'GET',
   };
 
-  console.log(callback);
-
   yield networking(function*() {
     try {
-      const res = yield requestWithAuth(`/pharmacies/print`, options, true);
+      const res = yield requestWithAuth(`/pharmacies/print?from=${fromDate}&to=${toDate}`, options, true);
       yield callback && callback(null, res);
     } catch (e) {
       yield callback && callback(e, null);
