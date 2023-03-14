@@ -158,7 +158,7 @@ export const components = {
 };
 
 function SingleAutoCompleteSelect(props) {
-  const { classes, className, theme, options, onChange, placeholder, value, style } = props;
+  const { classes, className, theme, options, onChange, placeholder, value, style, isMulti = false } = props;
 
   const selectStyles = {
     input: base => ({
@@ -174,6 +174,7 @@ function SingleAutoCompleteSelect(props) {
     <div className={classes.root} style={style}>
       <NoSsr>
         <Select
+          isMulti={isMulti}
           className={className}
           classes={classes}
           styles={selectStyles}

@@ -79,6 +79,18 @@ export const dropDownMenuList = [
     link: '/ads',
     allowedRoles: [ADMIN, SUPER_ADMIN],
   },
+  {
+    key: 13,
+    label: 'pharmacie analytique',
+    link: '/pharmacies/analytics',
+    allowedRoles: [ADMIN, SUPER_ADMIN],
+  },
+  {
+    key: 14,
+    label: 'labos analytique',
+    link: '/labos/analytics',
+    allowedRoles: [ADMIN, SUPER_ADMIN],
+  },
 ];
 
 export const mobileMenu = [

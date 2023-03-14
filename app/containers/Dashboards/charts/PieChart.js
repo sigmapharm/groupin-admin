@@ -1,7 +1,8 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { backgroundColor, borderColor } from './chartGlobalStyle';
-
+import * as _ from 'lodash';
+import { useMemo } from 'react';
 const PieChart = ({ data, labels, label }) => {
   const activite = {
     labels,
@@ -16,6 +17,13 @@ const PieChart = ({ data, labels, label }) => {
     ],
   };
 
+  const totalAmount = useMemo(
+    () => {
+      return _.sum(data, item => item.value);
+    },
+    [data],
+  );
+
   return (
     <Pie
       data={activite}
@@ -29,6 +37,14 @@ const PieChart = ({ data, labels, label }) => {
             text: label,
             padding: {
               bottom: 10,
+            },
+          },
+          tooltip: {
+            callbacks: {
+              title: (t, d) => {
+                console.log(t);
+                return t[0].label + ' ' + ((t[0].parsed / totalAmount) * 100).toFixed(2) + ' %';
+              },
             },
           },
         },

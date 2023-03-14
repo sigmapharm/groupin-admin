@@ -30,6 +30,10 @@ export const formDataInitialState = fromJS({
   montantMax: '',
   laboratoire: '',
   comment: '',
+  region: [],
+  city: [],
+  show_by: null,
+  pharmacy: [],
 });
 
 export const initialState = fromJS({
@@ -51,6 +55,10 @@ export const initialState = fromJS({
     laboratoire: '',
     comment: '',
     minToOrder: '',
+    region: [],
+    city: [],
+    show_by: null,
+    pharmacy: [],
   },
   selectedOffer: {},
   selectedAll: false,
@@ -64,7 +72,7 @@ function reducer(state = initialState, action) {
     case APPLY_GLOBAL_REMISE_OR_MIN_QT: {
       const articlesListlabo = state.get('articlesListlabo').toJS();
       const payload = action.payload;
-
+      console.log('payload from reducer', payload);
       return state.merge({
         articlesListlabo: articlesListlabo.map(({ selected, required, ...article }) => ({
           ...article,
@@ -173,7 +181,7 @@ function reducer(state = initialState, action) {
       const { index, selected, discount, minQuantity, required } = action.payload;
       const articlesListlabo = state.get('articlesListlabo').toJS();
       const item = articlesListlabo[index];
-      console.log('index', index);
+
       return state.merge({
         articlesListlabo: _.merge(articlesListlabo, {
           [index]: {

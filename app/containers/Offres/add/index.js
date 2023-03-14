@@ -25,7 +25,7 @@ import {
 import AddOffreForm from '../../../components/offres/add/AddOffreForm';
 import InfoBar from '../../../components/Snackbar/InfoBar';
 import { formatLaboratoireToLabelValue } from './utils';
-import { makeSelectLaboratoires } from '../../App/selectors';
+import { makeSelectLaboratoires, makeSelectPharmacies, selectRegions } from '../../App/selectors';
 import { getLaboArticlesList } from '../../App/actions';
 import { getSelectedAllValue, makeSelectarticlesListlabo, selectOfferFormData, selectOriginalOfferFormData } from '../selectors';
 
@@ -72,6 +72,10 @@ const initialState = {
     comment: '',
     globalDiscount: '',
     minToOrder: '',
+    region: [],
+    city: [],
+    show_by: null,
+    pharmacy: [],
   },
   globalMinQuantity: '',
   globalDiscountPerArticle: '',
@@ -240,6 +244,7 @@ export class AddOffre extends React.PureComponent {
   }
 
   onGlobalVarsChange = payload => {
+    console.log(payload);
     this.setState(payload);
   };
 
@@ -247,7 +252,7 @@ export class AddOffre extends React.PureComponent {
     console.log(key, keyPerArticle);
     const { dispatch } = this.props;
     const keyValue = _.get(this.state, key);
-    console.log(keyValue);
+    console.log('keyValue', keyValue);
     dispatch(applyGlobalRemiseOrMinQt({ [keyPerArticle]: keyValue }));
   };
 
@@ -262,6 +267,7 @@ export class AddOffre extends React.PureComponent {
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit}>
           <AddOffreForm
+            pharmacies={this.props.pharmacies}
             editMode={editMode}
             classes={classes}
             errors={errors}
@@ -279,6 +285,7 @@ export class AddOffre extends React.PureComponent {
             handleLaboratoireSelectChange={this.handleLaboratoireSelectChange}
             onCancel={this.handleGoToOffresList}
             labName={this.state.labName}
+            regions={this.props.regions}
           />
         </form>
         {isSuccess && (
@@ -312,6 +319,8 @@ const mapStateToProps = createStructuredSelector({
   offerFormData: selectOfferFormData(),
   originalOfferFormData: selectOriginalOfferFormData(),
   checkAllValue: getSelectedAllValue(),
+  regions: selectRegions(),
+  pharmacies: makeSelectPharmacies(),
 });
 
 const withConnect = connect(

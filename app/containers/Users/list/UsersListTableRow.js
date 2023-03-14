@@ -22,9 +22,9 @@ import { formatCityToLabelValue } from '../add/utils';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import FilterInputsList from '../../Reporting/inputsList/FilterInputsList';
-
+import { ShoppingCart } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
-import { getUserInfo } from '../actions';
+import { getUserCommandsList, getUserInfo } from '../actions';
 import { DropDown } from '../../../components/DropDown';
 import { Person, PersonOutline, Settings } from '@material-ui/icons';
 import { Button, ListItemIcon, MenuItem } from '@material-ui/core';
@@ -32,6 +32,8 @@ import { Button, ListItemIcon, MenuItem } from '@material-ui/core';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/light.css';
+import Table from '../../../components/Table';
+import moment from 'moment';
 
 const RowComponent = forwardRef((props, ref) => {
   return (
@@ -40,6 +42,14 @@ const RowComponent = forwardRef((props, ref) => {
     </IconButton>
   );
 });
+
+export const commandHeaders = [
+  { title: 'Date Command' },
+  { title: 'delai Livraison' },
+  { title: 'date de livraison' },
+  { title: 'total Amount Discount' },
+  { title: 'verified' },
+];
 
 const closeButton = { float: 'right' };
 
@@ -75,6 +85,8 @@ export class UsersListTableRow extends React.PureComponent {
       open: false,
       anchorEl: null,
       isTippyOpen: false,
+      showSubCommands: false,
+      subCommands: [],
     };
   }
 
@@ -173,19 +185,36 @@ export class UsersListTableRow extends React.PureComponent {
     });
   };
 
+  hanldeGetUserCommandes = userId => () => {
+    this.props.dispatch(
+      getUserCommandsList({
+        userId,
+        callback: (res, err) => {
+          this.setState({ subCommands: res, showSubCommands: true });
+        },
+      }),
+    );
+  };
+
+  closeSubCommandsModel = () => {
+    this.setState({ showSubCommands: false });
+  };
+
   render() {
     const { row, cities, regions } = this.props;
     const { editMode, detailsOpen } = this.state;
     return (
       <React.Fragment>
         <TableRow key={row.id}>
-          <TableCell component="th" scope="row">
+          <TableCell style={{ padding: 5 }} component="th" scope="row">
             {row.firstName} {row.lastName}
           </TableCell>
-          <TableCell>{row.email}</TableCell>
-          <TableCell>{row.pharmacy}</TableCell>
-          <TableCell>{row.role}</TableCell>
-          <TableCell>{row.lastCommad ? row.lastCommad.split('T')[0] : 'aucune commandes'}</TableCell>
+          <TableCell style={{ padding: 5 }}>{row.email}</TableCell>
+          <TableCell style={{ padding: 5 }}>{row.pharmacy}</TableCell>
+          <TableCell style={{ padding: 5 }}>{row.role}</TableCell>
+          <TableCell style={{ padding: 5 }}>{row.lastCommad ? row.lastCommad.split('T')[0] : 'aucune commandes'}</TableCell>
+          <TableCell style={{ padding: 0 }}>{row.quantityCmd}</TableCell>
+          <TableCell style={{ padding: 0 }}>{row.totalAmount ? row.totalAmount.toFixed(2) : null}</TableCell>
           <TableCell style={{ padding: 0, display: 'flex' }}>
             <Switch checked={row.enabled} onChange={this.toggle} value={row.enabled} color="primary" />
 
@@ -221,6 +250,12 @@ export class UsersListTableRow extends React.PureComponent {
                       <DeleteIcon color="primary" />
                     </ListItemIcon>
                     <Typography>Supprimer</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={this.hanldeGetUserCommandes(row.id)}>
+                    <ListItemIcon style={{ padding: 5 }}>
+                      <ShoppingCart color="primary" />
+                    </ListItemIcon>
+                    <Typography>Commands List</Typography>
                   </MenuItem>
                 </div>
               }
@@ -273,6 +308,29 @@ export class UsersListTableRow extends React.PureComponent {
             </MuiDialogContent>
           </Dialog>
         )}
+        <Dialog
+          title="List des commands associées"
+          open={this.state.showSubCommands}
+          showBtns={false}
+          onClose={this.closeSubCommandsModel}
+          maxWidth="lg"
+        >
+          <div>
+            <Table headers={commandHeaders} pageable={false}>
+              {this.state.subCommands.map(row => {
+                return (
+                  <TableRow key={row.commandId}>
+                    <TableCell>{row.createdAt ? moment(row.createdAt).format('YYYY/MM/DD') : '---------'}</TableCell>
+                    <TableCell>{row.delaiLivraison}</TableCell>
+                    <TableCell>{row.deliveredAt ? moment(row.deliveredAt).format('YYYY/MM/DD') : '-------------'}</TableCell>
+                    <TableCell>{row.totalAmountDiscount.toFixed(2)}</TableCell>
+                    <TableCell>{row.verified ? 'oui' : 'no'}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </Table>
+          </div>
+        </Dialog>
       </React.Fragment>
     );
   }

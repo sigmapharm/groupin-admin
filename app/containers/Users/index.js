@@ -74,6 +74,8 @@ export class UsersList extends React.PureComponent {
       nom: '',
       pharmacie: '',
       region: '',
+      from: '',
+      to: '',
       showInfoBar: false,
       infoBarParams: {},
       showPopConfirmation: false,
@@ -97,6 +99,7 @@ export class UsersList extends React.PureComponent {
           selected: false,
           order: 'asc',
         },
+
         {
           label: 'Role',
           colName: 'role',
@@ -104,8 +107,20 @@ export class UsersList extends React.PureComponent {
           order: 'asc',
         },
         {
-          label: 'dernière commande',
-          colName: 'lastCommand',
+          label: 'last Commade ',
+          colName: 'lastCommad',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'nbr de commandes',
+          colName: 'quantityCmd',
+          selected: false,
+          order: 'asc',
+        },
+        {
+          label: 'C.A',
+          colName: 'totalAmount',
           selected: false,
           order: 'desc',
         },
@@ -337,7 +352,7 @@ export class UsersList extends React.PureComponent {
                     </Tooltip>
                   </TableCell>
                 ))}
-                <TableCell style={{ color: '#fff' }}>Actions</TableCell>
+                <TableCell style={{ color: '#fff', padding: 5 }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

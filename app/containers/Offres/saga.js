@@ -187,16 +187,6 @@ function* addNewOffreWorker(action) {
     callback,
   } = action;
 
-  console.log(
-    offerArticledtos.map(({ selected, id, discount, minQuantity, required }) => ({
-      articleId: id,
-      discount,
-      selected: Boolean(discount > 0 && minQuantity),
-      required: Boolean(required),
-      minQuantity,
-    })),
-  );
-
   const options = {
     method: offerId ? 'PUT' : 'POST',
     headers: {

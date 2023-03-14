@@ -170,9 +170,6 @@ class AdsList extends React.Component {
             </TableBody>
           </Table>
         </Paper>
-        {/* <Fab color="primary" className={classes.addLaboratoiresButton} onClick={this.handleAdsAddClick}>
-          <AddIcon />
-        </Fab> */}
       </div>
     );
   }

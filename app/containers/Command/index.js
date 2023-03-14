@@ -122,6 +122,8 @@ class Command extends PureComponent {
         ville: '',
         // region :'',
         denomination: '',
+        from: '',
+        to: '',
       },
       showInfoBar: false,
       infoBarParams: {},

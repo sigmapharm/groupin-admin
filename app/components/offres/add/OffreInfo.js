@@ -95,17 +95,10 @@ export function OffreInfo(props) {
           />
         </Grid>
 
-        {/* <div style={{color: "red"}}>{dateD}</div> */}
-
         <Grid xs={12} md={6} item>
           <DateInput
             name={fields.dateFin.name}
-            // fields.dateDebut.label
             label={editMode ? dateF : fields.dateFin.label}
-            // disabled={disableAll}
-            // check to verify that start date < end date
-            // min={moment()
-            //   .add(2, 'day')
             min={moment()
               .add(0, 'day')
               .toDate()}

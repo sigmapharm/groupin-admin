@@ -13,8 +13,9 @@ import {
   TOGGLE_USER,
   GET_USER_INFO,
   EXPORT_USERS_CSV,
+  GET_COMMANDS_USER,
 } from './constants';
-import { manageCreateUserResponse, putUsersList, putUserProfile } from './actions';
+import { manageCreateUserResponse, putUsersList, putUserProfile, putUSerCommnadsList } from './actions';
 import requestWithAuth from '../../services/request/request-with-auth';
 import ApiRoutes from '../../core/ApiRoutes';
 import * as GlobalActions from '../App/actions';
@@ -29,13 +30,15 @@ function* usersListWorker(action) {
   };
   yield networking(function*() {
     try {
-      const { cols } = action.payload;
+      const { cols, from, to } = action.payload;
       const sortQuery = cols
         .filter(({ selected }) => selected)
         .reduce((acc, n) => acc.concat(`&sort=${n.colName},${n.order}`), '');
       const params = `?size=${action.payload.rowsPerPage}&page=${action.payload.page}&firstName=${
         action.payload.prenom
-      }&lastName=${action.payload.nom}&pharmacy=${action.payload.pharmacie}&region=${action.payload.region}${sortQuery}`;
+      }&lastName=${action.payload.nom}&pharmacy=${action.payload.pharmacie}&region=${
+        action.payload.region
+      }${sortQuery}&from=${from}&to=${to}`;
       const res = yield requestWithAuth(`/users${params}`, options);
       yield put(putUsersList(res));
       yield callback && callback();
@@ -249,6 +252,27 @@ function* restePasswordWorker(action) {
   });
 }
 
+function* getUserCommnadsList(action) {
+  const {
+    payload: { userId, callback },
+  } = action;
+
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  yield networking(function*() {
+    try {
+      const res = yield requestWithAuth(`${ApiRoutes.USERS}/commands/${userId}`, options);
+      yield callback && callback(res, null);
+    } catch (e) {
+      callback && callback([], e);
+    }
+  });
+}
+
 function* exportUsersCsvWorker(action) {
   const { callback } = action.payload;
   console.log('Saga reached');
@@ -286,6 +310,7 @@ function* usersListSagas() {
     takeLatest(GET_PROFILE, getProfileWorker),
     takeLatest(GET_USER_INFO, getUserInfo),
     takeLatest(EXPORT_USERS_CSV, exportUsersCsvWorker),
+    takeLatest(GET_COMMANDS_USER, getUserCommnadsList),
   ]);
 }
 

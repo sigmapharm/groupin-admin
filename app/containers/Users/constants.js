@@ -17,3 +17,7 @@ export const PUT_USER_PROFILE = 'app/users/PUT_USER_PROFILE';
 export const GET_USER_INFO = 'app/users/getInfo';
 export const EXPORT_USERS_CSV = 'app/users/export';
 export const PUT_USER_INFO = 'app/users/putInfo';
+
+export const GET_COMMANDS_USER = "app/users/GET_COMMANDS_USER'";
+
+export const PUT_COMMANDS_USER = "app/users/PUT_COMMANDS_USER'";

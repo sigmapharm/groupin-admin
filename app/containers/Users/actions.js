@@ -15,6 +15,8 @@ import {
   GET_USER_INFO,
   PUT_USER_INFO,
   EXPORT_USERS_CSV,
+  GET_COMMANDS_USER,
+  PUT_COMMANDS_USER,
 } from './constants';
 
 const getUsersList = (values, callback) => ({
@@ -110,6 +112,16 @@ export const exportUsersCsv = payload => ({
 
 export const putUserInfo = payload => ({
   type: PUT_USER_INFO,
+  payload,
+});
+
+export const getUserCommandsList = payload => ({
+  type: GET_COMMANDS_USER,
+  payload,
+});
+
+export const putUSerCommnadsList = payload => ({
+  type: PUT_COMMANDS_USER,
   payload,
 });
 

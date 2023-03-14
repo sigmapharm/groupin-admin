@@ -30,8 +30,6 @@ export const AticlesListTableRow = props => {
     [discount, minQuantity, isChecked],
   );
 
-  console.log('isOffreNotStart', isOffreNotStart);
-
   return (
     <TableRow key={row.id} style={discount && minQuantity ? { backgroundColor: '#4d609c70' } : {}}>
       <TableCell>{row.nom}</TableCell>

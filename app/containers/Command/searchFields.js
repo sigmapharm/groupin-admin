@@ -1,26 +1,38 @@
 export default dispatch => [
-  // {
-  //   name: 'offerName',
-  //   label: 'Offre désignation',
-  //   type: 'text',
-  //   onChange: ({ target: { name, value } }) => dispatch({ [name]: value }),
-  // },
-  // {
-  //   name: 'laboratoryName',
-  //   label: 'Laboratoire',
-  //   type: 'text',
-  //   onChange: ({ target: { name, value } }) => dispatch({ [name]: value }),
-  // },
   {
-    name: 'ville',
-    label: 'Ville',
+    name: 'offerName',
+    label: 'Offre désignation',
     type: 'text',
     onChange: ({ target: { name, value } }) => dispatch({ [name]: value }),
   },
   {
-    name: 'denomination',
-    label: 'Pharmacie',
+    name: 'laboratoryName',
+    label: 'Laboratoire',
     type: 'text',
+    onChange: ({ target: { name, value } }) => dispatch({ [name]: value }),
+  },
+  // {
+  //   name: 'ville',
+  //   label: 'Ville',
+  //   type: 'text',
+  //   onChange: ({ target: { name, value } }) => dispatch({ [name]: value }),
+  // },
+  // {
+  //   name: 'denomination',
+  //   label: 'Pharmacie',
+  //   type: 'text',
+  //   onChange: ({ target: { name, value } }) => dispatch({ [name]: value }),
+  // },
+  {
+    name: 'from',
+    label: 'From',
+    type: 'date',
+    onChange: ({ target: { name, value } }) => dispatch({ [name]: value }),
+  },
+  {
+    name: 'to',
+    label: 'To',
+    type: 'date',
     onChange: ({ target: { name, value } }) => dispatch({ [name]: value }),
   },
   // {

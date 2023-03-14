@@ -31,6 +31,8 @@ const Alert = React.lazy(() => import('../Alerts'));
 const AddAlert = React.lazy(() => import('../Alerts/AddAlert'));
 const AdsList = React.lazy(() => import('../Ads/index'));
 const AdsAdd = React.lazy(() => import('../Ads/AddAds'));
+const PharmaciesAnalayticsList = React.lazy(() => import('../AnalyticsList/index'));
+const LabosAnalayticsList = React.lazy(() => import('../AnalyticsList/LaboAnalytics'));
 class InternalApp extends React.PureComponent {
   componentWillMount() {
     this.props.dispatch(getConfiguration());
@@ -71,6 +73,8 @@ class InternalApp extends React.PureComponent {
           <Route exact path="/alerts/:alertId" component={AddAlert} />
           <Route exact path="/ads" component={AdsList} />
           <Route exact path="/ads/:id" component={AdsAdd} />
+          <Route exact path="/pharmacies/analytics" component={PharmaciesAnalayticsList} />
+          <Route exact path="/labos/analytics" component={LabosAnalayticsList} />
           <Route
             exact
             path="/offres/:offerId/commands"

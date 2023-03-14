@@ -28,11 +28,11 @@ const cols = [
     colName: 'designation',
     orderName: 'nom',
   },
-  // {
-  //   label: 'Articles commandés',
-  //   colName: 'articlesCommandes',
-  //   orderName: 'total',
-  // },
+  {
+    label: 'Articles commandés',
+    colName: 'articlesCommandes',
+    orderName: 'total',
+  },
   {
     label: "chiffre d'affaires",
     colName: 'ca',
@@ -95,7 +95,7 @@ function LineChart(props) {
           return (
             <TableRow key={index}>
               <TableCell>{row.designation}</TableCell>
-              {/* <TableCell>{row.articlesCommandes}</TableCell> */}
+              <TableCell>{row.articlesCommandes}</TableCell>
               <TableCell>{formatNumber.format(row.ca)}</TableCell>
             </TableRow>
           );

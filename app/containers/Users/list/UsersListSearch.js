@@ -44,6 +44,8 @@ export class UsersListSearch extends React.PureComponent {
         <TextField name="nom" label="Nom" className={classes.textField} margin="normal" onChange={handleChange} />
         <TextField name="pharmacie" label="Pharmacie" className={classes.textField} margin="normal" onChange={handleChange} />
         <TextField name="region" label="Region" className={classes.textField} margin="normal" onChange={handleChange} />
+        <TextField name="from" label="from" className={classes.textField} margin="normal" onChange={handleChange} type="date" />
+        <TextField name="to" label="to" className={classes.textField} margin="normal" onChange={handleChange} type="date" />
         <Fab color="primary" className={classes.button} onClick={handleSearchUsers}>
           <SearchIcon />
         </Fab>

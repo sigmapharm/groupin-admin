@@ -16,6 +16,7 @@ import providerSagas from 'containers/Providers/saga';
 import laboratoireSaga from 'containers/laboratoires/saga';
 import alertSaga from 'containers/Alerts/saga';
 import adsSaga from 'containers/Ads/saga';
+import PharmaciesAlalyticsSagas from 'containers/AnalyticsList/saga';
 export default [
   loginSagas,
   appSagas,
@@ -35,4 +36,5 @@ export default [
   laboratoireSaga,
   alertSaga,
   adsSaga,
+  PharmaciesAlalyticsSagas,
 ];

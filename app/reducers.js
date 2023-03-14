@@ -22,6 +22,7 @@ import providersReducer from 'containers/Providers/reducer';
 import laboratoiresReducer from 'containers/Laboratoires/reducer';
 import alertsReducer from 'containers/Alerts/reducer';
 import adsReducer from 'containers/Ads/reducer';
+import pharmaciesAnalytics from 'containers/AnalyticsList/reducers';
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
  */
@@ -44,6 +45,7 @@ export default function createReducer(injectedReducers = {}) {
     laboratoires: laboratoiresReducer,
     alerts: alertsReducer,
     ads: adsReducer,
+    pharmaciesAnalytics: pharmaciesAnalytics,
   });
 
   // Wrap the root reducer and return a new root reducer with router state

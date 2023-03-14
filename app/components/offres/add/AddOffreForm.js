@@ -23,6 +23,7 @@ import AticlesListTableRow from './ArticlesRow';
 import { useEffect } from 'react';
 import fuzzy from 'fuzzy';
 import { Input } from '@material-ui/core';
+import { useSelectFormat } from '../../../containers/Reporting/hooks/useSelectFormat';
 
 const styles = theme => ({
   root: {
@@ -126,6 +127,8 @@ export function AddOffreForm(props) {
     handleGlobalVarsChange,
     applyGlobalVars,
     labName,
+    regions,
+    pharmacies,
   } = props;
 
   const [articlesRow, setArticlesRows] = useState(rows);
@@ -134,6 +137,16 @@ export function AddOffreForm(props) {
   const [times, setTimes] = useState(0);
 
   const isOffreNotStart = moment(formData.dateDebut).isAfter(new Date());
+
+  const [region, setRegion] = useState('');
+  const [city, setCity] = useState([]);
+  const [selectedCity, setSelectedCity] = useState();
+  const [selectedregion, setSelectedRegion] = useState();
+
+  const regionOptions = useSelectFormat(regions, { label: 'name', value: 'id', allow: ['cities'] });
+  const villeOptiosn = useSelectFormat(city, { label: 'name', value: 'id' });
+
+  const [showBy, setShowBy] = useState();
 
   useEffect(
     () => {
@@ -146,7 +159,7 @@ export function AddOffreForm(props) {
     },
     [rows],
   );
-
+  console.log(city);
   useEffect(
     () => {
       setDisplayRows(articlesRow);
@@ -169,6 +182,107 @@ export function AddOffreForm(props) {
   const disableAllFieldsExceptDate = editOnlyDateField(editMode, originalFormData);
   const onGlobalVarsChange = _.debounce(handleGlobalVarsChange, 500);
 
+  const DisplayOject = {
+    City: (
+      <>
+        <Grid xs={12} md={6} item>
+          {!editMode ? (
+            <SingleAutoCompleteSelect
+              className={classes.select}
+              name="region"
+              options={regionOptions}
+              onChange={e => {
+                setCity(e.cities);
+                setSelectedRegion(e);
+              }}
+              value={selectedregion}
+              placeholder="Region"
+              isClearable
+            />
+          ) : (
+            <>
+              <Typography color="textSecondary">Region</Typography>
+              <span>{formData.laboratoryName}</span>
+            </>
+          )}
+        </Grid>
+        <Grid xs={12} md={6} item>
+          {!editMode ? (
+            <SingleAutoCompleteSelect
+              className={classes.select}
+              name="city"
+              options={villeOptiosn}
+              onChange={e => {
+                setSelectedCity(e);
+                console.log(e);
+                handleFormDataChange({ target: { name: 'city', value: e.map(item => item.value) } });
+              }}
+              value={selectedCity}
+              placeholder="Ville"
+              isClearable
+              isMulti
+            />
+          ) : (
+            <>
+              <Typography color="textSecondary">Ville</Typography>
+              <span>{formData.laboratoryName}</span>
+            </>
+          )}
+        </Grid>
+      </>
+    ),
+    Region: (
+      <Grid xs={12} md={6} item>
+        {!editMode ? (
+          <SingleAutoCompleteSelect
+            className={classes.select}
+            name="region"
+            options={regionOptions}
+            onChange={e => {
+              setCity(e.cities);
+              setSelectedRegion(e);
+              handleFormDataChange({ target: { name: 'region', value: e.map(item => item.value) } });
+            }}
+            value={selectedregion}
+            placeholder="Region"
+            isClearable
+            isMulti
+          />
+        ) : (
+          <>
+            <Typography color="textSecondary">Region</Typography>
+            <span>{formData.laboratoryName}</span>
+          </>
+        )}
+      </Grid>
+    ),
+    Pharmacy: (
+      <Grid xs={12} md={6} item>
+        {!editMode ? (
+          <SingleAutoCompleteSelect
+            className={classes.select}
+            name="pharmacy"
+            options={pharmacies && pharmacies.map(item => ({ value: item.id, label: item.denomination }))}
+            onChange={e => {
+              console.log('e', e);
+              handleFormDataChange({ target: { name: 'pharmacy', value: e.map(item => item.value) } });
+            }}
+            value={selectedregion}
+            placeholder="Pharmacy"
+            isClearable
+            isMulti
+          />
+        ) : (
+          <>
+            <Typography color="textSecondary">Region</Typography>
+            <span>{formData.laboratoryName}</span>
+          </>
+        )}
+      </Grid>
+    ),
+    null: null,
+  };
+
   return (
     <Paper className={classes.paper}>
       <Grid className={classes.headerGridContainer} container>
@@ -182,16 +296,6 @@ export function AddOffreForm(props) {
       <Grid className={classes.gridContainer} spacing={8} container>
         <Grid xs={12} item>
           <ErrorsArea variant="success" prefix="Vous avez les erreurs suivantes" errors={errors.messages} />
-        </Grid>
-        <Grid xs={12} item>
-          <Typography style={{ color: 'red', fontSize: '1em' }} variant="h6" color="red">
-            {/* {!(editMode && disableAllFieldsExceptDate) && (
-              <span style={{ display: 'block' }}>
-                - Date début doit être supérieur à J + 1
-              </span>
-            )} */}
-            {/* !disableAllFields && <span style={{ display: 'block' }}>- Date Fin doit être supérieur à J + 2</span>*/}
-          </Typography>
         </Grid>
         <OffreInfo
           editMode={editMode}
@@ -225,6 +329,34 @@ export function AddOffreForm(props) {
               </>
             )}
           </Grid>
+          <Grid xs={12} md={6} item>
+            {!editMode ? (
+              <SingleAutoCompleteSelect
+                className={classes.select}
+                name="show_by"
+                options={[
+                  { label: 'Pharmacy', value: 'Pharmacy' },
+                  { label: 'Region', value: 'Region' },
+                  { label: 'Ville', value: 'City' },
+                ]}
+                onChange={e => {
+                  setShowBy(e);
+                  handleFormDataChange({ target: { name: 'show_by', value: e.value } });
+                }}
+                value={selectedCity}
+                placeholder="Show By "
+                isClearable
+              />
+            ) : (
+              <>
+                <Typography color="textSecondary">show by</Typography>
+                <span>{formData.show_by}</span>
+              </>
+            )}
+          </Grid>
+
+          {DisplayOject[showBy ? showBy.value : null]}
+
           <Grid xs={12} md={4} container item>
             <Grid className={classes.globalVarsContainer} item xs={6}>
               <TextField
