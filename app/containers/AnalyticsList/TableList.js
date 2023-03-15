@@ -6,7 +6,7 @@ const TableList = ({ cols, list, classes }) => {
   const parentRef = React.useRef();
 
   return (
-    <Paper className={classes.root} style={{ height: 500, overflow: 'auto' }}>
+    <Paper className={classes.root}>
       <Table className={classes.table}>
         <TableHead className={classes.tableHead}>
           <TableRow>

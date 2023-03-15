@@ -195,6 +195,7 @@ export class UsersList extends React.PureComponent {
               this.props.dispatch(getPharmaciesAnalytics({ page: 0, laboName: labo }));
             }}
           >
+            <option value=""> TOUS LES LABO</option>;
             {this.props.labos.map(item => {
               return <option value={item.nom}> {item.nom} </option>;
             })}
