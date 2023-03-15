@@ -59,6 +59,7 @@ const initialState = {
     website: '',
     description: '',
     adresse: '',
+    subscriptionType: '',
   },
   errors: {
     fields: {},

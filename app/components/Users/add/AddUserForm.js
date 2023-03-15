@@ -136,6 +136,24 @@ export function AddUserForm(props) {
             />
           </Grid>
         )}
+
+        {isLaboAddMode && (
+          <SingleAutoCompleteSelect
+            className={classes.laboInputs}
+            name="subscriptionType"
+            options={[{ label: 'FREE', value: 'FREE' }, { label: 'PREMIUM', value: 'PREMIUM' }]}
+            onChange={value => {
+              console.log(value);
+              handleFormDataChange({
+                target: { name: 'subscriptionType', value: value.value },
+              });
+            }}
+            value={formData.value}
+            placeholder={''}
+            isClearable
+            fullWidth
+          />
+        )}
         {/* <Grid className={classes.selectPharmacieContainer} xs={12} md={6} item>
           <SingleAutoCompleteSelect
             className={classes.select}

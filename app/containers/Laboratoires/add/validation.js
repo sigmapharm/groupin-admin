@@ -54,4 +54,8 @@ export const fields = {
     label: 'Adresse',
     validator: validators.stringNotBlank,
   },
+  subscriptionType: {
+    name: 'subscriptionType',
+    label: 'subscription Type',
+  },
 };

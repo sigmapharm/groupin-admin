@@ -74,6 +74,7 @@ const initialState = {
     ville: '',
     codePostal: '',
     laboId: '',
+    subscriptionType: 'FREE',
     pharmacie: {
       denomination: '',
       adresse: '',

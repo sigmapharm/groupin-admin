@@ -17,6 +17,7 @@ const laboratoireFormDataInitialState = fromJS({
   fax: '',
   email: '',
   cityName: '',
+  subscriptionType: '',
 });
 
 export const initialState = fromJS({

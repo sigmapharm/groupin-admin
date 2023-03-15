@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { fields } from '../../containers/Laboratoires/add/validation';
-// import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
+import SingleAutoCompleteSelect from '../../components/AutoCompleteSelect';
 const styles = () => ({
   laboInputs: {},
 });
@@ -84,22 +84,23 @@ export function LaboratoireInfo(props) {
           fullWidth
         />
       </Grid>
-      {/* <Grid xs={12} md={6} item>
+      <Grid xs={12} md={6} item>
         <SingleAutoCompleteSelect
           className={classes.laboInputs}
-          name={fields.cityName.name}
-          options={cities}
-          error={!!errors[fields.cityName.name]}
+          name={fields.subscriptionType.name}
+          options={[{ label: 'FREE', value: 'FREE' }, { label: 'PREMIUM', value: 'PREMIUM' }]}
+          error={!!errors[fields.subscriptionType.name]}
           onChange={value => {
             onChange({
-              target: { name: fields.cityName.name, value:value.label},
+              target: { name: fields.subscriptionType.name, value: value.label },
             });
           }}
-          value={formData[fields.cityName]}
-          placeholder={fields.cityName.label}
+          value={formData[fields.subscriptionType]}
+          placeholder={fields.subscriptionType.label}
           isClearable
           fullWidth
-        /> */}
+        />
+      </Grid>
       <Grid xs={12} md={6} item>
         <TextField
           name={fields.adresse.name}
