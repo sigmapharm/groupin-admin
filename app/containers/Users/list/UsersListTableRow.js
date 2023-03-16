@@ -44,11 +44,10 @@ const RowComponent = forwardRef((props, ref) => {
 });
 
 export const commandHeaders = [
-  { title: 'Date Command' },
-  { title: 'delai Livraison' },
-  { title: 'date de livraison' },
-  { title: 'total Amount Discount' },
-  { title: 'verified' },
+  { title: 'Date commande' },
+  { title: 'Total remisé' },
+  { title: 'Offre' },
+  { title: 'Laboratoire' },
 ];
 
 const closeButton = { float: 'right' };
@@ -321,10 +320,9 @@ export class UsersListTableRow extends React.PureComponent {
                 return (
                   <TableRow key={row.commandId}>
                     <TableCell>{row.createdAt ? moment(row.createdAt).format('YYYY/MM/DD') : '---------'}</TableCell>
-                    <TableCell>{row.delaiLivraison}</TableCell>
-                    <TableCell>{row.deliveredAt ? moment(row.deliveredAt).format('YYYY/MM/DD') : '-------------'}</TableCell>
                     <TableCell>{row.totalAmountDiscount.toFixed(2)}</TableCell>
-                    <TableCell>{row.verified ? 'oui' : 'no'}</TableCell>
+                    <TableCell>{row.offerName}</TableCell>
+                    <TableCell>{row.laboName}</TableCell>
                   </TableRow>
                 );
               })}
