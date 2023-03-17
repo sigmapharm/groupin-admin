@@ -186,54 +186,6 @@ export function AddOffreForm(props) {
     City: (
       <>
         <Grid xs={12} md={6} item>
-          {!editMode ? (
-            <SingleAutoCompleteSelect
-              className={classes.select}
-              name="region"
-              options={regionOptions}
-              onChange={e => {
-                setCity(e.cities);
-                setSelectedRegion(e);
-              }}
-              value={selectedregion}
-              placeholder="Region"
-              isClearable
-            />
-          ) : (
-            <>
-              <Typography color="textSecondary">Region</Typography>
-              <span>{formData.laboratoryName}</span>
-            </>
-          )}
-        </Grid>
-        <Grid xs={12} md={6} item>
-          {!editMode ? (
-            <SingleAutoCompleteSelect
-              className={classes.select}
-              name="city"
-              options={villeOptiosn}
-              onChange={e => {
-                setSelectedCity(e);
-                console.log(e);
-                handleFormDataChange({ target: { name: 'city', value: e.map(item => item.value) } });
-              }}
-              value={selectedCity}
-              placeholder="Ville"
-              isClearable
-              isMulti
-            />
-          ) : (
-            <>
-              <Typography color="textSecondary">Ville</Typography>
-              <span>{formData.laboratoryName}</span>
-            </>
-          )}
-        </Grid>
-      </>
-    ),
-    Region: (
-      <Grid xs={12} md={6} item>
-        {!editMode ? (
           <SingleAutoCompleteSelect
             className={classes.select}
             name="region"
@@ -241,43 +193,63 @@ export function AddOffreForm(props) {
             onChange={e => {
               setCity(e.cities);
               setSelectedRegion(e);
-              handleFormDataChange({ target: { name: 'region', value: e.map(item => item.value) } });
             }}
             value={selectedregion}
             placeholder="Region"
             isClearable
+          />
+        </Grid>
+        <Grid xs={12} md={6} item>
+          <SingleAutoCompleteSelect
+            className={classes.select}
+            name="city"
+            options={villeOptiosn}
+            onChange={e => {
+              setSelectedCity(e);
+              console.log(e);
+              handleFormDataChange({ target: { name: 'city', value: e.map(item => item.value) } });
+            }}
+            value={selectedCity}
+            placeholder="Ville"
+            isClearable
             isMulti
           />
-        ) : (
-          <>
-            <Typography color="textSecondary">Region</Typography>
-            <span>{formData.laboratoryName}</span>
-          </>
-        )}
+        </Grid>
+      </>
+    ),
+    Region: (
+      <Grid xs={12} md={6} item>
+        <SingleAutoCompleteSelect
+          className={classes.select}
+          name="region"
+          options={regionOptions}
+          onChange={e => {
+            setCity(e.cities);
+            setSelectedRegion(e);
+            handleFormDataChange({ target: { name: 'region', value: e.map(item => item.value) } });
+          }}
+          value={selectedregion}
+          placeholder="Region"
+          isClearable
+          isMulti
+        />
       </Grid>
     ),
     Pharmacy: (
       <Grid xs={12} md={6} item>
-        {!editMode ? (
-          <SingleAutoCompleteSelect
-            className={classes.select}
-            name="pharmacy"
-            options={pharmacies && pharmacies.map(item => ({ value: item.id, label: item.denomination }))}
-            onChange={e => {
-              console.log('e', e);
-              handleFormDataChange({ target: { name: 'pharmacy', value: e.map(item => item.value) } });
-            }}
-            value={selectedregion}
-            placeholder="Pharmacy"
-            isClearable
-            isMulti
-          />
-        ) : (
-          <>
-            <Typography color="textSecondary">Region</Typography>
-            <span>{formData.laboratoryName}</span>
-          </>
-        )}
+        <SingleAutoCompleteSelect
+          className={classes.select}
+          name="pharmacy"
+          options={pharmacies && pharmacies.map(item => ({ value: item.id, label: item.denomination }))}
+          onChange={e => {
+            console.log('e', e);
+            handleFormDataChange({ target: { name: 'pharmacy', value: e.map(item => item.value) } });
+          }}
+          value={selectedregion}
+          placeholder="Pharmacy"
+          isClearable
+          isMulti
+        />
       </Grid>
     ),
     null: null,
@@ -330,29 +302,22 @@ export function AddOffreForm(props) {
             )}
           </Grid>
           <Grid xs={12} md={6} item>
-            {!editMode ? (
-              <SingleAutoCompleteSelect
-                className={classes.select}
-                name="show_by"
-                options={[
-                  { label: 'Pharmacy', value: 'Pharmacy' },
-                  { label: 'Region', value: 'Region' },
-                  { label: 'Ville', value: 'City' },
-                ]}
-                onChange={e => {
-                  setShowBy(e);
-                  handleFormDataChange({ target: { name: 'show_by', value: e.value } });
-                }}
-                value={selectedCity}
-                placeholder="Show By "
-                isClearable
-              />
-            ) : (
-              <>
-                <Typography color="textSecondary">show by</Typography>
-                <span>{formData.show_by}</span>
-              </>
-            )}
+            <SingleAutoCompleteSelect
+              className={classes.select}
+              name="show_by"
+              options={[
+                { label: 'Pharmacy', value: 'Pharmacy' },
+                { label: 'Region', value: 'Region' },
+                { label: 'Ville', value: 'City' },
+              ]}
+              onChange={e => {
+                setShowBy(e);
+                handleFormDataChange({ target: { name: 'show_by', value: e.value } });
+              }}
+              value={selectedCity}
+              placeholder="Show By "
+              isClearable
+            />
           </Grid>
 
           {DisplayOject[showBy ? showBy.value : null]}
