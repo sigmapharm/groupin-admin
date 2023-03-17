@@ -33,23 +33,37 @@ const styles = theme => ({
   },
 });
 
-export default withStyles(styles)(({ classes, fields = [], onSearch }) => (
+export default withStyles(styles)(({ classes, fields = [], onSearch, isGrouped }) => (
   <div className={classes.root}>
     <Typography component="h1" variant="h6">
       Recherche
     </Typography>
     <div className={classes.filtersSection}>
-      {fields.map((field, index) => (
-        <TextField
-          key={index}
-          name={field.name}
-          label={field.label}
-          type={field.type}
-          onChange={field.onChange}
-          className={classes.textField}
-          margin="normal"
-        />
-      ))}
+      {isGrouped
+        ? fields
+            .filter((field, index) => (field.isGrouped ? field : null))
+            .map((field, index) => (
+              <TextField
+                key={index}
+                name={field.name}
+                label={field.label}
+                type={field.type}
+                onChange={field.onChange}
+                className={classes.textField}
+                margin="normal"
+              />
+            ))
+        : fields.map((field, index) => (
+            <TextField
+              key={index}
+              name={field.name}
+              label={field.label}
+              type={field.type}
+              onChange={field.onChange}
+              className={classes.textField}
+              margin="normal"
+            />
+          ))}
 
       <Fab onClick={onSearch} color="primary" className={classes.button}>
         <SearchIcon />

@@ -216,7 +216,6 @@ export class UsersListTableRow extends React.PureComponent {
           <TableCell style={{ padding: 0 }}>{row.totalAmount ? row.totalAmount.toFixed(2) : null}</TableCell>
           <TableCell style={{ padding: 0, display: 'flex' }}>
             <Switch checked={row.enabled} onChange={this.toggle} value={row.enabled} color="primary" />
-
             <Tippy
               theme="light"
               interactive

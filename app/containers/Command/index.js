@@ -117,8 +117,8 @@ class Command extends PureComponent {
       showSubCommands: false,
       selectedCommand: {},
       searchData: {
-        // laboratoryName: '',
-        // offerName: '',
+        laboratoryName: '',
+        offerName: '',
         ville: '',
         // region :'',
         denomination: '',
@@ -713,7 +713,6 @@ class Command extends PureComponent {
     } = this.props;
     const { selectedCommand, showInfoBar, infoBarParams, showPopConfirmation, popConfirmationParams, cols } = this.state;
     const isSmallDevice = isWidthDown('md', width);
-
     return (
       <>
         <Typography component="h1" variant="h4" className={classes.root}>
@@ -728,8 +727,7 @@ class Command extends PureComponent {
         )}
 
         {/* <Divider variant="middle" className={classes.root} /> */}
-        <Search fields={this.searchFields} onSearch={this.onSearch} />
-
+        {!this.isMember && <Search fields={this.searchFields} isGrouped={this.canGroup} onSearch={this.onSearch} />}
         {this.canGroup && (
           <div className={`${classes.root} ${classes.groupingContainer}`}>
             {this.disableGroupingBtn && (
@@ -747,7 +745,6 @@ class Command extends PureComponent {
           </div>
         )}
         <div style={{ height: '8px' }} />
-
         {isSmallDevice ? (
           <div className={classes.root}>
             {!!commands.length && (
