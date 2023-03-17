@@ -108,7 +108,7 @@ export class UsersList extends React.PureComponent {
         },
         {
           label: 'last Commade ',
-          colName: 'lastCommad',
+          colName: 'createdAt',
           selected: false,
           order: 'asc',
         },

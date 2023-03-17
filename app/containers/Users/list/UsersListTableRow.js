@@ -211,7 +211,7 @@ export class UsersListTableRow extends React.PureComponent {
           <TableCell style={{ padding: 5 }}>{row.email}</TableCell>
           <TableCell style={{ padding: 5 }}>{row.pharmacy}</TableCell>
           <TableCell style={{ padding: 5 }}>{row.role}</TableCell>
-          <TableCell style={{ padding: 5 }}>{row.lastCommad ? row.lastCommad.split('T')[0] : 'aucune commandes'}</TableCell>
+          <TableCell style={{ padding: 5 }}>{row.createdAt ? row.createdAt.split('T')[0] : 'aucune commandes'}</TableCell>
           <TableCell style={{ padding: 0 }}>{row.quantityCmd}</TableCell>
           <TableCell style={{ padding: 0 }}>{row.totalAmount ? row.totalAmount.toFixed(2) : null}</TableCell>
           <TableCell style={{ padding: 0, display: 'flex' }}>
