@@ -1,145 +1,203 @@
 import React, { useMemo } from 'react';
 import * as _ from 'lodash';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
-import { AttachMoney, ShoppingCart } from '@material-ui/icons';
+import { AttachMoney } from '@material-ui/icons';
+import groupBy from 'group-by';
 
 function colors(total) {
-  if (!_.isNumber(total)) {
+  if (!_.isNumber(Number(total))) {
     return null;
-  } else if (_.inRange(total, 15000, 20000)) {
+  } else if (_.inRange(Number(total), 15000, 20000)) {
     return 'orange';
-  } else if (_.gte(total, 20000)) {
+  } else if (_.gte(Number(total), 20000)) {
     return 'green';
-  } else if (_.lte(total, 15000)) {
+  } else if (_.lte(Number(total), 15000)) {
     return 'red';
   } else {
     return null;
   }
 }
+function isOdd(number) {
+  return number % 2 > 0;
+}
 
 export const DataTableBody = ({ rows }) => {
-  const data = useMemo(
+  const _data = useMemo(
     () => {
-      return _.groupBy(rows, 'denomination');
+      const groupedData = groupBy(rows || [], 'denomination');
+
+      return Object.entries(groupedData).map(([key, value], index) => {
+        return {
+          label: key,
+          data: value.map((val, _index) => ({
+            total: val.ca ? val.ca.toFixed(2) : null,
+            quantity: val.nbr_co,
+            mois: val.mois,
+          })),
+        };
+      });
     },
     [rows],
   );
-  console.log(data);
+
   return (
     <TableBody>
-      {Object.keys(data).map(key => {
+      {_data.map((element, index) => {
+        const item = element.data;
         return (
-          <TableRow key={key}>
-            <TableCell style={{ padding: 3, borderLeft: '1px solid black', textAlign: 'center' }}>{key}</TableCell>
-            <TableCell style={{ padding: 0, borderLeft: '1px solid black', color: colors(data[key][0] && data[key][0].ca) }}>
+          <TableRow key={index} style={{ backgroundColor: isOdd(index) ? '#e2e8f0' : undefined }}>
+            <TableCell style={{ padding: 3, borderLeft: '1px solid black', textAlign: 'center' }}>{element.label}</TableCell>
+            <TableCell
+              style={{
+                padding: 0,
+                borderLeft: '1px solid black',
+                color: colors(item.filter(d => d.mois === 1)[0] && item.filter(d => d.mois === 1)[0].total),
+              }}
+            >
               <div style={{ display: 'flex' }}>
                 <AttachMoney style={{ fontSize: 15 }} /> :{' '}
-                {data[key][0] && data[key][0].ca ? data[key][0].ca.toFixed(2) : '------'}
-              </div>
-              <div>
-                <ShoppingCart style={{ fontSize: 15 }} /> : {data[key][0] && data[key][0].nbr_co ? data[key][0].nbr_co : '------'}
+                {item.filter(d => d.mois === 1)[0] ? item.filter(d => d.mois === 1)[0].total : '------'}
               </div>
             </TableCell>
-            <TableCell style={{ padding: 0, borderLeft: '1px solid black', color: colors(data[key][1] && data[key][1].ca) }}>
+            <TableCell
+              style={{
+                padding: 0,
+                borderLeft: '1px solid black',
+                color: colors(item.filter(d => d.mois === 2)[0] && item.filter(d => d.mois === 2)[0].total),
+              }}
+            >
               <div style={{ display: 'flex' }}>
                 <AttachMoney style={{ fontSize: 15 }} fontSize="small" /> :{' '}
-                {data[key][1] && data[key][1].ca ? data[key][1].ca.toFixed(2) : '------'}
-              </div>
-              <div>
-                <ShoppingCart style={{ fontSize: 15 }} /> : {data[key][1] && data[key][1].nbr_co ? data[key][1].nbr_co : '------'}
+                {item.filter(d => d.mois === 2)[0] ? item.filter(d => d.mois === 2)[0].total : '------'}
               </div>
             </TableCell>
-            <TableCell style={{ padding: 0, borderLeft: '1px solid black', color: colors(data[key][2] && data[key][2].ca) }}>
+            <TableCell
+              style={{
+                padding: 0,
+                borderLeft: '1px solid black',
+                color: colors(item.filter(d => d.mois === 3)[0] && item.filter(d => d.mois === 3)[0].total),
+              }}
+            >
               <div style={{ display: 'flex' }}>
                 <AttachMoney style={{ fontSize: 15 }} fontSize="small" /> :{' '}
-                {data[key][2] && data[key][2].ca ? data[key][2].ca.toFixed(2) : '------'}
-              </div>
-              <div>
-                <ShoppingCart style={{ fontSize: 15 }} /> : {data[key][2] && data[key][2].nbr_co ? data[key][2].nbr_co : '------'}
+                {item.filter(d => d.mois === 3)[0] ? item.filter(d => d.mois === 3)[0].total : '------'}
               </div>
             </TableCell>
-            <TableCell style={{ padding: 0, borderLeft: '1px solid black', color: colors(data[key][3] && data[key][3].ca) }}>
+            <TableCell
+              style={{
+                padding: 0,
+                borderLeft: '1px solid black',
+                color: colors(item.filter(d => d.mois === 4)[0] && item.filter(d => d.mois === 4)[0].total),
+              }}
+            >
               <div style={{ display: 'flex' }}>
                 <AttachMoney style={{ fontSize: 15 }} fontSize="small" /> :{' '}
-                {data[key][3] && data[key][3].ca ? data[key][3].ca.toFixed(2) : '------'}
-              </div>
-              <div>
-                <ShoppingCart style={{ fontSize: 15 }} /> : {data[key][3] && data[key][3].nbr_co ? data[key][3].nbr_co : '------'}
+                {item.filter(d => d.mois === 4)[0] ? item.filter(d => d.mois === 4)[0].total : '------'}
               </div>
             </TableCell>
-            <TableCell style={{ padding: 0, borderLeft: '1px solid black', color: colors(data[key][4] && data[key][4].ca) }}>
+            <TableCell
+              style={{
+                padding: 0,
+                borderLeft: '1px solid black',
+                color: colors(item.filter(d => d.mois === 5)[0] && item.filter(d => d.mois === 5)[0].total),
+              }}
+            >
               <div style={{ display: 'flex' }}>
                 <AttachMoney style={{ fontSize: 15 }} fontSize="small" /> :{' '}
-                {data[key][4] && data[key][4].ca ? data[key][4].ca.toFixed(2) : '------'}
-              </div>
-              <div>
-                <ShoppingCart style={{ fontSize: 15 }} /> : {data[key][4] && data[key][4].nbr_co ? data[key][4].nbr_co : '------'}
+                {item.filter(d => d.mois === 5)[0] ? item.filter(d => d.mois === 5)[0].total : '------'}
               </div>
             </TableCell>
-            <TableCell style={{ padding: 0, borderLeft: '1px solid black', color: colors(data[key][5] && data[key][5].ca) }}>
+            <TableCell
+              style={{
+                padding: 0,
+                borderLeft: '1px solid black',
+                color: colors(item.filter(d => d.mois === 6)[0] && item.filter(d => d.mois === 6)[0].total),
+              }}
+            >
               <div style={{ display: 'flex' }}>
                 <AttachMoney style={{ fontSize: 15 }} fontSize="small" /> :{' '}
-                {data[key][5] && data[key][5].ca ? data[key][5].ca.toFixed(2) : '------'}
-              </div>
-              <div>
-                <ShoppingCart style={{ fontSize: 15 }} /> : {data[key][5] && data[key][5].nbr_co ? data[key][5].nbr_co : '------'}
+                {item.filter(d => d.mois === 6)[0] ? item.filter(d => d.mois === 6)[0].total : '------'}
               </div>
             </TableCell>
-            <TableCell style={{ padding: 0, borderLeft: '1px solid black', color: colors(data[key][6] && data[key][6].ca) }}>
+            <TableCell
+              style={{
+                padding: 0,
+                borderLeft: '1px solid black',
+                color: colors(item.filter(d => d.mois === 7)[0] && item.filter(d => d.mois === 7)[0].total),
+              }}
+            >
               <div style={{ display: 'flex' }}>
                 <AttachMoney style={{ fontSize: 15 }} fontSize="small" /> :{' '}
-                {data[key][6] && data[key][6].ca ? data[key][6].ca.toFixed(2) : '------'}
-              </div>
-              <div>
-                <ShoppingCart style={{ fontSize: 15 }} /> : {data[key][6] && data[key][6].nbr_co ? data[key][6].nbr_co : '------'}
+                {item.filter(d => d.mois === 7)[0] ? item.filter(d => d.mois === 7)[0].total : '------'}
               </div>
             </TableCell>
-            <TableCell style={{ padding: 0, borderLeft: '1px solid black', color: colors(data[key][7] && data[key][7].ca) }}>
+            <TableCell
+              style={{
+                padding: 0,
+                borderLeft: '1px solid black',
+                color: colors(item.filter(d => d.mois === 8)[0] && item.filter(d => d.mois === 8)[0].total),
+              }}
+            >
               <div style={{ display: 'flex' }}>
                 <AttachMoney style={{ fontSize: 15 }} fontSize="small" /> :{' '}
-                {data[key][7] && data[key][7].ca ? data[key][7].ca.toFixed(2) : '------'}
-              </div>
-              <div>
-                <ShoppingCart style={{ fontSize: 15 }} /> : {data[key][7] && data[key][7].nbr_co ? data[key][7].nbr_co : '------'}
+                {item.filter(d => d.mois === 8)[0] ? item.filter(d => d.mois === 8)[0].total : '------'}
               </div>
             </TableCell>
-            <TableCell style={{ padding: 0, borderLeft: '1px solid black', color: colors(data[key][8] && data[key][8].ca) }}>
+            <TableCell
+              style={{
+                padding: 0,
+                borderLeft: '1px solid black',
+                color: colors(item.filter(d => d.mois === 9)[0] && item.filter(d => d.mois === 9)[0].total),
+              }}
+            >
               <div style={{ display: 'flex' }}>
                 <AttachMoney style={{ fontSize: 15 }} fontSize="small" /> :{' '}
-                {data[key][8] && data[key][8].ca ? data[key][8].ca.toFixed(2) : '------'}
-              </div>
-              <div>
-                <ShoppingCart style={{ fontSize: 15 }} /> : {data[key][8] && data[key][8].nbr_co ? data[key][8].nbr_co : '------'}
+                {item.filter(d => d.mois === 9)[0] ? item.filter(d => d.mois === 9)[0].total : '------'}
               </div>
             </TableCell>
-            <TableCell style={{ padding: 0, borderLeft: '1px solid black', color: colors(data[key][9] && data[key][9].ca) }}>
+            <TableCell
+              style={{
+                padding: 0,
+                borderLeft: '1px solid black',
+                color: colors(item.filter(d => d.mois === 10)[0] && item.filter(d => d.mois === 10)[0].total),
+              }}
+            >
               <div style={{ display: 'flex' }}>
                 <AttachMoney style={{ fontSize: 15 }} fontSize="small" /> :{' '}
-                {data[key][9] && data[key][9].ca ? data[key][9].ca.toFixed(2) : '------'}
-              </div>
-              <div>
-                <ShoppingCart style={{ fontSize: 15 }} /> : {data[key][9] && data[key][9].nbr_co ? data[key][9].nbr_co : '------'}
+                {item.filter(d => d.mois === 10)[0] ? item.filter(d => d.mois === 10)[0].total : '------'}
               </div>
             </TableCell>
-            <TableCell style={{ padding: 0, borderLeft: '1px solid black', color: colors(data[key][10] && data[key][10].ca) }}>
+            <TableCell
+              style={{
+                padding: 0,
+                borderLeft: '1px solid black',
+                color: colors(item.filter(d => d.mois === 11)[0] && item.filter(d => d.mois === 11)[0].total),
+              }}
+            >
               <div style={{ display: 'flex' }}>
                 <AttachMoney style={{ fontSize: 15 }} fontSize="small" /> :{' '}
-                {data[key][10] && data[key][10].ca ? data[key][10].ca.toFixed(2) : '------'}
-              </div>
-              <div>
-                <ShoppingCart style={{ fontSize: 15 }} /> :{' '}
-                {data[key][10] && data[key][10].nbr_co ? data[key][10].nbr_co : '------'}
+                {item.filter(d => d.mois === 11)[0] ? item.filter(d => d.mois === 11)[0].total : '------'}
               </div>
             </TableCell>
-            <TableCell style={{ padding: 0, borderLeft: '1px solid black', color: colors(data[key][11] && data[key][11].ca) }}>
+            <TableCell
+              style={{
+                padding: 0,
+                borderLeft: '1px solid black',
+                color: colors(item.filter(d => d.mois === 12)[0] && item.filter(d => d.mois === 12)[0].total),
+              }}
+            >
               <div style={{ display: 'flex' }}>
                 <AttachMoney style={{ fontSize: 15 }} fontSize="small" /> :{' '}
-                {data[key][11] && data[key][11].ca ? data[key][11].ca.toFixed(2) : '------'}
+                {item.filter(d => d.mois === 12)[0] ? item.filter(d => d.mois === 12)[0].total : '------'}
               </div>
-              <div>
-                <ShoppingCart style={{ fontSize: 15 }} /> :{' '}
-                {data[key][11] && data[key][11].nbr_co ? data[key][11].nbr_co : '------'}
-              </div>
+            </TableCell>
+            <TableCell
+              style={{
+                padding: 0,
+                borderLeft: '1px solid black',
+              }}
+            >
+              <div style={{ display: 'flex' }}>{_.sum(_.map(item, i => Number(i.total))).toFixed(2)}</div>
             </TableCell>
           </TableRow>
         );

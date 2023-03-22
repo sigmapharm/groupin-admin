@@ -119,6 +119,11 @@ export class UsersList extends React.PureComponent {
           colName: 'totalAmount',
           selected: false,
         },
+        {
+          label: 'total',
+          colName: 'Total',
+          selected: false,
+        },
       ],
     };
   }

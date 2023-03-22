@@ -126,6 +126,11 @@ export class UsersList extends React.PureComponent {
           colName: 'totalAmount',
           selected: false,
         },
+        {
+          label: 'total',
+          colName: 'Total',
+          selected: false,
+        },
       ],
     };
   }
@@ -176,7 +181,9 @@ export class UsersList extends React.PureComponent {
             onChange={e => {
               const dates = e.target.value.split('/');
               this.setState({ from: dates[0], to: dates[1] });
-              this.props.dispatch(getPharmaciesAnalytics({ page: 0, from: dates[0], to: dates[1] }));
+              this.props.dispatch(
+                getPharmaciesAnalytics({ page: 0, from: dates[0], to: dates[1], laboName: this.state.laboName }),
+              );
             }}
           >
             <option value="2020-01-01/2020-12-30">2020</option>
@@ -192,7 +199,7 @@ export class UsersList extends React.PureComponent {
             onChange={e => {
               const labo = e.target.value;
               this.setState({ laboName: labo });
-              this.props.dispatch(getPharmaciesAnalytics({ page: 0, laboName: labo }));
+              this.props.dispatch(getPharmaciesAnalytics({ page: 0, laboName: labo, from: this.state.from, to: this.state.to }));
             }}
           >
             <option value=""> TOUS LES LABO</option>;
