@@ -19,6 +19,7 @@ import ReactExport from 'react-data-export';
 import { ExportToExcel } from './ExelExportPrintButton';
 import TableList from './TableList';
 import { makeSelectLaboratoires } from '../App/selectors';
+import { Button, TextField } from '@material-ui/core';
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -59,6 +60,7 @@ export class UsersList extends React.PureComponent {
       from: '2022-01-01',
       to: '2022-12-30',
       laboName: '',
+      pharmacyName: '',
       cols: [
         {
           label: 'Pharmacies',
@@ -136,7 +138,9 @@ export class UsersList extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.dispatch(getPharmaciesAnalytics({ page: 0, from: '2022-01-01', to: '2022-12-30' }));
+    this.props.dispatch(
+      getPharmaciesAnalytics({ page: 0, from: '2022-01-01', to: '2022-12-30', pharmacyName: this.state.pharmacyName }),
+    );
   }
 
   handleChangePage = (event, page) => {
@@ -156,6 +160,20 @@ export class UsersList extends React.PureComponent {
     );
   };
 
+  handleInputChange = e => {
+    setTimeout(() => {
+      this.props.dispatch(
+        getPharmaciesAnalytics({
+          page: 0,
+          from: this.state.from,
+          to: this.state.to,
+          laboName: this.state.laboName,
+          pharmacyName: this.state.pharmacyName,
+        }),
+      );
+    }, 1000);
+  };
+
   render() {
     const { classes, list } = this.props;
     const { cols } = this.state;
@@ -173,6 +191,7 @@ export class UsersList extends React.PureComponent {
             apiData={this.state.printData}
             fileName={`${Date.now()}-pharmacies-statique`}
           />
+
           <select
             value={`${this.state.from}/${this.state.to}`}
             name=""
@@ -182,7 +201,13 @@ export class UsersList extends React.PureComponent {
               const dates = e.target.value.split('/');
               this.setState({ from: dates[0], to: dates[1] });
               this.props.dispatch(
-                getPharmaciesAnalytics({ page: 0, from: dates[0], to: dates[1], laboName: this.state.laboName }),
+                getPharmaciesAnalytics({
+                  page: 0,
+                  from: dates[0],
+                  to: dates[1],
+                  laboName: this.state.laboName,
+                  pharmacyName: this.state.pharmacyName,
+                }),
               );
             }}
           >
@@ -199,7 +224,15 @@ export class UsersList extends React.PureComponent {
             onChange={e => {
               const labo = e.target.value;
               this.setState({ laboName: labo });
-              this.props.dispatch(getPharmaciesAnalytics({ page: 0, laboName: labo, from: this.state.from, to: this.state.to }));
+              this.props.dispatch(
+                getPharmaciesAnalytics({
+                  page: 0,
+                  laboName: labo,
+                  from: this.state.from,
+                  to: this.state.to,
+                  pharmacyName: this.state.pharmacyName,
+                }),
+              );
             }}
           >
             <option value=""> TOUS LES LABO</option>;
@@ -207,6 +240,23 @@ export class UsersList extends React.PureComponent {
               return <option value={item.nom}> {item.nom} </option>;
             })}
           </select>
+          <div
+            style={{
+              marginLeft: 10,
+              display: 'inline-block',
+            }}
+          >
+            <TextField
+              placeholder="Pharmacy Name"
+              value={this.state.pharmacyName}
+              onChange={e => {
+                this.setState({ pharmacyName: e.target.value });
+              }}
+            />
+            <Button variant="contained" style={{ marginLeft: 20 }} onClick={this.handleInputChange}>
+              search
+            </Button>
+          </div>
         </div>
         <Divider variant="middle" className={classes.root} />
         <TableList cols={cols} list={this.props.list} classes={classes} />

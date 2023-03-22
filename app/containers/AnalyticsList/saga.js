@@ -11,7 +11,7 @@ import {
   putPharmaciesAnalytics,
 } from './actions';
 
-function* analyticsList({ payload: { page = 0, from, to, laboName } }) {
+function* analyticsList({ payload: { page = 0, from, to, laboName, pharmacyName } }) {
   const options = {
     method: 'GET',
   };
@@ -19,7 +19,9 @@ function* analyticsList({ payload: { page = 0, from, to, laboName } }) {
   yield networking(function*() {
     try {
       const res = yield requestWithAuth(
-        `/pharmacies/analytics?from=${from ? from : ''}&to=${to ? to : ''}&laboName=${laboName ? laboName : ''}`,
+        `/pharmacies/analytics?from=${from ? from : ''}&to=${to ? to : ''}&laboName=${laboName ? laboName : ''}&pharmacyName=${
+          pharmacyName ? pharmacyName : ''
+        }`,
         options,
         false,
       );
