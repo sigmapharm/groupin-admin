@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -61,7 +61,7 @@ const styles = theme => ({
 
 export function UpdateUserForm(props) {
   const { classes, errors, formData, handleFormDataChange, handleSubmit, cities, regions } = props;
-  console.log(formData);
+
   return (
     <div>
       <Grid className={classes.headerGridContainer} container>

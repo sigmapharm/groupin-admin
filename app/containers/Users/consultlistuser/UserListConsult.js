@@ -171,6 +171,17 @@ export class UserListConsult extends React.PureComponent {
           <TextField
             disabled
             id="standard-disabled"
+            label="Status"
+            value={row.enabled ? 'active' : 'inactive'}
+            className={classes.textField}
+            inputProps={{
+              className: classes.input,
+            }}
+            margin="normal"
+          />
+          <TextField
+            disabled
+            id="standard-disabled"
             label="email"
             value={row.email}
             className={classes.textField}

@@ -73,6 +73,8 @@ const initialState = {
   isSuccess: false,
   detailsOpen: false,
   editMode: false,
+  updateStatus: false,
+  userStatus: 'active',
 };
 
 export class UsersListTableRow extends React.PureComponent {
@@ -88,15 +90,6 @@ export class UsersListTableRow extends React.PureComponent {
       subCommands: [],
     };
   }
-
-  edit = () => {
-    const { row } = this.props;
-    this.setState({
-      formData: { ...row, ville: formatCityToLabelValue(row.ville) },
-      editMode: true,
-      isTippyOpen: false,
-    });
-  };
 
   handleFormDataChange = e => {
     const { formData } = this.state;
@@ -125,6 +118,14 @@ export class UsersListTableRow extends React.PureComponent {
       }),
     );
     closeDropDown();
+  };
+
+  edit = () => {
+    this.setState({
+      formData: { ...row, ville: formatCityToLabelValue(row.ville) },
+      editMode: true,
+      isTippyOpen: false,
+    });
   };
 
   handleSubmitEdit = e => {
@@ -199,6 +200,31 @@ export class UsersListTableRow extends React.PureComponent {
     this.setState({ showSubCommands: false });
   };
 
+  closeUpdateStatusModel = () => {
+    this.setState({ updateStatus: false });
+  };
+
+  openUpdateUserStatus = () => {
+    const { row } = this.props;
+    this.props.dispatch(
+      getUserInfo({
+        callback: (err, data) => {
+          if (!err) {
+            this.setState({ updateStatus: true, userStatus: data.enabled ? 'active' : 'inactive' });
+            return;
+          }
+          console.log(err);
+        },
+        id: row.id,
+      }),
+    );
+  };
+
+  updateStatus = () => {
+    this.props.toggleUser(this.state.userStatus === 'active' ? true : false);
+    this.setState({ updateStatus: false });
+  };
+
   render() {
     const { row, cities, regions } = this.props;
     const { editMode, detailsOpen } = this.state;
@@ -215,7 +241,7 @@ export class UsersListTableRow extends React.PureComponent {
           <TableCell style={{ padding: 0 }}>{row.quantityCmd}</TableCell>
           <TableCell style={{ padding: 0 }}>{row.totalAmount ? row.totalAmount.toFixed(2) : null}</TableCell>
           <TableCell style={{ padding: 0, display: 'flex' }}>
-            <Switch checked={row.enabled} onChange={this.toggle} value={row.enabled} color="primary" />
+            {/* <Switch checked={row.enabled} onChange={this.toggle} value={row.enabled} color="primary" /> */}
             <Tippy
               theme="light"
               interactive
@@ -249,6 +275,14 @@ export class UsersListTableRow extends React.PureComponent {
                     </ListItemIcon>
                     <Typography>Supprimer</Typography>
                   </MenuItem>
+
+                  <MenuItem onClick={this.openUpdateUserStatus}>
+                    <ListItemIcon style={{ padding: 5 }}>
+                      <EditIcon color="primary" />
+                    </ListItemIcon>
+                    <Typography>update Status</Typography>
+                  </MenuItem>
+
                   <MenuItem onClick={this.hanldeGetUserCommandes(row.id)}>
                     <ListItemIcon style={{ padding: 5 }}>
                       <ShoppingCart color="primary" />
@@ -302,6 +336,7 @@ export class UsersListTableRow extends React.PureComponent {
                 handleFormDataChange={this.handleFormDataChange}
                 handleSubmit={this.handleSubmitEdit}
                 regions={regions}
+                rowId={this.props.rowId}
               />
             </MuiDialogContent>
           </Dialog>
@@ -326,6 +361,48 @@ export class UsersListTableRow extends React.PureComponent {
                 );
               })}
             </Table>
+          </div>
+        </Dialog>
+        <Dialog
+          title="Modifier User Status"
+          open={this.state.updateStatus}
+          showBtns={false}
+          onClose={this.closeUpdateStatusModel}
+          maxWidth="lg"
+        >
+          <div
+            style={{
+              width: 300,
+              height: 200,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+            }}
+          >
+            <select
+              style={{
+                width: 200,
+                border: '1px solid black',
+                height: 50,
+                borderRadius: 11,
+              }}
+              value={this.state.userStatus}
+              onChange={e => this.setState({ userStatus: e.target.value })}
+            >
+              <option value={'active'}>active</option>
+              <option value={'inactive'}>inactive</option>
+            </select>
+            <Button
+              style={{
+                marginTop: 10,
+              }}
+              variant="contained"
+              color="blue"
+              onClick={this.updateStatus}
+            >
+              update
+            </Button>
           </div>
         </Dialog>
       </React.Fragment>
