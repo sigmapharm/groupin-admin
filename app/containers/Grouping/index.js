@@ -131,7 +131,7 @@ class Grouping extends React.PureComponent {
     const { classes, commands, articles, providers, checkAllValue, toggleCheckAll } = this.props;
     const steps = getSteps();
     const { activeStep, selectedProvider, showProviderForm } = this.state;
-
+    console.log(' groupin articles', articles);
     return (
       <Paper className={classes.root}>
         <Typography className={classes.titleContainer} component="h1" variant="h4">

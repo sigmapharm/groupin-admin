@@ -13,10 +13,11 @@ import reportingSagas from 'containers/Reporting/saga';
 import StateSaga from 'containers/statistiques/saga';
 import pharmacieSaga from 'containers/Pharmacies/saga';
 import providerSagas from 'containers/Providers/saga';
-import laboratoireSaga from 'containers/laboratoires/saga';
+import laboratoireSaga from 'containers/Laboratoires/saga';
 import alertSaga from 'containers/Alerts/saga';
 import adsSaga from 'containers/Ads/saga';
 import PharmaciesAlalyticsSagas from 'containers/AnalyticsList/saga';
+
 export default [
   loginSagas,
   appSagas,

@@ -24,9 +24,7 @@ function reducer(state = initialState, action) {
       const checkAll = !state.get('checkAll');
       return state.merge({
         checkAll,
-        commands: commands.map(cmd =>
-          _.merge(cmd, { selected: cmd.isLinked ? false : checkAll }),
-        ),
+        commands: commands.map(cmd => _.merge(cmd, { selected: cmd.isLinked ? false : checkAll })),
       });
     }
     case CHANGE_COMMAND_SELECTION: {
@@ -47,10 +45,10 @@ function reducer(state = initialState, action) {
       return initialState;
     }
     case LOAD_AGGREGATED_ARTICLES_SUCCESS: {
+      console.log('action.payload articles', action.payload);
+      const articlesList = Array.isArray(action.payload) ? action.payload : [];
       return state.merge({
-        articles: (action.payload || []).map(e =>
-          _.merge({}, e, { modifiedQuantity: e.quantity }),
-        ),
+        articles: articlesList.map(e => _.merge({}, e, { modifiedQuantity: e.quantity })),
       });
     }
     case LOAD_ALL_COMMAND_BY_OFFER_SUCCESS: {

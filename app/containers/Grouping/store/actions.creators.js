@@ -25,23 +25,18 @@ export const loadAggregatedArticlesSuccess = payload => ({
   payload,
 });
 
-export const createCommandAggregate = (
-  { providerId, offerId, commandsId, commandArticleAggregates },
-  callback,
-) => ({
+export const createCommandAggregate = ({ providerId, offerId, commandsId, commandArticleAggregates }, callback) => ({
   type: actionsType.CREATE_COMMAND_AGGREGATE,
   payload: { providerId, offerId, commandsId, commandArticleAggregates },
   callback,
 });
+
 export const createCommandAggregateSuccess = payload => ({
   type: actionsType.CREATE_COMMAND_AGGREGATE_SUCCESS,
   payload,
 });
 
-export const changeAggregatedArticleQuantity = ({
-  index,
-  modifiedQuantity,
-}) => ({
+export const changeAggregatedArticleQuantity = ({ index, modifiedQuantity }) => ({
   type: actionsType.CHANGE_AGGREGATED_ARTICLE_QUANTITY,
   payload: { index, modifiedQuantity },
 });

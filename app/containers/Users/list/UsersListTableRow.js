@@ -120,7 +120,7 @@ export class UsersListTableRow extends React.PureComponent {
     closeDropDown();
   };
 
-  edit = () => {
+  edit = row => {
     this.setState({
       formData: { ...row, ville: formatCityToLabelValue(row.ville) },
       editMode: true,
@@ -257,7 +257,7 @@ export class UsersListTableRow extends React.PureComponent {
                     </ListItemIcon>
                     <Typography>Consulter</Typography>
                   </MenuItem>
-                  <MenuItem onClick={this.edit}>
+                  <MenuItem onClick={() => this.edit(row)}>
                     <ListItemIcon style={{ padding: 5 }}>
                       <EditIcon color="primary" />
                     </ListItemIcon>

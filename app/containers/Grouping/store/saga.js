@@ -99,6 +99,7 @@ function* loadAggregatedArticlesByCommandWorker({ payload: { commandIds = [] } }
 
 function* loadAggregatedArticlesByCommandWorker({ payload: { commandIds = [] } }) {
   const queryString = commandIds.map(value => Number(value));
+
   const options = {
     method: 'POST',
     headers: {
@@ -112,8 +113,11 @@ function* loadAggregatedArticlesByCommandWorker({ payload: { commandIds = [] } }
   yield networking(function*() {
     try {
       const res = yield requestWithAuth(`/commands/articles/aggregate`, options);
+      console.log('log response ', res);
       yield put(loadAggregatedArticlesSuccess(res));
-    } catch (e) {}
+    } catch (e) {
+      console.log('loadAggregatedArticles request error : ', res);
+    }
   });
 }
 
