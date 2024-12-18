@@ -24,6 +24,7 @@ function isOdd(number) {
 }
 
 export const LaboDataTableBody = ({ rows }) => {
+  console.log('rows', rows);
   const _data = useMemo(
     () => {
       const groupedData = groupBy(rows || [], 'nom');

@@ -22,8 +22,9 @@ import ArticlesListTableHeader from './ArticlesHeader';
 import AticlesListTableRow from './ArticlesRow';
 import { useEffect } from 'react';
 import fuzzy from 'fuzzy';
-import { Input } from '@material-ui/core';
+import { Checkbox, Input } from '@material-ui/core';
 import { useSelectFormat } from '../../../containers/Reporting/hooks/useSelectFormat';
+import { fields } from '../../../containers/Offres/add/validation';
 
 const styles = theme => ({
   root: {
@@ -135,7 +136,7 @@ export function AddOffreForm(props) {
   const [search, setSearch] = useState('');
   const [displayRows, setDisplayRows] = useState([]);
   const [times, setTimes] = useState(0);
-
+  const [isAllowNonSigmapharmChecked, setIsAllowNonSigmapharmChecked] = useState(false);
   const isOffreNotStart = moment(formData.dateDebut).isAfter(new Date());
 
   const [region, setRegion] = useState('');
@@ -146,7 +147,17 @@ export function AddOffreForm(props) {
   const regionOptions = useSelectFormat(regions, { label: 'name', value: 'id', allow: ['cities'] });
   const villeOptiosn = useSelectFormat(city, { label: 'name', value: 'id' });
 
-  const [showBy, setShowBy] = useState();
+  console.log('formData', formData);
+
+  const [showBy, setShowBy] = useState({ label: formData.show_by, value: formData.show_by });
+
+  useEffect(
+    () => {
+      setShowBy({ label: formData.show_by, value: formData.show_by });
+      setIsAllowNonSigmapharmChecked(formData[fields.allow_non_sigmapharm.name]);
+    },
+    [formData],
+  );
 
   useEffect(
     () => {
@@ -185,71 +196,89 @@ export function AddOffreForm(props) {
   const DisplayOject = {
     City: (
       <>
-        <Grid xs={12} md={6} item>
-          <SingleAutoCompleteSelect
-            className={classes.select}
-            name="region"
-            options={regionOptions}
-            onChange={e => {
-              setCity(e.cities);
-              setSelectedRegion(e);
-            }}
-            value={selectedregion}
-            placeholder="Region"
-            isClearable
-          />
-        </Grid>
-        <Grid xs={12} md={6} item>
-          <SingleAutoCompleteSelect
-            className={classes.select}
-            name="city"
-            options={villeOptiosn}
-            onChange={e => {
-              setSelectedCity(e);
-              console.log(e);
-              handleFormDataChange({ target: { name: 'city', value: e.map(item => item.value) } });
-            }}
-            value={selectedCity}
-            placeholder="Ville"
-            isClearable
-            isMulti
-          />
-        </Grid>
+        {isOffreNotStart || editMode ? (
+          <div style={{ marginTop: '10px' }}>Les Ville : {formData.cityNames && formData.cityNames.join(', ')}</div>
+        ) : (
+          <>
+            <Grid xs={12} md={6} item>
+              <SingleAutoCompleteSelect
+                className={classes.select}
+                name="region"
+                disabled={isOffreNotStart ? false : editMode}
+                options={regionOptions}
+                onChange={e => {
+                  setCity(e.cities);
+                  setSelectedRegion(e);
+                }}
+                value={selectedregion}
+                placeholder="Region"
+                isClearable
+              />
+            </Grid>
+            <Grid xs={12} md={6} item>
+              <SingleAutoCompleteSelect
+                className={classes.select}
+                disabled={isOffreNotStart ? false : editMode}
+                name="city"
+                options={villeOptiosn}
+                onChange={e => {
+                  setSelectedCity(e);
+                  console.log(e);
+                  handleFormDataChange({ target: { name: 'city', value: e.map(item => item.value) } });
+                }}
+                value={selectedCity}
+                placeholder="Ville"
+                isClearable
+                isMulti
+              />
+            </Grid>
+          </>
+        )}
       </>
     ),
     Region: (
       <Grid xs={12} md={6} item>
-        <SingleAutoCompleteSelect
-          className={classes.select}
-          name="region"
-          options={regionOptions}
-          onChange={e => {
-            setCity(e.cities);
-            setSelectedRegion(e);
-            handleFormDataChange({ target: { name: 'region', value: e.map(item => item.value) } });
-          }}
-          value={selectedregion}
-          placeholder="Region"
-          isClearable
-          isMulti
-        />
+        {isOffreNotStart || editMode ? (
+          <div style={{ marginTop: '10px' }}>Region : {formData.regionNames && formData.regionNames.join(', ')}</div>
+        ) : (
+          <SingleAutoCompleteSelect
+            className={classes.select}
+            name="region"
+            disabled={isOffreNotStart ? false : editMode}
+            options={regionOptions}
+            onChange={e => {
+              setCity(e.cities);
+              setSelectedRegion(e);
+              handleFormDataChange({ target: { name: 'region', value: e.map(item => item.value) } });
+            }}
+            value={selectedregion}
+            placeholder="Region"
+            isClearable
+            isMulti
+          />
+        )}
       </Grid>
     ),
     Pharmacy: (
       <Grid xs={12} md={6} item>
-        <SingleAutoCompleteSelect
-          className={classes.select}
-          name="pharmacy"
-          options={pharmacies && pharmacies.map(item => ({ value: item.id, label: item.denomination }))}
-          onChange={e => {
-            console.log('e', e);
-            handleFormDataChange({ target: { name: 'pharmacy', value: e.map(item => item.value) } });
-          }}
-          value={selectedregion}
-          placeholder="Pharmacy"
-          isClearable
-          isMulti
-        />
+        {isOffreNotStart || editMode ? (
+          <div style={{ marginTop: '10px' }}>Pharmacies : {formData.pharmacyNames && formData.pharmacyNames.join(', ')}</div>
+        ) : (
+          <SingleAutoCompleteSelect
+            className={classes.select}
+            disabled={isOffreNotStart ? false : editMode}
+            name="pharmacy"
+            options={pharmacies && pharmacies.map(item => ({ value: item.id, label: item.denomination }))}
+            onChange={e => {
+              console.log('e', e);
+              handleFormDataChange({ target: { name: 'pharmacy', value: e.map(item => item.value) } });
+            }}
+            value={selectedregion}
+            placeholder="Pharmacy"
+            isClearable
+            isMulti
+          />
+        )}
       </Grid>
     ),
     null: null,
@@ -302,26 +331,42 @@ export function AddOffreForm(props) {
             )}
           </Grid>
           <Grid xs={12} md={6} item>
-            <SingleAutoCompleteSelect
-              className={classes.select}
-              name="show_by"
-              options={[
-                { label: 'Pharmacy', value: 'Pharmacy' },
-                { label: 'Region', value: 'Region' },
-                { label: 'Ville', value: 'City' },
-              ]}
-              onChange={e => {
-                setShowBy(e);
-                handleFormDataChange({ target: { name: 'show_by', value: e.value } });
-              }}
-              value={selectedCity}
-              placeholder="Show By "
-              isClearable
-            />
+            {isOffreNotStart || editMode ? (
+              <div style={{ marginTop: '10px' }}>Afficher l'offre par : {showBy ? showBy.label : ''}</div>
+            ) : (
+              <SingleAutoCompleteSelect
+                className={classes.select}
+                name="show_by"
+                options={[
+                  { label: 'Pharmacy', value: 'Pharmacy' },
+                  { label: 'Region', value: 'Region' },
+                  { label: 'Ville', value: 'City' },
+                ]}
+                onChange={e => {
+                  setShowBy(e);
+                  handleFormDataChange({ target: { name: 'show_by', value: e.value } });
+                }}
+                value={showBy}
+                placeholder="Show By "
+                isClearable
+              />
+            )}
           </Grid>
 
           {DisplayOject[showBy ? showBy.value : null]}
-
+          <div style={{ width: '100%', marginTop: '30px' }}>
+            <label>
+              <Checkbox
+                disabled={isOffreNotStart ? false : editMode}
+                checked={isAllowNonSigmapharmChecked}
+                onChange={e => {
+                  handleFormDataChange({ target: { name: 'allow_non_sigmapharm', value: e.target.checked } });
+                  setIsAllowNonSigmapharmChecked(e.target.checked);
+                }}
+              />
+              <span>autoriser aussi les utilisateurs non sigmapharm</span>
+            </label>
+          </div>
           <Grid xs={12} md={4} container item>
             <Grid className={classes.globalVarsContainer} item xs={6}>
               <TextField

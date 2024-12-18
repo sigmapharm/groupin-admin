@@ -53,6 +53,7 @@ export default ({
   printBL,
   isTippyOpen,
   handleTippyToggle,
+  exportExcel,
 }) => {
   return (
     <>
@@ -98,6 +99,14 @@ export default ({
                         <PrintIcon color="primary" />
                       </ListItemIcon>
                       <Typography>Imprimer BC </Typography>
+                    </MenuItem>
+                  )}
+                  {exportExcel && (
+                    <MenuItem onClick={exportExcel && exportExcel(row)}>
+                      <ListItemIcon>
+                        <PrintIcon color="primary" />
+                      </ListItemIcon>
+                      <Typography>Imprimer Excel </Typography>
                     </MenuItem>
                   )}
                   {!row.isAggregate && (

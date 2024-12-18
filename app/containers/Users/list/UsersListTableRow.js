@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import * as PropTypes from 'prop-types';
 import Search from '@material-ui/icons/Search';
 import EditIcon from '@material-ui/icons/Edit';
@@ -34,6 +34,7 @@ import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/light.css';
 import Table from '../../../components/Table';
 import moment from 'moment';
+import { PROD_API_BASE_PATH } from '../../../services/api/constants';
 
 const RowComponent = forwardRef((props, ref) => {
   return (
@@ -88,6 +89,7 @@ export class UsersListTableRow extends React.PureComponent {
       isTippyOpen: false,
       showSubCommands: false,
       subCommands: [],
+      isUserEnabled: true,
     };
   }
 
@@ -227,10 +229,11 @@ export class UsersListTableRow extends React.PureComponent {
 
   render() {
     const { row, cities, regions } = this.props;
-    const { editMode, detailsOpen } = this.state;
+    const { editMode, detailsOpen, userStatus } = this.state;
+
     return (
       <React.Fragment>
-        <TableRow key={row.id}>
+        <TableRowComponent row={row} key={row.id} status={userStatus}>
           <TableCell style={{ padding: 5 }} component="th" scope="row">
             {row.firstName} {row.lastName}
           </TableCell>
@@ -295,7 +298,7 @@ export class UsersListTableRow extends React.PureComponent {
               <RowComponent onClick={() => this.setState({ isTippyOpen: true })} />
             </Tippy>
           </TableCell>
-        </TableRow>
+        </TableRowComponent>
 
         {detailsOpen && (
           <Dialog maxWidth="lg" onClose={this.handleClose} open>
@@ -434,3 +437,39 @@ export default compose(
   withConnect,
   withStyles(styles),
 )(UsersListTableRow);
+
+export function TableRowComponent(props) {
+  const { children, ...rest } = props;
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  useEffect(
+    () => {
+      fetch(`${PROD_API_BASE_PATH}/users/${props.row.id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localStorage.getItem('access_token'),
+        },
+      })
+        .then(res => res.json())
+        .then(data => {
+          setIsEnabled(data.enabled || false);
+        });
+    },
+    [props.row.id],
+  );
+
+  useEffect(
+    () => {
+      setIsEnabled(rest.status === 'active' ? true : false);
+      console.log(rest.status);
+    },
+    [rest.status],
+  );
+
+  return (
+    <TableRow {...rest} style={{ backgroundColor: isEnabled ? 'white' : 'yellow' }}>
+      {children}
+    </TableRow>
+  );
+}

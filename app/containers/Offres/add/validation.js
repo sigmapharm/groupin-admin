@@ -61,6 +61,11 @@ export const fields = {
     label: 'Designation',
     validator: validators.stringNotBlank,
   },
+  allow_non_sigmapharm: {
+    name: 'allow_non_sigmapharm',
+    label: 'Autoriser les utilisateurs non sigmapharm',
+    type: 'checkbox',
+  },
   dateDebut: {
     name: 'dateDebut',
     label: 'Date début',

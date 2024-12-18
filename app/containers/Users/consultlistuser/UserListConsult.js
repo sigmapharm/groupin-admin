@@ -376,7 +376,7 @@ export class UserListConsult extends React.PureComponent {
             }}
             margin="normal"
           />
-          <TextField
+          {/* <TextField
             disabled
             id="standard-disabled"
             label="villeRC"
@@ -386,7 +386,7 @@ export class UserListConsult extends React.PureComponent {
               className: classes.input,
             }}
             margin="normal"
-          />
+          /> */}
           <TextField
             disabled
             id="standard-disabled"

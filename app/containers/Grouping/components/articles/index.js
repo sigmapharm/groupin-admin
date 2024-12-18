@@ -15,9 +15,7 @@ const articleHeaders = [
   { title: 'Quantité Ajustée' },
 ];
 
-const styles = theme => ({
-
-});
+const styles = theme => ({});
 
 export default withStyles(styles)(({ articles = [], onChange }) => (
   <>
@@ -25,20 +23,18 @@ export default withStyles(styles)(({ articles = [], onChange }) => (
       {articles.map((article, index) => (
         <TableRow key={article.offerArticleId}>
           <TableCell>{article.label}</TableCell>
-          <TableCell>{article.pph.toFixed(2)}</TableCell>
-          <TableCell>{article.ppv.toFixed(2)}</TableCell>
-          <TableCell>{article.tva.toFixed(2)}</TableCell>
-          <TableCell>{article.computedPPH.toFixed(2)}</TableCell>
-          <TableCell>{article.quantity}</TableCell>
+          <TableCell>{article.pph ? article.pph.toFixed(2) : ''}</TableCell>
+          <TableCell>{article.ppv ? article.ppv.toFixed(2) : ''}</TableCell>
+          <TableCell>{article.tva ? article.tva.toFixed(2) : ''}</TableCell>
+          <TableCell>{article.computedPPH ? article.computedPPH.toFixed(2) : ''}</TableCell>
+          <TableCell>{article.quantity ? article.quantity : ''}</TableCell>
           <TableCell>
             <TextField
               name="modifiedQuantity"
               label="Quantité Ajustée"
               value={article.modifiedQuantity || ''}
               type="number"
-              onChange={({ target: { value } }) =>
-                onChange({ index, modifiedQuantity: +value })
-              }
+              onChange={({ target: { value } }) => onChange({ index, modifiedQuantity: +value })}
               autoComplete="off"
               inputProps={{ maxLength: 100 }}
               fullWidth

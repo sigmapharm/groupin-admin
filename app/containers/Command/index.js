@@ -28,7 +28,8 @@ import { makeSelectUser } from '../App/selectors';
 import { ADMIN, SUPER_ADMIN, MEMBRE } from '../AppHeader/Roles';
 import { clearSelectedOffer } from '../Offres/actions';
 import { selectSelectedOffer } from '../Offres/selectors';
-
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 import GeneriqueDialog from '../../components/Alert';
 import { isWidthDown } from '@material-ui/core/withWidth';
 import CommandListCards from './components/responsive/CommandListCards';
@@ -699,6 +700,45 @@ class Command extends PureComponent {
     });
   };
 
+  exportExcel = row => () => {
+    const { loadCommandArticles } = this.props;
+    loadCommandArticles({
+      commandId: row.commandId,
+      isAggregate: this.forAdminCommands,
+      callback: err => {
+        if (err) {
+          this.setState({
+            showInfoBar: true,
+            infoBarParams: {
+              title: " L'affichage de commande  à échoué merci de contacter l'administrateur ",
+            },
+          });
+        } else {
+          const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+          const fileExtension = '.xlsx';
+          const { commandArticles } = this.props;
+          const fileName = `${Date.now()}-commande-${row.commandId}`;
+          const ws = XLSX.utils.json_to_sheet(
+            commandArticles.sort((a, b) => a.label.localeCompare(b.label)).map(item => ({
+              Désignation: item.label,
+              TVA: item.tva,
+              qte: item.quantity,
+              ppv: item.ppv,
+              pph: item.pph,
+              remise: item.discount + ' %',
+              pph_remise: item.computedPPH,
+              Total: item.quantity * item.computedPPH,
+            })),
+          );
+          const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
+          const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+          const data = new Blob([excelBuffer], { type: fileType });
+          FileSaver.saveAs(data, fileName + fileExtension);
+        }
+      },
+    });
+  };
+
   render() {
     console.log('date update', this.state.livraisonDate);
     const {
@@ -711,6 +751,7 @@ class Command extends PureComponent {
       copyQtIntoModifiedQt,
       width,
     } = this.props;
+
     const { selectedCommand, showInfoBar, infoBarParams, showPopConfirmation, popConfirmationParams, cols } = this.state;
     const isSmallDevice = isWidthDown('md', width);
     return (
@@ -792,6 +833,7 @@ class Command extends PureComponent {
             >
               {!!commands.length && (
                 <CommandBody
+                  exportExcel={this.exportExcel}
                   list={commands}
                   user={user}
                   forAdmin={this.forAdminCommands}

@@ -45,6 +45,13 @@ const Reporting = props => {
           {typeof reportingCa === 'number' ? ` ${formatNumber.format(reportingCa)} ` : ' loading...'}
         </Typography>
         <Divider variant="middle" className={classes.divider} />
+        <Typography component="h1" variant="h5" className={classes.title}>
+          chiffre d'affaires par filter / {laboratoires.length} laboratoires :
+          {typeof reportingCa === 'number'
+            ? ` ${formatNumber.format(reporting.reduce((acc, item) => acc + item.ca, 0))} `
+            : ' loading...'}
+        </Typography>
+        <Divider variant="middle" className={classes.divider} />
         <ReportingTable rows={reporting} />
       </div>
 

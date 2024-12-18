@@ -191,6 +191,27 @@ export function OffreInfo(props) {
         </Grid>
         <Grid xs={12} md={6} item>
           <TextField
+            // disabled={isOffreNotStart ? false : editMode}
+            noValidate
+            autoComplete="off"
+            name={fields.quantiteMin.name}
+            label={fields.quantiteMin.label}
+            value={formData[fields.quantiteMin.name] || 0}
+            type={fields.quantiteMin.type}
+            error={!!errors[fields.quantiteMin.name]}
+            onChange={onChange}
+            className={classes.offreInputs}
+            inputProps={{
+              maxLength,
+            }}
+            fullWidth
+            multiline
+            rows={1}
+            rowsMax={2}
+          />
+        </Grid>
+        <Grid xs={12} md={6} item>
+          <TextField
             noValidate
             autoComplete="off"
             name={fields.minToOrder.name}

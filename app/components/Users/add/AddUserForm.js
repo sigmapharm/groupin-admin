@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import PersonalInfo from './PersonalInfo';
 import SingleAutoCompleteSelect from '../../AutoCompleteSelect';
 import ErrorsArea from '../../ErrorsArea';
+import { Checkbox } from '@material-ui/core';
 
 const styles = theme => ({
   root: {
@@ -136,6 +137,17 @@ export function AddUserForm(props) {
             />
           </Grid>
         )}
+
+        <div style={{ width: '100%' }}>
+          <Checkbox
+            onChange={e => {
+              handleFormDataChange({
+                target: { name: 'is_not_user', value: e.target.checked },
+              });
+            }}
+          />
+          <label>n'est pas un utilisateur sigmapharm</label>
+        </div>
 
         {isLaboAddMode && (
           <SingleAutoCompleteSelect

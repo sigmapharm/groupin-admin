@@ -188,7 +188,7 @@ export class UsersList extends React.PureComponent {
         <div style={{ marginLeft: 30 }}>
           <ExportToExcel
             dispatch={this.props.dispatch}
-            apiData={this.state.printData}
+            apiData={this.props.list}
             fileName={`${Date.now()}-pharmacies-statique`}
           />
 
@@ -211,10 +211,14 @@ export class UsersList extends React.PureComponent {
               );
             }}
           >
-            <option value="2020-01-01/2020-12-30">2020</option>
-            <option value="2021-01-01/2021-12-30">2021</option>
-            <option value="2022-01-01/2022-12-30">2022</option>
-            <option value="2023-01-01/2023-12-30">2023</option>
+            {Array.from({ length: new Date().getFullYear() - 2020 + 1 }, (_, i) => {
+              const year = 2020 + i;
+              return (
+                <option key={year} value={`${year}-01-01/${year}-12-30`}>
+                  {year}
+                </option>
+              );
+            })}
           </select>
           <select
             value={this.state.laboName}

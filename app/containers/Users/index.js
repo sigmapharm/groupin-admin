@@ -359,6 +359,8 @@ export class UsersList extends React.PureComponent {
               {rows &&
                 rows.map(row => (
                   <UsersListTableRow
+                    loadUsers={this.loadUsers}
+                    handleChangePage={this.handleChangePage}
                     cities={formatedCities}
                     regions={formatedRegions}
                     row={row}
