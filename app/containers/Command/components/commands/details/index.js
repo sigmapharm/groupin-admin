@@ -141,11 +141,11 @@ export default withStyles(styles)(({ list, metadata, classes, readMode = true, o
                   {article.label}
                   test
                 </TableCell>
-                <TableCell>{article.pph.toFixed(2)}</TableCell>
-                <TableCell>{article.ppv.toFixed(2)}</TableCell>
-                <TableCell>{article.tva.toFixed(2)}</TableCell>
-                <TableCell>{article.discount}</TableCell>
-                <TableCell>{article.computedPPH.toFixed(2)}</TableCell>
+                <TableCell>{article.pph && article.pph.toFixed(2)}</TableCell>
+                <TableCell>{article.ppv && article.ppv.toFixed(2)}</TableCell>
+                <TableCell>{article.tva && article.tva.toFixed(2)}</TableCell>
+                <TableCell>{article.discount && article.discount}</TableCell>
+                <TableCell>{article.computedPPH && article.computedPPH.toFixed(2)}</TableCell>
                 <TableCell>
                   {!readMode && ((isAdmin && forAdmin) || (!isAdmin && !forAdmin)) ? (
                     <TextField

@@ -710,7 +710,7 @@ class Command extends PureComponent {
           this.setState({
             showInfoBar: true,
             infoBarParams: {
-              title: " L'affichage de commande  à échoué merci de contacter l'administrateur ",
+              title: "L'affichage de commande a échoué, merci de contacter l'administrateur.",
             },
           });
         } else {
@@ -718,20 +718,58 @@ class Command extends PureComponent {
           const fileExtension = '.xlsx';
           const { commandArticles } = this.props;
           const fileName = `${Date.now()}-commande-${row.commandId}`;
-          const ws = XLSX.utils.json_to_sheet(
-            commandArticles.sort((a, b) => a.label.localeCompare(b.label)).map(item => ({
-              Désignation: item.label,
-              TVA: item.tva,
-              qte: item.quantity,
-              ppv: item.ppv,
-              pph: item.pph,
-              remise: item.discount + ' %',
-              pph_remise: item.computedPPH,
-              Total: item.quantity * item.computedPPH,
-            })),
-          );
+
+          // Prepare the header information to be added before the table
+          const headerInfo = [
+            ['Bon de Commande N° ', row.commandId],
+            ['Offre ', row.offerName], // Example address
+            ['Date de commande', new Date(row.creationDate).toLocaleDateString()],
+            ['Laboratoire', row.laboratoryName],
+            ['Nom', 'SIGMA PHARM'],
+            ['Adresse', row.laboratoryAddress],
+            ['email ', row.laboratoryEmail],
+            [''], // Empty row for spacing
+            [''], // Empty row for spacing
+            [''], // Empty row for spacing
+          ];
+          const tableData = commandArticles.sort((a, b) => a.label.localeCompare(b.label)).map(item => ({
+            Désignation: item.label,
+            TVA: item.tva,
+            qte: item.quantity,
+            ppv: item.ppv,
+            pph: item.pph,
+            remise: item.discount + ' %',
+            pph_remise: item.computedPPH,
+            Total: item.quantity * item.computedPPH,
+          }));
+
+          const footerInfo = [
+            [''], // Empty row for spacing
+            ['QTE TOTAL', tableData.reduce((a, b) => b.qte + a, 0)],
+            ['TOTAL PPH TTC', row.totalAmount],
+            ['TOTAL PPH remisé', row.totalAmountDiscount],
+            ['ESCOMPTE', row.globalDiscount],
+            ['NET A PAYER', row.totalAmountDiscount - row.totalAmountDiscount * (row.globalDiscount / 100)],
+          ];
+
+          // Prepare the table rows (command articles)
+
+          // Create the worksheet from the header and table data
+          const ws = XLSX.utils.aoa_to_sheet(headerInfo); // Create worksheet with header first
+          XLSX.utils.sheet_add_json(ws, tableData, { origin: 'A15' }); // Start the table at row 5
+
+          // Create the workbook and add the sheet
           const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
+
+          const lastRow = tableData.length + 15; // Adding 5 to account for the header (row 1–4)
+
+          // Add footer information at the bottom after the table
+          XLSX.utils.sheet_add_aoa(ws, footerInfo, { origin: { r: lastRow + 1, c: 0 } });
+
+          // Write the Excel buffer
           const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+          // Save the Excel file using FileSaver
           const data = new Blob([excelBuffer], { type: fileType });
           FileSaver.saveAs(data, fileName + fileExtension);
         }
