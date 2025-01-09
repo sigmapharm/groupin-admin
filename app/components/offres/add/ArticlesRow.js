@@ -33,9 +33,9 @@ export const AticlesListTableRow = props => {
   return (
     <TableRow key={row.id} style={discount && minQuantity ? { backgroundColor: '#4d609c70' } : {}}>
       <TableCell>{row.nom}</TableCell>
-      <TableCell>{row.pph.toFixed(2)}</TableCell>
-      <TableCell>{row.ppv.toFixed(2)}</TableCell>
-      <TableCell>{row.tva}</TableCell>
+      <TableCell>{row.pph ? row.pph.toFixed(2) : 0}</TableCell>
+      <TableCell>{row.ppv ? row.ppv.toFixed(2) : 0}</TableCell>
+      <TableCell>{row.tva || 0}</TableCell>
       <TableCell>
         <TextField
           disabled={isOffreNotStart ? false : editMode}
